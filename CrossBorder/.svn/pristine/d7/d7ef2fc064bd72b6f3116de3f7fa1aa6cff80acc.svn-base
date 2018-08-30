@@ -1,0 +1,1297 @@
+$(function(){
+
+    // Groups and Colors        
+	var mapsvg_groups = {
+		shopping:	'#78287E', // purple
+		dining:     '#78287E', // purple
+		lifestyle:	'#EE1E7B', // pink
+		hotel:      '#FAC511', // yellow
+		services:	'#60CCED', // light_blue
+		living:     '#B2CF8D', // green
+		parking:	'#4A89BE', // blue
+		security:	'#FF6611', // orange
+		grey:       '#A8A9AD', // grey
+		red:        '#DA2026', // red
+	};
+
+	$('#cc_map').mapSvg({
+
+		source: 'http://citycentrehouston.com/js/map/cc2.svg',    
+		responsive: 1,
+        disableAll: true,    
+		colors: {
+			background: "transparent"
+		},
+		regions:{
+         
+          
+          			
+		  
+		  		  
+		  		  'r100': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'services',
+		  		  		
+		  		  		tenant_name: "Amegy Bank",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Amegy Bank<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.235.8800<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/amegy-bank\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+		  		  
+		  		  'r130': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'services',
+		  		  		
+		  		  		tenant_name: "Amegy Bank",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Amegy Bank<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.235.8800<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/amegy-bank\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r103': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Anthropologie",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Anthropologie<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.973.0561<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/anthropologie\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r246': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'living',
+		  		  		
+		  		  		tenant_name: "ASCENT AT CITYCENTRE",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>ASCENT AT CITYCENTRE<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713-463-0400<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/icon-citycentre\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r220': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "baby, go green",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>baby, go green<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.213.8093<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/baby-go-green\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r207': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'lifestyle',
+		  		  		
+		  		  		tenant_name: "BeHuman Gallery",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>BeHuman Gallery<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>281.215.3609<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/behuman-gallery\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r122': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "belle la vie",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>belle la vie<\/h3>\n\t\t  \t\t  \t\t\t<p><strong><\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/belle-la-vie\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r213': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "bevello",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>bevello<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.827.7711<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/bevello\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r202': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "BISTRO",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>BISTRO<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.827.3545<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/the-bistro\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r107': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Bistro Bar",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Bistro Bar<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.827.3545<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/bistro-bar\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r121': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "BRIO Tuscan Grille",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>BRIO Tuscan Grille<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.973.9610<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/brio-tuscan-grille\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r228': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Charming Charlie",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Charming Charlie<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.722.0192<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/charming-charlie\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r126': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Cyclone Anaya&#8217;s",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Cyclone Anaya&#8217;s<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.461.1300<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/cyclone-anayas\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r125': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Dryden Kreps",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Dryden Kreps<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.984.9884<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/dryden-kreps\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r208': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Eddie V&#8217;s Prime Seafood",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Eddie V&#8217;s Prime Seafood<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>832.200.2380<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/eddie-vs-prime-seafood\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r127': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Elaine Turner",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Elaine Turner<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.255.9095<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/elaine-turner\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r123': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Eye Couture",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Eye Couture<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.935.9966<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/eye-couture\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r114': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'services',
+		  		  		
+		  		  		tenant_name: "FLOSS Dental",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>FLOSS Dental<\/h3>\n\t\t  \t\t  \t\t\t<p><strong><\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/floss-dental\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r247': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'hotel',
+		  		  		
+		  		  		tenant_name: "Four Points by Sheraton Houston West",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Four Points by Sheraton Houston West<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>281.501.4600<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/four-points-houston-west\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r111': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Free People",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Free People<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.464.8423<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/free-people\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r237': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Grub Burger Bar",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Grub Burger Bar<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.827.7157<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/grub-burger-bar\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r106': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'hotel',
+		  		  		
+		  		  		tenant_name: "Hotel Sorella",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Hotel Sorella<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.973.1600<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/hotel-sorella\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r102': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'hotel',
+		  		  		
+		  		  		tenant_name: "Hotel Sorella Meetings &amp; Events Centre",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Hotel Sorella Meetings &amp; Events Centre<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.973.1600<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/sorella-meetings-events-centre\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r115': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'lifestyle',
+		  		  		
+		  		  		tenant_name: "Houston Motor Club",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Houston Motor Club<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.481.4469<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/houston-motor-club\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+		  		  
+		  		  'r204': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'lifestyle',
+		  		  		
+		  		  		tenant_name: "Houston Motor Club",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Houston Motor Club<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.481.4469<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/houston-motor-club\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r206': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Houston Texans Grille",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Houston Texans Grille<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.461.2002<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/houston-texans-grille\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r127': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "ivivva",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>ivivva<\/h3>\n\t\t  \t\t  \t\t\t<p><strong><\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/ivivva\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r129': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "J. Crew",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>J. Crew<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.827.1743\n \n<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/j-crew\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r113': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Jamba Juice",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Jamba Juice<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.464.0652<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/jamba-juice\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r225': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Kendra Scott",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Kendra Scott<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.965.4115<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/kendra-scott\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r134': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'lifestyle',
+		  		  		
+		  		  		tenant_name: "Life Time Athletic",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Life Time Athletic<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.464.1200<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/lifetime-athletic\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r135': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "LifeCaf\u00e9",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>LifeCaf\u00e9<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.630.8441<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/lifecafe\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r133': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'lifestyle',
+		  		  		
+		  		  		tenant_name: "LifeSpa | Salon",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>LifeSpa | Salon<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.630.8424<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/lifespa-salon\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r132': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "lululemon athletica",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>lululemon athletica<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.464.1257<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/lululemon-athletica\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r242': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'hotel',
+		  		  		
+		  		  		tenant_name: "Mays Business School, Texas A&amp;M",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Mays Business School, Texas A&amp;M<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>979.845.4714<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/mays-business-school-texas-am-university\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r203': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Monnalisa",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Monnalisa<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.973.1600<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/monnolisa-bar\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r211': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Muir Fine Art Gallery",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Muir Fine Art Gallery<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.722.0099<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/muir-fine-art-gallery\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r201': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'hotel',
+		  		  		
+		  		  		tenant_name: "Norris Conference Centers",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Norris Conference Centers<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.590.0950<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/norris-conference-center\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r120': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "OLIVE &amp; VINE",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>OLIVE &amp; VINE<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>832.377.1610<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/olive-vine\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r118': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Paper Source",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Paper Source<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.984.8619<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/paper-source\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'rparking1': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'parking',
+		  		  		
+		  		  		tenant_name: "Parking Garage 1",
+		  		  				  		  		
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'rparking2': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'parking',
+		  		  		
+		  		  		tenant_name: "Parking Garage 2",
+		  		  				  		  		
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'rparking3': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'parking',
+		  		  		
+		  		  		tenant_name: "Parking Garage 3",
+		  		  				  		  		
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r205': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "RA Sushi",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>RA Sushi<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.331.2792<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/ra-sushi\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r109': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Red Mango",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Red Mango<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.463.3830<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/red-mango\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r201': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'hotel',
+		  		  		
+		  		  		tenant_name: "Red Oak Ballroom",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Red Oak Ballroom<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>(713) 590-0950 <\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/red-oak-ballroom\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r105': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Ruggles Green",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Ruggles Green<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.464.5557<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/ruggles-green\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r244': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Salata",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Salata<\/h3>\n\t\t  \t\t  \t\t\t<p><strong><\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/salata\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r241': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Seasons 52",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Seasons 52<\/h3>\n\t\t  \t\t  \t\t\t<p><strong><\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/seasons-52\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r131': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'security',
+		  		  		
+		  		  		tenant_name: "Security Office",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Security Office<\/h3>\n\t\t  \t\t  \t\t\t\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/security-office\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r104': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Straits Restaurant",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Straits Restaurant<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.365.9922<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/straits-restaurant\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r200': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'lifestyle',
+		  		  		
+		  		  		tenant_name: "Studio Movie Grill",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Studio Movie Grill<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.461.4449<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/studio-movie-grill\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r101': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Sur La Table",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Sur La Table<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>832.201.3492<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/sur-la-table\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r110': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "SWEET",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>SWEET<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.64.SWEET<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/sweet\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r230': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Texas de Brazil",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Texas de Brazil<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.730.3013<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/texas-de-brazil\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r245': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "The Capital Grille",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>The Capital Grille<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.463.5051<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/capital-grille\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r139': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'living',
+		  		  		
+		  		  		tenant_name: "The Domain Apartments",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>The Domain Apartments<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.463.0400<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/the-domain-apartments\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r124': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'living',
+		  		  		
+		  		  		tenant_name: "THE LOFTS CITYCENTRE",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>THE LOFTS CITYCENTRE<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.463.4663<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/the-lofts-citycentre\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'rL12': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'living',
+		  		  		
+		  		  		tenant_name: "The Residences at Hotel Sorella",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>The Residences at Hotel Sorella<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.973.1600 <\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/the-residences-at-hotel-sorella\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r136': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "The Tasting Room",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>The Tasting Room<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>281.822.1500<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/the-tasting-room\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r116': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Urban Outfitters",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Urban Outfitters<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.467.1840<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/urban-outfitters\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r108': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'dining',
+		  		  		
+		  		  		tenant_name: "Yard House",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Yard House<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.461.9273<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/yard-house\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+          			
+		  
+		  		  
+		  		  'r215': {
+		  		  	
+		  		  	data: {
+		  		  		
+		  		  		group: 'shopping',
+		  		  		
+		  		  		tenant_name: "Z Gallerie",
+		  		  				  		  		
+		  		  				  		  		popover: "<div class=\"tip\">\n\t\t  \t\t  \t\t\t<h3>Z Gallerie<\/h3>\n\t\t  \t\t  \t\t\t<p><strong>713.470.4635<\/strong><\/p>\n\t\t  \t\t  \t\t\t<p><a href=\"http:\/\/citycentrehouston.com\/tenants\/detail\/z-gallerie\" class=\"btn btn_nav\">More Info<\/a><\/p>\n\t\t  \t\t  \t\t<\/div>\n\t\t  \t\t  \t\t<div class=\"tip_arrow\"><\/div>"
+		  		  				  		  		
+		  		  	}
+		  		  },
+		  
+
+		
+		
+		  'r':{}
+		
+		    /*    
+            // GREEN				
+			'r138': {data: {group: 'green', popover: "test"}},
+			'r139': {data: {group: 'green', popover: "test2"}},                        
+            // PINK				
+			'r200': {data: {group: 'pink'}},
+			'r133': {data: {group: 'pink'}},
+			'r134': {data: {group: 'pink'}},
+			'r204': {data: {group: 'pink'}},
+			'r115': {data: {group: 'pink'}}
+			*/
+		},
+		onClick: function(e,m){m.cityCentreSelectRoom(this.id);},        
+		onPopoverClose : function(m){this.deselect();},                                
+        onLoad : function(){
+
+           var Paper = this.getData().R;
+           var _data = this.getData();
+           var mapsvg = this;
+
+           _data.groups = {};
+
+           // Init (set groups, colors)
+           Paper.forEach(function(el){
+
+               if(el.id == undefined || el.id=='') return;
+
+               if(el.id.toString().substring(0,1) == 'r'){
+
+                    var bbox = el.getBBox();
+                    var c = {x: bbox.x + (bbox.width/2), y: bbox.y + (15)};
+
+                    if(el._data && el._data.group){
+                        
+                        el.hover_attr.fill = mapsvg_groups[el._data.group]
+                        el.selected_attr.fill = mapsvg_groups[el._data.group]
+
+                        // Create a reference for group if it doesn't exist yet
+                        if(_data.groups[el._data.group] === undefined)
+                            _data.groups[el._data.group] = [];
+                        // Add element into a group reference
+                        _data.groups[el._data.group].push(el);
+                    }
+
+                    // Write pop-up position to room's data property
+                    el.data({'popx': c.x , 'popy' : c.y});
+               }
+           });
+         
+           var selected_group = '';
+
+           // Deselect group function
+           mapsvg.deselect = function(){
+                if(typeof _data.selected_id == 'object'){
+                    for(var i in _data.selected_id){
+                        var selectedRegion = _data.R.getById(_data.selected_id[i]);
+                        selectedRegion.attr(selectedRegion.default_attr);                            
+                    }                        
+                }else if(_data.selected_id){
+                    var selectedRegion = _data.R.getById(_data.selected_id);
+                    selectedRegion.attr(selectedRegion.default_attr);                                                    
+                }                        
+           };
+            
+           // Select group function
+           mapsvg.groupSelect = function(group){
+            
+                mapsvg.deselect();
+                mapsvg.hidePopover();
+                
+                _data.options.multiSelect = true;
+                _data.selected_id = [];
+
+                // select group
+                for(i in _data.groups[group])
+                    mapsvg.selectRegion(_data.groups[group][i].id);
+
+                _data.options.multiSelect = false;        
+                selected_group = group;
+           };
+           
+           mapsvg.cityCentreSelectRoom = function(id){
+				var r = mapsvg.getData().R.getById(id);
+
+                if(r._data.group)
+                    mapsvg.groupSelect(r._data.group);
+                
+				// Show pop-up message
+				var pop_pos = [
+					r.data('popx'),
+					r.data('popy')
+				];
+                
+                // !!!! REMOVE 2 LINES BELOW TO BE ABLE TO SHOW YOUR OWN POP-UPS...
+                // var pop = 'Room ID: <b>'+r.id+'</b>';
+                // mapsvg.showPopover(null,pop, pop_pos);
+                
+                // !!!! ...AND UNCOMMENT THE LINE BELOW
+                
+                console.log(this);
+                console.log(r._data);
+                mapsvg.showPopover(null, r._data.popover, pop_pos);
+				 
+                                                
+                r.attr({fill: '#ff0000'});
+           };
+           
+           $('.mapsvg-select-group').on('click', function(e){
+                e.preventDefault();
+                mapsvg.groupSelect($(this).attr('data-group'));
+           });
+           
+           $('.mapsvg-select-room').on('click', function(e){
+                e.preventDefault();                 
+                mapsvg.cityCentreSelectRoom($(this).attr('data-room-id'));           
+           });
+
+        }
+	});
+
+
+
+    jQuery("h2 a").click(function(e){
+        e.preventDefault();
+        if ($(this).hasClass('selected'))
+        {
+        	console.log($(this).attr('class'));
+	        jQuery('h2 a').removeClass('selected');
+	        jQuery('ul.map_nav').slideUp();
+        }
+        else {
+        	console.log("not selected");
+	        jQuery('ul.map_nav').slideUp();
+	        jQuery(this).parent().next().slideDown();
+	        jQuery('h2 a').removeClass('selected');
+	        jQuery(this).addClass('selected');
+        }
+    });
+
+});

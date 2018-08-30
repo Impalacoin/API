@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+ require_once("engine.php");
+     
+   
+   display_navigation();
+   check_if_logged_in($me); 
+   if($me){   
+?>
+
+ 
+      
+        <div  class="pushRight">
+        <h3>How it works </h3>
+        <ul style="list-style-type: lower-roman;">
+        <li> 1. Register with us to use our service</li>
+        <li> 2. Top up your account by going to load account tab.</li>
+        <li> 3. Go to send money tab and send money to your friends in kenya.</li>
+        </ul>
+        
+        </ul>
+        
+         </div>   
+        
+       
+       <!--iframe src="http://www.facebook.com/plugins/like.php?href=apps.facebook.com/impalapay/"
+        scrolling="no" frameborder="0"
+        style="border:none; width:450px; height:80px"><iframe-->
+<?php
+}
+     
+//require_once "includes/footer.php"
+?>

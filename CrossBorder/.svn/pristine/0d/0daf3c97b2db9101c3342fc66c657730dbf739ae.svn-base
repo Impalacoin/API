@@ -1,0 +1,170 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "CryptoCls"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
+Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
+
+ Private VMisidn As Variant ' message type
+ Private VMisidn_2 As Variant
+ Private VAuthorizationCode As Variant
+ Private VRandomBase As Integer
+ Private VModulaBase As Integer
+ Private VVerificationState As Boolean
+ 
+ 
+Private Sub Class_Initialize()
+    VMisidn = ""
+    VMisidn_2 = "" '2
+    VAuthorizationCode = "" '3
+    VRandomBase = 0 '4
+    VModulaBase = 0 '5
+    VerificationState = False '7
+    
+End Sub
+
+Public Property Get MsisdnOriginator() As Variant
+    MsisdnOriginator = VMisidn
+End Property
+
+Public Property Let MsisdnOriginator(ByVal vNewValue As Variant)
+    VMisidn = vNewValue
+End Property
+
+Public Property Get MsisdnRecipient() As Variant
+    MsisdnRecipient = VMisidn_2
+End Property
+
+Public Property Let MsisdnRecipient(ByVal vNewValue As Variant)
+    VMisidn_2 = vNewValue
+End Property
+Public Property Get AuthorizationCode() As Variant
+    AuthorizationCode = VAuthorizationCode
+End Property
+
+Public Property Let AuthorizationCode(ByVal vNewValue As Variant)
+    VAuthorizationCode = vNewValue
+End Property
+Public Property Get RandomBase() As Variant
+    RandomBase = VRandomBase
+End Property
+
+Public Property Let RandomBase(ByVal vNewValue As Variant)
+    VRandomBase = vNewValue
+End Property
+Public Property Get ModulaBase() As Variant
+    ModulaBase = VModulaBase
+End Property
+
+Public Property Let ModulaBase(ByVal vNewValue As Variant)
+    VModulaBase = vNewValue
+End Property
+Public Property Get VerificationState() As Variant
+    VerificationState = VVerificationState
+End Property
+
+Public Sub AuthCodeGenerator()
+
+Dim Dbase As Long
+Dim Qbase As Integer
+Dim nCode As Variant
+Dim nRand As Integer
+nRand = RandomNumber(9999, 1)
+Dbase = Val(VMisidn) \ nRand
+Qbase = Val(VMisidn) Mod nRand
+nCode = Format(Dbase, "000000000")
+Dim alpha As Variant
+Dim l As Integer
+Dim m As Integer
+Dim alpha_code As Variant
+l = 1
+m = 0
+While Mid$(nCode, l, 1) = "0"
+      m = m + 1
+      nCode = Right(nCode, Len(nCode) - 1)
+Wend
+
+For l = 1 To m
+Select Case RandomNumber(26, 1):
+            Case 1:  alpha = "A"
+            Case 2:  alpha = "B"
+            Case 3:  alpha = "C"
+            Case 4:  alpha = "D"
+            Case 5:  alpha = "E"
+            Case 6:  alpha = "F"
+            Case 7:  alpha = "G"
+            Case 8:  alpha = "H"
+            Case 9:  alpha = "I"
+            Case 10: alpha = "J"
+            Case 11: alpha = "K"
+            Case 12: alpha = "L"
+            Case 13: alpha = "M"
+            Case 14: alpha = "N"
+            Case 15: alpha = "O"
+            Case 16: alpha = "P"
+            Case 17: alpha = "Q"
+            Case 18: alpha = "R"
+            Case 19: alpha = "S"
+            Case 20: alpha = "T"
+            Case 21: alpha = "U"
+            Case 22: alpha = "V"
+            Case 23: alpha = "W"
+            Case 24: alpha = "X"
+            Case 25: alpha = "Y"
+            Case 26: alpha = "Z"
+
+  
+  End Select
+ alpha_code = alpha_code & alpha
+ Next l
+ '----------------------
+rand = nRand
+modula = Qbase
+code = alpha & nCode
+'------------------------------
+VAuthorizationCode = alpha_code & nCode & ":" & nRand & ":" & Qbase
+
+End Sub
+
+Public Function RandomNumber(Upper As Integer, _
+     Lower As Integer) As Integer
+    'Generates a Random Number BETWEEN the LOWER and UPPER values
+    Randomize
+    RandomNumber = Int((Upper - Lower + 1) * Rnd + Lower)
+End Function
+
+
+Public Sub Verify_Code() 'ByVal msisdn As Variant, ByVal auCode As Variant, ByVal nRandom As Integer, ByVal nModular As Integer) As Boolean
+Dim IntCode As Long
+
+Dim l As Integer
+Dim m As Integer
+Dim alpha_code As Variant
+l = 1
+m = 0
+While IsNumeric(Mid$(VAuthorizationCode, l, 1)) = False
+      m = m + 1
+      VAuthorizationCode = Right(VAuthorizationCode, Len(VAuthorizationCode) - 1)
+           
+Wend
+
+IntCode = (Val(VAuthorizationCode) * VRandomBase) + VModulaBase
+
+If VMisidn = "0" & IntCode Then
+  VVerificationState = True
+  
+  Else
+  VVerificationState = False
+  
+  End If
+End Sub
+

@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+$jquery='
+$(function(){
+    alert("jquery exists");
+});
+';
+
+require_once "engine.php";
+validateLoggedIn();
+NickDisplay::header();
+NickDisplay::topNavigation();
+NickDisplay::topSection();
+NickDisplay::content(calculate_form("calculate.php"));
+NickDisplay::footer();
+
+?>

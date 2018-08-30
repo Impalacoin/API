@@ -1,0 +1,298 @@
+VERSION 5.00
+Object = "{8E27C92E-1264-101C-8A2F-040224009C02}#7.0#0"; "MSCAL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form frmQuery 
+   BackColor       =   &H00E0E0E0&
+   BorderStyle     =   1  'Fixed Single
+   Caption         =   "Participants Currency  Exchange Rates"
+   ClientHeight    =   7680
+   ClientLeft      =   -15
+   ClientTop       =   270
+   ClientWidth     =   13050
+   Icon            =   "Query.frx":0000
+   LinkTopic       =   "Transaction Query"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   7680
+   ScaleWidth      =   13050
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00E0E0E0&
+      Height          =   7335
+      Left            =   120
+      TabIndex        =   0
+      Top             =   240
+      Width           =   12735
+      Begin VB.TextBox Text1 
+         Appearance      =   0  'Flat
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   13.5
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FF8080&
+         Height          =   480
+         Left            =   6000
+         Locked          =   -1  'True
+         TabIndex        =   5
+         Top             =   720
+         Width           =   2775
+      End
+      Begin MSACAL.Calendar Calendar1 
+         Height          =   2775
+         Left            =   120
+         TabIndex        =   2
+         Top             =   240
+         Width           =   4695
+         _Version        =   524288
+         _ExtentX        =   8281
+         _ExtentY        =   4895
+         _StockProps     =   1
+         BackColor       =   12632256
+         Year            =   2013
+         Month           =   9
+         Day             =   27
+         DayLength       =   1
+         MonthLength     =   2
+         DayFontColor    =   0
+         FirstDay        =   1
+         GridCellEffect  =   1
+         GridFontColor   =   10485760
+         GridLinesColor  =   -2147483632
+         ShowDateSelectors=   -1  'True
+         ShowDays        =   -1  'True
+         ShowHorizontalGrid=   -1  'True
+         ShowTitle       =   -1  'True
+         ShowVerticalGrid=   -1  'True
+         TitleFontColor  =   10485760
+         ValueIsNull     =   0   'False
+         BeginProperty DayFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty GridFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty TitleFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Arial"
+            Size            =   12
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.CommandButton Command1 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Pull Exchange Rate"
+         Height          =   855
+         Left            =   6000
+         Picture         =   "Query.frx":1082
+         Style           =   1  'Graphical
+         TabIndex        =   1
+         Top             =   2160
+         Width           =   2655
+      End
+      Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+         Height          =   3735
+         Left            =   0
+         TabIndex        =   7
+         Top             =   3480
+         Width           =   12735
+         _ExtentX        =   22463
+         _ExtentY        =   6588
+         _Version        =   393216
+         Rows            =   5
+         Cols            =   7
+         FixedCols       =   0
+         BackColorBkg    =   16777215
+         FocusRect       =   0
+         SelectionMode   =   1
+         AllowUserResizing=   3
+         FormatString    =   $"Query.frx":14C4
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.Label Label3 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Exchange Date:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   6000
+         TabIndex        =   6
+         Top             =   360
+         Width           =   1455
+      End
+      Begin VB.Line Line1 
+         BorderStyle     =   3  'Dot
+         X1              =   6000
+         X2              =   9840
+         Y1              =   1680
+         Y2              =   1680
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "BASE CURRENCY = KENYA SHILLINGS"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   6000
+         TabIndex        =   4
+         Top             =   1320
+         Width           =   3975
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Select Exchage Date and run [PULL]"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   6000
+         TabIndex        =   3
+         Top             =   1755
+         Width           =   3735
+      End
+   End
+End
+Attribute VB_Name = "frmQuery"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Dim DbCon As New ADODB.Connection
+Private Sub Command4_Click()
+'MSHFlexGrid1.Visible = False
+End Sub
+Private Sub Command5_Click()
+'Frame2.Visible = False
+End Sub
+
+
+
+Private Sub Calendar1_Click()
+Text1.Text = Calendar1.Value
+End Sub
+
+Private Sub Command1_Click()
+Dim DateT As String
+Dim RecSet As New ADODB.Recordset
+DateT = Format(Calendar1.Value, "dd/MM/yyyy")
+On Error GoTo ErrorTrap
+Dim col, i As Integer
+RecSet.Open ("Select * from currency_history where date_fx = '" & DateT & "'  order by country_code asc"), DbCon
+
+col = 0
+MSHFlexGrid1.Rows = 1
+i = 1
+i = 1
+Do While Not RecSet.EOF
+col = 0
+MSHFlexGrid1.Rows = MSHFlexGrid1.Rows + 1
+MSHFlexGrid1.TextMatrix(i, 0) = RecSet.Fields(1).Value
+MSHFlexGrid1.TextMatrix(i, 1) = RecSet.Fields(2).Value
+MSHFlexGrid1.TextMatrix(i, 2) = RecSet.Fields(0).Value
+MSHFlexGrid1.TextMatrix(i, 3) = RecSet.Fields(3).Value
+MSHFlexGrid1.TextMatrix(i, 4) = RecSet.Fields(4).Value
+
+i = i + 1
+
+RecSet.MoveNext
+Loop
+RecSet.Close
+Exit Sub
+
+ErrorTrap:
+MsgBox "Error occurred!." & vbNewLine & err.Description, vbCritical, "Emserv"
+
+
+End Sub
+
+Private Sub Form_Load()
+
+
+Dim K As Integer
+On Error GoTo ErrTrap
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+'
+'          DbCon.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\FBL MONEX\emconnect.accdb;Persist Security Info=True"
+'    DbCon.Open
+          
+          Dim DateT As String
+Dim RecSet As New ADODB.Recordset
+DateT = Format(Calendar1.Value, "dd/MM/yyyy")
+
+Dim col, i As Integer
+RecSet.Open ("Select * from currency_history where date_fx = '" & DateT & "'  order by country_code asc"), DbCon
+
+col = 0
+MSHFlexGrid1.row = 1
+i = 1
+i = 1
+Do While Not RecSet.EOF
+col = 0
+MSHFlexGrid1.Rows = MSHFlexGrid1.Rows + 1
+MSHFlexGrid1.TextMatrix(i, 0) = RecSet.Fields(1).Value
+MSHFlexGrid1.TextMatrix(i, 1) = RecSet.Fields(2).Value
+MSHFlexGrid1.TextMatrix(i, 2) = RecSet.Fields(0).Value
+MSHFlexGrid1.TextMatrix(i, 3) = RecSet.Fields(3).Value
+MSHFlexGrid1.TextMatrix(i, 4) = RecSet.Fields(4).Value
+
+i = i + 1
+
+RecSet.MoveNext
+Loop
+RecSet.Close
+Exit Sub
+
+ErrTrap:
+
+End Sub
+

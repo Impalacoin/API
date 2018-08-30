@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+	<meta name="author" content="Nicholas N. Chege" />
+
+	<title>Untitled 3</title>
+    <style>
+    html,body{
+        margin:0;
+        padding: 0;
+    }
+    .topNavs{
+        background:url(button_1.jpg);
+        width:100%;
+        color:white;
+        padding:0;
+        
+    }
+    .topNavs a{
+        text-decoration: none;
+        color:white;
+        margin-right: 10px;
+    }
+    .container{
+        padding:0 5px;
+        width:995px;
+        margin:auto;
+        min-height:200px;
+        height:auto;
+        overflow:hidden;
+        border:2px solid #EFEFEF;
+    }
+    .top-section{
+        display:inline;
+        height:80px;
+        width:995px;
+        background:white;
+        overflow:hidden;
+    }
+    .top-section .logo{
+        float:left;
+        width:auto;
+        height:inherit;
+    }
+    .top-section .right{        
+        float:right;
+        padding: 20px 0px 0px 0px;
+        
+    }
+    .container .content{
+        clear:both;
+        width: 950px;
+        border:1px solid #EFEFEF;
+        min-height: 200px;
+        height:auto;
+        overflow:hidden;
+        
+    }
+    </style>
+</head>
+
+<body>
+
+<div class="topNavs">
+    <table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+              <tr>
+                <td><a href="index.php" class="style2">Home</a></td>
+                <td><a href="about-us.php" class="style2">About us</a></td>
+                <td><a href="faqs.php" class="style2">FAQs</a></td>
+                <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+</div>
+<div class="container">
+    <div class="top-section">
+      <div class="logo"><img src="logo.jpg" /></div>  
+      <div class="right">
+        <table width="100%"  border="0" cellspacing="0" cellpadding="10">
+              <tr>
+                <td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td>
+              </tr>
+          </table>
+      </div>
+    </div>
+    <div class="content">
+    
+    </div>
+
+</div>
+
+</body>
+</html>

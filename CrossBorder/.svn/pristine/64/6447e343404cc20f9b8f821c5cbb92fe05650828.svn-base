@@ -1,0 +1,995 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "MainClass"
+Attribute VB_GlobalNameSpace = True
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private t_Balance As Balance
+Private t_customerinfo As CustomerInfo
+Private t_DebitAuthorizationInfo As DebitAuthorizationInfo
+Private t_debitauthrevinfo As DebitAuthRevInfo
+Private t_networktraninfo As NetworkTranInfo
+Private t_OriginalTranInfo As OriginalTranInfo
+Private t_respcode As field
+Private t_authnumber As field
+Private t_field(1 To 128) As field
+Private t_messagetype As field
+
+Private Function GetField(ByVal strRawData As String, strFieldName As String) As String
+            
+    Dim strFieldData As String
+    
+    ' simply pulls the data from the XML string and assigns it to my field array
+    If InStr(1, strRawData, "<" & strFieldName, vbTextCompare) = 0 Then
+        strFieldData = ""
+    ElseIf InStr(1, strRawData, "<" & strFieldName & " i:nil=", vbTextCompare) > 0 Or _
+        InStr(1, strRawData, "<" & strFieldName & "/>", vbTextCompare) > 0 Then
+        strFieldData = ""
+    Else
+    
+        strFieldData = Mid(strRawData, InStr(1, strRawData, "<" & strFieldName, vbTextCompare) + Len(strFieldName) + 2, InStr(1, strRawData, "</" & strFieldName, vbTextCompare) - (InStr(1, strRawData, "<" & strFieldName, vbTextCompare) + Len(strFieldName) + 2))
+    End If
+    
+    'return field value
+    GetField = strFieldData
+    
+End Function
+
+Private Sub Class_Initialize()
+    Set t_Balance = New Balance
+    Set t_customerinfo = New CustomerInfo
+    Set t_DebitAuthorizationInfo = New DebitAuthorizationInfo
+    Set t_debitauthrevinfo = New DebitAuthRevInfo
+    Set t_networktraninfo = New NetworkTranInfo
+    Set t_OriginalTranInfo = New OriginalTranInfo
+    Set t_respcode = New field
+    Set t_authnumber = New field
+    Set t_messagetype = New field
+    
+    
+    Dim i As Integer
+    
+    For i = 1 To 128
+        Set t_field(i) = New field
+    Next i
+    
+    t_respcode.Name = "ResponseCode"
+    t_authnumber.Name = "AuthorisationCode"
+    t_messagetype.Name = "MessageType"
+End Sub
+
+Public Property Let field_MessageType(ByVal vNewValue As Variant)
+    t_messagetype.Value = vNewValue
+End Property
+
+Public Property Get field_MessageType() As field
+    Set field_MessageType = New field
+    
+    With field_MessageType
+        .Name = t_messagetype.Name
+        .Value = t_messagetype.Value
+    End With
+End Property
+
+Public Property Let field_002_Pan(ByVal vNewValue As Variant)
+    t_field(2).Value = vNewValue
+End Property
+
+Public Property Get field_002_Pan() As field
+    Set field_002_Pan = New field
+    
+    With field_002_Pan
+        .Name = t_customerinfo.field_Pan.Name
+        .Value = t_field(2).Value
+    End With
+End Property
+
+Public Property Let field_004_AmountTransaction(ByVal vNewValue As Variant)
+    t_field(4).Value = vNewValue
+End Property
+
+Public Property Get field_004_AmountTransaction() As field
+    Set field_004_AmountTransaction = New field
+    
+    With field_004_AmountTransaction
+        .Name = t_DebitAuthorizationInfo.field_Amount.subfield_Amount.Name
+        .Value = t_field(4).Value
+    End With
+End Property
+
+Public Property Let field_007_TransmissionDateTime(ByVal vNewValue As Variant)
+    t_field(7).Value = vNewValue
+End Property
+
+Public Property Get field_007_TransmissionDateTime() As field
+    Set field_007_TransmissionDateTime = New field
+    
+    With field_007_TransmissionDateTime
+        .Name = t_networktraninfo.field_TransmissionDateAndTime.Name
+        .Value = t_field(7).Value
+    End With
+End Property
+
+Public Property Let field_011_TraceNumber(ByVal vNewValue As Variant)
+    t_field(11).Value = vNewValue
+End Property
+
+Public Property Get field_011_TraceNumber() As field
+    Set field_011_TraceNumber = New field
+    
+    With field_011_TraceNumber
+        .Name = t_networktraninfo.field_TraceNumber.Name
+        .Value = t_field(11).Value
+    End With
+End Property
+
+Public Property Let field_012_LocalTransactionTime(ByVal vNewValue As Variant)
+    t_field(12).Value = vNewValue
+End Property
+
+Public Property Get field_012_LocalTransactionTime() As field
+    Set field_012_LocalTransactionTime = New field
+    
+    With field_012_LocalTransactionTime
+        .Name = t_DebitAuthorizationInfo.field_LocalTransactionTime.Name
+        .Value = t_field(12).Value
+    End With
+End Property
+
+Public Property Let field_013_LocalTransactionDate(ByVal vNewValue As Variant)
+    t_field(13).Value = vNewValue
+End Property
+
+Public Property Get field_013_LocalTransactionDate() As field
+    Set field_013_LocalTransactionDate = New field
+    
+    With field_013_LocalTransactionDate
+        .Name = t_DebitAuthorizationInfo.field_LocalTransactionDate.Name
+        .Value = t_field(13).Value
+    End With
+End Property
+
+Public Property Let field_015_SettlementDate(ByVal vNewValue As Variant)
+    t_field(15).Value = vNewValue
+End Property
+
+Public Property Get field_015_SettlementDate() As field
+    Set field_015_SettlementDate = New field
+    
+    With field_015_SettlementDate
+        .Name = t_DebitAuthorizationInfo.field_SettlementDate.Name
+        .Value = t_field(15).Value
+    End With
+End Property
+
+Public Property Let field_018_MerchantCategoryCode(ByVal vNewValue As Variant)
+    t_field(18).Value = vNewValue
+End Property
+
+Public Property Get field_018_MerchantCategoryCode() As field
+    Set field_018_MerchantCategoryCode = New field
+    
+    With field_018_MerchantCategoryCode
+        .Name = t_networktraninfo.field_MerchantCategoryCode.Name
+        .Value = t_field(18).Value
+    End With
+End Property
+
+Public Property Let field_032_AcquirerBIN(ByVal vNewValue As Variant)
+    t_field(32).Value = vNewValue
+End Property
+
+Public Property Get field_032_AcquirerBIN() As field
+    Set field_032_AcquirerBIN = New field
+    
+    With field_032_AcquirerBIN
+        .Name = t_networktraninfo.field_AcquirerBin.Name
+        .Value = t_field(32).Value
+    End With
+End Property
+
+Public Property Let field_035_Track2Data(ByVal vNewValue As Variant)
+    t_field(35).Value = vNewValue
+End Property
+
+Public Property Get field_035_Track2Data() As field
+    Set field_035_Track2Data = New field
+    
+    With field_035_Track2Data
+        .Name = t_customerinfo.field_MagCardData.subfield_Track2Data.Name
+        .Value = t_field(35).Value
+    End With
+End Property
+
+Public Property Let field_037_ReferenceNumber(ByVal vNewValue As Variant)
+    t_field(37).Value = vNewValue
+End Property
+
+Public Property Get field_037_ReferenceNumber() As field
+    Set field_037_ReferenceNumber = New field
+    
+    With field_037_ReferenceNumber
+        .Name = t_networktraninfo.field_ReferenceNumber.Name
+        .Value = t_field(37).Value
+    End With
+End Property
+
+Public Property Let field_038_AuthorizationNumber(ByVal vNewValue As Variant)
+    t_field(38).Value = vNewValue
+End Property
+
+Public Property Get field_038_AuthorizationNumber() As field
+    Set field_038_AuthorizationNumber = New field
+    
+    With field_038_AuthorizationNumber
+        .Name = t_authnumber.Name
+        .Value = t_field(38).Value
+    End With
+End Property
+
+Public Property Let field_039_ResponseCode(ByVal vNewValue As Variant)
+    t_field(39).Value = vNewValue
+End Property
+
+Public Property Get field_039_ResponseCode() As field
+    Set field_039_ResponseCode = New field
+    
+    With field_039_ResponseCode
+        .Name = t_respcode.Name
+        .Value = t_field(39).Value
+    End With
+End Property
+
+Public Property Let field_041_TerminalID(ByVal vNewValue As Variant)
+    t_field(41).Value = vNewValue
+End Property
+
+Public Property Get field_041_TerminalID() As field
+    Set field_041_TerminalID = New field
+    
+    With field_041_TerminalID
+        .Name = t_networktraninfo.field_TerminalId.Name
+        .Value = t_field(41).Value
+    End With
+End Property
+
+Public Property Let field_042_TerminalLocation(ByVal vNewValue As Variant)
+    t_field(42).Value = vNewValue
+End Property
+
+Public Property Get field_042_TerminalLocation() As field
+    Set field_042_TerminalLocation = New field
+    
+    With field_042_TerminalLocation
+        .Name = t_networktraninfo.field_TerminalLocation.Name
+        .Value = t_field(42).Value
+    End With
+End Property
+
+Public Property Let field_043_TerminalAddress(ByVal vNewValue As Variant)
+    t_field(43).Value = vNewValue
+End Property
+
+Public Property Get field_043_TerminalAddress() As field
+    Set field_043_TerminalAddress = New field
+    
+    With field_043_TerminalAddress
+        .Name = t_networktraninfo.field_TerminalAddress.Name
+        .Value = t_field(43).Value
+    End With
+End Property
+
+Public Property Let field_045_Track1Data(ByVal vNewValue As Variant)
+    t_field(45).Value = vNewValue
+End Property
+
+Public Property Get field_045_Track1Data() As field
+    Set field_045_Track1Data = New field
+    
+    With field_045_Track1Data
+        .Name = t_customerinfo.field_MagCardData.subfield_Track1Data.Name
+        .Value = t_field(45).Value
+    End With
+End Property
+
+Public Property Let field_046_Fees(ByVal vNewValue As Variant)
+    t_field(46).Value = vNewValue
+End Property
+
+Public Property Get field_046_Fees() As field
+    Set field_046_Fees = New field
+    
+    With field_046_Fees
+        .Name = t_DebitAuthorizationInfo.field_Fee.subfield_Amount.Name
+        .Value = t_field(45).Value
+    End With
+End Property
+
+Public Property Let field_049_CurrencyCode(ByVal vNewValue As Variant)
+    t_field(49).Value = vNewValue
+End Property
+
+Public Property Get field_049_CurrencyCode() As field
+    Set field_049_CurrencyCode = New field
+    
+    With field_049_CurrencyCode
+        .Name = t_DebitAuthorizationInfo.field_Amount.subfield_CurrencyCode.Name
+        .Value = t_field(49).Value
+    End With
+End Property
+
+Public Property Let field_054_AdditionalAmounts(ByVal vNewValue As Variant)
+    t_field(54).Name = "Balances Field"
+    t_field(54).Value = vNewValue
+End Property
+
+Public Property Get field_054_AdditionalAmounts() As field
+    Set field_054_AdditionalAmounts = New field
+    
+    With field_054_AdditionalAmounts
+        .Name = t_field(54).Name
+        .Value = t_field(54).Value
+    End With
+End Property
+
+Public Property Let field_056_MessageReasonCode(ByVal vNewValue As Variant)
+    t_field(56).Value = vNewValue
+End Property
+
+Public Property Get field_056_MessageReasonCode() As field
+    Set field_056_MessageReasonCode = New field
+    
+    With field_056_MessageReasonCode
+        .Name = t_debitauthrevinfo.field_ReversalReasonCode.Name
+        .Value = t_field(56).Value
+    End With
+End Property
+
+Public Property Let field_070_NetworkManagementCode(ByVal vNewValue As Variant)
+    t_field(70).Value = vNewValue
+End Property
+
+Public Property Get field_070_NetworkManagementCode() As field
+    Set field_070_NetworkManagementCode = New field
+    
+    With field_070_NetworkManagementCode
+        .Name = t_networktraninfo.field_NetworkMangtCode.Name
+        .Value = t_field(70).Value
+    End With
+End Property
+
+Public Property Let field_090_OriginalDataElements(ByVal vNewValue As Variant)
+    t_field(90).Value = vNewValue
+End Property
+
+Public Property Get field_090_OriginalDataElements() As field
+    Set field_090_OriginalDataElements = New field
+    
+    With field_090_OriginalDataElements
+        .Name = "Original Transaction Information"
+        .Value = t_field(90).Value
+    End With
+End Property
+
+Public Property Let field_VMT_ReversalAuthorizationNumber(ByVal vNewValue As Variant)
+    t_field(114).Value = vNewValue
+End Property
+
+Public Property Get field_VMT_ReversalAuthorizationNumber() As field
+    Set field_VMT_ReversalAuthorizationNumber = New field
+    
+    With field_VMT_ReversalAuthorizationNumber
+        .Name = t_debitauthrevinfo.field_AuthorizationNumber.Name
+        .Value = t_field(114).Value
+    End With
+End Property
+
+Public Property Let field_VMT_ReversalReferenceNumber(ByVal vNewValue As Variant)
+    t_field(115).Value = vNewValue
+End Property
+
+Public Property Get field_VMT_ReversalReferenceNumber() As field
+    Set field_VMT_ReversalReferenceNumber = New field
+    
+    With field_VMT_ReversalReferenceNumber
+        .Name = t_debitauthrevinfo.field_ReferenceNumber.Name
+        .Value = t_field(115).Value
+    End With
+End Property
+
+Public Property Let field_VMT_AuthorizationCode(ByVal vNewValue As Variant)
+    t_field(116).Value = vNewValue
+End Property
+
+Public Property Get field_VMT_AuthorizationCode() As field
+    Set field_VMT_AuthorizationCode = New field
+    
+    With field_VMT_AuthorizationCode
+        .Name = t_customerinfo.field_MobileData.subfield_AuthCode.Name
+        .Value = t_field(116).Value
+    End With
+End Property
+
+Public Property Let field_VMT_MSISDN(ByVal vNewValue As Variant)
+    t_field(117).Value = vNewValue
+End Property
+
+Public Property Get field_VMT_MSISDN() As field
+    Set field_VMT_MSISDN = New field
+    
+    With field_VMT_MSISDN
+        .Name = t_customerinfo.field_MobileData.subfield_Msisdn.Name
+        .Value = t_field(117).Value
+    End With
+End Property
+
+Public Property Let field_VTM_AcquirerName(ByVal vNewValue As Variant)
+    t_field(118).Value = vNewValue
+End Property
+
+Public Property Get field_VTM_AcquirerName() As field
+    Set field_VTM_AcquirerName = New field
+    
+    With field_VTM_AcquirerName
+        .Name = t_networktraninfo.field_AcquirerName.Name
+        .Value = t_field(118).Value
+    End With
+End Property
+
+Public Property Let field_VMT_TerminalType(ByVal vNewValue As Variant)
+    t_field(119).Value = vNewValue
+End Property
+
+Public Property Get field_VMT_TerminalType() As field
+    Set field_VMT_TerminalType = New field
+    
+    With field_VMT_TerminalType
+        .Name = t_networktraninfo.field_TerminalType.Name
+        .Value = t_field(119).Value
+    End With
+End Property
+
+Public Property Let field_VMT_ShortCode(ByVal vNewValue As Variant)
+    t_field(120).Value = vNewValue
+End Property
+
+Public Property Get field_VMT_ShortCode() As field
+    Set field_VMT_ShortCode = New field
+    
+    With field_VMT_ShortCode
+        .Name = t_networktraninfo.field_ShortCode.Name
+        .Value = t_field(120).Value
+    End With
+End Property
+
+Public Function BuildSoapMessage(ByVal MessageType As String, ByVal TranType As String, _
+ByVal strUrl As String, ByVal strPort As String) As String
+    Dim Message As String
+    Dim strPropertyTag As String
+    Dim strEnvelopeTag As String, strEndEnvelopeTag As String
+    Dim strBodyTag As String, strEndBodyTag As String
+    Dim strTranType As String, strMessageType As String
+    Dim strTranTypeXmlns As String, strTranTypeTag As String, strEndTranTypeTag As String
+    Dim strMsgTypeXmlns As String, strMsgTypeTag As String, strEndMsgTypeTag As String
+    
+    Dim strHeaderTag As String, strHeaderXmlns As String, strEndHeaderTag As String
+    Dim strToTag As String
+    Dim strActionTag As String
+    
+    Dim eUrl As URL
+    Dim strMethod As String
+    Dim strData As String
+    Dim strPostData As String
+    Dim strHeaders As String
+    Dim strHTTP As String
+    Dim strSoapAction As String
+    
+    strHeaders = ""
+    strMethod = "POST"
+    
+    Select Case TranType
+    Case "01":
+        strTranType = "CashWDAuth"
+    Case "21":
+        strTranType = "CashDepAdvc"
+    End Select
+    
+    Select Case MessageType
+    Case "0200":
+        strMessageType = "reques t"
+        strSoapAction = "http://vmt.sagentia.com/BankingIntegration/CashWDAuth"
+    Case "0420", "0421":
+        strTranType = "CashWDReversal"
+        strMessageType = "request"
+        strSoapAction = "http://vmt.sagentia.com/BankingIntegration/CashWDReversal"
+    Case "0800":
+        strTranType = "NetworkEcho"
+        strMessageType = "request"
+        strSoapAction = "http://vmt.sagentia.com/BankingIntegration/NetworkEcho"
+    End Select
+    
+    strHeaderTag = "<s:Header>": strEndHeaderTag = "</s:Header>"
+    strEnvelopeTag = "<s:Envelope xmlns:s=""" & "http://schemas.xmlsoap.org/soap/envelope/""" & ">"
+    strEndEnvelopeTag = "</s:Envelope>"
+    
+    ' header comes here
+    strHeaderXmlns = "s:mustUnderstand=""" & "1""" & " xmlns=""" & "http://schemas.microsoft.com/ws/2005/05/addressing/none""" & ">"
+    strToTag = "<To " & strHeaderXmlns & strUrl & "</To>"
+    strActionTag = "<Action " & strHeaderXmlns & strSoapAction & "</Action>"
+    
+    ' body starts here
+    strBodyTag = "<s:Body>"
+    strEndBodyTag = "</s:Body>"
+    strTranTypeXmlns = "xmlns=""" & "http://vmt.sagentia.com/BankingIntegration""" & ">"
+    strMsgTypeXmlns = "xmlns:i=" & """http://www.w3.org/2001/XMLSchema-instance""" & ">"
+    
+    strTranTypeTag = "<" & strTranType & " " & strTranTypeXmlns
+    strEndTranTypeTag = "</" & strTranType & ">"
+    strMsgTypeTag = "<" & strMessageType & " " & strMsgTypeXmlns
+    strEndMsgTypeTag = "</" & strMessageType & ">"
+    ' strPropertyTag = "<PropertyChanged i:nil=""" & "true""" & " xmlns:b=""" & "http://schemas.datacontract.org/2004/07/System.ComponentModel""" & "/>"
+    
+    Message = strEnvelopeTag
+    'Message = Message & strHeaderTag & strToTag & strActionTag & strEndHeaderTag
+    Message = Message & strBodyTag
+    Message = Message & strTranTypeTag
+    Message = Message & strMsgTypeTag
+    Message = Message & strPropertyTag
+    
+    ' add body details here
+    If MessageType = "0200" Or Mid(MessageType, 1, 3) = "042" Or MessageType = "0800" Then
+        'network information details
+        If MessageType = "0200" Or Mid(MessageType, 1, 3) = "042" Then _
+        Message = Message & "<" & t_networktraninfo.element_NetworkTranInfo.Name & ">"
+        'Message = Message & strPropertyTag
+            'acquirer bin
+            Message = Message & "<" & t_networktraninfo.field_AcquirerBin.Name & ">" & _
+                      t_field(32).Value & _
+                      "</" & t_networktraninfo.field_AcquirerBin.Name & ">"
+            'acquirer name
+            Message = Message & "<" & t_networktraninfo.field_AcquirerName.Name & ">" & _
+                      t_field(118).Value & _
+                      "</" & t_networktraninfo.field_AcquirerName.Name & ">"
+            'short code
+            Message = Message & "<" & t_networktraninfo.field_ShortCode.Name & ">" & _
+                      t_field(120).Value & _
+                      "</" & t_networktraninfo.field_ShortCode.Name & ">"
+                      
+            If MessageType = "0200" Or Mid(MessageType, 1, 3) = "042" Then
+                'terminal type
+                Message = Message & "<" & t_networktraninfo.field_TerminalType.Name & ">" & _
+                          t_field(119).Value & _
+                          "</" & t_networktraninfo.field_TerminalType.Name & ">"
+                'terminal id field
+                Message = Message & "<" & t_networktraninfo.field_TerminalId.Name & ">" & _
+                          t_field(41).Value & _
+                          "</" & t_networktraninfo.field_TerminalId.Name & ">"
+                'terminal location field
+                Message = Message & "<" & t_networktraninfo.field_TerminalLocation.Name & ">" & _
+                          t_field(42).Value & _
+                          "</" & t_networktraninfo.field_TerminalLocation.Name & ">"
+                'terminal address field
+                Message = Message & "<" & t_networktraninfo.field_TerminalAddress.Name & ">" & _
+                          t_field(43).Value & _
+                          "</" & t_networktraninfo.field_TerminalAddress.Name & ">"
+            End If
+            
+            'network management code
+            If MessageType = "0800" Then _
+            Message = Message & "<" & t_networktraninfo.field_NetworkMangtCode.Name & ">" & _
+                      t_field(70).Value & _
+                      "</" & t_networktraninfo.field_NetworkMangtCode.Name & ">"
+            'trace number
+            Message = Message & "<" & t_networktraninfo.field_TraceNumber.Name & ">" & _
+                      t_field(11).Value & _
+                      "</" & t_networktraninfo.field_TraceNumber.Name & ">"
+            'transmission date and time
+            Message = Message & "<" & t_networktraninfo.field_TransmissionDateAndTime.Name & ">" & _
+                      t_field(7).Value & _
+                      "</" & t_networktraninfo.field_TransmissionDateAndTime.Name & ">"
+            'merchant category code
+            Message = Message & "<" & t_networktraninfo.field_MerchantCategoryCode.Name & ">" & _
+                      t_field(18).Value & _
+                      "</" & t_networktraninfo.field_MerchantCategoryCode.Name & ">"
+            'reference number
+            Message = Message & "<" & t_networktraninfo.field_ReferenceNumber.Name & ">" & _
+                      t_field(37).Value & _
+                      "</" & t_networktraninfo.field_ReferenceNumber.Name & ">"
+            
+        If MessageType = "0200" Or Mid(MessageType, 1, 3) = "042" Then _
+        Message = Message & "</" & t_networktraninfo.element_NetworkTranInfo.Name & ">"
+    End If
+    
+    If MessageType = "0200" Or Mid(MessageType, 1, 3) = "042" Then
+        ' customer information
+        Message = Message & "<" & t_customerinfo.element_CustomerInfo.Name & ">"
+        'Message = Message & strPropertyTag
+            'PAN
+            Message = Message & "<" & t_customerinfo.field_Pan.Name & ">" & _
+                      t_field(2).Value & _
+                      "</" & t_customerinfo.field_Pan.Name & ">"
+            'magnetic strip card data
+            Message = Message & "<" & t_customerinfo.element_MagCardData.Name & ">"
+            'Message = Message & strPropertyTag
+                'track 1 data
+                If t_field(45).Value = "" Then
+                    Message = Message & "<" & t_customerinfo.field_MagCardData.subfield_Track1Data.Name & " i:nil=""" & "true" & """ />"
+                Else
+                    Message = Message & "<" & t_customerinfo.field_MagCardData.subfield_Track1Data.Name & ">" & _
+                              t_field(45).Value & _
+                              "</" & t_customerinfo.field_MagCardData.subfield_Track1Data.Name & ">"
+                End If
+                
+                'track 2 data
+                If t_field(35).Value = "" Then
+                    Message = Message & "<" & t_customerinfo.field_MagCardData.subfield_Track2Data.Name & " i:nil=""" & "true" & """ />"
+                Else
+                    Message = Message & "<" & t_customerinfo.field_MagCardData.subfield_Track2Data.Name & ">" & _
+                              t_field(35).Value & _
+                              "</" & t_customerinfo.field_MagCardData.subfield_Track2Data.Name & ">"
+                End If
+            Message = Message & "</" & t_customerinfo.element_MagCardData.Name & ">"
+            'mobile data
+            Message = Message & "<" & t_customerinfo.element_MobileData.Name & ">"
+            'Message = Message & strPropertyTag
+                'authorization code
+                If t_field(116).Value = "" Then
+                    Message = Message & "<" & t_customerinfo.field_MobileData.subfield_AuthCode.Name & " i:nil=""" & "true" & """ />"
+                Else
+                    Message = Message & "<" & t_customerinfo.field_MobileData.subfield_AuthCode.Name & ">" & _
+                              t_field(116).Value & _
+                              "</" & t_customerinfo.field_MobileData.subfield_AuthCode.Name & ">"
+                End If
+                
+                'MSISDN
+                Message = Message & "<" & t_customerinfo.field_MobileData.subfield_Msisdn.Name & ">" & _
+                          t_field(117).Value & _
+                          "</" & t_customerinfo.field_MobileData.subfield_Msisdn.Name & ">"
+            Message = Message & "</" & t_customerinfo.element_MobileData.Name & ">"
+        Message = Message & "</" & t_customerinfo.element_CustomerInfo.Name & ">"
+    End If
+    
+    If MessageType = "0200" Or Mid(MessageType, 1, 3) = "042" Then
+        ' debit authorization data
+        Message = Message & "<" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name & ">"
+        'Message = Message & strPropertyTag
+            'local date
+            Message = Message & "<" & t_DebitAuthorizationInfo.field_LocalTransactionDate.Name & ">" & _
+                      t_field(13).Value & _
+                      "</" & t_DebitAuthorizationInfo.field_LocalTransactionDate.Name & ">"
+            'local time
+            Message = Message & "<" & t_DebitAuthorizationInfo.field_LocalTransactionTime.Name & ">" & _
+                      t_field(12).Value & _
+                      "</" & t_DebitAuthorizationInfo.field_LocalTransactionTime.Name & ">"
+            'settlement date
+            Message = Message & "<" & t_DebitAuthorizationInfo.field_SettlementDate.Name & ">" & _
+                      t_field(15).Value & _
+                      "</" & t_DebitAuthorizationInfo.field_SettlementDate.Name & ">"
+            '''''''''''''''''''''''add amounts fields
+            Message = Message & "<" & t_DebitAuthorizationInfo.element_Amount.Name & ">"
+            'Message = Message & strPropertyTag
+                ' amounts currency code
+                Message = Message & "<" & t_DebitAuthorizationInfo.field_Amount.subfield_CurrencyCode.Name & ">" & _
+                          t_field(49).Value & _
+                          "</" & t_DebitAuthorizationInfo.field_Amount.subfield_CurrencyCode.Name & ">"
+                'amounts AMOUNT
+                Message = Message & "<" & t_DebitAuthorizationInfo.field_Amount.subfield_Amount.Name & ">" & _
+                          t_field(4).Value & _
+                          "</" & t_DebitAuthorizationInfo.field_Amount.subfield_Amount.Name & ">"
+            Message = Message & "</" & t_DebitAuthorizationInfo.element_Amount.Name & ">"
+            '''''''''''''''''''''''add fees fields
+            Message = Message & "<" & t_DebitAuthorizationInfo.element_Fee.Name & ">"
+            'Message = Message & strPropertyTag
+                'fees currency code
+                Message = Message & "<" & t_DebitAuthorizationInfo.field_Fee.subfield_CurrencyCode.Name & ">" & _
+                          t_field(49).Value & _
+                          "</" & t_DebitAuthorizationInfo.field_Fee.subfield_CurrencyCode.Name & ">"
+                'fees AMOUNT
+                Message = Message & "<" & t_DebitAuthorizationInfo.field_Fee.subfield_Amount.Name & ">" & _
+                          t_field(46).Value & _
+                          "</" & t_DebitAuthorizationInfo.field_Fee.subfield_Amount.Name & ">"
+            Message = Message & "</" & t_DebitAuthorizationInfo.element_Fee.Name & ">"
+        Message = Message & "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name & ">"
+    End If
+    
+    If Mid(MessageType, 1, 3) = "042" Then
+        ' original tran info
+        Message = Message & "<" & t_OriginalTranInfo.element_OriginalTranInfo.Name & ">"
+        'Message = Message & strPropertyTag
+            Dim posPipe As Integer
+            posPipe = 1
+            'original trace number
+            Message = Message & "<" & t_OriginalTranInfo.field_OrigTraceNumber.Name & ">" & _
+                      Mid(t_field(90).Value, posPipe, InStr(posPipe, t_field(90).Value, "|", vbTextCompare) - posPipe) & _
+                      "</" & t_OriginalTranInfo.field_OrigTraceNumber.Name & ">"
+                      
+            posPipe = InStr(posPipe, t_field(90).Value, "|", vbTextCompare) + 1
+            'original date
+            Message = Message & "<" & t_OriginalTranInfo.field_OrigLocalTranDate.Name & ">" & _
+                      Mid(t_field(90).Value, posPipe, InStr(posPipe, t_field(90).Value, "|", vbTextCompare) - posPipe) & _
+                      "</" & t_OriginalTranInfo.field_OrigLocalTranDate.Name & ">"
+            
+            posPipe = InStr(posPipe, t_field(90).Value, "|", vbTextCompare) + 1
+            'original time
+            Message = Message & "<" & t_OriginalTranInfo.field_OrigLocalTranTime.Name & ">" & _
+                      Mid(t_field(90).Value, posPipe, Len(t_field(90).Value) + 1 - posPipe) & _
+                      "</" & t_OriginalTranInfo.field_OrigLocalTranTime.Name & ">"
+        Message = Message & "</" & t_OriginalTranInfo.element_OriginalTranInfo.Name & ">"
+        
+        ' debit auth reversal
+        Message = Message & "<" & t_debitauthrevinfo.element_DebitAuthRevInfo.Name & ">"
+        'Message = Message & strPropertyTag
+            'debit reference number
+            If t_field(115).Value = "" Then  'i:nil="true"
+                Message = Message & "<" & t_debitauthrevinfo.field_ReferenceNumber.Name & " i:nil=""" & "true" & """ />"
+            Else
+                Message = Message & "<" & t_debitauthrevinfo.field_ReferenceNumber.Name & ">" & _
+                          t_field(115).Value & _
+                          "</" & t_debitauthrevinfo.field_ReferenceNumber.Name & ">"
+            End If
+            
+            'debit authorization number
+            If t_field(114).Value = "" Then
+                Message = Message & "<" & t_debitauthrevinfo.field_AuthorizationNumber.Name & " i:nil=""" & "true" & """ />"
+            Else
+                Message = Message & "<" & t_debitauthrevinfo.field_AuthorizationNumber.Name & ">" & _
+                          t_field(114).Value & _
+                          "</" & t_debitauthrevinfo.field_AuthorizationNumber.Name & ">"
+            End If
+            
+            'reversal reason code
+            Message = Message & "<" & t_debitauthrevinfo.field_ReversalReasonCode.Name & ">" & _
+                      t_field(56).Value & _
+                      "</" & t_debitauthrevinfo.field_ReversalReasonCode.Name & ">"
+        Message = Message & "</" & t_debitauthrevinfo.element_DebitAuthRevInfo.Name & ">"
+    End If
+    
+    'wrap everything up
+    Message = Message & strEndMsgTypeTag
+    Message = Message & strEndTranTypeTag
+    Message = Message & strEndBodyTag
+    Message = Message & strEndEnvelopeTag
+    
+    strPostData = Message
+    
+    ' get the url
+    eUrl = ExtractUrl(strUrl)
+    
+    If eUrl.Host = vbNullString Then
+        BuildSoapMessage = "Error, Invalid URL"
+        Exit Function
+    End If
+
+    ' check if any variables were supplied
+    If strMethod = "GET" Then
+        ' if this is a GET request then the URL encoded data
+        ' is appended to the URI with a ?
+        If eUrl.Query <> vbNullString Then
+            eUrl.URI = eUrl.URI & "&" & strData
+        Else
+            eUrl.URI = eUrl.URI & "?" & strData
+        End If
+    Else
+        ' if it is a post request, the data is appended to the
+        ' body of the HTTP request and the headers Content-Type
+        ' and Content-Length added
+        strHeaders = "Content-Type: text/xml; charset=utf-8" & vbCrLf & _
+                     "Content-Length: " & Len(strPostData) & vbCrLf & _
+                     "SOAPAction: " & " """ & strSoapAction & """ " & vbCrLf & _
+                     "Expect: 100-continue" & vbCrLf & _
+                     "Connection: Keep-Alive" & vbCrLf
+    End If
+    
+    ' build the HTTP request in the form
+    '
+    ' {REQ METHOD} URI HTTP/1.1
+    ' Host: {host}
+    ' {headers}
+    '
+    ' {post data}
+    strHTTP = strMethod & " " & eUrl.URI & " HTTP/1.1" & vbCrLf
+    strHTTP = strHTTP & "Host: " & eUrl.Host & IIf(CStr(strPort) <> "", ":" & CStr(strPort), "") & vbCrLf
+    strHTTP = strHTTP & strHeaders
+    strHTTP = strHTTP & vbCrLf
+    strHTTP = strHTTP & strPostData
+    
+    ' return message (http)
+    BuildSoapMessage = strHTTP
+End Function
+
+Public Function UnpackSoapMessage(ByVal strSoapMessage As String) As Boolean
+    
+    Dim intContentLengthPos As Integer
+    Dim intMessageLength As Integer
+    Dim strXMLMessage As String
+    Dim strAmount As String
+    Dim strFees As String
+    Dim strDebitAuthRevInfo As String
+    Dim strMobileData As String
+    Dim strAuthCode As String
+    Dim strBalance As String
+    Dim strReference As String
+    Dim blSuccess As Boolean
+    
+    ' check if httprequest was OK
+    If InStr(1, strSoapMessage, "HTTP/1.1 200 OK", vbTextCompare) = 1 Then
+        ' find content-Length
+        intContentLengthPos = InStr(1, strSoapMessage, "Content-Length:", vbTextCompare) + 15
+        intMessageLength = Mid(strSoapMessage, intContentLengthPos, CInt(InStr(intContentLengthPos, strSoapMessage, Chr(10), vbTextCompare)) - intContentLengthPos)
+        
+        If Len(strSoapMessage) > intMessageLength Then 'check error readin data, discard
+            strXMLMessage = Mid(strSoapMessage, Len(strSoapMessage) - intMessageLength + 1, intMessageLength)
+        Else
+            GoTo error_handle
+        End If
+        
+        On Error Resume Next
+        
+        ' get message type
+        If InStr(1, UCase(strXMLMessage), UCase("CashWDAuthResponse"), vbTextCompare) > 0 Then
+            t_messagetype.Value = "0200"
+        ElseIf InStr(1, UCase(strXMLMessage), UCase("CashWDReversalResponse"), vbTextCompare) > 0 Then
+            t_messagetype.Value = "0420"
+        ElseIf InStr(1, UCase(strXMLMessage), UCase("NetworkEchoResponse"), vbTextCompare) > 0 Then
+            t_messagetype.Value = "0800"
+        End If
+        
+        ' get pan
+        t_field(2).Value = GetField(strXMLMessage, t_customerinfo.field_Pan.Name)
+        Debug.Print " PAN: " & t_field(2).Value
+        
+        ' get amount, which is a subset of amount - buggy design
+        strAmount = Mid(strXMLMessage, InStr(InStr(1, strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Amount.Name, vbTextCompare), strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Amount.Name, vbTextCompare) + Len(t_DebitAuthorizationInfo.element_Amount.Name) + 2, InStr(InStr(1, strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Amount.Name, vbTextCompare), strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare) - (InStr(InStr(1, strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Amount.Name, vbTextCompare), strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Amount.Name, vbTextCompare) + Len(t_DebitAuthorizationInfo.element_Amount.Name) + 2))
+        
+        t_field(4).Value = GetField(strAmount, t_DebitAuthorizationInfo.field_Amount.subfield_Amount.Name)
+        Debug.Print " AMOUNT: " & t_field(4).Value
+        
+        ' get transmission date and time
+        t_field(7).Value = GetField(strXMLMessage, t_networktraninfo.field_TransmissionDateAndTime.Name)
+        Debug.Print " TRANSDATETIME: " & t_field(7).Value
+        
+        ' get trace number
+        t_field(11).Value = GetField(strXMLMessage, t_networktraninfo.field_TraceNumber.Name)
+        Debug.Print " TRACE NR: " & t_field(11).Value
+        
+        ' get local time
+        t_field(12).Value = GetField(strXMLMessage, t_DebitAuthorizationInfo.field_LocalTransactionTime.Name)
+        Debug.Print " LCL TIME: " & t_field(12).Value
+        
+        ' get local date
+        t_field(13).Value = GetField(strXMLMessage, t_DebitAuthorizationInfo.field_LocalTransactionDate.Name)
+        Debug.Print " LCL DATE: " & t_field(13).Value
+        
+        'get settlement date
+        t_field(15).Value = GetField(strXMLMessage, t_DebitAuthorizationInfo.field_SettlementDate.Name)
+        Debug.Print " SETTLE DATE: " & t_field(15).Value
+        
+        ' get merchant category code
+        t_field(18).Value = GetField(strXMLMessage, t_networktraninfo.field_MerchantCategoryCode.Name)
+        Debug.Print " MERCHANT CODE: " & t_field(18).Value
+        
+        ' get acquiring institution id
+        t_field(32).Value = GetField(strXMLMessage, t_networktraninfo.field_AcquirerBin.Name)
+        Debug.Print " ACQUIRER: " & t_field(32).Value
+
+        ' get track 2 data
+        t_field(35).Value = GetField(strXMLMessage, t_customerinfo.field_MagCardData.subfield_Track2Data.Name)
+        Debug.Print " TRACK 2: " & t_field(35).Value
+
+        ' get reference number
+        strReference = ""
+        strReference = Mid(strXMLMessage, InStr(InStr(1, strXMLMessage, "<" & t_networktraninfo.element_NetworkTranInfo.Name, vbTextCompare), strXMLMessage, "<" & t_networktraninfo.element_NetworkTranInfo.Name, vbTextCompare) + Len(t_networktraninfo.element_NetworkTranInfo.Name) + 2, InStr(InStr(1, strXMLMessage, "<" & t_networktraninfo.element_NetworkTranInfo.Name, vbTextCompare), strXMLMessage, "</" & t_networktraninfo.element_NetworkTranInfo.Name, vbTextCompare) - (InStr(InStr(1, strXMLMessage, "<" & t_networktraninfo.element_NetworkTranInfo.Name, vbTextCompare), strXMLMessage, "<" & t_networktraninfo.element_NetworkTranInfo.Name, vbTextCompare) + Len(t_networktraninfo.element_NetworkTranInfo.Name) + 2))
+        If strReference <> "" Then
+            t_field(37).Value = GetField(strReference, t_networktraninfo.field_ReferenceNumber.Name)
+            Debug.Print " RET REF: " & t_field(37).Value
+        End If
+                
+        ' get transaction authorization number
+        If InStr(1, strXMLMessage, "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name, vbTextCompare) > 0 Then
+            strAuthCode = Mid(strXMLMessage, InStr(InStr(1, strXMLMessage, "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name, vbTextCompare), strXMLMessage, "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name, vbTextCompare) + Len(t_DebitAuthorizationInfo.element_DebitAuthInfo.Name) + 3, InStr(InStr(1, strXMLMessage, "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name, vbTextCompare), strXMLMessage, "<" & t_Balance.element_Balances.Name, vbTextCompare) - (InStr(InStr(1, strXMLMessage, "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name, vbTextCompare), strXMLMessage, "</" & t_DebitAuthorizationInfo.element_DebitAuthInfo.Name, vbTextCompare) + Len(t_DebitAuthorizationInfo.element_DebitAuthInfo.Name) + 3))
+            t_field(38).Value = GetField(strAuthCode, t_authnumber.Name)
+            Debug.Print " AUTH CODE: " & t_field(38).Value
+        End If
+        
+        ' get response code
+        t_field(39).Value = GetField(strXMLMessage, t_respcode.Name)
+        Debug.Print " RESP CODE: " & t_field(39).Value
+              
+        ' get terminal id
+        t_field(41).Value = GetField(strXMLMessage, t_networktraninfo.field_TerminalId.Name)
+        Debug.Print " TERM ID: " & t_field(41).Value
+        
+        ' get terminal id code
+        t_field(42).Value = GetField(strXMLMessage, t_networktraninfo.field_TerminalLocation.Name)
+        Debug.Print " ID CODE: " & t_field(42).Value
+        
+        ' get terminal name and location
+        t_field(43).Value = GetField(strXMLMessage, t_networktraninfo.field_TerminalAddress.Name)
+        Debug.Print " NAME & LOC: " & t_field(43).Value
+        
+        ' get track 1 data
+        t_field(45).Value = GetField(strXMLMessage, t_customerinfo.field_MagCardData.subfield_Track1Data.Name)
+        Debug.Print " TRACK 1: " & t_field(45).Value
+              
+        'get fees, a subset of Amount
+        strFees = Mid(strXMLMessage, InStr(InStr(1, strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare), strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare) + Len(t_DebitAuthorizationInfo.element_Fee.Name) + 2, InStr(InStr(1, strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare), strXMLMessage, "</" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare) - (InStr(InStr(1, strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare), strXMLMessage, "<" & t_DebitAuthorizationInfo.element_Fee.Name, vbTextCompare) + Len(t_DebitAuthorizationInfo.element_Fee.Name) + 2))
+        t_field(46).Value = GetField(strFees, t_DebitAuthorizationInfo.field_Fee.subfield_Amount.Name)
+        Debug.Print " FEES: " & t_field(46).Value
+        
+        ' get currency, assumption being currencies will be uniform
+        t_field(49).Value = GetField(strXMLMessage, t_DebitAuthorizationInfo.field_Amount.subfield_CurrencyCode.Name)
+        Debug.Print " CURRENCY: " & t_field(49).Value
+  
+        ' get balances
+        strBalance = Mid(strXMLMessage, InStr(InStr(1, strXMLMessage, "<" & t_Balance.element_Balances.Name, vbTextCompare), strXMLMessage, "<" & t_Balance.element_Balances.Name, vbTextCompare) + Len(t_Balance.element_Balances.Name) + 2, InStr(InStr(1, strXMLMessage, "<" & t_Balance.element_Balances.Name, vbTextCompare), strXMLMessage, "</" & t_Balance.element_Balances.Name, vbTextCompare) - (InStr(InStr(1, strXMLMessage, "<" & t_Balance.element_Balances.Name, vbTextCompare), strXMLMessage, "<" & t_Balance.element_Balances.Name, vbTextCompare) + Len(t_Balance.element_Balances.Name) + 2))
+        t_field(54).Value = GetField(strBalance, t_Balance.field_CurrencyCode.Name) & "|" & _
+                            GetField(strBalance, t_Balance.field_AvailableBalance.Name) & "|" & _
+                            GetField(strBalance, t_Balance.field_LedgerBalance.Name)
+        Debug.Print " BALANCES: " & t_field(54).Value
+        
+        ' get message (reversal) reason code
+        t_field(56).Value = GetField(strXMLMessage, t_debitauthrevinfo.field_ReversalReasonCode.Name)
+        Debug.Print " MSG REASON CODE: " & t_field(56).Value
+        
+        ' get network management code
+        t_field(70).Value = GetField(strXMLMessage, t_networktraninfo.field_NetworkMangtCode.Name)
+        Debug.Print " NET MANGT CODE: " & t_field(70).Value
+        
+        ' get original msg for reversal
+        t_field(90).Value = GetField(strXMLMessage, t_OriginalTranInfo.field_OrigTraceNumber.Name) & "|" & _
+                            GetField(strXMLMessage, t_OriginalTranInfo.field_OrigLocalTranDate.Name) & "|" & _
+                            GetField(strXMLMessage, t_OriginalTranInfo.field_OrigLocalTranTime.Name)
+        Debug.Print " ORIG MSG: " & t_field(90).Value
+          
+        If InStr(1, strXMLMessage, "<" & t_debitauthrevinfo.element_DebitAuthRevInfo.Name, vbTextCompare) > 0 Then
+            strDebitAuthRevInfo = Mid(strXMLMessage, InStr(1, strXMLMessage, "<" & t_debitauthrevinfo.element_DebitAuthRevInfo.Name, vbTextCompare) + Len(t_debitauthrevinfo.element_DebitAuthRevInfo.Name) + 2, InStr(1, strXMLMessage, "</" & t_debitauthrevinfo.element_DebitAuthRevInfo.Name, vbTextCompare) - (InStr(1, strXMLMessage, "<" & t_debitauthrevinfo.element_DebitAuthRevInfo.Name, vbTextCompare) + Len(t_debitauthrevinfo.element_DebitAuthRevInfo.Name) + 2))
+            ' get authorization number
+            t_field(114).Value = GetField(strDebitAuthRevInfo, t_debitauthrevinfo.field_AuthorizationNumber.Name)
+            Debug.Print " REV AUTH CODE: " & t_field(114).Value
+            
+            ' get reversal authorization reference number
+            t_field(115).Value = GetField(strDebitAuthRevInfo, t_debitauthrevinfo.field_ReferenceNumber.Name)
+            Debug.Print " REV AUTH REF NO.: " & t_field(115).Value
+        End If
+        
+        ' get authorization code
+        strMobileData = Mid(strXMLMessage, InStr(InStr(1, strXMLMessage, "<" & t_customerinfo.element_MobileData.Name, vbTextCompare), strXMLMessage, "<" & t_customerinfo.element_MobileData.Name, vbTextCompare) + Len(t_customerinfo.element_MobileData.Name) + 2, InStr(InStr(1, strXMLMessage, "<" & t_customerinfo.element_MobileData.Name, vbTextCompare), strXMLMessage, "</" & t_customerinfo.element_MobileData.Name, vbTextCompare) - (InStr(InStr(1, strXMLMessage, "<" & t_customerinfo.element_MobileData.Name, vbTextCompare), strXMLMessage, "<" & t_customerinfo.element_MobileData.Name, vbTextCompare) + Len(t_customerinfo.element_MobileData.Name) + 2))
+        t_field(116).Value = GetField(strMobileData, t_customerinfo.field_MobileData.subfield_AuthCode.Name)
+        Debug.Print " AUTH CODE: " & t_field(116).Value
+        
+        ' get MSISDN
+        t_field(117).Value = GetField(strXMLMessage, t_customerinfo.field_MobileData.subfield_Msisdn.Name)
+        Debug.Print " MSISDN: " & t_field(117).Value
+        
+        ' get Acquirer name
+        t_field(118).Value = GetField(strXMLMessage, t_networktraninfo.field_AcquirerName.Name)
+        Debug.Print " ACQUIRER NAME: " & t_field(118).Value
+        
+        ' get terminal type
+        t_field(119).Value = GetField(strXMLMessage, t_networktraninfo.field_TerminalType.Name)
+        Debug.Print " TERM TYPE: " & t_field(119).Value
+        
+        ' get short code
+        t_field(120).Value = GetField(strXMLMessage, t_networktraninfo.field_ShortCode.Name)
+        Debug.Print " SHORT CODE: " & t_field(120).Value
+       
+        blSuccess = True
+    Else 'If InStr(1, strSoapMessage, "HTTP/1.1 400 Bad Request", vbTextCompare) = 1 Then
+        blSuccess = False
+    End If
+    
+    UnpackSoapMessage = blSuccess
+    Exit Function
+error_handle:
+    UnpackSoapMessage = False
+End Function
+

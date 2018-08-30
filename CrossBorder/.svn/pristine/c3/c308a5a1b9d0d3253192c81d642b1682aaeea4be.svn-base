@@ -1,0 +1,161 @@
+﻿Public Class StudForm
+    Private ExtFilePath As String
+    Private Stud_id, Fname, Mname, Lname, SubCode, Subject, Gender, ClassName, ClassN, Stream, YearE, Term, Exam_Name, Exam_Date, Class_Mean_Grade, SubjectTeacher, TeacherComment, UpateUser As String
+    Private Score, RecordCount, TotaScore, Count, LoadStatus As Integer
+    Private MeanScore As Double
+    Private LogEvents As String
+    Private RunStatus As Int16 = 1
+    Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim sqlStr As String = ""
+        Try
+
+       
+
+        Dim RecSet As New ADODB.Recordset
+        ClassName = TextBox4.Text
+        Stream = TextBox5.Text
+        YearE = Trim(TextBox11.Text)
+        Term = Trim(TextBox12.Text)
+        Exam_Name = Trim(TextBox8.Text)
+        Exam_Date = Format(DateTimePicker1.Value, "yyyy-MM-dd")
+            SubjectTeacher = ComboBox1.SelectedItem
+        TeacherComment = Trim(TextBox10.Text)
+        UpateUser = UserName
+        Subject = ComboBox4.SelectedItem
+
+       
+
+        If ClassName <> "" And YearE <> "" And Term <> "" And Exam_Name <> "" And Subject <> "" And SubjectTeacher <> "" And Exam_Date <> "" And Trim(TextBox7.Text) Then
+            Score = CInt(Trim(TextBox7.Text))
+            RecSet.Open("select * from subject where subject = '" & Subject & "'", UniversalHostConnection)
+            If RecSet.EOF = False Then
+                SubCode = RecSet.Fields(1).Value
+            Else
+                MsgBox("SUBJECT CODE MISSING", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+            RecSet.Close()
+
+        Else
+            MsgBox("IMPORTANT DETAILS MISSING, KINDLY FILL", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        If CInt(Trim(TextBox12.Text)) > 3 Or CInt(Trim(TextBox12.Text)) < 1 Then
+            MsgBox(" WRONG TERM DATA (TERM SHOULD BE 1,2,3). KINDLY FILL", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        If CInt(Trim(TextBox11.Text)) > 2100 Or CInt(Trim(TextBox11.Text)) < 1999 Then
+            MsgBox(" WRONG YEAR DATA (YEAR SHOULD BE LESS THAN 2100 AND GREATER THAN 1999). KINDLY FILL", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        UniversalHostConnection.Execute(UCase("delete from subjectperformance where stud_id = '" & Trim(TextBox1.Text) & "' and year = '" & YearE & "' and term = '" & Term & "' and subject = '" & Subject & "' and exam_name = '" & Exam_Name & "'"))
+        UniversalHostConnection.Execute("insert into subjectperformance values('" & Trim(TextBox1.Text) & "','" & Fname & "','" & Mname & "','" & Lname & "','" & Gender & "'," & ClassN & ",'" & Stream & "','" & _
+            YearE & "','" & Term & "','" & Subject & "'," & Score & ",'" & Exam_Name & "','" & Exam_Date & "',0,'','" & SubjectTeacher & "','" & TeacherComment & "','" & UserName & "','" & SubCode & "')")
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub StudForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Try
+            Dim ReCset As New ADODB.Recordset
+            ReCset.Open("select distinct(subject) from subject", UniversalHostConnection)
+            ComboBox4.Items.Clear()
+            Do While ReCset.EOF = False
+                ComboBox4.Items.Add(UCase(ReCset.Fields(0).Value))
+                ReCset.MoveNext()
+            Loop
+            ReCset.Close()
+
+            ReCset.Open("select * from teacher", UniversalHostConnection)
+            ComboBox1.Items.Clear()
+            Do While ReCset.EOF = False
+                Dim Tname1 = IIf(IsDBNull(ReCset.Fields(1).Value), "", ReCset.Fields(1).Value & " ")
+                Dim Tname2 = IIf(IsDBNull(ReCset.Fields(2).Value), "", ReCset.Fields(2).Value & " ")
+                Dim Tname3 = IIf(IsDBNull(ReCset.Fields(3).Value), "", ReCset.Fields(3).Value)
+
+                ComboBox1.Items.Add(UCase(Tname1 & Tname2 & Tname3))
+                ReCset.MoveNext()
+            Loop
+            ReCset.Close()
+
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub StudForm_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 50
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Dim reCset As New ADODB.Recordset
+        Dim XreCset As New ADODB.Recordset
+        Dim SqlQry As String
+        Dim CountSub As Int16
+        Dim fname, mname, lname, InsertStr As String
+        Try
+
+
+            SqlQry = "SELECT [stud_id], [std_fname], [std_mname], [std_lname], [sex], [class], [stream] " & _
+                    " FROM student where stud_id ='" & Trim(TextBox1.Text) & "'"
+            reCset.Open(SqlQry, UniversalHostConnection)
+            If reCset.EOF = False Then
+
+                fname = IIf(IsDBNull(reCset.Fields(1).Value), "", reCset.Fields(1).Value)
+                mname = IIf(IsDBNull(reCset.Fields(2).Value), "", reCset.Fields(2).Value)
+                lname = IIf(IsDBNull(reCset.Fields(3).Value), "", reCset.Fields(3).Value)
+
+                TextBox11.Text = "" 'year
+                TextBox12.Text = "" 'term
+                TextBox2.Text = UCase(mname)
+                TextBox6.Text = UCase(fname)
+                TextBox3.Text = UCase(lname)
+                TextBox8.Text = "" 'exam name
+
+                TextBox7.Text = "" 'score
+                TextBox4.Text = reCset.Fields(5).Value 'class
+                TextBox5.Text = reCset.Fields(6).Value 'stream
+                TextBox1.Text = TextBox1.Text 'stud_id
+                TextBox11.Text = TextBox10.Text 'comment
+
+                'InsertStr = "insert into subjectperformance values('" & Stud_id & "','" & fname & "','" & mname & "','" & lname & "','" & Gender & "'," & ClassN & ",'" & Stream & "','" & _
+                '           YearE & "','" & Term & "','" & Subject & "'," & Score & ",'" & Exam_Name & "','" & Exam_Date & "',0,'','" & SubjectTeacher & "','" & TeacherComment & "','" & UserName & "')"
+                'UniversalHostConnection.Execute(InsertStr)
+            Else
+                MsgBox("    NO STUDENT RECORD FOUND!    ", vbExclamation, APPNAME)
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub TextBox11_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox11.TextChanged
+        If Not IsNumeric(Trim(TextBox11.Text)) Then
+            TextBox11.Text = ""
+        End If
+    End Sub
+
+    Private Sub TextBox12_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox12.TextChanged
+        If Not IsNumeric(Trim(TextBox12.Text)) Then
+            TextBox12.Text = ""
+
+        End If
+    End Sub
+
+    Private Sub TextBox7_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox7.TextChanged
+        If Not IsNumeric(Trim(TextBox7.Text)) Then
+            TextBox7.Text = ""
+
+        End If
+    End Sub
+End Class

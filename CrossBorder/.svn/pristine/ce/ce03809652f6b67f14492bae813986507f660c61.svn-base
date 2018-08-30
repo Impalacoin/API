@@ -1,0 +1,384 @@
+package com.impalapay.airtel.servlet.api.remit;
+
+import com.impalapay.airtel.servlet.api.APIConstants;
+import com.impalapay.airtel.servlet.util.PropertiesConfig;
+import com.impalapay.airtel.beans.accountmgmt.Account;
+import com.impalapay.airtel.beans.geolocation.Country;
+import com.impalapay.airtel.beans.sessionlog.SessionLog;
+import com.impalapay.airtel.beans.transaction.Transaction;
+import com.impalapay.airtel.persistence.accountmgmt.balance.AccountBalanceDAO;
+import com.impalapay.airtel.persistence.sessionlog.SessionLogDAO;
+import com.impalapay.airtel.persistence.transaction.TransactionDAO;
+import com.impalapay.airtel.cache.CacheVariables;
+import com.impalapay.airtel.util.DateUtil;
+import com.impalapay.airtel.util.SecurityUtil;
+import com.impalapay.airtel.util.net.PostMinusThread;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
+
+/**
+ * Allows for sending through an HTTP API.
+ * <p>
+ * Copyright (c) ImpalaPay Ltd., Sep 31, 2014
+ * 
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * 
+ */
+public class SendMoney extends HttpServlet {
+	
+	private PostMinusThread postMinusThread;
+	
+	private TransactionDAO transactionDAO;
+
+	private Cache accountsCache,countryCache;
+
+	private SessionLogDAO sessionlogDAO;
+	
+	private AccountBalanceDAO accountbalanceDAO;
+	
+	private HashMap<String,String> countryHash = new HashMap<>();
+	
+	private HashMap<String, String> countryCode = new HashMap<>();
+	
+	private Map<String,String> toairtel = new HashMap< >();
+	
+	private String CLIENT_URL ="";
+     
+	
+	
+	/**
+	 * 
+	 * @param config
+	 * @throws ServletException
+	 */
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+
+		CacheManager mgr = CacheManager.getInstance();
+		
+		transactionDAO = TransactionDAO.getInstance();
+		
+		accountsCache = mgr.getCache(CacheVariables.CACHE_ACCOUNTS_BY_USERNAME);
+		
+		countryCache = mgr.getCache(CacheVariables.CACHE_COUNTRY_BY_UUID);
+
+		sessionlogDAO = SessionLogDAO.getInstance();
+		
+		accountbalanceDAO = AccountBalanceDAO.getInstance();
+		
+		CLIENT_URL = PropertiesConfig.getConfigValue("COMVIVA_URL");
+		
+		
+	}
+	
+
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException, IOException
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		OutputStream out = response.getOutputStream();
+
+		response.setContentType("text/plain;charset=UTF-8");
+		response.setDateHeader("Expires", new Date().getTime()); // Expiration
+																	// date
+		response.setDateHeader("Date", new Date().getTime()); // Date and time
+																// that the  message was sent
+
+		out.write(sendMoney(request).getBytes());
+		out.flush();
+		out.close();
+	}
+	
+
+	/**
+	 * 
+	 * @param request
+	 * @return JSon response
+	 * @throws IOException
+	 */
+	private String sendMoney(HttpServletRequest request) throws IOException {
+		Account account = null;
+
+		// joined json string
+		String join = "";
+		JsonElement root = null;
+		
+		
+
+		//These represent parameters received over the network
+		String username = "", sessionid = "", sourcecountrycode = "", sendername = "", recipientmobile = "", 
+				recipientcurrencycode = "", recipientcountrycode = "", referencenumber = "", clienttime = "", sendertoken = "";
+
+		double amount = 0;
+		
+		// Get all parameters
+		List<String> lines = IOUtils.readLines(request.getReader());
+
+		// used to format/join incoming JSon string
+		join = StringUtils.join(lines.toArray(), " ");
+
+		try {
+			// parse the JSon string
+			root = new JsonParser().parse(join);
+
+		} catch (Exception e) {		
+			return APIConstants.COMMANDSTATUS_INVALID_PARAMETERS;
+		}
+
+		
+		username = root.getAsJsonObject().get("api_username").getAsString();
+		sessionid = root.getAsJsonObject().get("session_id").getAsString();
+		sourcecountrycode = root.getAsJsonObject().get("source_country_code")
+				.getAsString();
+		sendername = root.getAsJsonObject().get("sendername").getAsString();
+		recipientmobile = root.getAsJsonObject().get("recipient_mobile")
+				.getAsString();
+		recipientcurrencycode = root.getAsJsonObject()
+				.get("recipient_currency_code").getAsString();
+		recipientcountrycode = root.getAsJsonObject()
+				.get("recipient_country_code").getAsString();
+		referencenumber = root.getAsJsonObject().get("reference_number").getAsString();
+		sendertoken = root.getAsJsonObject().get("sendertoken").getAsString();
+		amount = root.getAsJsonObject().get("amount").getAsDouble();
+		clienttime = root.getAsJsonObject().get("client_datetime").getAsString();
+
+		
+		// instantiate the JSon
+		Gson g = new Gson();
+		Map<String, String> expected = new HashMap<>();
+
+		// check for the presence of all required parameters
+		if (StringUtils.isBlank(username) || StringUtils.isBlank(sessionid)
+				|| StringUtils.isBlank(sourcecountrycode)
+				|| StringUtils.isBlank(sendername)
+				|| StringUtils.isBlank(recipientmobile)
+				|| StringUtils.isBlank(recipientcurrencycode)
+				|| StringUtils.isBlank(recipientcountrycode)
+				|| StringUtils.isBlank(referencenumber)
+				|| StringUtils.isBlank(sendertoken) 
+				|| StringUtils.isBlank(clienttime)
+				|| amount <= 0) {
+
+			expected.put("command_status",APIConstants.COMMANDSTATUS_INVALID_PARAMETERS);
+			String jsonResult = g.toJson(expected);
+
+			return jsonResult;
+		}
+
+		
+		// Retrieve the account details then check against username and sessionid
+		Element element;
+		if ((element = accountsCache.get(username)) != null) {
+			account = (Account) element.getObjectValue();
+		}
+
+		// unknown username
+		if (account == null) {
+			expected.put("command_status",APIConstants.COMMANDSTATUS_UNKNOWN_USERNAME);
+			String jsonResult = g.toJson(expected);
+
+			return jsonResult;
+		}
+
+		// test for invalid sessionid
+		SessionLog sessionlog = sessionlogDAO.getValidSessionLog(account);
+		String session = sessionlog.getSessionUuid();
+		
+		if (!StringUtils.equals(SecurityUtil.getMD5Hash(sessionid), session)) {
+			expected.put("command_status",APIConstants.COMMANDSTATUS_INVALID_SESSIONID);
+			String jsonResult = g.toJson(expected);
+
+			return jsonResult;
+		}
+        
+		
+	    List keys;
+		//fetch from cache
+		Country country;
+	    keys = countryCache.getKeys();
+	    for(Object key : keys) {
+	        element = countryCache.get(key);
+	        country = (Country) element.getObjectValue();
+	        countryHash.put(country.getCountrycode(), country.getCurrencycode());	        
+	    }
+		
+	    //country and country uuid
+	    for(Object key : keys){
+	    	element = countryCache.get(key);
+	    	country =(Country) element.getObjectValue();
+	    	countryCode.put(country.getCountrycode(), country.getUuid());
+	    }
+		
+	 // checks for the provide currencyCode(invalid)
+	 		if (!countryHash.containsValue(recipientcurrencycode)) {
+	 			expected.put("command_status", APIConstants.COMMANDSTATUS_INVALID_CURRENCYCODE);
+
+	 			return g.toJson(expected);
+	 		}
+	 		
+
+	 		// checks for the provided countryCode(invalid)
+	 		if (!countryHash.containsKey(recipientcountrycode)) {
+	 			expected.put("command_status", APIConstants.COMMANDSTATUS_INVALID_COUNTRYCODE);
+
+	 			return g.toJson(expected);
+	 		}
+	 		
+
+	 		// determines if the provided recipient currencyCode doesn't
+	 		// correspond to the countryCode
+	 		if (!StringUtils.equalsIgnoreCase(countryHash.get(recipientcountrycode), recipientcurrencycode) ) {				
+	 			expected.put("command_status", APIConstants.COMMANDSTATUS_CURRENCY_COUNTRYMISMATCH);
+
+	 			return g.toJson(expected);
+	 		}
+	 		//retrieve from countrycode hashmap uuid representing the country provided country
+	 		String countrycodetodb =countryCode.get(recipientcountrycode);
+	 		
+	 		//Test to see if the provided reference number has previously been used.
+	 		//if reference number is a duplicate return duplicate reference number response.
+	 		List referencetest = transactionDAO.getTransactionstatus(referencenumber);
+	 		
+	 		int size = referencetest.size();
+	 		
+	 		if(size !=0){
+	 			expected.put("command_status", APIConstants.COMMANDSTATUS_DUPLICATE_REFERENCE);
+
+	 			return g.toJson(expected);
+	
+	 			
+	 		}
+	 		/**
+	 		//test for the correct date.
+	 		try{
+	 			
+				LocalDateTime dt2 = LocalDateTime.parse(clienttime,
+				        DateTimeFormat.forPattern("YYYY-MM-DD'T'hh:mm:ss"));
+						
+						//System.out.println(dt2);
+				
+			}catch(Exception e){
+				String errors ="error in date formart";
+				 return clienttime;	
+				 		}
+	 	**/
+	 	Country countrys = new Country();
+		countrys.setUuid(countrycodetodb);
+			
+	 	//send transaction to switch.
+			
+	 	//insert values to be sent
+	 	toairtel.put("username", "Airtel_KE");
+	 	toairtel.put("password", "password");
+		toairtel.put("sessionId", "eugene5544542");
+		//toairtel.put("applicationId", "1234567890");
+		toairtel.put("sourceCountryCode", "254");
+		toairtel.put("destinationCountryCode", "256");
+		toairtel.put("sourceAmount", "1000");
+		        
+		String jsonData = g.toJson(toairtel);
+				
+		        
+		postMinusThread = new PostMinusThread(CLIENT_URL, jsonData);
+		
+		//capture the switch respoinse.
+		String switchresponse = postMinusThread.doPost();
+			
+		String success = "800";
+			
+		//generate UUID then save transaction.
+		String transactioinid = StringUtils.remove(UUID.randomUUID().toString(), '-');
+		
+		//the account UUID
+		String accountuuid = account.getUuid();
+		
+		Transaction saved = new Transaction();
+		
+		//server time
+		Date now = new Date();
+		
+		
+		saved.setUuid(transactioinid);
+		saved.setAccountUuid(accountuuid);
+		saved.setSourceCountrycode(sourcecountrycode);
+		saved.setSenderName(sendername);
+		saved.setRecipientMobile(recipientmobile);
+		saved.setAmount(amount);
+		saved.setCurrencyCode(recipientcurrencycode);
+		saved.setRecipientCountryUuid(countrycodetodb);
+		saved.setSenderToken(sendertoken);
+		saved.setClientTime(clienttime);
+		saved.setServerTime(now);
+		saved.setReferenceNumber(referencenumber);
+		
+		//testing to see if adding of transaction is successful(it's failing to return true)		
+		if (!transactionDAO.addTransaction(saved)) {
+		
+			expected.put("command_status", APIConstants.COMMANDSTATUS_FAIL);
+			String jsonResult = g.toJson(expected);
+			
+
+			return jsonResult;
+		}
+		Country toDb = new Country();
+		toDb.setCountrycode(recipientcountrycode);
+		//accountbalanceDAO.deductBalance(account, amount);
+		accountbalanceDAO.deductBalanceByCountry(account,toDb, amount);
+		
+		//mhits recommendation to return 
+		
+		expected.put("api_username", username);
+		expected.put("transaction_id", transactioinid);
+		expected.put("command_status", APIConstants.COMMANDSTATUS_OK);
+		expected.put("remit_status", APIConstants.COMMANDSTATUS_REMIT_SUCCESS);
+		String jsonResult = g.toJson(expected);
+
+		return jsonResult;
+	}
+	
+
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException, IOException
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+}

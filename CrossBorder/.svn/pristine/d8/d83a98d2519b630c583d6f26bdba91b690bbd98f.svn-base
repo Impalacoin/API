@@ -1,0 +1,145 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("engine.php");
+$registered=has_registered($uid);
+if(!$registered){
+    header('location:register.php?notregistered');
+}
+check_if_logged_in($me);
+display_navigation();
+if($me){
+if(isset($_GET["buy"])){
+    require_once "php/functions.php";
+     
+    //set GET var's to local vars:
+    $token = $_GET['token'];
+    $payerid = $_GET['PayerID'];
+    //set API Creds, Version, and endpoint:
+    //**************************************************//
+    // This is where you would set your API Credentials //
+    // Please note this is not considered "SECURE" this // 
+    // is an example only. It is NOT Recommended to use //
+    // this method in production........................//
+    //**************************************************//
+    // $APIUSERNAME  = "nickje_1298362650_biz_api1.yahoo.com";
+    // $APIPASSWORD  = "1298362658";
+    //$APISIGNATURE = "AymdwE-ji6Jqb9yxr0TZBJsvkHJmALBRLawZMz0aNIpdJ2KgV2DlOqMO";
+    //$ENDPOINT     = "https://api-3t.sandbox.paypal.com/nvp";
+    //$VERSION      = "65.1"; //must be >= 65.1
+    
+    $APIUSERNAME=APIUSERNAME;
+    $APIPASSWORD=APIPASSWORD;
+    $APISIGNATURE=APISIGNATURE;
+    $ENDPOINT=ENDPOINT;
+    $VERSION=VERSION;
+    $REDIRECTURL=REDIRECTURL;
+  
+    //Build the Credential String:
+    $cred_str = "USER=" . $APIUSERNAME . "&PWD=" . $APIPASSWORD . "&SIGNATURE=" . $APISIGNATURE . "&VERSION=" . $VERSION;
+    //Build NVP String for GetExpressCheckoutDetails
+    $nvp_str = "&METHOD=GetExpressCheckoutDetails&TOKEN=" . urldecode($token);
+ 
+    //combine the two strings and make the API Call
+    $req_str = $cred_str . $nvp_str;
+    $response = PPHttpPost($ENDPOINT, $req_str);
+    //get total
+    //print_r($response);
+    $total = urldecode($response['PAYMENTREQUEST_0_AMT']);
+    $itemAmount=urldecode($response['PAYMENTREQUEST_0_ITEMAMT']);
+    $taxAmount=urldecode($response['PAYMENTREQUEST_0_TAXAMT']);
+    //print_r($response);
+    //Display totals to user and request a "confirm"
+    echo "<table class='pretty-table'>";
+    echo "<tr><th colspan='5'  >Confirm Your Purchase</th></tr>";
+    echo "<tr><th colspan='3' scope='row'>Item Amount:</td><td colspan='2'>" . $itemAmount . "</td></tr>";
+    echo "<tr><td colspan='3' scope='row'>VAT:</td><td colspan='2'>" . $taxAmount . "</td></tr>";
+    echo "<tr><td colspan='3' scope='row'>Total:</td><td colspan='2'>" . $total . "</td></tr>";
+    echo "<tr><td colspan=5 align=left><form action='' method='post'><input class = 'button' type='submit' name='confirm' value='Confirm' /></form></td></tr>";
+    echo "</table>";
+    echo "";
+    echo "";
+    if(isset($_POST['confirm']) && $_POST['confirm'] == "Confirm")
+    {
+        //if($_GET["buy"]){
+            //set NVP Str PLEASE NOTE, This is HARD CODED for this Example, You would want to Dynamically Build the request string
+    //based on the API Response from GetExpressCheckoutDetails
+        $doec_str  = $cred_str . "&METHOD=DoExpressCheckoutPayment" 
+        . "&TOKEN=" . $token
+        . "&PAYERID=" . $payerid
+            . "&PAYMENTREQUEST_0_CURRENCYCODE=USD"
+        ."&PAYMENTREQUEST_0_AMT={$total}"
+        . "&PAYMENTREQUEST_0_ITEMAMT={$itemAmount}"
+        . "&PAYMENTREQUEST_0_TAXAMT={$taxAmount}"
+        . "&PAYMENTREQUEST_0_DESC=Credit"
+        . "&PAYMENTREQUEST_0_PAYMENTACTION=Sale"        
+        . "&L_PAYMENTREQUEST_0_NAME0={$itemAmount} Credit"        
+        . "&L_PAYMENTREQUEST_0_NUMBER0=101"        
+        . "&L_PAYMENTREQUEST_0_QTY0=1"        
+        . "&L_PAYMENTREQUEST_0_TAXAMT0={$taxAmount}"        
+        . "&L_PAYMENTREQUEST_0_AMT0={$itemAmount}"       
+        . "&L_PAYMENTREQUEST_0_DESC0={$itemAmount} Credit";
+        
+   
+        //make the DoEC Call:
+        $doresponse = PPHttpPost($ENDPOINT, $doec_str);
+        //}
+        if($doresponse['ACK'] == "Success" || $doresponse['ACK'] == "SuccessWithWarning")
+        {   
+            $total = urldecode($response['PAYMENTREQUEST_0_AMT']);
+            $itemAmount=urldecode($response['PAYMENTREQUEST_0_ITEMAMT']);
+            $taxAmount=urldecode($response['PAYMENTREQUEST_0_TAXAMT']);
+            $account=getAccount($uid);
+            $row_account=mysql_fetch_array($account);
+            //$fb_id=get_fb_id_by_email(urldecode($response["email"]));
+            $old_amount=$row_account["amount"];
+            //echo $old_amount."<br />";
+            /*$b4PPamount=urldecode($response["PAYMENTREQUEST_0_AMT"]);
+            $commision=$b4PPamount*(3/100);
+            $amount=$b4PPamount-$commision;*/
+            $amount=$itemAmount;
+                      
+            $ImpalaFee=CalculateImpalaCharges($amount);
+            
+            $new_amount=$old_amount+$amount+$ImpalaFee;
+            $query="UPDATE account SET amount={$new_amount} WHERE fb_id='{$uid}' ";
+            $result=mysql_query($query) or die(mysql_error());
+            if($result){
+        
+                $id=$row_account["id"];
+                //echo $id."<br />";
+                $query_trans="INSERT INTO transaction SET account_id='{$id}', transaction='d',balance={$new_amount},amount={$amount} ";
+                $result_trans=mysql_query($query_trans) or die(mysql_error());
+                if(mysql_affected_rows()==1){
+                    header('location:statement.php?trans_success');
+                }
+            }
+
+        }//end doresponse=success
+        else if($doresponse['ACK'] == "Failure" || $doresponse['ACK'] == "FailureWithWarning")
+        {
+            echo "The API Call Failed";
+            print_r($doresponse);
+        }
+    }//end isset confirm
+    else
+    {
+        echo "";
+    }
+
+?>
+<?php
+}
+if(!isset($_GET["buy"])){
+  echo "<div class=pushRight>";  
+  displayBuyCredit();  
+  echo "</div>";
+}
+
+
+}
+include("includes/footer.php")
+?>

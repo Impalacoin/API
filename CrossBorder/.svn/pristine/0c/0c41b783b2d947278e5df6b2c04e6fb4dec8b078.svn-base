@@ -1,0 +1,122 @@
+﻿Public Class frmViewHouse
+    'Private UniversalHostConnection As ADODB.Connection
+    Private Sub frmViewHouse_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        'frmRent.WindowState = FormWindowState.Normal
+    End Sub
+
+
+    Private Sub frmViewHouse_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Left = 300
+        Me.Top = 50
+        'Me.Height = frmRent.GroupBox2.Height + 196
+
+        Try
+
+            Dim recset As New ADODB.Recordset
+            Dim UResidents As String
+            'Dim UStalls As String
+            'Dim VResidents As Integer
+            'Dim VStalls As Integer
+            'Dim recount As Integer
+            Dim I As Integer
+            Dim n As Integer
+            'Dim State As Integer
+
+            recset.Open("select house_no,cust_id,cust_fname,cust_mname,cust_lname from tenant where house_name = '" & Me.Text & "' and status = 1 and ten_type = 'Residence' order by house_no asc", UniversalHostConnection)
+            I = 0
+            n = 0
+            DataGridView4.Rows.Clear()
+            Do While recset.EOF = False
+                DataGridView4.Rows.Add()
+                For I = 0 To 5
+                    DataGridView4.Rows.Item(n).Cells(I).Value = recset.Fields(0).Value
+                    recset.MoveNext()
+                    If recset.EOF = True Then
+                        Exit Sub
+                    End If
+                Next
+                recset.MoveNext()
+                n = n + 1
+            Loop
+            recset.Close()
+            recset.Open("select house_no,cust_id,cust_fname,cust_mname,cust_lname from tenant where house_name = '" & Me.Text & "' and status = 1 and ten_type = 'Commercial' order by house_no asc", UniversalHostConnection)
+            I = 0
+            n = 0
+            DataGridView2.Rows.Clear()
+            Do While recset.EOF = False
+                For I = 0 To 5
+                    DataGridView2.Rows.Item(n).Cells(I).Value = Format(recset.Fields(0).Value, "###")
+                    recset.MoveNext()
+                    If recset.EOF = True Then
+                        Exit Sub
+                    End If
+                Next
+
+                recset.MoveNext()
+                If recset.EOF = False Then
+                    DataGridView2.Rows.Add()
+                End If
+
+                n = n + 1
+
+            Loop
+            'Data Grid 3
+            recset.Close()
+            'recset.Open("select house_no,cust_id,cust_fname,cust_mname,cust_lname from tenant where house_name = '" & Me.Text & "' and status = 1 and ten_type = 'Residence' order by house_no asc", UniversalHostConnection)
+            'I = 0
+            'n = 0
+            'DataGridView1.Rows.Clear()
+            'Do While recset.EOF = False
+            '    DataGridView1.Rows.Add()
+            '    For I = 0 To 5
+            '        DataGridView1.Rows.Item(n).Cells(I).Value = Format(recset.Fields(0).Value, "000")
+            '        recset.MoveNext()
+            '        If recset.EOF = True Then
+            '            Exit Sub
+            '        End If
+            '    Next
+            '    recset.MoveNext()
+            '    n = n + 1
+            'Loop
+
+            ''Data Grid 3
+
+            'recset.Open("select house_no,cust_id,cust_fname,cust_mname,cust_lname from tenant where house_name = '" & Me.Text & "' and status = 1 and ten_type = 'Residence' order by house_no asc", UniversalHostConnection)
+            'I = 0
+            'n = 0
+            'DataGridView1.Rows.Clear()
+            'Do While recset.EOF = False
+            '    DataGridView1.Rows.Add()
+            '    For I = 0 To 5
+            '        DataGridView1.Rows.Item(n).Cells(I).Value = Format(recset.Fields(0).Value, "000")
+            '        recset.MoveNext()
+            '        If recset.EOF = True Then
+            '            Exit Sub
+            '        End If
+            '    Next
+            '    recset.MoveNext()
+            '    n = n + 1
+            'Loop
+
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridView1_CellDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
+
+    End Sub
+
+    Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
+    Private Sub GroupBox4_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox4.Enter
+
+    End Sub
+End Class

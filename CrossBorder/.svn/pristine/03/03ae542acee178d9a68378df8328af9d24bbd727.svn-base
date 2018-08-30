@@ -1,0 +1,161 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "NetworkTranInfo"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private t_networktraninfo As field
+Private t_acquirername As field
+Private t_acquirerbin As field
+Private t_terminaltype As field
+Private t_shortcode As field
+Private t_terminalid As field
+Private t_terminallocation As field
+Private t_terminaladdress As field
+Private t_tracenumber As field
+Private t_transmissiondateandtime As field
+Private t_merchantcategorycode As field
+Private t_referencenumber As field
+Private t_networkmanagementcode As field
+
+Private Sub Class_Initialize()
+    Set t_networktraninfo = New field
+    t_networktraninfo.Name = "NetworkTrnInfo"
+    
+    Set t_acquirername = New field
+    t_acquirername.Name = "AcquirerName"
+    
+    Set t_acquirerbin = New field
+    t_acquirerbin.Name = "AcquirerBIN"
+    
+    Set t_terminaltype = New field
+    t_terminaltype.Name = "TerminalType"
+    
+    Set t_shortcode = New field
+    t_shortcode.Name = "AcquirerShortCode"
+    
+    Set t_terminalid = New field
+    t_terminalid.Name = "TerminalID"
+    
+    Set t_terminallocation = New field
+    t_terminallocation.Name = "TerminalLocation"
+    
+    Set t_terminaladdress = New field
+    t_terminaladdress.Name = "TerminalAddress"
+    
+    Set t_tracenumber = New field
+    t_tracenumber.Name = "TraceNumber"
+    
+    Set t_transmissiondateandtime = New field
+    t_transmissiondateandtime.Name = "TransmissionDateTime"
+    
+    Set t_merchantcategorycode = New field
+    t_merchantcategorycode.Name = "MerchantCategoryCode"
+    
+    Set t_referencenumber = New field
+    t_referencenumber.Name = "ReferenceNumber"
+    
+    Set t_networkmanagementcode = New field
+    t_networkmanagementcode.Name = "NetworkManagementCode"
+End Sub
+
+Public Property Get element_NetworkTranInfo() As field
+    Set element_NetworkTranInfo = New field
+    With element_NetworkTranInfo
+        .Name = t_networktraninfo.Name
+    End With
+End Property
+
+Public Property Get field_AcquirerName() As field
+    Set field_AcquirerName = New field
+    With field_AcquirerName
+        .Name = t_acquirername.Name
+    End With
+End Property
+
+Public Property Get field_AcquirerBin() As field
+    Set field_AcquirerBin = New field
+    With field_AcquirerBin
+        .Name = t_acquirerbin.Name
+    End With
+End Property
+
+Public Property Get field_TerminalType() As field
+    Set field_TerminalType = New field
+    With field_TerminalType
+        .Name = t_terminaltype.Name
+    End With
+End Property
+
+Public Property Get field_ShortCode() As field
+    Set field_ShortCode = New field
+    With field_ShortCode
+        .Name = t_shortcode.Name
+    End With
+End Property
+
+Public Property Get field_TerminalId() As field
+    Set field_TerminalId = New field
+    With field_TerminalId
+        .Name = t_terminalid.Name
+    End With
+End Property
+
+Public Property Get field_TerminalLocation() As field
+    Set field_TerminalLocation = New field
+    With field_TerminalLocation
+        .Name = t_terminallocation.Name
+    End With
+End Property
+
+Public Property Get field_TerminalAddress() As field
+    Set field_TerminalAddress = New field
+    With field_TerminalAddress
+        .Name = t_terminaladdress.Name
+    End With
+End Property
+
+Public Property Get field_TraceNumber() As field
+    Set field_TraceNumber = New field
+    With field_TraceNumber
+        .Name = t_tracenumber.Name
+    End With
+End Property
+
+Public Property Get field_TransmissionDateAndTime() As field
+    Set field_TransmissionDateAndTime = New field
+    With field_TransmissionDateAndTime
+        .Name = t_transmissiondateandtime.Name
+    End With
+End Property
+
+Public Property Get field_MerchantCategoryCode() As field
+    Set field_MerchantCategoryCode = New field
+    With field_MerchantCategoryCode
+        .Name = t_merchantcategorycode.Name
+    End With
+End Property
+
+Public Property Get field_ReferenceNumber() As field
+    Set field_ReferenceNumber = New field
+    With field_ReferenceNumber
+        .Name = t_referencenumber.Name
+    End With
+End Property
+
+Public Property Get field_NetworkMangtCode() As field
+    Set field_NetworkMangtCode = New field
+    With field_NetworkMangtCode
+        .Name = t_networkmanagementcode.Name
+    End With
+End Property
+

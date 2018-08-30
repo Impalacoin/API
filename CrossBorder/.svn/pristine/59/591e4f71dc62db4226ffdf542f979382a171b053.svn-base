@@ -1,0 +1,1178 @@
+﻿Imports System.Net.Json
+Imports System.Net
+Imports System.Net.Sockets
+Imports System.IO
+Imports System.Text
+Imports System.Net.WebRequestMethods
+
+Public Class Main
+
+    Private port As Integer
+    Public ISSUER_PORT As String
+    Public ISSUER_IP As String
+    Public ISSUER_NAME As String
+
+    Public SWTCH_IP As String
+    Public SWTCH_PORT As String
+
+    Public UserName As String
+    Public HashCode As String
+    Private ConStatus As Boolean
+    Private ConStatusX As Boolean
+    Private consolePort As Integer
+    Private maxCons As Integer
+    Private curCons As Integer = 0
+    Private consoleCurCons As Integer = 0
+    Private LMKFile As String
+    Private VBsources As String
+    Private CheckLMKParity As Boolean
+    Private HostDefsDir As String
+    Private DoubleLengthZMKs As Boolean
+    Private LegacyMode As Boolean
+    Private ExpectTrailers As Boolean
+    Private HeaderLength As Integer
+    Private EBCDIC As Boolean
+    Private ClientArray() As TCP.WorkerClient
+    Private ClCount As Integer = 0
+    'Listening thread for hosts
+    Private LT As Threading.Thread
+    'Listening thread for console
+    Private CLT As Threading.Thread
+    'Host connections
+    Private WC() As TCP.WorkerClient
+    'Console connection - we allow only one at a time
+    Private CWC As TCP.WorkerClient
+    'Host TCP listener
+    Private SL As TcpListener
+    'Console TCP listener
+    Private CSL As TcpListener
+
+    Public Event DataArrived(ByVal sender As Main, ByVal e As TCPEventArgs)
+
+    Public Event DataSent(ByVal sender As Main, ByVal e As TCPEventArgs)
+
+    Public Event MessageArrived(ByVal sender As Main, ByRef b() As Byte, ByVal len As Integer)
+
+    Public WithEvents w As TCP.WorkerClient
+    Private WithEvents x As TCP.WorkerClient
+
+    Delegate Sub DisconnectedFromSimulator(ByVal msg As String)
+    Delegate Sub MessageFromSimulator(ByVal msg As String)
+
+    Private Const jsonText As String =
+                "{""MSIDN1"": ""07206884578""," & _
+                """MSIDN2"": ""07406884578""," & _
+                """OPCO1"": ""KE""," & _
+                 """OPCO2"": ""UG""," & _
+                  """AMNT"": ""20000.00""" & _
+                "}"
+
+    Private Sub StartTCP()
+
+        StartThread(LT, AddressOf ListenerThread, "TCP listening")
+        StartThread(CLT, AddressOf ConsoleListenerThread, "Console TCP listening")
+
+    End Sub
+    Private Sub StartThread(ByRef t As Threading.Thread, ByVal threadStart As System.Threading.ThreadStart, ByVal threadMsg As String)
+        t = New Threading.Thread(threadStart)
+        t.IsBackground = True
+        Try
+            t.Start()
+            Dim cntr As Integer = 0
+            Threading.Thread.Sleep(100)
+        Catch ex As Exception
+            'Logger.MajorError(String.Format("Error while starting the {0} thread: " + ex.ToString(), threadMsg))
+            Throw ex
+        End Try
+
+    End Sub
+    Private Sub ListenerThread()
+
+        ReDim WC(-1)
+
+        Try
+
+            SL = New TcpListener(New System.Net.IPEndPoint(0, port))
+            SL.Start()
+
+            While True
+                Dim wClient As New TCP.WorkerClient(SL.AcceptTcpClient())
+                wClient.InitOps()
+
+                AddHandler wClient.Disconnected, AddressOf WCDisconnected
+                AddHandler wClient.MessageArrived, AddressOf WCMessageArrived
+
+                'Logger.MajorInfo("Client from " + wClient.ClientIP + " is connected")
+
+                curCons += 1
+
+                Dim slotedIt As Boolean = False
+
+                For i As Integer = 0 To WC.GetUpperBound(0)
+                    If WC(i) Is Nothing OrElse WC(i).IsConnected = False Then
+                        WC(i) = wClient
+                        slotedIt = True
+                        Exit For
+                    End If
+                Next
+
+                If slotedIt = False Then
+                    ReDim Preserve WC(WC.GetLength(0))
+                    WC(WC.GetUpperBound(0)) = wClient
+                End If
+
+                While curCons >= maxCons
+                    Threading.Thread.Sleep(50)
+                End While
+
+            End While
+
+        Catch ex As Exception
+            'Logger.MajorInfo("Exception on listening thread (" + ex.Message + ")")
+            If Not SL Is Nothing Then
+                SL.Stop()
+                SL = Nothing
+            End If
+        End Try
+
+    End Sub
+    Private Sub ConsoleListenerThread()
+        Try
+            CSL = New TcpListener(New System.Net.IPEndPoint(0, consolePort))
+            CSL.Start()
+
+            While True
+                CWC = New TCP.WorkerClient(CSL.AcceptTcpClient())
+                CWC.InitOps()
+
+                AddHandler CWC.Disconnected, AddressOf CWCDisconnected
+                AddHandler CWC.MessageArrived, AddressOf CWCMessageArrived
+
+                'Logger.MajorInfo("Console client from " + CWC.ClientIP + " is connected")
+
+                'If we have one connection, don't accept others.
+                consoleCurCons = 1
+                While consoleCurCons = 1
+                    Threading.Thread.Sleep(50)
+                End While
+            End While
+        Catch ex As Exception
+            'Logger.MajorInfo("Exception on console listening thread (" + ex.Message + ")")
+            If Not CSL Is Nothing Then
+                CSL.Stop()
+                CSL = Nothing
+            End If
+        End Try
+    End Sub
+    Private Sub WCDisconnected(ByVal sender As TCP.WorkerClient)
+        'Logger.MajorInfo("Client disconnected.")
+        sender.TermClient()
+        curCons -= 1
+
+    End Sub
+
+    'Host date event
+    Private Sub WCMessageArrived(ByVal sender As TCP.WorkerClient, ByRef b() As Byte, ByVal len As Integer)
+
+        'Raise a data-arrived event.
+        Dim e As New TCPEventArgs
+        e.RemoteClient = sender.ClientIP
+        ReDim e.Data(len - 1)
+        Array.Copy(b, 0, e.Data, 0, len)
+        RaiseEvent DataArrived(Me, e)
+
+        Dim msg As New Message.Message(b)
+        Dim msgDat As String = msg.MessageData()
+
+        'Logger.MajorVerbose("Client: " + sender.ClientIP + vbCrLf + _
+        '                    "Request: " + msg.MessageData())
+
+        Try
+            'Logger.MajorDebug("Parsing header and code of message " + msg.MessageData + "...")
+
+            'Dim sHex As String = ""
+            'Utility.ByteArrayToHexString(Utility.GetBytesFromString(msg.MessageData), sHex)
+            'Logger.MajorDebug("TEMP: Hex dump is [" + sHex + "]")
+
+            'Dim messageHeader As String = msg.GetSubstring(4)
+            'msg.AdvanceIndex(4)
+            Dim messageHeader As String = msg.GetSubstring(HeaderLength)
+            msg.AdvanceIndex(HeaderLength)
+            Dim commandCode As String = msg.GetSubstring(2)
+            msg.AdvanceIndex(2)
+
+            'RaiseEvent CommandCalled(Me, commandCode)
+            Dim CC
+
+            If CC Is Nothing Then
+                sender.TermClient()
+            Else
+
+
+
+
+                sender.send(msgDat)
+
+                RaiseDataSentEvent(sender.ClientIP, msgDat)
+
+                sender.send(msgDat)
+
+                RaiseDataSentEvent(sender.ClientIP, msgDat)
+
+
+
+                sender.send(msgDat)
+
+                RaiseDataSentEvent(sender.ClientIP, msgDat)
+            End If
+
+        Catch ex As Exception
+            sender.TermClient()
+        End Try
+
+
+    End Sub
+    Private Sub RaiseDataSentEvent(ByVal remoteClient As String, ByVal msg As String)
+        Dim e As New TCPEventArgs
+        e.RemoteClient = remoteClient
+        RaiseEvent DataSent(Me, e)
+    End Sub
+    'Private Sub WCDisconnected(ByVal sender As TCP.WorkerClient)
+
+    '    Logger.MajorInfo("Client disconnected.")
+    '    sender.TermClient()
+    '    curCons -= 1
+
+    'End Sub
+    Private Sub CWCDisconnected(ByVal sender As TCP.WorkerClient)
+
+        'Logger.MajorInfo("Console client disconnected.")
+        sender.TermClient()
+        'Indicate that the console is off
+        consoleCurCons -= 1
+
+    End Sub
+
+    'Console client data event
+    Private Sub CWCMessageArrived(ByVal sender As TCP.WorkerClient, ByRef b() As Byte, ByVal len As Integer)
+
+        '' Data for console commands do not all arrive at once. For most console commands, the console
+        '' prompts the user to enter information during a series of steps, then the command is executed
+        '' when all information has been gathered.
+        ''
+        '' This event handler is coded in order to reflect that. During the first message arrival, an
+        '' appropriate implementor of a console command is searched. If one is found, an object is
+        '' created and kept in the curMsg variable. This is used to accept keyed data from the console
+        '' and prompt the user for the next part of information to be entered. Once all information has
+        '' been entered, curMsg performs the processing and returns the result.
+        ''
+
+        'We're using a Message only to get a string back. No other relation to processing.
+        'Dim msg As New Message.Message(b)
+
+        'Try
+        '    'Do we have a current command?
+        '    If curMsg Is Nothing Then
+        '        'No, find the appropriate one.
+        '        Logger.MajorVerbose("Client: " + sender.ClientIP + vbCrLf + _
+        '                            "Request: " + msg.MessageData())
+        '        Logger.MajorDebug("Searching for implementor of " + msg.MessageData + "...")
+        '        Dim CC As ConsoleCommands.ConsoleCommandClass = CCE.GetLoadedCommand(msg.MessageData)
+        '        If CC Is Nothing Then
+        '            Logger.MajorError("No implementor for " + msg.MessageData + ".")
+        '            sender.send("Command not found" + vbCrLf)
+        '            Exit Sub
+        '        End If
+
+        '        'Instantiate and let it initialize its command stack.
+        '        curMsg = CType(Activator.CreateInstance(CC.CommandType), ConsoleCommands.AConsoleCommand)
+        '        curMsg.InitializeStack()
+        '    Else
+        '        'We already have a command so we'll pass the data from the console to it.
+        '        Dim returnMsg As String = Nothing
+
+        '        'This catches exceptions of the last process.
+        '        Try
+        '            returnMsg = curMsg.AcceptMessage(msg.MessageData)
+        '        Catch ex As Exception
+        '            returnMsg = ex.Message
+        '        End Try
+
+        '        'If it returns some string and it signaled a finish, we're done with the command.
+        '        If returnMsg IsNot Nothing AndAlso curMsg.CommandFinished Then
+        '            sender.send(returnMsg + vbCrLf)
+        '            curMsg = Nothing
+        '        Else
+        '            'Else, let the command send the next prompt to the console.
+        '            sender.send(curMsg.GetClientMessage())
+        '        End If
+        '        Exit Sub
+        '    End If
+
+        '    'This is reached when a command has just been instantiated.
+        '    'There are some commands that require no input. If this is one
+        '    'of them, just run the ProcessMessage method and return the result.
+        '    If curMsg.IsNoinputCommand Then
+        '        Try
+        '            sender.send(curMsg.ProcessMessage + vbCrLf)
+        '        Catch ex As Exception
+        '            sender.send(ex.Message)
+        '        End Try
+        '        curMsg = Nothing
+        '    Else
+        '        'Else, let the command send the first prompt to the console.
+        '        sender.send(curMsg.GetClientMessage())
+        '    End If
+
+        'Catch ex As Exception
+        '    Logger.MajorError("Exception while parsing message or creating implementor instance" + vbCrLf + ex.ToString())
+        '    Logger.MajorError("Disconnecting client.")
+        '    sender.TermClient()
+        '    curMsg = Nothing
+        'End Try
+
+    End Sub
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+
+
+            'Dim parser As New JsonTextParser()
+            'Dim obj As JsonObjectCollection = parser.Parse(jsonText)
+            ''TextBox1.Text = obj.ToString()
+
+            'JsonUtility.GenerateIndentedJsonText = False
+            'TextBox1.Text = TextBox1.Text & vbNewLine
+
+            'TextBox1.Text = TextBox1.Text & obj.ToString()
+            ''Parsing obj
+            'For Each field As JsonObject In obj
+
+            '    Dim name As String = field.Name
+            '    Dim value As String = String.Empty
+            '    Dim type As String = field.GetValue().GetType().Name
+
+            '    Select Case (type)
+
+            '        Case "String"
+            '            value = field.GetValue()
+            '        Case "Double"
+            '            value = field.GetValue().ToString()
+            '        Case "Boolean"
+            '            value = field.GetValue().ToString()
+            '    End Select
+
+            '    TextBox1.Text = TextBox1.Text & vbNewLine & name.PadLeft(15) & ": " & value.PadLeft(15)
+
+            'Next
+            TextBox1.Text = ""
+            TextBox2.Text = ""
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Try
+
+            Dim collection As JsonObjectCollection = New JsonObjectCollection()
+
+            collection.Add(New JsonStringValue("FirstName", "Pavel"))
+            collection.Add(New JsonStringValue("LastName", "Lazureykis"))
+            collection.Add(New JsonNumericValue("Age", 23))
+            collection.Add(New JsonStringValue("Email", "me@somewhere.com"))
+            collection.Add(New JsonBooleanValue("HideEmail", True))
+            JsonUtility.GenerateIndentedJsonText = False
+            TextBox2.Text = (collection).ToString
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Public Sub ClientConnect(ByVal UrL As String, ByVal vPort As String)
+        Try
+
+            w = New TCP.WorkerClient(New TcpClient(UrL, Convert.ToInt32(vPort)))
+            w.InitOps()
+            ConStatus = True
+        Catch ex As Exception
+            'MsgBox(ex.Message + vbCrLf)
+        End Try
+    End Sub
+
+    Private Sub ClientISSConnect(ByVal UrL As String, ByVal vPort As String)
+        Try
+
+            x = New TCP.WorkerClient(New TcpClient(UrL, Convert.ToInt32(vPort)))
+            x.InitOps()
+            ConStatusX = True
+        Catch ex As Exception
+            'MsgBox(ex.Message + vbCrLf)
+        End Try
+    End Sub
+
+    Private Sub Main_FontChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.FontChanged
+        Try
+            Dim SocketCommand As New SqlClient.SqlCommand
+
+            Dim strSQL As String
+            strSQL = "update em_issuer_sap set mode = 0 where node_name = '" & ISSUER_NAME & "' and mode = 1"
+            SocketCommand = New SqlClient.SqlCommand(strSQL, dbConnection)
+            SocketCommand.ExecuteNonQuery()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Main_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+
+        If (MsgBox("Shutting down interface is not allow when system is running! Do want you want to continue?", vbYesNo)) = vbYes Then
+
+            ' e.Cancel = True
+            ' Exit Sub
+
+            Dim strSQL = "update em_issuer_sap set mode = 0 where node_name = '" & ISSUER_NAME & "'"
+            Dim SocketCommand = New SqlClient.SqlCommand(strSQL, dbConnection)
+            SocketCommand.ExecuteNonQuery()
+
+            If w IsNot Nothing Then
+                Try
+                    w.TermClient()
+                Catch ex As Exception
+
+                End Try
+
+                w = Nothing
+            End If
+        End If
+
+    End Sub
+    Private Sub w_Disconnected(ByVal sender As TCP.WorkerClient) Handles w.Disconnected
+        Me.Invoke(New DisconnectedFromSimulator(AddressOf Disconnected), New String() {"DISCONNECTED"})
+    End Sub
+    Private Sub x_Disconnected(ByVal sender As TCP.WorkerClient) Handles x.Disconnected
+        Me.Invoke(New DisconnectedFromSimulator(AddressOf Disconnected), New String() {"DISCONNECTED"})
+    End Sub
+    Private Sub Disconnected(ByVal msg As String)
+        ConStatus = False
+    End Sub
+    Private Sub XDisconnected(ByVal msg As String)
+        ConStatusX = False
+    End Sub
+    Private Sub w_Hasconnected(ByVal sender As TCP.WorkerClient) Handles w.HasConnected
+        Me.Invoke(New DisconnectedFromSimulator(AddressOf Hasconnected), New String() {"CONNECTED"})
+    End Sub
+    Private Sub x_Hasconnected(ByVal sender As TCP.WorkerClient) Handles x.HasConnected
+        Me.Invoke(New DisconnectedFromSimulator(AddressOf HasXconnected), New String() {"CONNECTED"})
+    End Sub
+    Private Sub Hasconnected(ByVal msg As String)
+        ConStatus = True
+    End Sub
+    Private Sub HasXconnected(ByVal msg As String)
+        ConStatusX = True
+    End Sub
+
+    Public Sub ClientSendMessage(ByVal vMessage As String)
+        w.send(vMessage)
+    End Sub
+    Private Sub w_MessageArrived(ByVal sender As TCP.WorkerClient, ByRef b() As Byte, ByVal len As Integer) Handles w.MessageArrived
+        Dim s As String = ""
+        For i As Integer = 0 To len - 1
+            s = s + Chr(b(i))
+        Next
+        Me.Invoke(New MessageFromSimulator(AddressOf Switch_Message_Processor), New String() {s})
+    End Sub
+
+    Private Sub x_MessageArrived(ByVal sender As TCP.WorkerClient, ByRef b() As Byte, ByVal len As Integer) Handles x.MessageArrived
+        Dim s As String = ""
+        ' System.Text.Encoding.Unicode.GetBytes(STR)
+        s = System.Text.Encoding.Unicode.GetString(b)
+        'For i As Integer = 0 To len - 1
+        '    s = s + Chr(b(i))
+        'Next
+        Me.Invoke(New MessageFromSimulator(AddressOf Switch_Message_Processor), New String() {s})
+        If x IsNot Nothing Then
+            Try
+
+                x.TermClient()
+                x = Nothing
+            Catch ex As Exception
+
+            End Try
+
+        End If
+
+    End Sub
+    Private Sub Main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        ReDim ClientArray(100)
+        Dim nConnections As Int32 = 0
+        Dim SocketCommand As SqlClient.SqlCommand
+        Dim ReCset As SqlClient.SqlDataReader
+        Dim strReadLine As String = ""
+        Dim HOST_IP = "", HOST_PORT = "", HOST_USER = ""
+
+        Try
+            FileOpen(1, Application.StartupPath & "\zapbridge.ini", OpenMode.Input, OpenAccess.Read, OpenShare.Shared)
+            Do While Not EOF(1)
+                strReadLine = LineInput(1)
+                If InStr(1, UCase(strReadLine), UCase("EM_SERVER"), vbTextCompare) > 0 Then
+                    HostServer = GetValue(strReadLine, "=")
+                ElseIf InStr(1, UCase(strReadLine), UCase("DBN"), vbTextCompare) > 0 Then
+                    DataBaseName = GetValue(strReadLine, "=")
+                ElseIf InStr(1, UCase(strReadLine), UCase("USER_ID"), vbTextCompare) > 0 Then
+                    UserName1 = GetValue(strReadLine, "=")
+                End If
+            Loop
+            FileClose(1)
+        Catch ex As Exception
+
+        End Try
+
+        Try
+
+
+
+            Dim State As String = ""
+            DBConnect(State)
+
+            If State = "" Then
+                Dim strSQL = "select top 1 * from em_issuer_sap where mode = 0"
+                SocketCommand = New SqlClient.SqlCommand(strSQL, dbConnection)
+                ReCset = SocketCommand.ExecuteReader
+                TextBox3.Text = ""
+                Do While ReCset.Read
+                    ISSUER_NAME = IIf(IsDBNull(ReCset.GetValue(0)), "", ReCset.GetValue(0))
+                    ISSUER_IP = IIf(IsDBNull(ReCset.GetValue(1)), "", ReCset.GetValue(1))
+                    ISSUER_PORT = IIf(IsDBNull(ReCset.GetValue(2)), "", ReCset.GetValue(2))
+                    SWTCH_IP = IIf(IsDBNull(ReCset.GetValue(5)), "", ReCset.GetValue(5))
+                    SWTCH_PORT = IIf(IsDBNull(ReCset.GetValue(6)), "", ReCset.GetValue(6))
+                    UserName = IIf(IsDBNull(ReCset.GetValue(7)), "", ReCset.GetValue(7))
+                    HashCode = IIf(IsDBNull(ReCset.GetValue(8)), "", ReCset.GetValue(8))
+
+                    TextBox3.Text = ISSUER_IP
+                    TextBox4.Text = ISSUER_PORT
+                    TextBox5.Text = SWTCH_PORT
+
+                Loop
+
+                strSQL = "update em_issuer_sap set mode = 1 where node_name = '" & ISSUER_NAME & "' and mode = 0"
+                SocketCommand = New SqlClient.SqlCommand(strSQL, dbConnection)
+                SocketCommand.ExecuteNonQuery()
+
+                Me.Text = Me.Text & " " & ISSUER_NAME
+                ClientConnect(SWTCH_IP, SWTCH_PORT)
+                ConStatus = True
+            End If
+        Catch ex As Exception
+            End
+        End Try
+    End Sub
+    Public Function GetValue(ByVal strText As String, ByVal strSearchString As String) As String
+        Try
+
+
+        GetValue = Trim(Mid(strText, InStr(1, strText, strSearchString, vbTextCompare) + 1, Len(strText) - InStr(1, strText, strSearchString, vbTextCompare) + 1))
+
+        Catch ex As Exception
+            GetValue = ""
+        End Try
+
+    End Function
+    Private Sub TranProcess(ByVal Message As String)
+        Dim myProcessor As New MsgProcess
+        myProcessor.Message = Message
+        myProcessor.USER = UserName
+        myProcessor.PASS = HashCode
+        myProcessor.PORT = ISSUER_PORT
+        myProcessor.ISSUER = ISSUER_IP
+        Dim t As New Threading.Thread(AddressOf myProcessor.ProcessMessage)
+        t.Start()
+    End Sub
+    Private Sub Switch_Message_Processor(ByVal Message As String)
+
+        Dim PostMsg As PostBridgeISO8385
+        Dim strNewMessage As String
+        '    Dim Recset As New ADODB.Recordset
+        Dim Trace = ""
+        Try
+
+        
+        PostMsg = New PostBridgeISO8385
+
+
+        With PostMsg
+            .ISO8583MsgBD(Message)
+            .ResetBitMaps()
+            Trace = "Message type: " & .MessageTypeID & vbNewLine
+
+            If .MessageTypeID = "0200" Then
+                .MessageTypeID = "0210"
+            ElseIf .MessageTypeID = "0420" Or .MessageTypeID = "0421" Then
+                .MessageTypeID = "0430"
+                    '.RespCode = "00"
+            ElseIf .MessageTypeID = "0220" Or .MessageTypeID = "0221" Then
+                .MessageTypeID = "0230"
+                .RespCode = "00"
+            End If
+
+                If .Pan <> "" Then .CreatePBBitMap(2) : Trace = Trace & "Field 002: " & .Pan & vbNewLine
+                If .ProcessingCODE <> "" Then .CreatePBBitMap(3) : Trace = Trace & "Field 003: " & .ProcessingCODE & vbNewLine
+                If .AmtTransaction <> "" Then .CreatePBBitMap(4) : Trace = Trace & "Field 004: " & .AmtTransaction & vbNewLine
+                If .DatetimeTransmission <> "" Then .CreatePBBitMap(7) : Trace = Trace & "Field 007: " & .DatetimeTransmission & vbNewLine
+                If .ConvRateSettle <> "" Then .CreatePBBitMap(9) : Trace = Trace & "Field 009: " & .ConvRateSettle & vbNewLine
+                If .SysTraceAuditNum <> "" Then .CreatePBBitMap(11) : Trace = Trace & "Field 011: " & .SysTraceAuditNum & vbNewLine
+                If .TimeLocTxn <> "" Then .CreatePBBitMap(12) : Trace = Trace & "Field 012: " & .DateLocTxn & vbNewLine
+                If .DateLocTxn <> "" Then .CreatePBBitMap(13) : Trace = Trace & "Field 013: " & .TimeLocTxn & vbNewLine
+                If .DateExpiry <> "" Then .CreatePBBitMap(14) : Trace = Trace & "Field 014: " & .DateExpiry & vbNewLine
+                If .DateSettle <> "" Then .CreatePBBitMap(15) : Trace = Trace & "Field 015: " & .DateSettle & vbNewLine
+                If .MerchantType <> "" Then .CreatePBBitMap(18) : Trace = Trace & "Field 018: " & .MerchantType & vbNewLine
+                If .POSEntryMode <> "" Then .CreatePBBitMap(22) : Trace = Trace & "Field 022: " & .POSEntryMode & vbNewLine
+                If .CardSeqNum <> "" Then .CreatePBBitMap(23) : Trace = Trace & "Field 023: " & .CardSeqNum & vbNewLine
+                If .POSConditionCode <> "" Then .CreatePBBitMap(25) : Trace = Trace & "Field 025: " & .POSConditionCode & vbNewLine
+                If .POSPinCaptureCode <> "" Then .CreatePBBitMap(26) : Trace = Trace & "Field 026: " & .POSPinCaptureCode & vbNewLine
+                If .AmtTxnFee <> "" Then .CreatePBBitMap(28) : Trace = Trace & "Field 028: " & .AmtTxnFee & vbNewLine
+                If .AmtTxnProcessingFee <> "" Then .CreatePBBitMap(30) : Trace = Trace & "Field 030: " & .AmtTxnProcessingFee & vbNewLine
+                If .AcquiringInstIdCode <> "" Then .CreatePBBitMap(32) : Trace = Trace & "Field 032: " & .AcquiringInstIdCode & vbNewLine
+                If .ForwardingInstIdCode <> "" Then .CreatePBBitMap(33) : Trace = Trace & "Field 033: " & .ForwardingInstIdCode & vbNewLine
+                If .Track2Data <> "" Then .CreatePBBitMap(35) : Trace = Trace & "Field 035: " & .Track2Data & vbNewLine
+                If .RetrievalRefNum <> "" Then .CreatePBBitMap(37) : Trace = Trace & "Field 037: " & .RetrievalRefNum & vbNewLine
+                If .AuthIdResp <> "" Then .CreatePBBitMap(38) : Trace = Trace & "Field 038: " & .AuthIdResp & vbNewLine
+                If .ServiceRestrictionCode <> "" Then .CreatePBBitMap(40) : Trace = Trace & "Field 040: " & .ServiceRestrictionCode & vbNewLine
+                If .CardAcceptorTermId <> "" Then .CreatePBBitMap(41) : Trace = Trace & "Field 041: " & .CardAcceptorTermId & vbNewLine
+                If .CardAcceptorIdCode <> "" Then .CreatePBBitMap(42) : Trace = Trace & "Field 042: " & .CardAcceptorIdCode & vbNewLine
+                If .CardAcceptorNameLoc <> "" Then .CreatePBBitMap(43) : Trace = Trace & "Field 043: " & .CardAcceptorNameLoc & vbNewLine
+                If .AdditionalRespData <> "" Then .CreatePBBitMap(44) : Trace = Trace & "Field 044: " & .AdditionalRespData & vbNewLine
+                If .AdditionalData <> "" Then .CreatePBBitMap(48) : Trace = Trace & "Field 048: " & .AdditionalData & vbNewLine
+                If .CurrencyCodeTxn <> "" Then .CreatePBBitMap(49) : Trace = Trace & "Field 049: " & .CurrencyCodeTxn & vbNewLine
+                If .PinData <> "" Then .CreatePBBitMap(52) : Trace = Trace & "Field 052: " & "****************" & vbNewLine
+                If .AdditionalAmts <> "" Then .CreatePBBitMap(54) : Trace = Trace & "Field 054: " & .AdditionalAmts & vbNewLine
+                If .MsgReasonCode <> "" Then .CreatePBBitMap(56) : Trace = Trace & "Field 056: " & .MsgReasonCode & vbNewLine
+                If .EchoData <> "" Then .CreatePBBitMap(59) : Trace = Trace & "Field 059: " & .EchoData & vbNewLine
+                If .OriginalTranRefnumber <> "" Then .CreatePBBitMap(60) : Trace = Trace & "Field 060: " & .OriginalTranRefnumber & vbNewLine
+                If .SessionID <> "" Then .CreatePBBitMap(61) : Trace = Trace & "Field 061: " & .SessionID & vbNewLine
+                If .TranRefnumber <> "" Then .CreatePBBitMap(62) : Trace = Trace & "Field 062: " & .TranRefnumber & vbNewLine
+                If .NetMangtInfoCode <> "" Then .CreatePBBitMap(70) : Trace = Trace & "Field 070: " & .NetMangtInfoCode & vbNewLine
+                If .OriginalDataElements <> "" Then .CreatePBBitMap(90) : Trace = Trace & "Field 090: " & .OriginalDataElements & vbNewLine
+                If .ReplacementAmts <> "" Then .CreatePBBitMap(95) : Trace = Trace & "Field 095: " & .ReplacementAmts & vbNewLine
+                If .Payee <> "" Then .CreatePBBitMap(98) : Trace = Trace & "Field 098: " & .Payee & vbNewLine
+                If .ReceivingInstIdCode <> "" Then .CreatePBBitMap(100) : Trace = Trace & "Field 100: " & .ReceivingInstIdCode & vbNewLine
+                If .AccIdOne <> "" Then .CreatePBBitMap(102) : Trace = Trace & "Field 102: " & .AccIdOne & vbNewLine
+                If .AccIdTwo <> "" Then .CreatePBBitMap(103) : Trace = Trace & "Field 103: " & .AccIdTwo & vbNewLine
+                If .POSDataCode <> "" Then .CreatePBBitMap(123) : Trace = Trace & "Field 123: " & .POSDataCode & vbNewLine
+
+
+            'Create new message
+
+                If RadioButton1.Checked = True Then
+                    TextBox1.Text = TextBox1.Text & Trace & vbNewLine
+                End If
+                TextBox1.Text = TextBox1.Text & Trace & vbNewLine
+
+
+            'build JSON message to Issuer
+                Dim collection As JsonObjectCollection = New JsonObjectCollection()
+                Dim SRCAMount As Double = IIf(.AmtSettlement <> "", Val(.AmtSettlement) / 100, 0)
+                Dim DSTamount As Double = IIf(.AmtTransaction <> "", Val(.AmtTransaction) / 100, 0)
+                Dim MSISDN1 As String = .AccIdOne
+                Dim MSISDN2 As String = .AccIdTwo
+                Dim Orginal_Ref_Nr As String = .OriginalTranRefnumber
+                Dim Ref_Nr As String = .TranRefnumber
+                Dim session_id As String = .SessionID
+                Dim SrcCountry As String = .AcquiringInstIdCode
+                Dim DstCountry As String = .ReceivingInstIdCode
+
+                Dim DateTime As String = .AdditionalData
+                Dim Sender As String = .Payee
+                Dim Frate As Double = IIf(.ConvRateSettle <> "", Val(.ConvRateSettle) / 100, 0)
+
+                Dim Status_code As String = ""
+                Dim name2 As String = ""
+                Dim Response As String = ""
+                Dim Address As String
+                Dim ReferenceID1 As String = ""
+                Dim ReferenceID2 As String = ""
+                Dim Timestamp2 As String = ""
+                Dim StatusCode As String = ""
+                Dim StatusMessage As String = ""
+
+
+                Address = ISSUER_IP
+                If ISSUER_PORT <> "" Then
+                    Address = ISSUER_IP & ":" & ISSUER_PORT
+                End If
+
+
+                If Mid(.ProcessingCODE, 1, 2) = "31" Then 'AML check
+                    Address = Address & "/cashinAuthorize"
+
+                    collection.Add(New JsonStringValue("api_username", UserName))
+                    collection.Add(New JsonStringValue("api_password", HashCode))
+                    collection.Add(New JsonNumericValue("AMOUNT2", DSTamount))
+                    collection.Add(New JsonStringValue("MSISDN1", MSISDN1))
+                    collection.Add(New JsonStringValue("MSISDN2", MSISDN2))
+                    collection.Add(New JsonStringValue("SESSION_ID", session_id))
+                    JsonUtility.GenerateIndentedJsonText = False
+
+                    If RadioButton1.Checked = True Then
+                        TextBox2.Text = TextBox2.Text & (collection).ToString & vbNewLine
+                    End If
+
+
+                ElseIf Mid(.ProcessingCODE, 1, 2) = "42" Or Mid(.ProcessingCODE, 1, 2) = "00" Or Mid(.ProcessingCODE, 1, 2) = "01" Then
+                    If .MessageTypeID = "0210" Then
+                        Address = Address & "/Cashin"
+
+                        collection.Add(New JsonStringValue("api_username", UserName))
+                        collection.Add(New JsonStringValue("api_password", HashCode))
+                        collection.Add(New JsonStringValue("reference_id1", Ref_Nr))
+                        collection.Add(New JsonNumericValue("amount1", SRCAMount))
+                        collection.Add(New JsonNumericValue("amount2", DSTamount))
+                        collection.Add(New JsonStringValue("MSISDN1", MSISDN1))
+                        collection.Add(New JsonStringValue("MSISDN2", MSISDN2))
+                        collection.Add(New JsonStringValue("session_id", session_id))
+                        collection.Add(New JsonStringValue("name1", Sender))
+                        collection.Add(New JsonStringValue("country_code1", SrcCountry))
+                        collection.Add(New JsonStringValue("TIMESTAMP1", DateTime))
+                        collection.Add(New JsonNumericValue("fRate", Frate))
+
+                        JsonUtility.GenerateIndentedJsonText = False
+                        If RadioButton1.Checked = True Then
+                            TextBox2.Text = TextBox2.Text & (collection).ToString & vbNewLine
+                        End If
+                    ElseIf .MessageTypeID = "0430" Then
+                        Address = Address & "/reverse"
+
+                        collection.Add(New JsonStringValue("api_username", UserName))
+                        collection.Add(New JsonStringValue("api_password", HashCode))
+                        collection.Add(New JsonStringValue("reversalRefId", Ref_Nr))
+                        collection.Add(New JsonStringValue("originalRefId", Orginal_Ref_Nr))
+                        collection.Add(New JsonNumericValue("amount1", SRCAMount))
+                        collection.Add(New JsonNumericValue("amount2", DSTamount))
+                        'collection.Add(New JsonStringValue("MSISDN1", MSISDN1))
+                        collection.Add(New JsonStringValue("MSISDN2", MSISDN2))
+                        collection.Add(New JsonStringValue("session_id", session_id))
+                        collection.Add(New JsonStringValue("name1", Sender))
+                        collection.Add(New JsonStringValue("sourceCountryCode", SrcCountry))
+                        collection.Add(New JsonStringValue("destinationCountryCode", DstCountry))
+                        'collection.Add(New JsonStringValue("TIMESTAMP1", DateTime))
+                        collection.Add(New JsonNumericValue("fRate", Frate))
+
+                        JsonUtility.GenerateIndentedJsonText = False
+                        If RadioButton1.Checked = True Then
+                            TextBox2.Text = TextBox2.Text & (collection).ToString & vbNewLine
+                        End If
+                    End If
+
+                    ElseIf Mid(.ProcessingCODE, 1, 2) = "30" Then 'AML check
+                        Address = Address & "/update_frate"
+                        Frate = IIf(.ConvRateSettle <> "", Val(.ConvRateSettle) / 1000, 0)
+                        collection.Add(New JsonStringValue("api_username", UserName))
+                        collection.Add(New JsonStringValue("api_password", HashCode))
+                        collection.Add(New JsonStringValue("reference_id", Ref_Nr))
+                        collection.Add(New JsonStringValue("country_code", SrcCountry))
+                        collection.Add(New JsonNumericValue("fRate", Frate))
+                        JsonUtility.GenerateIndentedJsonText = False
+
+                        If RadioButton1.Checked = True Then
+                            TextBox2.Text = TextBox2.Text & (collection).ToString & vbNewLine
+                        End If
+                    End If
+                    '/cashin
+                    'send data to Issuer
+
+                    Dim Url = New Uri(Address)
+                    Dim data = Encoding.UTF8.GetBytes((collection).ToString)
+
+                    Dim result_post = SendJSONRequest(Url, data, "application/json", "POST")
+
+
+                    If Mid(.ProcessingCODE, 1, 2) = "30" Then
+                        Exit Sub
+                    End If
+
+                    If result_post = "" Then
+                        .RespCode = "91" : .CreatePBBitMap(39) : Trace = Trace & "Field 039: " & .RespCode & vbNewLine
+                        strNewMessage = .CREATEMsgISO8538
+                        ClientSendMessage(strNewMessage)
+
+
+                    Else
+
+                        Dim parser As New JsonTextParser()
+                        Dim obj As JsonObjectCollection = parser.Parse(result_post)
+
+
+                        JsonUtility.GenerateIndentedJsonText = False
+                        For Each field As JsonObject In obj
+
+                            Dim name As String = field.Name
+                            Dim value As String = field.GetValue
+                            Dim type As String = field.GetValue().GetType().Name
+
+                            Select Case (name)
+
+                                Case "status_code"
+                                    If value = "S000" Then
+                                        .RespCode = "00" : .CreatePBBitMap(39)
+                                    ElseIf value = "200" Then
+                                        .RespCode = "00" : .CreatePBBitMap(39)
+                                    Else
+                                        .RespCode = "05" : .CreatePBBitMap(39)
+                                    End If
+                                Case "name2"
+                                    .AdditionalRespData = Mid(field.GetValue().ToString(), 1, 25) : .CreatePBBitMap(44)
+
+                                Case "responseMessage"
+                                    .AdditionalData = field.GetValue().ToString() : .CreatePBBitMap(48)
+                            End Select
+
+
+                        Next
+                        If RadioButton1.Checked = True Then
+                            TextBox2.Text = TextBox2.Text & obj.ToString() & vbNewLine
+                        End If
+                        strNewMessage = .CREATEMsgISO8538
+                        ClientSendMessage(strNewMessage)
+                    End If
+
+
+
+
+            End With
+
+        Catch ex As Exception
+
+        End Try
+
+
+    End Sub
+
+
+    Private Function SendJSONRequest(ByVal uri As Uri, ByVal jsonDataBytes As Byte(), ByVal contentType As String, ByVal method As String) As String
+        Try
+
+
+            Dim req As WebRequest = WebRequest.Create(uri)
+            req.ContentType = contentType
+            req.Method = method
+            req.ContentLength = jsonDataBytes.Length
+
+            ''''IF PROXY IS NEEDED
+            'Dim proxy As IWebProxy
+            'proxy = New WebProxy("172.17.0.155", 8080) ' // port number is of type integer 
+            'proxy.Credentials = New NetworkCredential("ekimanthi", "EKAni!6")
+            'req.Proxy = proxy
+
+            Dim stream = req.GetRequestStream()
+            stream.Write(jsonDataBytes, 0, jsonDataBytes.Length)
+            stream.Close()
+
+            Dim response = req.GetResponse().GetResponseStream()
+
+            Dim reader As New StreamReader(response)
+            Dim res = reader.ReadToEnd()
+            reader.Close()
+            response.Close()
+
+            Return res
+        Catch ex As Exception
+            Return ""
+           
+        End Try
+
+    End Function
+
+    Private Sub Main_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 140
+        GroupBox2.Width = Me.Width - 140
+
+        GroupBox1.Height = Me.Height / 2 - 30
+        GroupBox2.Top = GroupBox1.Top + GroupBox1.Height + 5
+        GroupBox2.Height = Me.Height / 2 - 50
+    End Sub
+
+    Private Sub ConTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConTimer.Tick
+        Try
+            If w IsNot Nothing Then
+
+                If ConStatus = False Then
+                    w.TermClient()
+                    w = Nothing
+                    ClientConnect(SWTCH_IP, SWTCH_PORT)
+
+                End If
+
+            Else
+                ClientConnect(SWTCH_IP, SWTCH_PORT)
+
+            End If
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    Private Sub ClientXSendMessage(ByVal vMessage As String)
+        x.send(vMessage)
+    End Sub
+
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+        If RadioButton2.Checked = True Then
+            RadioButton1.Checked = False
+            RadioButton2.Text = "Trace Stopped"
+            RadioButton1.Text = "Start"
+        End If
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked = True Then
+            RadioButton2.Checked = False
+            RadioButton2.Enabled = True
+            RadioButton1.Text = "Trace Started"
+            RadioButton2.Text = "Stop"
+        End If
+    End Sub
+End Class
+
+
+Class MsgProcess
+    Public Message As String
+    Public ISSUER As String
+    Public PORT As String
+    Public USER As String
+    Public PASS As String
+
+    Sub ProcessMessage()
+        Switch_Message_Processor(Message)
+    End Sub
+    Private Sub Switch_Message_Processor(ByVal mMessage As String)
+
+        Dim PostMsg As PostBridgeISO8385
+        Dim strNewMessage As String
+        
+        Dim Trace = ""
+        Try
+
+
+            PostMsg = New PostBridgeISO8385
+
+
+            With PostMsg
+                .ISO8583MsgBD(Message)
+                .ResetBitMaps()
+                Trace = "Message type: " & .MessageTypeID & vbNewLine
+
+                If .MessageTypeID = "0200" Then
+                    .MessageTypeID = "0210"
+                ElseIf .MessageTypeID = "0420" Or .MessageTypeID = "0421" Then
+                    .MessageTypeID = "0430"
+                    .RespCode = "00"
+                ElseIf .MessageTypeID = "0220" Or .MessageTypeID = "0221" Then
+                    .MessageTypeID = "0230"
+                    .RespCode = "00"
+                End If
+
+                If .Pan <> "" Then .CreatePBBitMap(2) : Trace = Trace & "Field 002: " & .Pan & vbNewLine
+                If .ProcessingCODE <> "" Then .CreatePBBitMap(3) : Trace = Trace & "Field 003: " & .ProcessingCODE & vbNewLine
+                If .AmtTransaction <> "" Then .CreatePBBitMap(4) : Trace = Trace & "Field 004: " & .AmtTransaction & vbNewLine
+                If .DatetimeTransmission <> "" Then .CreatePBBitMap(7) : Trace = Trace & "Field 007: " & .DatetimeTransmission & vbNewLine
+                If .SysTraceAuditNum <> "" Then .CreatePBBitMap(11) : Trace = Trace & "Field 011: " & .SysTraceAuditNum & vbNewLine
+                If .TimeLocTxn <> "" Then .CreatePBBitMap(12) : Trace = Trace & "Field 012: " & .DateLocTxn & vbNewLine
+                If .DateLocTxn <> "" Then .CreatePBBitMap(13) : Trace = Trace & "Field 013: " & .TimeLocTxn & vbNewLine
+                If .DateExpiry <> "" Then .CreatePBBitMap(14) : Trace = Trace & "Field 014: " & .DateExpiry & vbNewLine
+                If .DateSettle <> "" Then .CreatePBBitMap(15) : Trace = Trace & "Field 015: " & .DateSettle & vbNewLine
+                If .MerchantType <> "" Then .CreatePBBitMap(18) : Trace = Trace & "Field 018: " & .MerchantType & vbNewLine
+                If .POSEntryMode <> "" Then .CreatePBBitMap(22) : Trace = Trace & "Field 022: " & .POSEntryMode & vbNewLine
+                If .CardSeqNum <> "" Then .CreatePBBitMap(23) : Trace = Trace & "Field 023: " & .CardSeqNum & vbNewLine
+                If .POSConditionCode <> "" Then .CreatePBBitMap(25) : Trace = Trace & "Field 025: " & .POSConditionCode & vbNewLine
+                If .POSPinCaptureCode <> "" Then .CreatePBBitMap(26) : Trace = Trace & "Field 026: " & .POSPinCaptureCode & vbNewLine
+                If .AmtTxnFee <> "" Then .CreatePBBitMap(28) : Trace = Trace & "Field 028: " & .AmtTxnFee & vbNewLine
+                If .AmtTxnProcessingFee <> "" Then .CreatePBBitMap(30) : Trace = Trace & "Field 030: " & .AmtTxnProcessingFee & vbNewLine
+                If .AcquiringInstIdCode <> "" Then .CreatePBBitMap(32) : Trace = Trace & "Field 032: " & .AcquiringInstIdCode & vbNewLine
+                If .ForwardingInstIdCode <> "" Then .CreatePBBitMap(33) : Trace = Trace & "Field 033: " & .ForwardingInstIdCode & vbNewLine
+                If .Track2Data <> "" Then .CreatePBBitMap(35) : Trace = Trace & "Field 035: " & .Track2Data & vbNewLine
+                If .RetrievalRefNum <> "" Then .CreatePBBitMap(37) : Trace = Trace & "Field 037: " & .RetrievalRefNum & vbNewLine
+                If .AuthIdResp <> "" Then .CreatePBBitMap(38) : Trace = Trace & "Field 038: " & .AuthIdResp & vbNewLine
+                If .ServiceRestrictionCode <> "" Then .CreatePBBitMap(40) : Trace = Trace & "Field 040: " & .ServiceRestrictionCode & vbNewLine
+                If .CardAcceptorTermId <> "" Then .CreatePBBitMap(41) : Trace = Trace & "Field 041: " & .CardAcceptorTermId & vbNewLine
+                If .CardAcceptorIdCode <> "" Then .CreatePBBitMap(42) : Trace = Trace & "Field 042: " & .CardAcceptorIdCode & vbNewLine
+                If .CardAcceptorNameLoc <> "" Then .CreatePBBitMap(43) : Trace = Trace & "Field 043: " & .CardAcceptorNameLoc & vbNewLine
+                If .AdditionalRespData <> "" Then .CreatePBBitMap(44) : Trace = Trace & "Field 044: " & .AdditionalRespData & vbNewLine
+                If .AdditionalData <> "" Then .CreatePBBitMap(48) : Trace = Trace & "Field 048: " & .AdditionalData & vbNewLine
+                If .CurrencyCodeTxn <> "" Then .CreatePBBitMap(49) : Trace = Trace & "Field 049: " & .CurrencyCodeTxn & vbNewLine
+                If .PinData <> "" Then .CreatePBBitMap(52) : Trace = Trace & "Field 052: " & "****************" & vbNewLine
+                If .AdditionalAmts <> "" Then .CreatePBBitMap(54) : Trace = Trace & "Field 054: " & .AdditionalAmts & vbNewLine
+                If .MsgReasonCode <> "" Then .CreatePBBitMap(56) : Trace = Trace & "Field 056: " & .MsgReasonCode & vbNewLine
+                If .EchoData <> "" Then .CreatePBBitMap(59) : Trace = Trace & "Field 059: " & .EchoData & vbNewLine
+                If .SessionID <> "" Then .CreatePBBitMap(61) : Trace = Trace & "Field 061: " & .SessionID & vbNewLine
+                If .TranRefnumber <> "" Then .CreatePBBitMap(62) : Trace = Trace & "Field 062: " & .TranRefnumber & vbNewLine
+                If .NetMangtInfoCode <> "" Then .CreatePBBitMap(70) : Trace = Trace & "Field 070: " & .NetMangtInfoCode & vbNewLine
+                If .OriginalDataElements <> "" Then .CreatePBBitMap(90) : Trace = Trace & "Field 090: " & .OriginalDataElements & vbNewLine
+                If .ReplacementAmts <> "" Then .CreatePBBitMap(95) : Trace = Trace & "Field 095: " & .ReplacementAmts & vbNewLine
+                If .Payee <> "" Then .CreatePBBitMap(98) : Trace = Trace & "Field 098: " & .Payee & vbNewLine
+                If .ReceivingInstIdCode <> "" Then .CreatePBBitMap(100) : Trace = Trace & "Field 100: " & .ReceivingInstIdCode & vbNewLine
+                If .AccIdOne <> "" Then .CreatePBBitMap(102) : Trace = Trace & "Field 102: " & .AccIdOne & vbNewLine
+                If .AccIdTwo <> "" Then .CreatePBBitMap(103) : Trace = Trace & "Field 103: " & .AccIdTwo & vbNewLine
+                If .POSDataCode <> "" Then .CreatePBBitMap(123) : Trace = Trace & "Field 123: " & .POSDataCode & vbNewLine
+
+
+                'Create new message
+
+
+
+                Main.TextBox1.Text = Main.TextBox1.Text & Trace & vbNewLine
+
+                'build JSON message to Issuer
+                Dim collection As JsonObjectCollection = New JsonObjectCollection()
+                Dim SRCAMount As Double = Val(.AmtSettlement) / 100
+                Dim DSTamount As Double = Val(.AmtTransaction) / 100
+                Dim MSISDN1 As String = .AccIdOne
+                Dim MSISDN2 As String = .AccIdTwo
+                Dim Ref_Nr As String = .TranRefnumber
+                Dim session_id As Integer = .SessionID
+                Dim SrcCountry As String = .AcquiringInstIdCode
+                Dim DstCountry As String = .ReceivingInstIdCode
+                Dim DateTime As String = .AdditionalData
+                Dim Sender As String = .Payee
+                Dim Frate As String = Val(.ConvRateSettle) / 100
+
+                Dim Status_code As String = ""
+                Dim name2 As String = ""
+                Dim Response As String = ""
+                Dim Address As String
+                Dim ReferenceID1 As String = ""
+                Dim ReferenceID2 As String = ""
+                Dim Timestamp2 As String = ""
+                Dim StatusCode As String = ""
+                Dim StatusMessage As String = ""
+
+
+                Address = ISSUER
+                If PORT <> "" Then
+                    Address = ISSUER & ":" & PORT
+                End If
+
+
+                If Mid(.ProcessingCODE, 1, 2) = "31" Then 'AML check
+                    Address = Address & "/cashinAuthorize"
+
+                    collection.Add(New JsonStringValue("api_username", USER))
+                    collection.Add(New JsonStringValue("api_password", PASS))
+                    collection.Add(New JsonNumericValue("AMOUNT2", DSTamount))
+                    collection.Add(New JsonStringValue("MSISDN1", MSISDN1))
+                    collection.Add(New JsonStringValue("MSISDN2", MSISDN2))
+                    collection.Add(New JsonNumericValue("SESSION_ID", session_id))
+                    JsonUtility.GenerateIndentedJsonText = False
+                    Main.TextBox2.Text = Main.TextBox2.Text & (collection).ToString & vbNewLine
+
+                ElseIf Mid(.ProcessingCODE, 1, 2) = "42" Or Mid(.ProcessingCODE, 1, 2) = "00" Or Mid(.ProcessingCODE, 1, 2) = "01" Then
+                    Address = Address & "/Cashin"
+
+                    collection.Add(New JsonStringValue("api_username", USER))
+                    collection.Add(New JsonStringValue("api_password", PASS))
+                    collection.Add(New JsonStringValue("Reference_id1", Ref_Nr))
+                    collection.Add(New JsonNumericValue("AMOUNT1", SRCAMount))
+                    collection.Add(New JsonNumericValue("AMOUNT2", DSTamount))
+                    collection.Add(New JsonStringValue("MSISDN1", MSISDN1))
+                    collection.Add(New JsonStringValue("MSISDN2", MSISDN2))
+                    collection.Add(New JsonStringValue("SESSION_ID", session_id))
+                    collection.Add(New JsonStringValue("Name1", Sender))
+                    collection.Add(New JsonStringValue("country_code1", SrcCountry))
+                    collection.Add(New JsonStringValue("TIMESTAMP1", DateTime))
+                    collection.Add(New JsonStringValue("fRate", Frate))
+
+                    JsonUtility.GenerateIndentedJsonText = False
+                    If Main.RadioButton1.Checked = True Then
+                        Main.TextBox2.Text = Main.TextBox2.Text & (collection).ToString & vbNewLine
+                    End If
+                End If
+                '/cashin
+                'send data to Issuer
+
+                Dim Url = New Uri(Address)
+                Dim data = Encoding.UTF8.GetBytes((collection).ToString)
+
+                Dim result_post = SendJSONRequest(Url, data, "application/json", "POST")
+
+
+                If result_post = "" Then
+                    .RespCode = "91" : .CreatePBBitMap(39) : Trace = Trace & "Field 039: " & .RespCode & vbNewLine
+                    strNewMessage = .CREATEMsgISO8538
+                    'Main.ClientConnect("127.0.0.1", "55055")
+                    Main.ClientSendMessage(strNewMessage)
+                    'Main.w.TermClient()
+
+
+                Else
+
+                    Dim parser As New JsonTextParser()
+                    Dim obj As JsonObjectCollection = parser.Parse(result_post)
+
+
+                    JsonUtility.GenerateIndentedJsonText = False
+                    For Each field As JsonObject In obj
+
+                        Dim name As String = field.Name
+                        Dim value As String = String.Empty
+                        Dim type As String = field.GetValue().GetType().Name
+
+                        Select Case (name)
+
+                            Case "status_code"
+                                .RespCode = field.GetValue().ToString : .CreatePBBitMap(39)
+                            Case "name2"
+                                .AdditionalRespData = Mid(field.GetValue().ToString(), 1, 25) : .CreatePBBitMap(44)
+                        End Select
+
+
+                    Next
+                    If Main.RadioButton1.Checked = True Then
+                        Main.TextBox1.Text = Main.TextBox1.Text & obj.ToString() & vbNewLine
+                    End If
+                    strNewMessage = .CREATEMsgISO8538
+                    Main.ClientConnect("127.0.0.1", "55055")
+                    Main.ClientSendMessage(strNewMessage)
+                End If
+
+
+
+
+            End With
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Private Function SendJSONRequest(ByVal uri As Uri, ByVal jsonDataBytes As Byte(), ByVal contentType As String, ByVal method As String) As String
+        Try
+
+
+            Dim req As WebRequest = WebRequest.Create(uri)
+            req.ContentType = contentType
+            req.Method = method
+            req.ContentLength = jsonDataBytes.Length
+
+            ''''IF PROXY IS NEEDED
+            'Dim proxy As IWebProxy
+            'proxy = New WebProxy("172.17.0.155", 8080) ' // port number is of type integer 
+            'proxy.Credentials = New NetworkCredential("ekimanthi", "EKAni!6")
+            'req.Proxy = proxy
+
+            Dim stream = req.GetRequestStream()
+            stream.Write(jsonDataBytes, 0, jsonDataBytes.Length)
+            stream.Close()
+
+            Dim response = req.GetResponse().GetResponseStream()
+
+            Dim reader As New StreamReader(response)
+            Dim res = reader.ReadToEnd()
+            reader.Close()
+            response.Close()
+
+            Return res
+        Catch ex As Exception
+            Return ""
+        End Try
+
+    End Function
+End Class
+

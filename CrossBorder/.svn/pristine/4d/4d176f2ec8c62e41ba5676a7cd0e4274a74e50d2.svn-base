@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+session_start();
+require_once("engine.php");
+
+display_navigation();
+check_if_logged_in($me);
+require_once("includes/functions.php");
+if(isset($_POST["create"])){
+    
+    $required_fields=array("name","user_id","id","pin","confirm_pin","mobile","email");
+    $errors=check_required_fields($required_fields);
+    if(empty($errors)){
+        if($_POST["pin"]==$_POST["confirm_pin"]){
+            $fb_id=trim($_POST["user_id"]);
+            $name=trim($_POST["name"]);
+            $id_number=trim($_POST["id"]);
+            $mobile=trim($_POST["mobile"]);
+            $email=mysql_prep($_POST["email"]);
+            $pin=sha1(trim($_POST["pin"]));
+        
+        
+            $query="INSERT INTO users set ";
+            $query.="fb_id={$fb_id}, ";
+            //$query.="$name={$name}, ";
+            $query.="id_number={$id_number}, ";
+            $query.="phone_number='{$mobile}', " ;
+            $query.="email='{$email}', " ;
+            $query.="pin='{$pin}'";
+        
+            $result=mysql_query($query) or die(mysql_error());
+            if(mysql_affected_rows()==1){
+                $query="INSERT INTO account SET ";
+                $query.="fb_id={$fb_id}, ";
+                $query.="amount=0 ";
+            
+                $result2=mysql_query($query) or die(mysql_error());
+                if(mysql_affected_rows()==1){
+                    $accountId=mysql_insert_id();
+                    $querySent="SELECT * FROM sent_money WHERE receiver_id={$fb_id}";
+                    $resultSent=mysql_query($querySent) or die(mysql_error());
+                    if(mysql_num_rows($resultSent)>0){                       
+                        while($sent=mysql_fetch_array($resultSent)){
+                            $queryAmt="SELECT * FROM account WHERE fb_id={$fb_id}";
+                            $resultAmt=mysql_query($queryAmt) or die(mysql_error());
+                            $accId=mysql_result($resultAmt,0,"id");
+                            $dbamount=mysql_result($resultAmt,0,"amount");
+                            $newAmount=$dbamount+$sent["amount"];
+                                                        
+                            $queryTran="INSERT INTO transaction SET account_id={$accId},amount={$sent["amount"]}, ";
+                            $queryTran.="transaction='r',date='{$sent["date"]}',balance={$newAmount}";
+                            $resultTran=mysql_query($queryTran) or die(mysql_error());
+                            if(mysql_affected_rows()>0){
+                                $queryUPD="UPDATE account SET amount={$newAmount} WHERE fb_id={$fb_id}";
+                                $resultUPD=mysql_query($queryUPD) or die(mysql_error());
+                                if(mysql_affected_rows()>0){
+                                    
+                                }
+                            }
+                        }
+                        
+                    }
+                  redirect_to("statement.php");
+            }
+          }   
+        }else{
+            $error_pin="Pins did not match";
+        }
+        
+    }
+}   
+
+
+
+
+    $registered=@has_registered($uid);
+    if($registered==false){
+        if(isset($_GET["notregistered"])){
+            echo "<p class='pushRight'>You are not registered. Please register to use our services.</p>";
+        }
+        if(isset($error_pin)){echo $error_pin;}
+        if(isset($errors)){
+           if(!empty($errors)){
+            echo "<p class='pushRight'>Please review the following fields:- <br />";
+            foreach($errors as $error){
+                echo "-{$error}<br />";
+            }
+            echo "</p>";
+           } 
+        }
+        
+        @display_new_user_form($me,$uid);  
+    }else{
+        echo "<div class='pushRight'>{$me["name"]}, you have registered.</div>";
+    }
+
+
+?>
+
+
+    

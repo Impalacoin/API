@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+ require_once("engine.php");
+     
+   $registered=has_registered($uid);
+    if($registered==false){
+         header('location:register.php?notregistered');
+    }
+   display_navigation();
+   check_if_logged_in($me); 
+   if($me){
+    if(isset($_POST["changePin"])){
+        
+        $required_fields=array("oldPin","newPin","confirmPin");
+        $errors=check_required_fields($required_fields);
+        if(empty($errors)){
+            $p_oldPin=sha1(mysql_prep($_POST["oldPin"]));
+            $p_newPin=sha1(mysql_prep($_POST["newPin"]));
+            $p_comfirm=sha1(mysql_prep($_POST["confirmPin"]));
+            $db_oldPin=get_pin($uid);
+            if($p_newPin==$p_comfirm){
+               if($p_oldPin==$db_oldPin){
+                    $query="UPDATE users set pin='{$p_newPin}' WHERE fb_id={$uid}";
+                    $result=mysql_query($query) or die(mysql_error());
+                    if(mysql_affected_rows()==1)
+                        echo "<p>Your pin has been Changed successfully.</p>";
+                }else{
+                    echo "Old pin does not match the one in our database. Please try again. <br />";
+                    
+                } 
+            }else{
+                echo "The new pins do not match. Please try again. <br />";
+            }
+            
+            
+        }else{
+            print_r($errors);
+        }
+    }
+    
+   
+?>
+<form action="change_pin.php" method="post" class="pushRight">
+    <fieldset>
+    <legend>Change Pin</legend>
+    <label>Old Pin</label><input type="password" name="oldPin" /><br />
+    <label>New Pin</label></td><td><input type="password" name="newPin" /><br />
+    <label>Confirm New Pin</label></td><td><input type="password" name="confirmPin" /><br />
+    </fieldset>
+    <input class="button" type="submit" name="changePin" value="Change Pin" /><br />
+    
+</form>
+
+<?php
+     }
+     
+//require_once "includes/footer.php"
+?>

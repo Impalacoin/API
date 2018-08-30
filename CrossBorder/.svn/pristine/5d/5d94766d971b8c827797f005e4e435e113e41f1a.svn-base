@@ -1,0 +1,133 @@
+package com.impalapay.airtel.persistence.accountmgmt.balance;
+
+import com.impalapay.airtel.beans.accountmgmt.Account;
+import com.impalapay.airtel.beans.accountmgmt.balance.ClientAccountBalanceByCountry;
+import com.impalapay.airtel.beans.accountmgmt.balance.MasterAccountBalance;
+import com.impalapay.airtel.beans.geolocation.Country;
+
+import java.util.List;
+
+
+
+/**
+ * Abstraction for persistence of balance in an the master account.
+ * <p>
+ * Copyright (c) ImpalaPay Ltd., Oct 12, 2014
+ *
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ */
+public interface AccountBalance {
+
+	/**
+	 * Checks whether a user has a certain amount of balance.
+	 * 
+	 * 
+	 * @param account
+	 * @param amount
+	 * @return whether this account has that balance.
+	 */
+	public boolean hasBalance(Account account, Country country, double amount);
+
+	/**
+	 * Deducts a certain amount of balance from an account based on country.
+	 * 
+	 * @param account
+	 * @param country
+	 * @param amount
+	 * @return whether it was successful when attempting to deduct the balance
+	 *         of this account
+	 */
+	public boolean deductBalanceByCountry(Account account, Country country,
+			double amount);
+
+	/**
+	 * Adds a certain amount of balance on an account on a particular country.
+	 * 
+	 * @param account
+	 * @param country
+	 * @param amount
+	 * @return whether it was successful when attempting to add the balance to
+	 *         this account
+	 */
+	public boolean addBalanceByCountry(Account account, Country country,
+			double amount);
+
+	/**
+	 * 
+	 * @param uuid
+	 * @return a {@link ClientAccountBalanceByCountry} with the corresponding
+	 *         UUID
+	 */
+	//public ClientAccountBalanceByCountry getCountryAccountBalance(String uuid);
+
+	/**
+	 * 
+	 * @param account
+	 * @return a list of balances belonging to this account by countries
+	 */
+	public List<ClientAccountBalanceByCountry> getClientBalanceByCountry(
+			Account account);
+	
+	/**
+	 * 
+	 * @param account
+	 * @param country
+	 * @return a list of balances belonging to this account from this country
+	 */
+	public List<ClientAccountBalanceByCountry> getClientBalanceByCountry(
+			Account account, Country country);
+	
+	
+	/**
+	 * 
+	 * @param account
+	 * @param country
+	 * @return balance belonging to this account on a specific country
+	 */
+	public double getBalanceByCountry1(Account account, Country country);
+	
+	
+	
+	public MasterAccountBalance getMasterAccountBalance(String uuid);
+	
+	
+	public MasterAccountBalance getMasterAccountBalance(Account account);
+	
+	/**
+	 * 
+	 * @return a list of all master balances 
+	 */
+	public List< MasterAccountBalance> getMasterAccountBalances();
+
+	/**
+	 * Deducts a certain amount of balance from an main float account.
+	 * 
+	 * @param account
+	 * @param amount
+	 * @return whether it was successful when attempting to deduct the balance
+	 *         of this account
+	 * 
+	 *         public boolean deductBalance(Account account, double amount);
+	 * 
+	 *         /** Adds a certain amount of balance on an account.
+	 * 
+	 * @param account
+	 * @param amount
+	 * @return whether it was successful when attempting to add the balance to
+	 *         this account
+	 */
+	// public boolean addBalance(Account account, double amount);
+
+	/**
+	 * 
+	 * @param account
+	 * @return balances belonging to this account
+	 */
+	//public getClientBalance1(Account account);
+
+	
+
+	
+
+}

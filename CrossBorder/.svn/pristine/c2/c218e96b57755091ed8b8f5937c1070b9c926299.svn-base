@@ -1,0 +1,38 @@
+﻿
+Imports System.Data.SqlClient
+Module DbCON
+    Public dbConnection As SqlClient.SqlConnection
+    Public ConnectionType As Integer
+    Public HostServer As String
+    Public UserName1 As String
+    Public DataBaseName As String
+    Public PassCode As String
+    Public DBconnectionSatus As String
+    Public Sub DBConnect(ByRef Status As String)
+        Try
+
+            'HostServer = "172.17.0.165"
+            'DataBaseName = "emconnect"
+            'UserName1 = "emcon"
+            PassCode = "password"
+            Status = ""
+            ConnectionType = 0
+            dbConnection = New SqlClient.SqlConnection
+            With dbConnection
+                'Server=" & HostServer & ";Database=" & DataBaseName & ";Trusted_Connection=True;
+                If ConnectionType = 1 Then
+                    .ConnectionString = "Server=" & HostServer & ";Database=" & DataBaseName & ";User Id=" & UserName1 & ";Password=" & PassCode & ";MultipleActiveResultSets=true"
+                ElseIf ConnectionType = 0 Then
+                    .ConnectionString = "Server=" & HostServer & ";Database=" & DataBaseName & ";Trusted_Connection=True;MultipleActiveResultSets=true"
+                End If
+                .Open()
+            End With
+        Catch ex As Exception
+            Status = ex.Message
+        End Try
+
+    End Sub
+
+
+End Module
+

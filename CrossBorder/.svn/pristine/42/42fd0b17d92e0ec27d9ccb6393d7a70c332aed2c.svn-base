@@ -1,0 +1,15 @@
+Attribute VB_Name = "SubMain"
+Option Explicit
+
+Sub Main()
+    Dim frm As ZapBridge
+    
+    Set frm = New ZapBridge
+    Load frm
+End Sub
+
+Sub endApp(frm As Form)
+    Unload frm
+    End
+End Sub
+

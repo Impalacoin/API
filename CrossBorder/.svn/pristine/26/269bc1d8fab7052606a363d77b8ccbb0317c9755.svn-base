@@ -1,0 +1,154 @@
+﻿Public Class frmNewTenant
+    'Private UniversalHostConnection As ADODB.Connection
+    Public HouseNameT As String
+    Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs)
+        'MonthCalendar1.Visible = True
+    End Sub
+
+    Private Sub MonthCalendar1_DateChanged(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DateRangeEventArgs)
+        'TextBox2.Text = MonthCalendar1.SelectionRange.Start
+        'MonthCalendar1.Visible = False
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Me.Dispose()
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim RecSet As New ADODB.Recordset
+        Dim SqlStr As String
+        Try
+
+
+
+            If Trim(TextBox1.Text) <> "" And Trim(TextBox2.Text) <> "" And Trim(TextBox4.Text) <> "" And
+               ComboBox1.SelectedItem <> "" And Trim(TextBox5.Text) <> "" And Trim(TextBox6.Text) <> "" And Trim(TextBox14.Text) <> "" And Trim(TextBox16.Text) <> "" And
+               Trim(TextBox7.Text) <> "" And Trim(TextBox15.Text) <> "" And Trim(TextBox11.Text) <> "" Then
+
+                SqlStr = "Insert into tenant values('" & Trim(TextBox1.Text) & "','" & _
+                             Trim(TextBox2.Text) & "','" & _
+                             Trim(TextBox3.Text) & "','" & _
+                             Trim(TextBox4.Text) & "','" & _
+                             Trim(TextBox8.Text) & " " & Trim(TextBox9.Text) & " " & Trim(TextBox10.Text) & "','" & _
+                             HouseNameT & "','" & _
+                             Trim(TextBox15.Text) & "','" & _
+                             DateTimePicker1.Value.ToShortDateString & "','" & _
+                             Trim(TextBox7.Text) & "',0," & _
+                             Trim(TextBox5.Text) & "," & Trim(TextBox6.Text) & "," & _
+                             Trim(TextBox14.Text) & "," & Trim(TextBox16.Text) & ",'" & _
+                             ComboBox1.SelectedItem & "','" & _
+                             Trim(TextBox11.Text) & "',1,'03-04-2013','" & _
+                            Trim(TextBox12.Text) & "')"
+                Dim SqlStr2 As String
+                SqlStr2 = "select * from tenant where house_name = '" & HouseNameT & "' and house_no = '" & Trim(TextBox15.Text) & "' and status = 1"
+
+
+
+
+                Dim CheckInDate As String = ""
+
+                CheckInDate = Format(DateTimePicker1.Value, "dd-MM-yyyy")
+
+                RecSet.Open("select * from houserooms where house_name = '" & HouseNameT & "' and unit_number = '" & Trim(TextBox15.Text) & "'", UniversalHostConnection)
+                If RecSet.EOF = True Then
+                    MsgBox("This House Unit does not exits", vbInformation, APPNAME)
+                    Exit Sub
+                ElseIf RecSet.Fields(3).Value = 1 Then
+
+                    MsgBox("This House Unit is occupied", vbInformation, APPNAME)
+                    Exit Sub
+
+                Else
+                    UniversalHostConnection.Execute("update houserooms set occupied = 1,board_type = '" & ComboBox1.SelectedItem & "', number_days = 0, check_in_date = '" & CheckInDate & "',check_out_day = 0,check_out_month = 0, check_out_year = 0,customer_id = '" & Trim(TextBox1.Text) & "',customer_name = '" & Trim(TextBox2.Text) & "' where house_name = '" & HouseNameT & "' and unit_number = '" & Trim(TextBox15.Text) & "'")
+
+                    If ComboBox1.SelectedIndex = 0 Then
+                        UniversalHostConnection.Execute("update house_details  set res_occupied = res_occupied +1 where house_name = '" & HouseNameT & "'")
+                    ElseIf ComboBox1.SelectedIndex = 1 Then
+                        UniversalHostConnection.Execute("update house_details  set com_occupied = com_occupied +1 where house_name = '" & HouseNameT & "'")
+                    Else
+                        UniversalHostConnection.Execute("update house_details  set com_occupied = com_occupied +1 where house_name = '" & HouseNameT & "'")
+                    End If
+
+
+                End If
+
+                RecSet.Close()
+
+                RecSet.Open(SqlStr2, UniversalHostConnection)
+                If RecSet.EOF = True Then
+                    UniversalHostConnection.Execute(UCase(SqlStr))
+
+
+
+
+
+                    MsgBox("A Tenant Added: " & Trim(TextBox2.Text) & " " & _
+                             Trim(TextBox3.Text) & " " & _
+                             Trim(TextBox4.Text), vbInformation)
+                Else
+                    MsgBox("A House Number is not Vacant.", vbExclamation)
+                    Exit Sub
+                End If
+
+
+            Else
+                MsgBox("One or More Data Missing.", vbExclamation)
+                Exit Sub
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+
+
+    Private Sub frmNewTenant_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        Try
+            'UniversalHostConnection.Close()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TextBox12_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox12.TextChanged
+
+    End Sub
+
+    Private Sub frmNewTenant_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Left = frmTenant.Left + 10
+        Me.Top = frmTenant.Top + 110
+        Try
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+
+
+        Try
+            Dim Recset As New ADODB.Recordset
+            Recset.Open("select floors from house_details where house_name = '" & HouseNameT & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                frmRooms.SourceFrm = 2
+                frmRooms.TextBox1.Text = HouseNameT
+                frmRooms.Floor = Recset.Fields(0).Value
+
+                frmRooms.Panel3.Enabled = False
+                frmRooms.MODE = 0
+                frmRooms.UNITEDIT = 0
+                frmRooms.ShowDialog()
+            End If
+
+        Catch ex As Exception
+
+        End Try
+
+
+    End Sub
+
+    Private Sub DateTimePicker1_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker1.ValueChanged
+
+    End Sub
+End Class

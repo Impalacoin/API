@@ -1,0 +1,134 @@
+﻿Public Class frmEnquiry
+    'Private UniversalHostConnection As ADODB.Connection
+    Public House_Name As String
+    Private Sub DataGridRefresh()
+        Dim i As Integer
+        Try
+
+            Dim RecSet As New ADODB.Recordset
+            'create a new dataset
+            Dim n As Integer '= DataGridView1.Rows.Add()
+            RecSet.Open("Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from wdTransaction order by id asc", UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For i = 0 To 11
+                    DataGridView1.Rows.Item(n).Cells(i).Value = UCase(RecSet.Fields(i).Value)
+
+                Next
+
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+
+    End Sub
+
+    Private Sub frmEnquiry_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+
+        On Error GoTo ErrTrap
+        Dim recSet As New ADODB.Recordset
+        'AccessDBConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Recon Service\ReconModule.accdb;Persist Security Info=True"
+        'AccessDBConnection.Open()   'Microsoft.Jet.OLEDB.4.0=mdb
+        UniversalHostConnection = New ADODB.Connection
+        UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\AIMS\RecModule\1HouseAsset.accdb;Persist Security Info=True"
+        UniversalHostConnection.Open()
+
+        Call DataGridRefresh()
+        recSet.Open("select house_name from house_details order by house_name asc", UniversalHostConnection)
+        'Call DataGridRefresh()
+        ComboBox1.Items.Add("ALL")
+        Do While recSet.EOF = False
+            ComboBox1.Items.Add(UCase(recSet.Fields(0).Value))
+            recSet.MoveNext()
+        Loop
+
+        RadioButton1.Checked = True
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+
+    End Sub
+
+
+    Private Sub frmEnquiry_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 10
+        GroupBox1.Height = Me.Height - 163
+        GroupBox2.Width = GroupBox1.Width
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        Dim Recset As New ADODB.Recordset
+        Dim SqlStr As String
+
+        SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from wdTransaction  order by id asc"
+
+        If RadioButton1.Checked = True Then
+            If TextBox2.Text <> "" Then
+                SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from wdTransaction where cust_id = '" & Trim(TextBox2.Text) & "'  order by id asc"
+            End If
+
+        End If
+        If RadioButton2.Checked = True Then
+            If ComboBox1.SelectedItem <> "ALL" And TextBox3.Text <> "" Then
+                SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from wdTransaction where house_name = '" & Trim(ComboBox1.SelectedItem) & "' and house_nr = '" & Trim(TextBox3.Text) & "' order by id asc"
+
+            ElseIf ComboBox1.SelectedItem <> "ALL" And TextBox3.Text = "" Then
+                SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from wdTransaction where house_name = '" & Trim(ComboBox1.SelectedItem) & "'  order by id asc"
+            ElseIf ComboBox1.SelectedItem = "ALL" Then
+                SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from wdTransaction  order by id asc"
+
+            End If
+        End If
+
+        Dim i As Integer
+        Try
+
+
+            Dim n As Integer '= DataGridView1.Rows.Add()
+            RecSet.Open(SqlStr, UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+            If Recset.EOF = False Then
+                Do While Recset.EOF = False
+                    DataGridView1.Rows.Add()
+                    For i = 0 To 11
+                        DataGridView1.Rows.Item(n).Cells(i).Value = UCase(Recset.Fields(i).Value)
+
+                    Next
+
+                    n = n + 1
+                    Recset.MoveNext()
+                Loop
+            Else
+                MsgBox("No Record Found", vbExclamation)
+                Exit Sub
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+
+
+
+
+
+
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked = True Then
+            ComboBox1.Enabled = False
+            TextBox3.Enabled = False
+        End If
+    End Sub
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+        If RadioButton2.Checked = True Then
+            ComboBox1.Enabled = True
+            TextBox3.Enabled = True
+        End If
+    End Sub
+End Class

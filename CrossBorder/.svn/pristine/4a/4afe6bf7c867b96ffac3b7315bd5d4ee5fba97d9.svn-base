@@ -1,0 +1,1469 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Begin VB.Form frmParam 
+   BackColor       =   &H00C0FFC0&
+   Caption         =   "Credit Option & Settings"
+   ClientHeight    =   8775
+   ClientLeft      =   60
+   ClientTop       =   345
+   ClientWidth     =   11085
+   Icon            =   "frmParam.frx":0000
+   LinkTopic       =   "Form2"
+   Moveable        =   0   'False
+   ScaleHeight     =   8775
+   ScaleWidth      =   11085
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Timer ProcessTimer 
+      Enabled         =   0   'False
+      Interval        =   30000
+      Left            =   3000
+      Top             =   120
+   End
+   Begin MSWinsockLib.Winsock ClientSocket 
+      Left            =   2280
+      Top             =   120
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
+   Begin MSWinsockLib.Winsock ServerSocket 
+      Index           =   0
+      Left            =   1680
+      Top             =   120
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
+   Begin VB.Frame Frame15 
+      BackColor       =   &H00C0FFC0&
+      Caption         =   "Service Monitor"
+      Height          =   2415
+      Left            =   120
+      TabIndex        =   66
+      Top             =   6120
+      Width           =   10815
+      Begin VB.TextBox txt_log 
+         Height          =   1935
+         Left            =   6840
+         MultiLine       =   -1  'True
+         ScrollBars      =   3  'Both
+         TabIndex        =   67
+         Top             =   360
+         Width           =   3135
+      End
+      Begin VB.Label Label13 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Events Viewer"
+         Height          =   255
+         Left            =   6840
+         TabIndex        =   68
+         Top             =   120
+         Width           =   2895
+      End
+   End
+   Begin VB.CommandButton Command2 
+      BackColor       =   &H00C0FFC0&
+      Caption         =   "Refresh Counters"
+      Height          =   375
+      Left            =   120
+      Style           =   1  'Graphical
+      TabIndex        =   20
+      Top             =   120
+      Width           =   1455
+   End
+   Begin VB.PictureBox SSTab1 
+      BackColor       =   &H00C0C0C0&
+      Height          =   5295
+      Left            =   120
+      ScaleHeight     =   5235
+      ScaleWidth      =   10755
+      TabIndex        =   0
+      Top             =   600
+      Width           =   10815
+      Begin VB.Frame Frame11 
+         BackColor       =   &H00C0FFFF&
+         Height          =   4695
+         Left            =   -74880
+         TabIndex        =   51
+         Top             =   360
+         Width           =   10695
+         Begin VB.Frame Frame14 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Salary Options"
+            Height          =   1215
+            Left            =   6800
+            TabIndex        =   69
+            Top             =   240
+            Width           =   2535
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   6
+               Left            =   1080
+               MaxLength       =   15
+               TabIndex        =   71
+               Top             =   240
+               Width           =   1335
+            End
+            Begin VB.CommandButton Command14 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1680
+               Style           =   1  'Graphical
+               TabIndex        =   70
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Salary Model"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   9
+               Left            =   120
+               TabIndex        =   72
+               Top             =   360
+               Width           =   975
+            End
+         End
+         Begin VB.Frame Frame13 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Account Age"
+            Height          =   1215
+            Left            =   3720
+            TabIndex        =   62
+            Top             =   240
+            Width           =   3015
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   5
+               Left            =   1800
+               MaxLength       =   15
+               TabIndex        =   64
+               Top             =   240
+               Width           =   1095
+            End
+            Begin VB.CommandButton Command13 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   2160
+               Style           =   1  'Graphical
+               TabIndex        =   63
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Age Bracket (Min-Max)"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   8
+               Left            =   120
+               TabIndex        =   65
+               Top             =   360
+               Width           =   1695
+            End
+         End
+         Begin VB.Frame Frame12 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Customer Age"
+            Height          =   1215
+            Left            =   645
+            TabIndex        =   52
+            Top             =   240
+            Width           =   3015
+            Begin VB.CommandButton Command12 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   2160
+               Style           =   1  'Graphical
+               TabIndex        =   54
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   4
+               Left            =   1920
+               MaxLength       =   15
+               TabIndex        =   53
+               Top             =   240
+               Width           =   975
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Age Bracket (Min-Max)"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   7
+               Left            =   120
+               TabIndex        =   55
+               Top             =   360
+               Width           =   1695
+            End
+         End
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid4 
+            Height          =   975
+            Left            =   645
+            TabIndex        =   56
+            Top             =   1800
+            Width           =   4335
+            _ExtentX        =   7646
+            _ExtentY        =   1720
+            _Version        =   393216
+            Rows            =   3
+            Cols            =   6
+            FocusRect       =   0
+            FormatString    =   "Years |18-21     |22-30     |31-45     |46-60        "
+         End
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid5 
+            Height          =   975
+            Left            =   600
+            TabIndex        =   57
+            Top             =   3240
+            Width           =   4335
+            _ExtentX        =   7646
+            _ExtentY        =   1720
+            _Version        =   393216
+            Rows            =   3
+            Cols            =   7
+            FocusRect       =   0
+            FormatString    =   "Years | 0-1       | 2-5      |6-15     |15-20     |Above 20 |"
+         End
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid6 
+            Height          =   975
+            Left            =   5160
+            TabIndex        =   60
+            Top             =   1800
+            Width           =   5055
+            _ExtentX        =   8916
+            _ExtentY        =   1720
+            _Version        =   393216
+            Rows            =   3
+            Cols            =   5
+            FocusRect       =   0
+            FormatString    =   "Salaried|   No   | Civil Servant  | Private Company| Own Business"
+         End
+         Begin VB.Label Label12 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Salary Check"
+            Height          =   255
+            Left            =   9120
+            TabIndex        =   61
+            Top             =   1560
+            Width           =   1095
+         End
+         Begin VB.Label Label11 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Number Years of Account Holding"
+            Height          =   255
+            Left            =   3000
+            TabIndex        =   59
+            Top             =   3000
+            Width           =   2055
+         End
+         Begin VB.Label Label10 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Applicant's Age"
+            Height          =   255
+            Left            =   3720
+            TabIndex        =   58
+            Top             =   1560
+            Width           =   1215
+         End
+      End
+      Begin VB.Frame Frame3 
+         BackColor       =   &H00C0FFFF&
+         Height          =   4695
+         Left            =   -74880
+         TabIndex        =   14
+         Top             =   360
+         Width           =   10695
+         Begin VB.Frame Frame9 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Balance Amounts"
+            Height          =   1215
+            Left            =   645
+            TabIndex        =   47
+            Top             =   240
+            Width           =   2415
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   3
+               Left            =   1440
+               MaxLength       =   15
+               TabIndex        =   49
+               Top             =   240
+               Width           =   735
+            End
+            Begin VB.CommandButton Command10 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1440
+               Style           =   1  'Graphical
+               TabIndex        =   48
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Amount"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   3
+               Left            =   840
+               TabIndex        =   50
+               Top             =   360
+               Width           =   615
+            End
+         End
+         Begin VB.Frame Frame10 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Loan Amounts"
+            Height          =   1215
+            Left            =   3120
+            TabIndex        =   43
+            Top             =   240
+            Width           =   2415
+            Begin VB.CommandButton Command11 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1440
+               Style           =   1  'Graphical
+               TabIndex        =   45
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   1
+               Left            =   1440
+               MaxLength       =   15
+               TabIndex        =   44
+               Top             =   240
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Amount"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   6
+               Left            =   840
+               TabIndex        =   46
+               Top             =   360
+               Width           =   615
+            End
+         End
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid3 
+            Height          =   975
+            Left            =   645
+            TabIndex        =   15
+            Top             =   1560
+            Width           =   9855
+            _ExtentX        =   17383
+            _ExtentY        =   1720
+            _Version        =   393216
+            Rows            =   3
+            Cols            =   18
+            FocusRect       =   0
+            FormatString    =   "Amount| 200 | 500 |1000 |1500 |2000 |2500 |3000 |3500 |4000 | 5000| 7500| 10000|15000|20000|30000|50000|100000"
+         End
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid2 
+            Height          =   975
+            Left            =   600
+            TabIndex        =   23
+            Top             =   3000
+            Width           =   9855
+            _ExtentX        =   17383
+            _ExtentY        =   1720
+            _Version        =   393216
+            Rows            =   3
+            Cols            =   18
+            FocusRect       =   0
+            FormatString    =   "Amount| 200 | 500 |1000 |1500 |2000 |2500 |3000 |3500 |4000 | 5000| 7500| 10000|15000|20000|30000|50000|100000"
+         End
+         Begin VB.Label Label9 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Current Balance"
+            Height          =   255
+            Left            =   6840
+            TabIndex        =   25
+            Top             =   1320
+            Width           =   1335
+         End
+         Begin VB.Label Label7 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Previous Loan"
+            Height          =   255
+            Left            =   6840
+            TabIndex        =   24
+            Top             =   2760
+            Width           =   1575
+         End
+      End
+      Begin VB.Frame Frame1 
+         BackColor       =   &H00C0FFFF&
+         Height          =   4695
+         Left            =   -74880
+         TabIndex        =   12
+         Top             =   360
+         Width           =   10695
+         Begin VB.Frame Frame8 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Average Amounts"
+            Height          =   1215
+            Left            =   3000
+            TabIndex        =   39
+            Top             =   240
+            Width           =   2415
+            Begin VB.CommandButton Command9 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1440
+               Style           =   1  'Graphical
+               TabIndex        =   41
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   0
+               Left            =   1440
+               MaxLength       =   15
+               TabIndex        =   40
+               Top             =   240
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Average Amount"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   2
+               Left            =   120
+               TabIndex        =   42
+               Top             =   360
+               Width           =   1215
+            End
+         End
+         Begin VB.Frame Frame7 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Cash Counts"
+            Height          =   1200
+            Left            =   645
+            TabIndex        =   35
+            Top             =   240
+            Width           =   2295
+            Begin VB.CommandButton Command6 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1320
+               Style           =   1  'Graphical
+               TabIndex        =   37
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.TextBox Text1 
+               Height          =   350
+               Index           =   0
+               Left            =   1320
+               MaxLength       =   20
+               TabIndex        =   36
+               Top             =   240
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Number of CWD"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   1
+               Left            =   120
+               TabIndex        =   38
+               Top             =   360
+               Width           =   1215
+            End
+         End
+         Begin VB.CommandButton Command5 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Reset Weights"
+            Height          =   375
+            Left            =   5520
+            Style           =   1  'Graphical
+            TabIndex        =   22
+            Top             =   240
+            Width           =   1455
+         End
+         Begin MSFlexGridLib.MSFlexGrid CDFlexGrid 
+            Height          =   2895
+            Left            =   645
+            TabIndex        =   13
+            Top             =   1560
+            Width           =   9855
+            _ExtentX        =   17383
+            _ExtentY        =   5106
+            _Version        =   393216
+            Cols            =   19
+            FocusRect       =   0
+            FormatString    =   "      | 200 | 500 |1000 |1500 |2000 |2500 |3000 |3500 |4000 | 5000| 7500| 10000|15000|20000|30000|50000|100000"
+         End
+         Begin VB.Label Label2 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Deposit Average Axis"
+            Height          =   255
+            Left            =   6600
+            TabIndex        =   17
+            Top             =   1320
+            Width           =   2295
+         End
+         Begin VB.Label Label1 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Count  Axis"
+            Height          =   495
+            Left            =   120
+            TabIndex        =   16
+            Top             =   2520
+            Width           =   495
+         End
+      End
+      Begin VB.Frame Frame2 
+         BackColor       =   &H00C0FFFF&
+         Height          =   4695
+         Left            =   -74880
+         TabIndex        =   3
+         Top             =   360
+         Width           =   10575
+         Begin VB.CommandButton Command4 
+            BackColor       =   &H00C0FFFF&
+            Caption         =   "Reset Weights"
+            Height          =   375
+            Left            =   4560
+            Style           =   1  'Graphical
+            TabIndex        =   26
+            Top             =   600
+            Width           =   1455
+         End
+         Begin VB.CommandButton Command3 
+            BackColor       =   &H00C0FFFF&
+            Caption         =   "Add New Values"
+            Height          =   375
+            Left            =   3000
+            Style           =   1  'Graphical
+            TabIndex        =   6
+            Top             =   600
+            Width           =   1455
+         End
+         Begin VB.TextBox Text1 
+            Appearance      =   0  'Flat
+            Height          =   350
+            Index           =   2
+            Left            =   1440
+            MaxLength       =   20
+            TabIndex        =   5
+            Top             =   240
+            Width           =   615
+         End
+         Begin VB.TextBox Text4 
+            Appearance      =   0  'Flat
+            Height          =   350
+            Left            =   1440
+            MaxLength       =   15
+            TabIndex        =   4
+            Top             =   600
+            Width           =   1455
+         End
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+            Height          =   2895
+            Left            =   720
+            TabIndex        =   7
+            Top             =   1560
+            Width           =   9615
+            _ExtentX        =   16960
+            _ExtentY        =   5106
+            _Version        =   393216
+            Cols            =   13
+            GridColor       =   8421504
+            AllowBigSelection=   0   'False
+            FocusRect       =   0
+            FormatString    =   $"frmParam.frx":1082
+         End
+         Begin VB.Label Label8 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Average Amount"
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   5
+            Left            =   120
+            TabIndex        =   11
+            Top             =   700
+            Width           =   1215
+         End
+         Begin VB.Label Label8 
+            Appearance      =   0  'Flat
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Number of CWD"
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Index           =   4
+            Left            =   120
+            TabIndex        =   10
+            Top             =   300
+            Width           =   1215
+         End
+         Begin VB.Label Label4 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Cash/Cheques Deposit Weighted Avearge Axis"
+            Height          =   255
+            Left            =   3360
+            TabIndex        =   9
+            Top             =   1320
+            Width           =   4095
+         End
+         Begin VB.Label Label3 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Cash Out Weight Average Axis"
+            Height          =   1695
+            Left            =   120
+            TabIndex        =   8
+            Top             =   2160
+            Width           =   615
+         End
+      End
+      Begin VB.Frame Frame5 
+         BackColor       =   &H00C0FFFF&
+         Height          =   4695
+         Left            =   120
+         TabIndex        =   1
+         Top             =   360
+         Width           =   10695
+         Begin VB.Frame Frame6 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Average Amounts"
+            Height          =   1215
+            Left            =   3000
+            TabIndex        =   31
+            Top             =   240
+            Width           =   2415
+            Begin VB.TextBox Text2 
+               Height          =   350
+               Index           =   2
+               Left            =   1440
+               MaxLength       =   15
+               TabIndex        =   33
+               Top             =   240
+               Width           =   735
+            End
+            Begin VB.CommandButton Command8 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1440
+               Style           =   1  'Graphical
+               TabIndex        =   32
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Average Amount"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   0
+               Left            =   120
+               TabIndex        =   34
+               Top             =   360
+               Width           =   1215
+            End
+         End
+         Begin VB.Frame Frame4 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Cash Counts"
+            Height          =   1200
+            Left            =   645
+            TabIndex        =   27
+            Top             =   240
+            Width           =   2295
+            Begin VB.TextBox Text1 
+               Height          =   350
+               Index           =   3
+               Left            =   1320
+               MaxLength       =   20
+               TabIndex        =   29
+               Top             =   240
+               Width           =   735
+            End
+            Begin VB.CommandButton Command7 
+               BackColor       =   &H00C0FFC0&
+               Caption         =   "Save"
+               Height          =   375
+               Left            =   1320
+               Style           =   1  'Graphical
+               TabIndex        =   28
+               Top             =   720
+               Width           =   735
+            End
+            Begin VB.Label Label8 
+               Appearance      =   0  'Flat
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               Caption         =   "Number of CWD"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   10
+               Left            =   120
+               TabIndex        =   30
+               Top             =   360
+               Width           =   1215
+            End
+         End
+         Begin VB.CommandButton Command1 
+            BackColor       =   &H00C0FFC0&
+            Caption         =   "Reset Weights"
+            Height          =   375
+            Index           =   3
+            Left            =   5640
+            Style           =   1  'Graphical
+            TabIndex        =   21
+            Top             =   240
+            Width           =   1455
+         End
+         Begin MSFlexGridLib.MSFlexGrid CWFlexGrid 
+            Height          =   2895
+            Left            =   645
+            TabIndex        =   2
+            Top             =   1560
+            Width           =   9855
+            _ExtentX        =   17383
+            _ExtentY        =   5106
+            _Version        =   393216
+            Cols            =   19
+            FocusRect       =   0
+            FormatString    =   "      | 200 | 500 |1000 |1500 |2000 |2500 |3000 |3500 |4000 | 5000| 7500| 10000|15000|20000|30000|50000|100000"
+         End
+         Begin VB.Label Label6 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Count  Axis"
+            Height          =   495
+            Left            =   120
+            TabIndex        =   19
+            Top             =   2520
+            Width           =   495
+         End
+         Begin VB.Label Label5 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Withdrawal  Average Axis"
+            Height          =   255
+            Left            =   8160
+            TabIndex        =   18
+            Top             =   1320
+            Width           =   2295
+         End
+      End
+   End
+End
+Attribute VB_Name = "frmParam"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Private DbCon As ADODB.Connection
+
+
+Private Sub Command1_Click(Index As Integer)
+Dim Average As Double
+Dim Count As Integer
+Dim Base As Integer
+Dim row As Long
+Dim col As Long
+Dim row_val As Variant
+Dim col_val As Variant
+Dim Weight As Long
+Dim QString As String
+Dim MaxCol As Integer
+Dim MaxRow As Integer
+Dim RecSet As New ADODB.Recordset
+'Weight = (Ln(Average) * Count) / Base
+'DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+'          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+'          DbCon.Open
+ Base = 10
+ col = 0
+ row = 0
+ RecSet.Open "select count(*) as 'Count' from em_cwd_amcount", DbCon
+ MaxCol = RecSet!Count
+ RecSet.Close
+ 
+ RecSet.Open "select count(*) as 'Count' from em_cwd_avcount", DbCon
+ MaxRow = RecSet!Count
+   
+ DbCon.Execute "delete from em_cwd_weight"
+ 
+ For row = 1 To MaxRow
+   For col = 1 To MaxCol - 1
+      Average = CLng(CWFlexGrid.TextMatrix(0, col))
+      Count = CInt(CWFlexGrid.TextMatrix(row, 0))
+      Weight = (Log(Average) * Count) / Base
+      QString = "Insert into em_cwd_weight Values('" & _
+                CStr(Count) & "_" & CStr(Average) & "'," & Weight & ")"
+      DbCon.Execute QString
+   Next col
+ Next row
+   
+End Sub
+
+Private Sub Command10_Click()
+Dim Count As Integer
+Dim Amt As Long
+On Error GoTo ErrTrap
+
+If IsNumeric(Trim(Text2(3).Text)) = True Then
+ DbCon.Execute "Insert into em_bal_amcount values(" & CLng(Trim(Text2(3).Text)) & ")"
+Else
+ MsgBox "Only numeric values accepted", vbCritical
+End If
+ 
+ Exit Sub
+ErrTrap:
+ 
+ MsgBox err.Description, vbcritcal
+End Sub
+
+Private Sub Command11_Click()
+Dim Count As Integer
+Dim Amt As Long
+On Error GoTo ErrTrap
+
+If IsNumeric(Trim(Text2(1).Text)) = True Then
+ DbCon.Execute "Insert into em_crd_amcount values(" & CLng(Trim(Text2(1).Text)) & ")"
+Else
+ MsgBox "Only numeric values accepted", vbCritical
+End If
+ 
+ Exit Sub
+ErrTrap:
+ 
+ MsgBox err.Description, vbcritcal
+End Sub
+
+Private Sub Command2_Click()
+Call RefreshData
+End Sub
+
+Private Sub RefreshData()
+Dim RecSet As New ADODB.Recordset
+Dim row As Long
+Dim col As Long
+Dim row_val As Variant
+Dim col_val As Variant
+
+On Error GoTo ErrTrap
+
+'DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+'          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+'          DbCon.Open
+
+RecSet.Open ("Select xcwd_ycad,loc_wgt from em_cwd_weight order by xcwd_ycad asc"), DbCon
+
+col = 0
+row = 0
+
+Do While Not RecSet.EOF
+  col = 0
+  row = 0
+  row_val = Left(RecSet!xcwd_ycad, InStr(1, RecSet!xcwd_ycad, "_", vbTextCompare) - 1)
+  col_val = Right(RecSet!xcwd_ycad, Len(RecSet!xcwd_ycad) - InStr(1, RecSet!xcwd_ycad, "_", vbTextCompare))
+    
+   While CWFlexGrid.TextMatrix(row, 0) <> row_val
+     row = row + 1
+   Wend
+   While CWFlexGrid.TextMatrix(0, col) <> col_val
+     col = col + 1
+   Wend
+  
+   CWFlexGrid.TextMatrix(row, col) = RecSet!loc_wgt
+   RecSet.MoveNext
+Loop
+RecSet.Close
+
+RecSet.Open ("Select xcwd_ycad,loc_wgt from em_cad_weight order by xcwd_ycad asc"), DbCon
+
+col = 0
+row = 0
+
+Do While Not RecSet.EOF
+  col = 0
+  row = 0
+  row_val = Left(RecSet!xcwd_ycad, InStr(1, RecSet!xcwd_ycad, "_", vbTextCompare) - 1)
+  col_val = Right(RecSet!xcwd_ycad, Len(RecSet!xcwd_ycad) - InStr(1, RecSet!xcwd_ycad, "_", vbTextCompare))
+    
+   While CDFlexGrid.TextMatrix(row, 0) <> row_val
+     row = row + 1
+   Wend
+   While CDFlexGrid.TextMatrix(0, col) <> col_val
+     col = col + 1
+   Wend
+  
+   CDFlexGrid.TextMatrix(row, col) = RecSet!loc_wgt
+   RecSet.MoveNext
+Loop
+RecSet.Close
+
+
+RecSet.Open ("Select xcwd_ycad,loc_money from em_avg_weight order by xcwd_ycad asc"), DbCon
+
+col = 0
+row = 0
+
+Do While Not RecSet.EOF
+  col = 0
+  row = 0
+  row_val = Left(RecSet!xcwd_ycad, InStr(1, RecSet!xcwd_ycad, "_", vbTextCompare) - 1)
+  col_val = Right(RecSet!xcwd_ycad, Len(RecSet!xcwd_ycad) - InStr(1, RecSet!xcwd_ycad, "_", vbTextCompare))
+    
+   While MSFlexGrid1.TextMatrix(row, 0) <> row_val
+     row = row + 1
+   Wend
+   While MSFlexGrid1.TextMatrix(0, col) <> col_val
+     col = col + 1
+   Wend
+  
+   MSFlexGrid1.TextMatrix(row, col) = RecSet!loc_money
+   RecSet.MoveNext
+Loop
+RecSet.Close
+
+
+Exit Sub
+ErrTrap:
+MsgBox err.Description, vbCritical
+End Sub
+
+Private Sub Command4_Click()
+
+Dim Average As Double
+Dim Count As Integer
+Dim Csh_weight As Long
+Dim Dep_weight As Long
+Dim row As Long
+Dim col As Long
+Dim row_val As Variant
+Dim col_val As Variant
+Dim Weight As Long
+Dim QString As String
+Dim CdRecSet As New ADODB.Recordset
+Dim CwRecSet As New ADODB.Recordset
+Dim MaxRow As Integer
+Dim MaxCol As Integer
+'Weight = (Ln(Average) * Count) / Base
+'DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+'          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+'          DbCon.Open
+  Base = 10
+  col = 1
+  row = 1
+    CdRecSet.Open "select [value] from  dbo.em_avg_weight_value where parameter = 'Cad'", DbCon
+    If CdRecSet.EOF = False Then Dep_weight = CdRecSet!value Else Dep_weight = 1000
+    CdRecSet.Close
+    
+    CwRecSet.Open "select [value] from  dbo.em_avg_weight_value where parameter = 'Cad'", DbCon
+    If CwRecSet.EOF = False Then Csh_weight = CwRecSet!value Else Csh_weight = 500
+    CwRecSet.Close
+ 
+ 
+'    CwRecSet.Open "select count(av_count) from em_wght_wcount", DbCon
+'    MaxRow = CwRecSet.Fields(0).Value
+'    CwRecSet.Close
+    CwRecSet.Open "select av_count from em_wght_wcount", DbCon
+    
+    DbCon.Execute "delete  FROM em_avg_weight"
+    
+    Do While Not CwRecSet.EOF
+      CdRecSet.Open "select av_count from em_wght_dcount", DbCon
+          Do While Not CdRecSet.EOF
+           Average = (CwRecSet!av_count * Csh_weight) + (CdRecSet!av_count * Dep_weight)
+           DbCon.Execute "INSERT INTO em_avg_weight VALUES('" & CwRecSet!av_count & "_" & CdRecSet!av_count & "'," & Average & ")"
+           CdRecSet.MoveNext
+          Loop
+          CdRecSet.Close
+       CwRecSet.MoveNext
+    Loop
+       CwRecSet.Close
+       
+    CwRecSet.Open ("Select xcwd_ycad,loc_money from em_avg_weight order by xcwd_ycad asc"), DbCon
+
+    col = 0
+    row = 0
+    
+    Do While Not CwRecSet.EOF
+      col = 0
+      row = 0
+      row_val = Left(CwRecSet!xcwd_ycad, InStr(1, CwRecSet!xcwd_ycad, "_", vbTextCompare) - 1)
+      col_val = Right(CwRecSet!xcwd_ycad, Len(CwRecSet!xcwd_ycad) - InStr(1, CwRecSet!xcwd_ycad, "_", vbTextCompare))
+        
+       While MSFlexGrid1.TextMatrix(row, 0) <> row_val
+         row = row + 1
+       Wend
+       While MSFlexGrid1.TextMatrix(0, col) <> col_val
+         col = col + 1
+       Wend
+      
+       MSFlexGrid1.TextMatrix(row, col) = CwRecSet!loc_money
+       CwRecSet.MoveNext
+    Loop
+CwRecSet.Close
+
+ 
+End Sub
+
+Private Sub Command5_Click()
+Dim Average As Double
+Dim Count As Integer
+Dim Base As Integer
+Dim row As Long
+Dim col As Long
+Dim row_val As Variant
+Dim col_val As Variant
+Dim Weight As Long
+Dim QString As String
+Dim RecSet As New ADODB.Recordset
+Dim MaxRow As Integer
+Dim MaxCol As Integer
+'Weight = (Ln(Average) * Count) / Base
+'DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+'          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+'          DbCon.Open
+  Base = 10
+  col = 1
+  row = 1
+
+ RecSet.CursorLocation = adUseClient
+ RecSet.Open "select count(*) as 'Count' from em_cad_amcount", DbCon
+ MaxCol = RecSet!Count
+ RecSet.Close
+ 
+ RecSet.Open "select count(*) as 'Count' from em_cad_avcount", DbCon
+ MaxRow = RecSet!Count
+ 
+ DbCon.Execute "delete from em_cad_weight"
+ 
+ For row = 1 To MaxRow
+   For col = 1 To MaxCol - 1
+      Average = CLng(CDFlexGrid.TextMatrix(0, col))
+      Count = CInt(CDFlexGrid.TextMatrix(row, 0))
+      Weight = (Log(Average) * Count) / Base
+      QString = "Insert into em_cad_weight Values('" & _
+                CStr(Count) & "_" & CStr(Average) & "'," & Weight & ")"
+      DbCon.Execute QString
+    Next col
+ Next row
+End Sub
+
+Private Sub Command6_Click()
+Dim Count As Integer
+Dim Amt As Long
+On Error GoTo ErrTrap
+If IsNumeric(Trim(Text1(0).Text)) = True Then
+ DbCon.Execute "Insert into em_cad_avcount values(" & CInt(Trim(Text1(0).Text)) & ")"
+Else
+ MsgBox "Only numeric values accepted", vbCritical
+End If
+
+Exit Sub
+ErrTrap:
+ 
+ MsgBox err.Description, vbcritcal
+End Sub
+
+Private Sub Command7_Click()
+Dim Count As Integer
+Dim Amt As Long
+On Error GoTo ErrTrap
+If IsNumeric(Trim(Text1(3).Text)) = True Then
+ DbCon.Execute "Insert into em_cwd_avcount values(" & CInt(Trim(Text1(3).Text)) & ")"
+Else
+ MsgBox "Only numeric values accepted", vbCritical
+End If
+
+Exit Sub
+ErrTrap:
+ 
+ MsgBox err.Description, vbcritcal
+End Sub
+
+
+
+Private Sub Command8_Click()
+Dim Count As Integer
+Dim Amt As Long
+On Error GoTo ErrTrap
+
+If IsNumeric(Trim(Text2(2).Text)) = True Then
+ DbCon.Execute "Insert into em_cwd_amcount values(" & CLng(Trim(Text2(2).Text)) & ")"
+Else
+ MsgBox "Only numeric values accepted", vbCritical
+End If
+ 
+ Exit Sub
+ErrTrap:
+ 
+ MsgBox err.Description, vbcritcal
+End Sub
+
+Private Sub Command9_Click()
+Dim Count As Integer
+Dim Amt As Long
+On Error GoTo ErrTrap
+
+If IsNumeric(Trim(Text2(0).Text)) = True Then
+ DbCon.Execute "Insert into em_cad_amcount values(" & CLng(Trim(Text2(0).Text)) & ")"
+Else
+ MsgBox "Only numeric values accepted", vbCritical
+End If
+ 
+ Exit Sub
+ErrTrap:
+ 
+ MsgBox err.Description, vbcritcal
+End Sub
+
+Private Sub Form_Load()
+Dim row As Long
+Dim col As Long
+Dim j As Integer
+Dim RecSet As New ADODB.Recordset
+Dim ColCount As Integer
+RecSet.CursorLocation = adUseClient
+
+Me.Top = MainForm.Top + 1020
+Me.Left = MainForm.Left + 4300
+Me.Height = MainForm.TreeView1.Height - 200
+Frame15.Height = Me.Height / 3
+
+'MSFlexGrid1.Height = Me.Height / 2 - 500
+
+
+Set DbCon = New ADODB.Connection
+'On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+'>>>>CASH OUT COUNTS VALUES
+
+RecSet.Open ("Select av_count from em_cwd_avcount order by av_count asc"), DbCon
+
+col = 0
+row = 1
+
+Do While Not RecSet.EOF
+    CWFlexGrid.Rows = CWFlexGrid.Rows + 1
+    CWFlexGrid.TextMatrix(row, col) = RecSet!av_count
+    RecSet.MoveNext
+    row = row + 1
+Loop
+RecSet.Close
+
+'>>>>DEPOSIT COUNT VALUES
+RecSet.Open ("Select av_count from em_cad_avcount order by av_count asc"), DbCon
+
+col = 0
+row = 1
+
+Do While Not RecSet.EOF
+    CDFlexGrid.Rows = CDFlexGrid.Rows + 1
+    CDFlexGrid.TextMatrix(row, col) = RecSet!av_count
+    RecSet.MoveNext
+    row = row + 1
+Loop
+
+'>>>>CASH OUT WEIGHTED COUNT VALUES
+RecSet.Close
+
+RecSet.Open ("Select av_count from em_wght_wcount order by av_count asc"), DbCon
+MSFlexGrid1.Rows = RecSet.RecordCount() + 1
+
+col = 0
+row = 1
+
+Do While Not RecSet.EOF
+    'MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+    MSFlexGrid1.TextMatrix(row, col) = RecSet!av_count
+    RecSet.MoveNext
+    row = row + 1
+Loop
+
+'>>>>CASH OUT MONEY VALUES
+RecSet.Close
+
+'Recset.Open ("Select count(av_amt) from em_cwd_amcount"), DbCon
+'ColCount = Recset.Fields(0).Value
+'Recset.Close
+RecSet.Open ("Select av_amt from em_cwd_amcount order by av_amt asc"), DbCon
+ColCount = RecSet.RecordCount()
+col = 1
+row = 0
+CDFlexGrid.Cols = ColCount + 1
+Do While Not RecSet.EOF
+    CDFlexGrid.TextMatrix(row, col) = RecSet!av_amt
+    RecSet.MoveNext
+    col = col + 1
+Loop
+
+
+'>>>>CASH OUT MONEY VALUES
+RecSet.Close
+RecSet.Open ("Select av_amt from em_cad_amcount order by av_amt asc"), DbCon
+
+col = 1
+row = 0
+
+Do While Not RecSet.EOF
+    'CWFlexGrid.Rows = CWFlexGrid.Rows + 1
+    CWFlexGrid.TextMatrix(row, col) = RecSet!av_amt
+    RecSet.MoveNext
+    col = col + 1
+Loop
+
+'>>>>DEPOSIT AVERAGE WEIGHT
+RecSet.Close
+RecSet.Open ("Select av_count from em_wght_dcount order by av_count asc"), DbCon
+
+
+col = 1
+row = 0
+
+Do While Not RecSet.EOF
+    'MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+    MSFlexGrid1.TextMatrix(row, col) = RecSet!av_count
+    RecSet.MoveNext
+    col = col + 1
+Loop
+RecSet.Close
+
+
+'>>>>BALANCE AMOUNT WEIGHT
+
+Dim Mxcols As Integer
+Dim value As Long
+Dim NewRecset As New ADODB.Recordset
+
+'Recset.Open ("Select count(av_amt) from em_bal_amcount"), DbCon
+'Mxcols = Recset.Fields(0).Value
+'Recset.Close
+RecSet.Open ("Select av_amt from em_bal_amcount order by av_amt asc"), DbCon
+Mxcols = RecSet.RecordCount()
+NewRecset.Open "select [value] from dbo.em_avg_weight_value where parameter = 'balance'", DbCon
+If NewRecset.EOF = False Then value = NewRecset!value Else value = 1000
+NewRecset.Close
+
+col = 1
+row = 0
+MSFlexGrid3.Cols = Mxcols + 1
+MSFlexGrid3.TextMatrix(1, 0) = "Weight"
+Do While Not RecSet.EOF
+    'MSFlexGrid3.Cols = MSFlexGrid3.Cols + 1
+    MSFlexGrid3.TextMatrix(row, col) = RecSet!av_amt
+    MSFlexGrid3.TextMatrix(1, col) = RecSet!av_amt / value
+    RecSet.MoveNext
+    col = col + 1
+Loop
+RecSet.Close
+
+'>>>>PREVIOUS LOAN WEIGHT
+
+'Recset.Open ("Select count(av_amt) from em_crd_amcount"), DbCon
+'Mxcols = Recset.Fields(0).Value
+'Recset.Close
+
+RecSet.Open ("Select av_amt from em_crd_amcount order by av_amt asc"), DbCon
+Mxcols = RecSet.RecordCount()
+NewRecset.Open "select [value] from dbo.em_avg_weight_value where parameter = 'credit'", DbCon
+If NewRecset.EOF = False Then value = NewRecset!value Else value = 1000
+NewRecset.Close
+
+col = 1
+row = 0
+MSFlexGrid2.Cols = Mxcols + 1
+MSFlexGrid2.TextMatrix(1, 0) = "Weight"
+Do While Not RecSet.EOF
+    'MSFlexGrid3.Cols = MSFlexGrid3.Cols + 1
+    MSFlexGrid2.TextMatrix(row, col) = RecSet!av_amt
+    MSFlexGrid2.TextMatrix(1, col) = RecSet!av_amt / value
+    RecSet.MoveNext
+    col = col + 1
+Loop
+
+RecSet.Close
+
+Call RefreshData
+
+Exit Sub
+ErrorTrap:
+MsgBox err.Description, vbCritical
+'MsgBox "Please Login to Access the Configuration Console" & vbNewLine & _
+'"Go to File Menu and click Database Login, " & vbNewLine & "DataBase Login Error occurred", vbCritical
+Unload Me
+
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    Select Case UnloadMode
+    Case 0:
+        'return to application without quiting
+        Cancel = 1
+        'make menu visible
+        Me.Hide
+    Case Else 'for future use
+       
+    End Select
+End Sub
+
+
+Private Sub Form_Unload(Cancel As Integer)
+Me.Hide
+End Sub
+
+Private Sub ProcessTimer_Timer()
+Dim sqlString  As String
+Dim sqlString1  As String
+Dim sqlString2  As String
+Dim sqlString3  As String
+Dim sqlString4  As String
+
+Dim CashCount As Integer
+Dim DepCount As Integer
+
+
+Dim RecSet As New ADODB.Recordset  'Local data queue
+Dim Recset1 As New ADODB.Recordset 'Withdrawals
+Dim Recset2 As New ADODB.Recordset 'Deposits
+Dim Recset3 As New ADODB.Recordset 'Customer Info (salary ac, age,balance etc)
+Dim Recset4 As New ADODB.Recordset 'Withdrawal
+
+sqlString = "Select * from table_date"
+
+
+RecSet.Open sqlString, DbCon
+'Get data from request queue if any
+   Do While Not RecSet.EOF
+         sqlString1 = "Select * from table_date"
+         Recset1.Open sqlString1, CoreDbCon
+         
+   RecSet.MoveNext
+   Loop
+   
+
+End Sub
+
+''''''''DATA COMING FROM MERCHANT TO PAYSERV BRIDGE TO SWITCH''''''''''''''''''''''''''
+'       message is receieved at postbridge port                             '
+'         The mesage is process into ZAP format and send                    '
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+     
+Private Sub CleintMessageProcess(ByVal StrPostMessage As String, ByVal Source_Key As String)
+    Dim strMessage As String
+    On Error GoTo ErrorTrap
+    Dim Trace As String
+    Dim RstCommand As ADODB.Command
+    Dim RecSet As New ADODB.Recordset
+    Dim Issuer As Variant
+    Dim Sink_Key As String
+    Dim sqlString As String
+    Dim PostMsg As New PostBridgeISO8583
+    
+    With PostMsg
+        .ISO8583MsgBD StrPostMessage
+        .ResetBitMaps
+        
+       
+        Trace = "Message type: " & .MessageTypeID & vbNewLine
+        
+         If .Pan <> "" Then .CreatePBBitMap (2): Trace = Trace & "Field 002: " & .Pan & vbNewLine
+         If .ProcessingCODE <> "" Then .CreatePBBitMap (3): Trace = Trace & "Field 003: " & .ProcessingCODE & vbNewLine
+         If .AmtTransaction <> "" Then: .CreatePBBitMap (4): Trace = Trace & "Field 004: " & .AmtTransaction & vbNewLine
+         If .DatetimeTransmission <> "" Then .CreatePBBitMap (7): Trace = Trace & "Field 007: " & .DatetimeTransmission & vbNewLine
+         If .SysTraceAuditNum <> "" Then .CreatePBBitMap (11): Trace = Trace & "Field 011: " & .SysTraceAuditNum & vbNewLine
+         If .TimeLocTxn <> "" Then .CreatePBBitMap (12): Trace = Trace & "Field 012: " & .DateLocTxn & vbNewLine
+         If .DateLocTxn <> "" Then .CreatePBBitMap (13): Trace = Trace & "Field 013: " & .TimeLocTxn & vbNewLine
+         If .DateExpiry <> "" Then .CreatePBBitMap (14): Trace = Trace & "Field 014: " & .DateExpiry & vbNewLine
+         If .DateSettle <> "" Then .CreatePBBitMap (15): Trace = Trace & "Field 015: " & .DateSettle & vbNewLine
+         If .MerchantType <> "" Then .CreatePBBitMap (18): Trace = Trace & "Field 018: " & .MerchantType & vbNewLine
+         If .POSEntryMode <> "" Then .CreatePBBitMap (22): Trace = Trace & "Field 022: " & .POSEntryMode & vbNewLine
+         If .CardSeqNum <> "" Then .CreatePBBitMap (23): Trace = Trace & "Field 023: " & .CardSeqNum & vbNewLine
+         If .POSConditionCode <> "" Then .CreatePBBitMap (25): Trace = Trace & "Field 025: " & .POSConditionCode & vbNewLine
+         If .POSPinCaptureCode <> "" Then .CreatePBBitMap (26): Trace = Trace & "Field 026: " & .POSPinCaptureCode & vbNewLine
+         If .AmtTxnFee <> "" Then .CreatePBBitMap (28): Trace = Trace & "Field 028: " & .AmtTxnFee & vbNewLine
+         If .AmtTxnProcessingFee <> "" Then .CreatePBBitMap (30): Trace = Trace & "Field 030: " & .AmtTxnProcessingFee & vbNewLine
+         If .AcquiringInstIdCode <> "" Then .CreatePBBitMap (32): Trace = Trace & "Field 032: " & .AcquiringInstIdCode & vbNewLine
+         If .ForwardingInstIdCode <> "" Then .CreatePBBitMap (33): Trace = Trace & "Field 033: " & .ForwardingInstIdCode & vbNewLine
+         If .Track2Data <> "" Then .CreatePBBitMap (35): Trace = Trace & "Field 035: " & .Track2Data & vbNewLine
+         If .RetrievalRefNum <> "" Then .CreatePBBitMap (37): Trace = Trace & "Field 037: " & .RetrievalRefNum & vbNewLine
+         If .AuthIdResp <> "" Then .CreatePBBitMap (38): Trace = Trace & "Field 038: " & .AuthIdResp & vbNewLine
+         If .RespCode <> "" Then .CreatePBBitMap (39): Trace = Trace & "Field 039: " & .RespCode & vbNewLine
+         If .ServiceRestrictionCode <> "" Then .CreatePBBitMap (40): Trace = Trace & "Field 040: " & .ServiceRestrictionCode & vbNewLine
+         If .CardAcceptorTermId <> "" Then .CreatePBBitMap (41): Trace = Trace & "Field 041: " & .CardAcceptorTermId & vbNewLine
+         If .CardAcceptorIdCode <> "" Then .CreatePBBitMap (42): Trace = Trace & "Field 042: " & .CardAcceptorIdCode & vbNewLine
+         If .CardAcceptorNameLoc <> "" Then .CreatePBBitMap (43): Trace = Trace & "Field 043: " & .CardAcceptorNameLoc & vbNewLine
+         If .AdditionalRespData <> "" Then .CreatePBBitMap (44):: Trace = Trace & "Field 044: " & .AdditionalRespData & vbNewLine
+         If .AdditionalData <> "" Then .CreatePBBitMap (48): Trace = Trace & "Field 048: " & .AdditionalData & vbNewLine
+         If .CurrencyCodeTxn <> "" Then .CreatePBBitMap (49): Trace = Trace & "Field 049: " & .CurrencyCodeTxn & vbNewLine
+         .PinData = "12345678": .CreatePBBitMap (52): Trace = Trace & "Field 052: " & "****************" & vbNewLine
+         If .AdditionalAmts <> "" Then .CreatePBBitMap (54): Trace = Trace & "Field 054: " & .AdditionalAmts & vbNewLine
+         If .MsgReasonCode <> "" Then .CreatePBBitMap (56): Trace = Trace & "Field 056: " & .MsgReasonCode & vbNewLine
+         If .EchoData <> "" Then .CreatePBBitMap (59): Trace = Trace & "Field 059: " & .EchoData & vbNewLine
+         If .NetMangtInfoCode <> "" Then .CreatePBBitMap (70): Trace = Trace & "Field 070: " & .NetMangtInfoCode & vbNewLine
+         If .OriginalDataElements <> "" Then .CreatePBBitMap (90): Trace = Trace & "Field 090: " & .OriginalDataElements & vbNewLine
+         If .ReplacementAmts <> "" Then .CreatePBBitMap (95): Trace = Trace & "Field 095: " & .ReplacementAmts & vbNewLine
+         If .ReceivingInstIdCode <> "" Then .CreatePBBitMap (100): Trace = Trace & "Field 100: " & .ReceivingInstIdCode & vbNewLine
+         If .AccIdOne <> "" Then .CreatePBBitMap (102): Trace = Trace & "Field 102: " & .AccIdOne & vbNewLine
+         If .AccIdTwo <> "" Then .CreatePBBitMap (103): Trace = Trace & "Field 103: " & .AccIdTwo & vbNewLine
+         .POSDataCode = "000000000000090": .CreatePBBitMap (123): Trace = Trace & "Field 123: " & .POSDataCode & vbNewLine
+        
+        
+        
+         'Start procesign request
+         sqlString = "INSERT STATEMENT"
+         
+         'Insert New Request into Data Queue
+         DbCon.Execute sqlString
+         'response backto client for waiting
+          
+         ServerSocket(Index).SendData "Data processing started"
+   End With
+Exit Sub
+            
+            
+ErrorTrap:
+txt_log.Text = txt_log.Text & vbNewLine & "Procedure ProcessMerchantMessage " & err.Description
+EventsTrap = err.Description
+                        
+  
+End Sub

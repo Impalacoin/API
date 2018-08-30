@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "includes/Rest.inc.php";
+require_once "engine.php";
+class RestProcessor extends REST{
+    private $queryType;
+    private $user;
+    public function __construct(){
+        parent::__construct();
+        $this->user = new Users(); 
+    }
+    
+    public function process(){
+        $this->queryType = $_GET["method"];
+        $func = $_GET["method"];
+        if(method_exists($this,$func)){
+            $this->$func();
+        }
+    }
+    private function register(){
+        $user = new Users();
+        $response =array();
+        if($user->checkIfUserExists($_POST["email"])){
+            $response=array("status"=>"58","message"=>"Email already exists in our record.");
+            $this->response(json_encode($response),200);
+            exit();
+        }
+        $userId=$user->register();
+        if($userId){
+            //make sure to use the user id for session
+            $response = array("status"=>"00","message"=>"Account was successfully created.");
+            $this->response(json_encode($response),200);
+        }else{
+            $response=array("status"=>"56","message"=>"An error occured while creating account, please try again later.");
+            $this->response(json_encode($response),200);
+        }
+    }
+    private function login(){
+        $email = $_POST["email"];
+        $password = $_POST["password"];        
+        $result = $this->user->login($email,$password); 
+               
+        if($result){            
+            $response = array("status"=>"00","message"=>"User found.");
+            
+            $this->response(json_encode($response),200);
+        }else{
+            $response = array("status"=>"60","message"=>"Email and password combination did not match. Please try again or register.");
+            $this->response(json_encode($response),200);
+        }
+    }
+    private function rate(){
+        $rate = $this->user->getExchangeRate();
+        if($rate){
+            $response=array("status"=>"00","message"=>$rate);
+            $this->response(json_encode($response),200);
+        }else{
+            $response=array("status"=>"61","message"=>"Could not get exchange rate");
+            $this->response(json_encode($response),200);
+        }
+    }
+    private function processCard(){
+        $cardNumber = $_POST["card_number"];
+        $cvv = $_POST["cvv"];
+        $expiry = $_POST["expiry_date"];
+        $masterCard = $this->user->processCard($_SESSION["payment"]["total"],$cardNumber,$cvv,$expiry);
+        if($masterCard){
+            $response = array("status"=>"00","message"=>$masterCard);
+            $this->response(json_encode($response),200);
+        }else{
+           $response = array("status"=>"58","message"=>"Error sending data to master card");
+           $this->response(json_encode($response),200); 
+        }
+    }
+    private function sendToMobile(){
+        $mobile = $this->user->sendToMobile();
+        if($mobile){
+            $response = array("status"=>"00","message"=>"Transaction successfull");
+            $this->response(json_encode($response),200);
+        }else{
+            $response = array("status"=>"58","message"=>"Error sending data to master card");
+            $this->response(json_encode($response),200); 
+        }
+    }
+    private function sendToBank(){
+        $mobile = $this->user->sendToBank();
+        if($mobile){
+            $response = array("status"=>"00","message"=>"Transaction successfull");
+            $this->response(json_encode($response),200);
+        }else{
+            $response = array("status"=>"58","message"=>"Error sending data to master card");
+            $this->response(json_encode($response),200); 
+        }
+    }
+}
+$rest = new RestProcessor;
+$rest->process();
+
+?>

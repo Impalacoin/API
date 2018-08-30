@@ -1,0 +1,618 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Cashswift Money Transfer service payment processing platform</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META NAME="DESCRIPTION" CONTENT="Cashswift  money transfer service, Send money to Kenyain a secure way from abroad to your bank or mobile phone"> 
+<META NAME="KEYWORDS" CONTENT="Send money, Kenya, send mone to kenya, remittance, remit, money, Cashswift Kenya, Kenya online banking, Kenya exchange rate, exchange rate, gifts to Kenya, merchant services Kenya, account, bill, pay, wire,transfer,gifts,e-commerce, shopping, send money nairobi, send money mombasa, mobassa,">
+<META  NAME="ROBOTS" CONTENT="ALL">
+
+<style type="text/css">
+<!--
+body {
+	background-color: #F7F7F7;
+}
+.style1 {
+	font-family: Verdana;
+	font-size: 13.5pt;
+}
+-->
+</style>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+<link rel="stylesheet" type="text/css" href="ajaxtabs/ajaxtabs.css" />
+
+<script type="text/javascript" src="ajaxtabs/ajaxtabs.js">
+
+/***********************************************
+* Ajax Tabs Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+</script>
+<style type="text/css">
+<!--
+.style2 {color: #FFFFFF}
+.style3 {font-size: 12pt}
+.style4 {
+	color: #DBF4F7;
+	font-weight: bold;
+}
+.style6 {color: #C6EFF2}
+
+</style>
+<script type="text/javascript">
+<!--
+    _CF_checkfrmCCadd = function(_CF_this)
+    {
+        //reset on submit
+        _CF_error_exists = false;
+        _CF_error_messages = new Array();
+        _CF_error_fields = new Object();
+        _CF_FirstErrorField = null;
+
+        //form element cc_creditcard_no required check
+        if( _CF_hasValue(_CF_this['cc_creditcard_no'], "TEXT", false ) )
+        {
+            //form element cc_creditcard_no 'CREDITCARD' validation checks
+            if (!_CF_checkcreditcard(_CF_this['cc_creditcard_no'].value, true))
+            {
+                _CF_onError(_CF_this, "cc_creditcard_no", _CF_this['cc_creditcard_no'].value, "Please enter your credit card number, If you do not wish to enter it here, please call us during business hours (9am-7pm PST) to order over the phone 1-205-267-6043!");
+                _CF_error_exists = true;
+            }
+
+        }else {
+            _CF_onError(_CF_this, "cc_creditcard_no", _CF_this['cc_creditcard_no'].value, "Please enter your credit card number, If you do not wish to enter it here, please call us during business hours (9am-7pm PST) to order over the phone 1-205-267-6043!");
+            _CF_error_exists = true;
+        }
+
+        //form element cc_first_name required check
+        if( _CF_hasValue(_CF_this['cc_first_name'], "TEXT", false ) )
+        {
+            //form element cc_first_name 'REGEX' validation checks
+            if (!_CF_checkregex(_CF_this['cc_first_name'].value, /^[a-zA-Z]{2,50}$/, true))
+            {
+                _CF_onError(_CF_this, "cc_first_name", _CF_this['cc_first_name'].value, "You must enter a valid first name (no special characters or number allowed) !");
+                _CF_error_exists = true;
+            }
+
+        }else {
+            _CF_onError(_CF_this, "cc_first_name", _CF_this['cc_first_name'].value, "You must enter a valid first name (no special characters or number allowed) !");
+            _CF_error_exists = true;
+        }
+
+        //form element cc_last_name required check
+        if( _CF_hasValue(_CF_this['cc_last_name'], "TEXT", false ) )
+        {
+            //form element cc_last_name 'REGEX' validation checks
+            if (!_CF_checkregex(_CF_this['cc_last_name'].value, /^[\s\S]{4,50}$/, true))
+            {
+                _CF_onError(_CF_this, "cc_last_name", _CF_this['cc_last_name'].value, "Please enter your valid last name (Paternal)!");
+                _CF_error_exists = true;
+            }
+
+        }else {
+            _CF_onError(_CF_this, "cc_last_name", _CF_this['cc_last_name'].value, "Please enter your valid last name (Paternal)!");
+            _CF_error_exists = true;
+        }
+
+        //form element cc_address required check
+        if( !_CF_hasValue(_CF_this['cc_address'], "TEXT", false ) )
+        {
+            _CF_onError(_CF_this, "cc_address", _CF_this['cc_address'].value, "Please enter the valid address ");
+            _CF_error_exists = true;
+        }
+
+        //form element cc_city required check
+        if( !_CF_hasValue(_CF_this['cc_city'], "TEXT", false ) )
+        {
+            _CF_onError(_CF_this, "cc_city", _CF_this['cc_city'].value, "Please enter valid city ");
+            _CF_error_exists = true;
+        }
+
+        //form element cc_state required check
+        if( !_CF_hasValue(_CF_this['cc_state'], "SELECT", false ) )
+        {
+            _CF_onError(_CF_this, "cc_state", _CF_this['cc_state'].value, "Error in cc_state text.");
+            _CF_error_exists = true;
+        }
+
+        //form element cc_zip required check
+        if( _CF_hasValue(_CF_this['cc_zip'], "TEXT", false ) )
+        {
+            //form element cc_zip 'ZIPCODE' validation checks
+            if (!_CF_checkzip(_CF_this['cc_zip'].value, true))
+            {
+                _CF_onError(_CF_this, "cc_zip", _CF_this['cc_zip'].value, "Please enter valid zip code ");
+                _CF_error_exists = true;
+            }
+
+        }else {
+            _CF_onError(_CF_this, "cc_zip", _CF_this['cc_zip'].value, "Please enter valid zip code ");
+            _CF_error_exists = true;
+        }
+
+
+        //display error messages and return success
+        if( _CF_error_exists )
+        {
+            if( _CF_error_messages.length > 0 )
+            {
+                // show alert() message
+                _CF_onErrorAlert(_CF_error_messages);
+                // set focus to first form error, if the field supports js focus().
+                if( _CF_this[_CF_FirstErrorField].type == "text" )
+                { _CF_this[_CF_FirstErrorField].focus(); }
+
+            }
+            return false;
+        }else {
+            // run userdefined onSubmit javascript. 
+            return chkfrm(this);
+            return true;
+        }
+    }
+//-->
+</script>
+
+</head>
+<link rel="shortcut icon" href="favicon.ico" >
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" marginwidth="0" marginheight="0">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="20" align="left" valign="middle" background="button_1.jpg"><table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+      <tr>
+        <td><a href="index.php" class="style2">Home</a></td>
+        <td><a href="about-us.php" class="style2">About us</a></td>
+        <td><a href="faqs.php" class="style2">FAQs</a></td>
+        <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+<table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF"><table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr align="left">
+        <td valign="middle" background="banner_.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF"><table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                        <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                        <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td>
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>EXCHANGE RATE: KSH 85 </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF">
+		
+
+	
+		
+		
+<script language="JavaScript" type="text/javascript">
+function chkfrm(){
+  var aba = payment_form.ach_routing_number.value;
+  var valid = "0123456789";
+  var len = aba.length;
+  var bNum = true;
+  var iABA = parseInt(aba);
+  var sABA = aba.toString();
+  var iTotal = 0;
+  var bResult = false;
+  var temp;
+
+  for (var j=0; j<len; j++) {
+  temp = "" + aba.substring(j, j+1);
+  if (valid.indexOf(temp) == "-1") bNum = false;
+  }
+
+  if(len !=0) {  
+    if(len != 9) {
+    } else {
+      for (var i=0; i<len; i += 3) {
+        iTotal += parseInt(sABA.charAt(i),     10) * 3
+          +  parseInt(sABA.charAt(i + 1), 10) * 7
+          +  parseInt(sABA.charAt(i + 2), 10);
+        }
+		
+    if (iTotal != 0 && iTotal % 10 == 0){
+      bResult = true;
+    } else {
+      bResult = false;
+    }
+  }
+  } else {
+  }
+    
+  if (!bResult) {
+   alert("Please enter a valid routing number");
+     return false;
+  } else {
+  return true;
+
+  }
+
+}
+
+</script> 
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><div class="GW_main_box_title">Card information </div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+<script language="JavaScript" type="text/javascript">
+function chkfrm(){
+	var d = new Date();
+	var thisyear=parseInt(d.getFullYear());
+	var thismonth=parseInt(d.getMonth()+1);
+	var selmonth=parseInt(frmCCadd.cc_expire_month.value);
+	var selyear=parseInt(frmCCadd.cc_expire_year.value);
+	if(selmonth<thismonth && selyear<=thisyear){
+		alert("Please select correct credit card expiration date.");
+		return false;
+	}else{
+		return true;
+	}
+}
+
+</script> 
+
+
+
+<table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+
+
+  <tr>
+    <td>
+      
+<form action="<?=$_SERVER['PHP_SELF']?>" method="post">
+        <table class="style-length">
+          
+          
+        
+			
+			<input type="hidden" name="method_nickname" id="method_nickname" value=""> 
+          
+          
+          <tr>
+            <td class="style-bold">Card type <span class="GW_txtred">*</span></td>
+            <td><select name="cc_creditcard_type" class="GW_selectbox">
+              <option value="VISA" >VISA</option>
+              <option value="MC" >MASTERCARD</option>
+              
+              </select></td>
+            </tr>
+          
+          
+          <tr>
+            <td class="style-bold">Card number <span class="GW_txtred">*</span></td>
+            <td><input name="cc_creditcard_no" id="cc_creditcard_no"  type="text" maxlength="16"  class="GW_textbox"  /> </td>
+            </tr>
+          
+          
+          
+          <tr>
+            <td class="style-bold">Expiration Date <span class="GW_txtred">*</span></td>
+            <td>
+              <select size="1" name="cc_expire_month" class="GW_selectbox">
+                <option value="01" selected> 01 </option>
+                  <option value="02"> 02 </option>
+                    <option value="03"> 03 </option>
+                      <option value="04"> 04 </option>
+                        <option value="05"> 05 </option>
+                          <option value="06"> 06 </option>
+                            <option value="07"> 07 </option>
+                              <option value="08"> 08 </option>
+                                <option value="09"> 09 </option>
+                                  <option value="10"> 10 </option>
+                                  <option value="11"> 11 </option>
+                                  <option value="12"> 12 </option>
+                                </select>
+              / 
+              <select size="1" name="cc_expire_year" class="GW_selectbox">
+                  <option value="2012"> 2012</option>
+                    <option value="2013"> 2013</option>
+                      <option value="2014"> 2014 </option>
+                        <option selected value="2015"> 2015</option>
+                          <option value="2016"> 2016</option>
+                            <option value="2017"> 2017</option>
+							<option value="2018"> 2018</option>
+							<option value="2019"> 2019</option>
+                              </select>              </td>
+            </tr>
+          
+          
+          
+			<input type="hidden" name="cc_cvv_no" id="cc_cvv_no" value="">
+          
+          
+ 
+    <tr>
+    	<td>&nbsp;</td>
+        <td>
+        <input type="hidden" name="ssn" value="123456789"></td>
+	</tr>
+    
+          
+          
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            </tr>
+          
+  
+          <tr>
+            <td colspan="2"><strong>Billing information</strong></td>
+            </tr>
+          <tr>
+            <td colspan="2">       
+              <div class="GW_msg_info" style="margin:10px 0">Billing address is the address listed on your credit card statement</div></td>
+            </tr>
+          
+
+  
+          <tr>
+            <td class="style-bold">First Name <span class="GW_txtred">*</span></td>
+            <td><input name="cc_first_name" id="cc_first_name"  type="text" value="as captured from db" maxlength="50"  class="GW_textbox"  /></td>
+          </tr>
+          
+          
+          <tr>
+            <td class="style-bold">Last Name <span class="GW_txtred">*</span></td>
+            <td><input name="cc_last_name" id="cc_last_name"  type="text" value="as captured from db" maxlength="50"  class="GW_textbox"  /></td>
+          </tr>
+          
+  
+          <tr>
+            <td class="style-bold">Address <span class="GW_txtred">*</span></td>
+            <td>  <input name="cc_address" id="cc_address"  type="text" value="as captured from db" maxlength="50"  size="25"  class="GW_textbox"  /></td>
+            </tr>
+          
+          
+          <tr>
+            <td class="style-bold">City <span class="GW_txtred">*</span></td>
+            <td>	 <input name="cc_city" id="cc_city"  type="text" value="as captured from db" maxlength="50"  size="25"  class="GW_textbox"  /></td>
+            </tr>
+          
+  
+          <tr>
+            <td class="style-bold">State <span class="GW_txtred">*</span></td>
+            <td>
+  <select name="cc_state" id="cc_state" class="GW_selectbox" >
+
+   
+  <option value="AK">AK</option>
+     
+  <option value="AL"selected>AL</option>
+     
+  <option value="AR">AR</option>
+     
+  <option value="AZ">AZ</option>
+     
+  <option value="CA">CA</option>
+     
+  <option value="CO">CO</option>
+     
+  <option value="CT">CT</option>
+     
+  <option value="DC">DC</option>
+     
+  <option value="DE">DE</option>
+     
+  <option value="FL">FL</option>
+     
+  <option value="GA">GA</option>
+     
+  <option value="HI">HI</option>
+     
+  <option value="IA">IA</option>
+     
+  <option value="ID">ID</option>
+     
+  <option value="IL">IL</option>
+     
+  <option value="IN">IN</option>
+     
+  <option value="KS">KS</option>
+     
+  <option value="KY">KY</option>
+     
+  <option value="LA">LA</option>
+     
+  <option value="MA">MA</option>
+     
+  <option value="MB">MB</option>
+     
+  <option value="MD">MD</option>
+     
+  <option value="ME">ME</option>
+     
+  <option value="MS">MS</option>
+     
+  <option value="MI">MI</option>
+     
+  <option value="MO">MO</option>
+     
+  <option value="MN">MN</option>
+     
+  <option value="MT">MT</option>
+     
+  <option value="NE">NE</option>
+     
+  <option value="NC">NC</option>
+     
+  <option value="ND">ND</option>
+     
+  <option value="NE">NE</option>
+     
+  <option value="NH">NH</option>
+     
+  <option value="NJ">NJ</option>
+     
+  <option value="NM">NM</option>
+     
+  <option value="NV">NV</option>
+     
+  <option value="NY">NY</option>
+     
+  <option value="OH">OH</option>
+     
+  <option value="OK">OK</option>
+     
+  <option value="ON">ON</option>
+     
+  <option value="OR">OR</option>
+     
+  <option value="PA">PA</option>
+     
+  <option value="PE">PE</option>
+     
+  <option value="RI">RI</option>
+     
+  <option value="SC">SC</option>
+     
+  <option value="SD">SD</option>
+     
+  <option value="SK">SK</option>
+     
+  <option value="TN">TN</option>
+     
+  <option value="TX">TX</option>
+     
+  <option value="UT">UT</option>
+     
+  <option value="VA">VA</option>
+     
+  <option value="VT">VT</option>
+     
+  <option value="WA">WA</option>
+     
+  <option value="WI">WI</option>
+     
+  <option value="WY">WY</option>
+     
+  <option value="WV">WV</option>
+     
+  <option value="PR">PR</option>
+     
+  <option value="VI">VI</option>
+    
+
+    </select>
+                </td>
+            </tr>
+          
+          
+          
+          <tr>
+            <td class="style-bold">Zip Code <span class="GW_txtred">*</span></td>
+            <td><input name="cc_zip" id="cc_zip"  type="text" value="as captured from db" maxlength="5"  size="5"  class="GW_textbox"  /></td>
+            </tr>
+          
+          
+  
+          <tr>
+            <td class="style-bold">Country <span class="GW_txtred">*</span></td>
+            <td>USA</td>
+            </tr>
+          
+          <tr>                           
+            <td>  <input type="hidden" name="client_id" value="269021"></td>
+            <td> <input type="hidden" name="Submit2" value="Reset"></td>
+            </tr>
+          
+          <tr>
+            <td><input type="hidden" name="method_type" value="Credit_card"> </td>
+            <td>&nbsp;</td>
+            </tr>
+          
+          <tr>
+            <td height="30">&nbsp;</td>
+            <td>
+              <button type="button" class="GW_button_grey" onClick="location.href='send-now.php'"><span>Cancel</span></button>
+              
+              <button type="submit" class="GW_button_grey"><span>Submit</span></button>
+                            </td>
+            </tr>
+          
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            </tr>
+          </table>
+        </form>
+
+      </td>
+  </tr>
+  <tr>
+    <td><strong>CVV Code Sample</strong></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><img src="cvv-sample.gif" alt="CVV Sample" /><!--  Sample Image for Credit Card Goes Here-->&nbsp;</td>
+  </tr>
+</table>
+
+
+<script>
+var txtBox=document.getElementById("cc_creditcard_no" );
+if (txtBox!=null ) txtBox.focus();
+</script>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+ 
+ <script>
+var txtBox=document.getElementById("ach_routing_number" );
+if (txtBox!=null ) txtBox.focus();
+</script>
+
+</td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, Cashswift Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

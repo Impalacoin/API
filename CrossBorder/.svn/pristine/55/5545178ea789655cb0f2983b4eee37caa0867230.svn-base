@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @author Nicholas N Chege
+ * @copyright 2011
+ */
+
+ require_once("engine.php");
+     
+   
+   display_navigation();
+   check_if_logged_in($me); 
+   if($me){
+    
+ if(isset($_POST["resetPin"])){
+    $generatedPin=mt_rand(1500,20000);
+    $hashedPin=sha1($generatedPin);
+    
+    
+    $msgBody="<p>Your pin for Impalapay facebook account has been reset.<br />
+    Your new pin is {$generatedPin}.<br />
+    For security, please change this pin when you login to Impalapay.</p>";
+    $subject="Pin Reset";
+    $to=$me["email"];
+    $toName=$me["name"];
+    $email=sendEmail($msgBody,$subject,$to,$toName);
+     
+    echo $email;
+    if($email){
+       $query="UPDATE users set pin='{$hashedPin}' WHERE fb_id={$uid}";
+        $result=mysql_query($query) or die(mysql_error());
+        if(mysql_affected_rows()==1)
+            echo "<p style='color:green'>Your pin has been reset successfully. Go to you email to get your new pin.<br /></p>";
+        
+    }else{
+        echo "<p>Email failed to send. Please try again.</p>";
+    }
+ }  
+?>
+
+<p>
+    If you have forgotten your pin, answer the security questions and click the reset button <br />
+    a new pin will be sent to your email. 
+    <form action="pin_change.php" method="post">
+    <table>
+        <tr>
+        <td>Secret Question 1</td>
+        <td>
+            <select name="secret1">
+                <option value="What is the first name of your favorite uncle?">What is the first name of your favorite uncle?</option>
+                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                <option value="What is your oldest cousin’s name?">What is your oldest cousin’s name?</option>
+                <option value="What is your youngest  child’s nickname?">What is your youngest  child’s nickname?</option>
+                <option value="What is your oldest child’s nickname?">What is your oldest child’s nickname?</option>
+                <option value="What is the first name of your youngest niece?">What is the first name of your youngest niece?</option>
+                <option value="What is the first name of your oldest nephew?">What is the first name of your oldest nephew?</option>
+                <option value="What is the first name of your favorite aunt?">What is the first name of your favorite aunt?</option> 
+                <option value="Where did you spend your honeymoon?">Where did you spend your honeymoon?</option>         
+            </select>
+        </td>
+    </tr>
+    <tr><td>Answer</td><td><input type="text" name="answer1" /></td></tr>
+    <tr>
+        <td>Secret Question 2</td>
+        <td>
+            <select name="secret2">
+                <option value="What is the first name of your favorite uncle?">What is the first name of your favorite uncle?</option>
+                <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                <option value="What is your oldest cousin’s name?">What is your oldest cousin’s name?</option>
+                <option value="What is your youngest  child’s nickname?">What is your youngest  child’s nickname?</option>
+                <option value="What is your oldest child’s nickname?">What is your oldest child’s nickname?</option>
+                <option value="What is the first name of your youngest niece?">What is the first name of your youngest niece?</option>
+                <option value="What is the first name of your oldest nephew?">What is the first name of your oldest nephew?</option>
+                <option value="What is the first name of your favorite aunt?">What is the first name of your favorite aunt?</option> 
+                <option value="Where did you spend your honeymoon?">Where did you spend your honeymoon?</option>         
+            </select>
+        </td>
+    </tr>
+<tr><td>Answer</td><td><input type="text" name="answer1" /></td></tr>
+    <tr><td colspan="2"><input type="submit" value="Reset" name="resetPin" /></td></tr>
+    </table>
+    
+    </form>
+</p>
+
+<?php
+     }
+     
+//require_once "includes/footer.php"
+
+?>

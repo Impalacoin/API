@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "engine.php";
+$output = '
+    <div class="full-width-content">
+        <ul id="blog-entries">
+            <li class="blog-entry single">
+                <h3 class="blog-page-title">My Account</h3>
+                <div class="sh-one-half float-left">
+                <p class=alert_success> Current balance 500.00$</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+';
+$form="";
+if(!isset($_POST["calculate"])){
+    $form.=Forms::culculateSendingFee("main.php");
+}else{
+    $form=Forms::paymentForm("");
+}
+Display::header("Welcome to Chasebank online instant money transfer");
+Display::memberNavigation();
+Display::content($form);
+Display::footer();
+
+?>

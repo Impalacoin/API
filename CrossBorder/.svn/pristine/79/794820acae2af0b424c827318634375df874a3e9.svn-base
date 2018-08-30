@@ -1,0 +1,1162 @@
+VERSION 5.00
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
+Begin VB.Form EMconBridge 
+   AutoRedraw      =   -1  'True
+   BorderStyle     =   1  'Fixed Single
+   Caption         =   "EMConnectBridge"
+   ClientHeight    =   3375
+   ClientLeft      =   45
+   ClientTop       =   330
+   ClientWidth     =   7020
+   Icon            =   "ZapBridge.frx":0000
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   3375
+   ScaleWidth      =   7020
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Timer TmrSendDataToClient 
+      Interval        =   2000
+      Left            =   600
+      Top             =   120
+   End
+   Begin VB.Timer ServerTmr 
+      Enabled         =   0   'False
+      Interval        =   62000
+      Left            =   120
+      Top             =   120
+   End
+   Begin VB.OptionButton Option2 
+      Caption         =   "Confirm Settings"
+      Enabled         =   0   'False
+      Height          =   255
+      Left            =   5280
+      TabIndex        =   18
+      Top             =   120
+      Width           =   1455
+   End
+   Begin VB.OptionButton Option1 
+      Caption         =   "Confiure Connections"
+      Height          =   255
+      Left            =   3360
+      TabIndex        =   17
+      Top             =   120
+      Width           =   1815
+   End
+   Begin VB.Frame Frame3 
+      Caption         =   "Mobile Server Connection"
+      Enabled         =   0   'False
+      Height          =   1095
+      Left            =   4200
+      TabIndex        =   8
+      Top             =   1800
+      Width           =   2535
+      Begin VB.TextBox txtMobileport 
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   960
+         TabIndex        =   16
+         Top             =   720
+         Width           =   1335
+      End
+      Begin VB.TextBox TxtMobileIP 
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   960
+         TabIndex        =   15
+         Top             =   360
+         Width           =   1335
+      End
+      Begin VB.Label Label5 
+         Caption         =   "Port"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   600
+         TabIndex        =   14
+         Top             =   720
+         Width           =   375
+      End
+      Begin VB.Label Label4 
+         Caption         =   "Server IP"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   240
+         TabIndex        =   13
+         Top             =   360
+         Width           =   735
+      End
+   End
+   Begin VB.Frame Frame2 
+      Caption         =   "Switch Connection"
+      Enabled         =   0   'False
+      Height          =   1215
+      Left            =   4200
+      TabIndex        =   7
+      Top             =   480
+      Width           =   2535
+      Begin VB.TextBox txtswitchPort 
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   960
+         TabIndex        =   12
+         Top             =   720
+         Width           =   1335
+      End
+      Begin VB.TextBox txtswitchIP 
+         Enabled         =   0   'False
+         Height          =   285
+         Left            =   960
+         TabIndex        =   10
+         Top             =   360
+         Width           =   1335
+      End
+      Begin VB.Label Label3 
+         Caption         =   "Port"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   600
+         TabIndex        =   11
+         Top             =   720
+         Width           =   375
+      End
+      Begin VB.Label Label2 
+         Caption         =   "Server IP"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   240
+         TabIndex        =   9
+         Top             =   360
+         Width           =   735
+      End
+   End
+   Begin MSComctlLib.StatusBar StatusBar 
+      Align           =   2  'Align Bottom
+      Height          =   375
+      Left            =   0
+      TabIndex        =   2
+      Top             =   3000
+      Width           =   7020
+      _ExtentX        =   12383
+      _ExtentY        =   661
+      _Version        =   393216
+      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
+         NumPanels       =   1
+         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+         EndProperty
+      EndProperty
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Bridge Control"
+      Height          =   2415
+      Left            =   480
+      TabIndex        =   0
+      Top             =   480
+      Width           =   3615
+      Begin VB.TextBox TxtServer 
+         Appearance      =   0  'Flat
+         BackColor       =   &H8000000B&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   1440
+         TabIndex        =   21
+         Top             =   1560
+         Width           =   2055
+      End
+      Begin MSWinsockLib.Winsock serverSocket 
+         Index           =   0
+         Left            =   3120
+         Top             =   720
+         _ExtentX        =   741
+         _ExtentY        =   741
+         _Version        =   393216
+      End
+      Begin VB.OptionButton Option4 
+         Caption         =   "No"
+         Enabled         =   0   'False
+         Height          =   195
+         Left            =   120
+         TabIndex        =   20
+         Top             =   1200
+         Width           =   855
+      End
+      Begin VB.OptionButton Option3 
+         Caption         =   "Yes"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   120
+         TabIndex        =   19
+         Top             =   840
+         Width           =   855
+      End
+      Begin VB.TextBox MsgTxt 
+         BackColor       =   &H80000007&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   12
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000005&
+         Height          =   345
+         Left            =   1440
+         MultiLine       =   -1  'True
+         TabIndex        =   6
+         Top             =   1950
+         Width           =   2055
+      End
+      Begin VB.TextBox PostTxt 
+         BackColor       =   &H8000000A&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   1440
+         TabIndex        =   5
+         Top             =   1200
+         Width           =   2055
+      End
+      Begin VB.TextBox MessageTxt 
+         BackColor       =   &H8000000A&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   1440
+         TabIndex        =   3
+         Top             =   840
+         Width           =   2055
+      End
+      Begin VB.CommandButton cmdStatus 
+         Appearance      =   0  'Flat
+         Caption         =   "Stop Processor"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   1
+         Top             =   240
+         Width           =   1575
+      End
+      Begin VB.Timer tmrTransaction 
+         Left            =   3120
+         Top             =   240
+      End
+      Begin VB.Timer TmrProcessor 
+         Enabled         =   0   'False
+         Interval        =   1000
+         Left            =   2640
+         Top             =   240
+      End
+      Begin VB.Timer ConnectionTimer 
+         Interval        =   30000
+         Left            =   2160
+         Top             =   240
+      End
+      Begin MSWinsockLib.Winsock ZapSck 
+         Left            =   1800
+         Top             =   240
+         _ExtentX        =   741
+         _ExtentY        =   741
+         _Version        =   393216
+      End
+      Begin MSWinsockLib.Winsock PostilionSck 
+         Left            =   1320
+         Top             =   240
+         _ExtentX        =   741
+         _ExtentY        =   741
+         _Version        =   393216
+      End
+      Begin VB.Label Label1 
+         Caption         =   "Additional status infomation"
+         Height          =   615
+         Left            =   120
+         TabIndex        =   4
+         Top             =   1560
+         Width           =   1215
+      End
+   End
+End
+Attribute VB_Name = "EMconBridge"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+Public dbConnection As ADODB.Connection
+Public rstRecordset As ADODB.Recordset
+
+Private postilionMessage As String
+Private strStatusBarText As String
+Private strSwitch As String
+Private strControlNode As String
+Private strdbServer As String
+Private strProcessing As String
+Private timerArray() As Boolean
+Private POSTILION_IP As String
+Private MOBILE_IP As String
+Private POSTILION_PORT As String
+Private MOBILE_PORT As String
+Private TMR_MAX As Integer
+Private SwtcIP As String
+Private swtcPort As String
+Private mobIp As String
+Private mobPort As String
+Public strTemp As String
+Private HOST_PORT As String
+Private SocketCount As Integer
+Private sServerMsg As String
+Private sRequestID As String
+Private DataBind() As String
+
+
+
+Private strCommands As String
+
+
+'Constants for managing number of allow connections
+Private Const CONN_MX As Integer = 1000
+
+'Constants for managing System Tray tasks, found in shellapi.h
+Private Const AddIcon = &H0
+Private Const ModifyIcon = &H1
+Private Const DeleteIcon = &H2
+
+Private Const WM_MOUSEMOVE = &H200
+Private Const WM_LBUTTONDBLCLK = &H203
+Private Const WM_LBUTTONDOWN = &H201
+Private Const WM_LBUTTONUP = &H202
+
+Private Const WM_RBUTTONDBLCLK = &H206
+Private Const WM_RBUTTONDOWN = &H204
+Private Const WM_RBUTTONUP = &H205
+
+Private Const MessageFlag = &H1
+Private Const IconFlag = &H2
+Private Const TipFlag = &H4
+
+Private prvPan As String
+Private prvTranNr As String
+Private prvMsisdn As String
+Private prvExpiryDate As String
+Private prvRetrievalReferenceNo As String
+Private prvTransactionType As String
+Private prvAmount As String
+Private prvTerminalId As String
+Private prvCardAcceptorNameLoc As String
+Private prvCardAcceptorIdCode As String
+Private prvState As String
+Private prvResponseCodePost As String
+Private prvResponseCodeMp As String
+Private prvAdditionalInfo As String
+Private prvAdditionalRespData As String
+Private prvMerchantType As String
+Private prvPosCondCode As String
+Private prvPosEntryMode As String
+Private prvAcquiringInst As String
+Private prvCurrencyCode As String
+Private prvPosDataCode As String
+Private prvTransDateTime As String
+Private prvSysTraceAudit As String
+
+
+
+Private Declare Function Shell_NotifyIcon _
+  Lib "shell32" Alias "Shell_NotifyIconA" ( _
+  ByVal Message As Long, Data As NotifyIconData) As Boolean
+
+Private Data As NotifyIconData
+
+' Type passed to Shell_NotifyIcon
+Private Type NotifyIconData
+  Size As Long
+  HANDLE As Long
+  ID As Long
+  Flags As Long
+  CallBackMessage As Long
+  Icon As Long
+  Tip As String * 64
+End Type
+
+Public meStateIcon As Boolean
+
+Private Sub AddIconToTray()
+
+  Data.Size = Len(Data)
+  Data.HANDLE = hWnd
+  Data.ID = vbNull
+  Data.Flags = IconFlag Or TipFlag Or MessageFlag
+  Data.CallBackMessage = WM_MOUSEMOVE
+  Data.Icon = Icon
+  Data.Tip = Trim("EMConnect Bridge")
+  Call Shell_NotifyIcon(AddIcon, Data)
+
+End Sub
+
+Private Sub DeleteIconFromTray()
+    With Data
+      .Size = Len(Data)
+      .HANDLE = hWnd
+      .ID = vbNull
+      .Flags = IconFlag Or TipFlag Or MessageFlag
+      .CallBackMessage = WM_MOUSEMOVE
+      .Icon = Icon
+    End With
+  Shell_NotifyIcon DeleteIcon, Data
+End Sub
+
+Private Sub cmdEnd_Click()
+      
+    'remove icon from tray
+    DeleteIconFromTray
+       
+End Sub
+Private Sub CkConfigure_Click()
+Frame2.Enabled = True
+Frame3.Enabled = True
+txtswitchIP.Enabled = True
+txtswitchPort.Enabled = True
+TxtMobileIP.Enabled = True
+txtMobileport.Enabled = True
+Label2.Enabled = True
+Label3.Enabled = True
+Label4.Enabled = True
+Label5.Enabled = True
+
+
+
+End Sub
+
+Private Sub Ckconfirm_Click()
+Frame2.Enabled = False
+Frame3.Enabled = False
+txtswitchIP.Enabled = False
+txtswitchPort.Enabled = False
+TxtMobileIP.Enabled = False
+txtMobileport.Enabled = False
+Label2.Enabled = False
+Label3.Enabled = False
+Label4.Enabled = False
+Label5.Enabled = False
+
+End Sub
+
+
+
+
+
+Private Sub cmdStatus_Click()
+If cmdStatus.Caption = "Stop Processor" Then
+  cmdStatus.Caption = "Confirm stopping?"
+  
+  Option3.Enabled = True
+  Option4.Enabled = True
+  'cmdStatus.Enabled = False
+ End If
+ If cmdStatus.Caption = "Confirm stopping?" Then
+ ''Unload Me
+ 
+ End If
+End Sub
+
+Private Sub cmdStop_Click()
+Unload Me
+End Sub
+
+
+
+Private Sub ConnectionTimer_Timer()
+    
+    Select Case PostilionSck.state
+    Case 7:
+        strStatusBarText = Replace(strStatusBarText, "=offline", "=online", , vbTextCompare)
+        StatusBar.SimpleText = strStatusBarText
+    Case Else
+        strStatusBarText = Replace(strStatusBarText, "=online", "=offline", , vbTextCompare)
+        StatusBar.SimpleText = strStatusBarText
+        
+        If PostilionSck.state <> sckConnected Then
+            PostTxt.Text = "Postilion disconnected"
+            PostilionSck.Close
+            PostilionSck.Connect SwtcIP, swtcPort
+            
+            Else
+            
+            PostTxt.Text = "Postilion connected"
+            
+        End If
+    End Select
+    
+    DoEvents
+End Sub
+
+Private Sub Option1_Click()
+Frame2.Enabled = True
+Frame3.Enabled = True
+txtswitchIP.Enabled = True
+txtswitchPort.Enabled = True
+TxtMobileIP.Enabled = True
+txtMobileport.Enabled = True
+Label2.Enabled = True
+Label3.Enabled = True
+Label4.Enabled = True
+Label5.Enabled = True
+Option2.Enabled = True
+
+End Sub
+
+Private Sub Option2_Click()
+Frame2.Enabled = False
+Frame3.Enabled = False
+txtswitchIP.Enabled = False
+txtswitchPort.Enabled = False
+TxtMobileIP.Enabled = False
+txtMobileport.Enabled = False
+Label2.Enabled = False
+Label3.Enabled = False
+Label4.Enabled = False
+Label5.Enabled = False
+Option2.Enabled = False
+mobIp = TxtMobileIP.Text
+mobPort = txtMobileport.Text
+SwtcIP = txtswitchIP.Text
+swtcPort = txtswitchPort.Text
+'Call ZapSck_Close
+Call PostilionSck_Close
+Call PostilionSck_Connect
+End Sub
+
+Private Sub Option3_Click()
+Unload Me
+End Sub
+
+Private Sub Option4_Click()
+cmdStatus.Caption = "Stop Processor"
+
+Option3.Enabled = False
+Option4.Enabled = False
+
+End Sub
+
+
+
+Private Sub serverSocket_Close(Index As Integer)
+    
+    On Error Resume Next
+    serverSocket(Index).Close
+    'serverSocket.Listen
+End Sub
+
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+  Dim Message As Long
+  Message = X / Screen.TwipsPerPixelX
+  
+  Select Case Message
+    Case WM_LBUTTONDBLCLK
+      Visible = Not Visible
+      WindowState = Abs(Not Visible)
+  End Select
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    Select Case UnloadMode
+    Case 0:
+        'return to application without quiting
+        Cancel = 1
+        'make menu visible
+        Me.Hide
+    Case Else 'for future use
+       
+    End Select
+End Sub
+
+Private Sub PostilionSck_Close()
+    PostilionSck.Close
+    strStatusBarText = Replace(strStatusBarText, "=online", "=offline", , , vbTextCompare)
+    StatusBar.SimpleText = strStatusBarText
+    PostTxt.Text = "Postilion disconnected"
+End Sub
+
+Private Sub PostilionSck_Connect()
+    If PostilionSck.state = sckConnected Then
+        strStatusBarText = Replace(strStatusBarText, "=offline", "=online", , , vbTextCompare)
+        StatusBar.SimpleText = strStatusBarText
+        PostTxt.Text = "Postilion connected"
+    End If
+End Sub
+
+
+''''''''DATA COMING FROM POSTILION TO BRIDGE TO EMConnect''''''''''''''''''''''''''
+'       message is receieved at postbridge port                             '
+'         The mesage is process into EMConnect format and send                    '
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+Private Sub PostilionSck_DataArrival(ByVal bytesTotal As Long)
+    Dim strPostMessage As String
+    Dim strMessage As String
+    Dim strMessageToMobile As String
+    
+     
+    
+    
+    Dim message_type As Variant
+    Dim Ppan As Variant
+    Dim tran_proc_code As Variant
+    Dim amount_transaction As Variant
+    Dim Tran_datetime As Variant
+    Dim stan As Variant
+    Dim local_time As Variant
+    Dim local_date As Variant
+    Dim merchant_type As Variant
+    Dim acquiring_institution_bin As Variant
+    Dim retrieval_reference_number As Variant
+    Dim authorization_code As Variant
+    Dim Response_code As Variant
+    Dim terminal_id As Variant
+    Dim card_acceptor_id_code As Variant
+    Dim card_acceptor_name_and_loc As Variant
+    Dim additional_response_data As Variant
+    Dim currency_code As Variant
+    Dim additional_amounts As Variant
+    Dim pin_block As Variant
+    Dim echo_data As Variant
+    Dim network_management_info As Variant
+    Dim Original_data_elements As Variant
+    Dim replacement_amounts As Variant
+    Dim account_to_debit As Variant
+    Dim account_to_credit As Variant
+
+    
+    postilionMessage = ""
+    
+    
+   If PostilionSck.state = sckConnected Then
+        PostilionSck.GetData strMessage
+        postilionMessage = postilionMessage & strMessage
+    
+   End If
+    
+    Dim isoMessage As PostISO8583
+    Set isoMessage = New PostISO8583
+    
+    isoMessage.ISO8583MsgBD postilionMessage
+    
+    'break the message into fields elements
+    
+    With isoMessage
+           message_type = .MessageTypeID
+           Ppan = .Pan
+           tran_proc_code = .ProcessingCODE
+           amount_transaction = .AmtTransaction
+           Tran_datetime = .DatetimeTransmission
+           stan = .SysTraceAuditNum
+           local_time = .TimeLocTxn
+           local_date = .DateLocTxn
+           merchant_type = .MerchantType
+           acquiring_institution_bin = .AcquiringInstIdCode
+           retrieval_reference_number = .RetrievalRefNum
+           authorization_code = .AuthIdResp
+           Response_code = .RespCode
+           terminal_id = .CardAcceptorTermId
+           card_acceptor_id_code = .CardAcceptorIdCode
+           card_acceptor_name_and_loc = .CardAcceptorNameLoc
+           additional_response_data = .AdditionalRespData
+           currency_code = .CurrencyCodeTxn
+           additional_amounts = .AdditionalAmts
+           pin_block = .PinData
+           echo_data = .EchoData
+           network_management_info = .NetMangtInfoCode
+           Original_data_elements = .OriginalDataElements
+           replacement_amounts = .ReplacementAmts
+           account_to_debit = .AccIdOne
+           account_to_credit = .AccIdTwo
+     End With
+    If message_type = "0210" Or message_type = "0430" Then
+        Dim MsdinLocate As String
+        Dim indexposition
+        MsdinLocate = "07" & terminal_id
+        
+        
+          strMessageToMobile = message_type & "07" & terminal_id & Ppan & "0000" & Mid(tran_proc_code, 1, 2) & amount_transaction _
+        & Response_code & Right(additional_amounts, 12)
+        
+             indexposition = ArrayPosition(MsdinLocate, DataBind)
+                If indexposition > 0 Then
+                    DataBind(indexposition) = strMessageToMobile
+                
+                End If
+          
+    'SendMessageToMobile strMessageToMobile, MsdinLocate
+    End If
+    postilionMessage = ""
+End Sub
+
+Private Sub PostilionSck_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    PostilionSck.Close
+    strStatusBarText = Replace(strStatusBarText, "=online", "=offline", , , vbTextCompare)
+    StatusBar.SimpleText = strStatusBarText
+    PostTxt.Text = "Error in connection"
+End Sub
+
+
+
+Private Sub TmrProcessor_Timer()
+    Dim rstCommand As ADODB.Command
+    On Error GoTo Error_Handle
+    Set rstCommand = New ADODB.Command
+    
+    With rstCommand
+        .ActiveConnection = dbConnection
+        .CommandType = adCmdStoredProc
+        .CommandText = "em_sp_get_trans"
+        .Execute
+    End With
+     
+      Dim prvMessageType As String
+      Dim prvTransactionType As String
+      Dim prvAmount As String
+      Dim prvPan   As String
+      Dim prvRetrievalReferenceNo As String
+      Dim prvSysTraceAudit As String
+      Dim prvTransDateTime As String
+      Dim prvDateLocal As String
+      Dim prvTimeLocal As String
+      Dim prvExpiryDate As String
+      Dim prvResult As String
+      
+      Dim rstRecord As ADODB.Recordset
+      Set rstRecord = New ADODB.Recordset
+    
+    
+   
+        With rstRecord
+            
+            .ActiveConnection = dbConnection
+            .Open "SELECT TOP 1  message_type, tran_type, tran_req_original," & _
+                  "pan, ret_ref_nr, sys_trace_nr,transdatetime," & _
+                  "date_local, time_local FROM dbo.em_trans nolock" & _
+                  "where tran_state = 0 ORDER BY date_time_local ASC"
+                  
+                  If Not (.BOF = True And .EOF = True) Then 'no records
+                     .MoveFirst
+                  Do While Not (.EOF)
+               
+                prvMessageType = !message_type
+                prvTransactionType = !tran_type
+                prvAmount = !tran_req_original
+                prvPan = !Pan
+                prvRetrievalReferenceNo = !ret_ref_nr
+                prvSysTraceAudit = !sys_trace_nr
+                prvTransDateTime = !transmissiondate
+                prvDateLocal = !date_local
+                prvTimeLocal = !time_local
+                 Loop
+               End If
+              
+              
+         
+        'If TransConn.Result = "11" Then
+        Dim PostMessage As PostISO8583
+        Set PostMessage = New PostISO8583
+    
+        Dim PostMessageString As String
+        
+           With PostMessage
+                 .ResetBitMaps
+                 PostMessageString = ""
+                .MessageTypeID = prvMessageType
+                .CreatePBBitMap 2: .Pan = prvPan
+                .CreatePBBitMap 3: .ProcessingCODE = prvTransactionType & "0000"
+                .CreatePBBitMap 4: .AmtTransaction = prvAmount
+                .CreatePBBitMap (7):
+                .DatetimeTransmission = prvTransDateTime
+                .CreatePBBitMap (11):
+                .SysTraceAuditNum = prvSysTraceAudit
+                .CreatePBBitMap (12):
+                .TimeLocTxn = prvTimeLocal
+                .CreatePBBitMap (13):
+                .DateLocTxn = prvDateLocal
+                .CreatePBBitMap 14: .DateExpiry = "2012"
+                .CreatePBBitMap (18): .MerchantType = "6010"
+                .CreatePBBitMap (22): .PosEntryMode = "901"
+                .CreatePBBitMap (25): .POSConditionCode = "00"
+                .CreatePBBitMap (26): .POSPinCaptureCode = "12"
+                .CreatePBBitMap 37: .RetrievalRefNum = prvRetrievalReferenceNo
+                .CreatePBBitMap (40): .ServiceRestrictionCode = "501"
+                .CreatePBBitMap 41: .CardAcceptorTermId = "01011010"
+                .CreatePBBitMap (42): .CardAcceptorIdCode = "123456789123456"
+                .CreatePBBitMap (43): .CardAcceptorNameLoc = "MOBILE BANKING POS     Nairobi        KE"
+                .CreatePBBitMap (49): .CurrencyCodeTxn = "404"
+                .CreatePBBitMap (56): .MsgReasonCode = "1510"
+                .CreatePBBitMap (52): .PinData = "56789ABC"
+                .CreatePBBitMap (123): .PosDataCode = "000000000000090"
+                
+                
+                PostMessageString = .CREATEMsgISO8538
+                SendMessageToPostilion PostMessageString
+            End With
+            End With
+       
+
+         'SendMessageToPostilion PostMessageString
+         
+         PostMessageString = ""
+Error_Handle:
+         'End If
+    'End If
+    
+End Sub
+
+Private Sub Form_Load()
+      
+    'add icon to tray
+    AddIconToTray
+    
+    StatusBar.Enabled = True
+    strStatusBarText = "switch=offline; Mobilenode=disconnected; db server=<unknown>; processing=idle"
+    StatusBar.SimpleText = strStatusBarText
+    
+    
+    TmrProcessor.Enabled = True
+    
+    If ReadIni(App.Path & "\EMconnect.ini") = False Then
+        MsgBox "File EMconnect.ini is missing or is incorrectly formatted, please check", vbCritical, "File Error"
+        End
+    End If
+    
+    ReDim DataBind(100) As String
+    'Dim j As Integer
+    '  For j = 1 To UBound(DataBind)
+     '    DataBind(j) = ""
+     ' Next
+   
+    Dim t As Date
+    If DateDiff("d", "2011/07/20", DateValue(Now)) > 30 Then
+   
+    
+    MsgBox "Trial Period Expired, please buy an authentic copy"
+    Exit Sub
+    End If
+    txtswitchIP.Text = POSTILION_IP
+    txtswitchPort.Text = POSTILION_PORT
+    TxtMobileIP.Text = MOBILE_IP
+    txtMobileport.Text = MOBILE_PORT
+    HOST_PORT = MOBILE_PORT
+    
+            SwtcIP = txtswitchIP.Text
+            swtcPort = txtswitchPort.Text
+            mobIp = TxtMobileIP.Text
+            mobPort = txtMobileport.Text
+
+           'OPEN THE SERVER PORT AND LISTENING INCOMING CONNECTIONS
+    
+            serverSocket(0).LocalPort = HOST_PORT
+            TxtServer.Text = "Listening on port: " & serverSocket(0).LocalPort
+            serverSocket(0).Listen
+           
+    
+            'establish connection with mobile node
+            'If ZapSck.state <> sckConnected Then
+            '    MessageTxt.Text = "Mobile Server disconnected"
+            '    ZapSck.Close
+            '    ZapSck.Connect mobIp, mobPort
+            ' Else
+            ' MessageTxt.Text = "Mobile Server connected"
+            ' End If
+    
+    DoEvents
+    
+    'establish connection with postilion
+    If PostilionSck.state <> sckConnected Then
+       PostTxt.Text = "Postilion diconnected"
+        PostilionSck.Close
+        PostilionSck.Connect SwtcIP, swtcPort
+    Else
+    PostTxt.Text = "Postilion connected"
+    End If
+      
+    DoEvents
+                'Dim connString As String
+                'Set dbConnection = New ADODB.Connection
+                'dbConnection.CommandTimeout = 3600
+                'dbConnection.ConnectionTimeout = 30
+                
+                'connString = "Provider=SQLOLEDB;data source = 172.17.0.165;initial catalog =emconnect;User ID=emcon;Password=emcon"
+                'dbConnection.Open (connString)
+    
+    
+End Sub
+
+Public Function GetValue(ByVal strText As String, ByVal strSearchString As String) As String
+    On Error GoTo Error_Handle
+    
+    GetValue = Trim(Mid(strText, InStr(1, strText, strSearchString, vbTextCompare) + 1, Len(strText) - InStr(1, strText, strSearchString, vbTextCompare) + 1))
+    
+    Exit Function
+Error_Handle:
+    GetValue = ""
+End Function
+
+Public Function ReadIni(ByVal strFileName As String) As Boolean
+    Dim intFileNo As Integer
+    Dim strReadLine As String
+    
+    intFileNo = CInt(Mid(Format(Time, "ms"), 2, 1))
+    
+    If Dir(strFileName) <> "" Then
+        Open strFileName For Input Shared As #intFileNo
+            
+            ' parse file
+            Do While Not EOF(intFileNo)
+                Input #intFileNo, strReadLine
+                
+                'If InStr(1, UCase(strReadLine), UCase("TMR_MAX"), vbTextCompare) > 0 Then
+                '    TMR_MAX = CInt(GetValue(strReadLine, "="))
+                If InStr(1, UCase(strReadLine), UCase("MOBILE_IP"), vbTextCompare) > 0 Then
+                    MOBILE_IP = GetValue(strReadLine, "=")
+                ElseIf InStr(1, UCase(strReadLine), UCase("MOBILE_PORT"), vbTextCompare) > 0 Then
+                    MOBILE_PORT = GetValue(strReadLine, "=")
+                ElseIf InStr(1, UCase(strReadLine), UCase("POSTILION_IP"), vbTextCompare) > 0 Then
+                    POSTILION_IP = GetValue(strReadLine, "=")
+                ElseIf InStr(1, UCase(strReadLine), UCase("POSTILION_PORT"), vbTextCompare) > 0 Then
+                    POSTILION_PORT = GetValue(strReadLine, "=")
+                End If
+            Loop
+        
+        Close #intFileNo
+    End If
+    
+    If MOBILE_IP <> "" And _
+    MOBILE_PORT <> "" And POSTILION_IP <> "" And _
+    POSTILION_PORT <> "" Then
+        ReadIni = True
+    Else
+        ReadIni = False
+    End If
+End Function
+
+Private Sub testEcho()
+Dim Byte2Hdr As String
+Dim DTLTxn As String
+DTLTxn = Now
+Dim post As PostISO8583
+Set post = New PostISO8583
+    With post
+        .ResetBitMaps
+        .MessageTypeID = "0800"
+        .CreatePBBitMap (7):
+        .DatetimeTransmission = Format(CDate(DTLTxn), "MMDDhhmmss")
+        .CreatePBBitMap (11):
+        .SysTraceAuditNum = "000101"
+        .CreatePBBitMap (12):
+        .TimeLocTxn = Format(CDate(DTLTxn), "hhmmss")
+        .CreatePBBitMap (13):
+        .DateLocTxn = Format(CDate(DTLTxn), "MMDD")
+        .CreatePBBitMap (70):
+        .NetMangtInfoCode = "301"
+        .CreatePBBitMap (161): .PExtendedTransactionType = "3200"
+        Dim REQUEST As String
+        REQUEST = ""
+        REQUEST = .CREATEMsgISO8538
+        MsgTxt.Text = .MessageTypeID
+    End With
+    
+   ' serverSocket(0).SendData REQUEST
+    
+    SendMessageToPostilion (REQUEST)
+    
+    Set post = Nothing
+End Sub
+Public Sub SendMessageToPostilion(ByVal PMessage As String)
+    If PostilionSck.state = sckConnected Then
+        PostilionSck.SendData PMessage
+    Else
+        If PostilionSck.state <> sckListening Then
+           PostilionSck.Close
+           PostilionSck.Connect SwtcIP, swtcPort
+           
+        End If
+    End If
+End Sub
+
+Public Sub SendMessageToZap(ByVal ZMessage As String)
+    If ZapSck.state = sckConnected Then
+        ZapSck.SendData ZMessage
+    Else
+        If ZapSck.state <> sckListening Then
+           ZapSck.Close
+           ZapSck.Connect mobIp, mobPort
+           
+        End If
+    End If
+End Sub
+
+
+Private Sub serverSocket_ConnectionRequest(Index As Integer, ByVal requestID As Long)
+
+    SocketCount = SocketCount + 1
+    Load serverSocket(SocketCount)
+    serverSocket(SocketCount).Accept requestID
+    
+End Sub
+ 
+''''''''''''''''''DATA COMING FROM EMConnect Mobile TO POSTILION'''''''''''''''''''''''''''''''''''''''''
+'                       get message from mobile port                                          '
+'       process the message to postbridge format and send to postbridge                    '
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+Private Sub serverSocket_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+    
+    Dim sItemData As String
+    Dim REQ_STREAM As String
+    Dim intCnt As Integer
+    Dim MoriginatorIP As String
+    Dim OriginatorPort As String
+       
+    serverSocket(Index).GetData sItemData, vbString
+    REQ_STREAM = sItemData
+
+   Dim DTLTxn As String
+   DTLTxn = Now
+   
+            Dim message_type As String
+            Dim Msisdn As String
+            Dim Cpan As String
+            Dim Mob_pin As String
+            Dim tran_type As String
+            Dim Amount As String
+            Dim Resp As String
+            Dim Additional_d As String
+            Dim transdatetime As String
+            Dim datelocal As String
+            Dim timelocal As String
+            Dim ref_nr As String
+            Dim stan As String
+   
+   
+   Dim PostMessage As PostISO8583
+   Set PostMessage = New PostISO8583
+   
+   '''''If connecting to intermediate DB
+   'Dim dbConnect As clsdatabase
+   'Set dbConnect = New clsdatabase
+  
+  
+   Dim Stream_Len As Integer
+    
+    
+    MoriginatorIP = serverSocket(Index).RemoteHostIP
+    OriginatorPort = serverSocket(Index).RemotePort
+    Stream_Len = Len(REQ_STREAM)
+    message_type = Mid(REQ_STREAM, 1, 4)
+    Msisdn = Mid(REQ_STREAM, 5, 10)
+    Cpan = Mid(REQ_STREAM, 15, 16)
+    Mob_pin = Mid(REQ_STREAM, 31, 4)
+    tran_type = Mid(REQ_STREAM, 35, 2)
+    Amount = Mid(REQ_STREAM, 37, 12)
+    Resp = Mid(REQ_STREAM, 49, 2)
+    Additional_d = Mid(REQ_STREAM, 51, Stream_Len - 40)
+    transdatetime = Format(CDate(DTLTxn), "MMDDhhmmss")
+    datelocal = Format(CDate(DTLTxn), "MMDD")
+    timelocal = Format(CDate(DTLTxn), "hhmmss")
+    ref_nr = Right(datelocal, 2) & timelocal & Right(Msisdn, 4)
+    stan = Right(timelocal, 4) & Right(Msisdn, 2)
+    
+    '''Call dbConnect.EnqueueTransaction(message_type, tran_type, Msisdn, Amount, DTLTxn, Mob_pin, ref_nr, stan, transdatetime, datelocal, timelocal)
+    
+    
+    DataBind(Index) = Msisdn
+    
+    Dim n As Integer
+    Dim PostMessageString As String
+       
+           With PostMessage
+            
+                 PostMessageString = ""
+                .MessageTypeID = message_type
+                .CreatePBBitMap 2: .Pan = Cpan
+                .CreatePBBitMap 3: .ProcessingCODE = tran_type & "0000"
+                .CreatePBBitMap 4: .AmtTransaction = Amount
+                .CreatePBBitMap (7):
+                .DatetimeTransmission = transdatetime
+                .CreatePBBitMap (11):
+                .SysTraceAuditNum = stan
+                .CreatePBBitMap (12):
+                .TimeLocTxn = timelocal
+                .CreatePBBitMap (13):
+                .DateLocTxn = datelocal
+                .CreatePBBitMap 14: .DateExpiry = "2012"
+                .CreatePBBitMap (18): .MerchantType = "6010"
+                .CreatePBBitMap (22): .PosEntryMode = "901"
+                .CreatePBBitMap (25): .POSConditionCode = "00"
+                .CreatePBBitMap (26): .POSPinCaptureCode = "12"
+                .CreatePBBitMap 37: .RetrievalRefNum = ref_nr
+                .CreatePBBitMap (40): .ServiceRestrictionCode = "501"
+                .CreatePBBitMap 41: .CardAcceptorTermId = Right(Msisdn, 8)
+                .CreatePBBitMap (42): .CardAcceptorIdCode = "123456789123456"
+                .CreatePBBitMap (43): .CardAcceptorNameLoc = "MOBILE BANKING POS     Nairobi        KE"
+                .CreatePBBitMap (49): .CurrencyCodeTxn = "404"
+                .CreatePBBitMap (56): .MsgReasonCode = "1510"
+                .CreatePBBitMap (52): .PinData = "56789ABC"
+                .CreatePBBitMap (123): .PosDataCode = "000000000000090"
+                
+                
+                PostMessageString = .CREATEMsgISO8538
+                MsgTxt.Text = .MessageTypeID
+            End With
+        
+        
+       SendMessageToPostilion PostMessageString
+    
+                
+
+End Sub
+
+''''''''SEND RESPONSES FROM POSTILION TO MOBILE''''''''''''''''
+
+'Public Sub SendMessageToMobile(ByVal ZMessage As String, ByVal terminal_id As String)
+'    Dim counter As Integer
+'    Dim i As Integer
+    
+'    For i = 1 To UBound(DataBind)
+       'indexpos = ArrayPosition(terminal_id, DataBind)
+    
+    'If indexpos > -1 Then
+ '      If serverSocket(i).state = sckConnected Then
+ '         serverSocket(i).SendData DataBind(i)
+ '         DataBind(i) = ""
+         
+ '    End If
+ '   End If
+    
+Private Sub TmrSendDataToClient_Timer()
+    Dim counter As Integer
+    Dim i As Integer
+    Dim intCnt As Integer
+    For i = LBound(DataBind) To SocketCount
+        If serverSocket(i).state = sckConnected And Len(DataBind(i)) > 20 Then
+          serverSocket(i).SendData DataBind(i)
+          DataBind(i) = ""
+          DoEvents
+          'serverSocket (i)
+      End If
+    Next
+  
+End Sub
+ 
+Public Function ArrayPosition(ByVal FindValue As Variant, arrSearch As Variant) As Integer
+    ArrayPosition = -1  'Set default value of "not found"
+    On Error GoTo LocalError
+    If Not IsArray(arrSearch) Then Exit Function
+    FindValue = UCase(FindValue)  'no need for the If, you can UCase anything (faster this way)
+Dim lngLoop As Long
+    For lngLoop = LBound(arrSearch) To UBound(arrSearch)
+      If UCase(arrSearch(lngLoop)) = FindValue Then
+        ArrayPosition = lngLoop
+        Exit Function
+      End If
+    Next lngLoop
+Exit Function
+LocalError:
+    'Nothing
+End Function
+

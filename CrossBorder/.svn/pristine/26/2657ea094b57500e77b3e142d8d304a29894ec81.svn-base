@@ -1,0 +1,19 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("../engine.php");
+check_admin_logged_in();
+display_admin_navigation();
+
+session_unset();
+
+redirect_to("impala_admins/login.php");
+
+//require_once "includes/footer.php"
+session_destroy();
+ob_end_flush();
+?>

@@ -1,0 +1,482 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2014
+ */
+
+class Display{
+    public static function header($bodyClass=""){
+        $output='';
+        $output.='
+            <!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]> <html class="no-js" lang="en"> <![endif]-->
+<head>
+    <!--BASE href="http://localhost/the-mall"-->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Welcome to the mall</title>
+	<meta name="description" content="NARENDRA MALL Houston, Houston dining, Houston shopping, Houston arts and entertainment">
+	<meta name="author" content="NARENDRA MALL">
+
+	<meta name="viewport" content="width=1100">
+	<meta name="robots" content="index,follow" />
+
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+
+  	
+	<link href=\'http://fonts.googleapis.com/css?family=Muli:400,400italic\' rel=\'stylesheet\' type=\'text/css\'>
+  	<link rel="stylesheet" href="css/reset.css" />
+    
+	
+    <link rel="stylesheet" href="css/styles.css" />
+    
+	<link rel="stylesheet" href="css/colorbox.css" />
+
+	<script src="js/libs/modernizr-2.0.6.min.js"></script>
+
+	
+	<script src="js/redirection_mobile.min.js"></script>
+	<script type="text/javascript">
+            SA.redirection_mobile ({
+		noredirection_param : "noredirection",
+		mobile_url : "noredirection",
+		mobile_prefix : "http",
+		tablet_redirection : "true",
+		cookie_hours : "2"
+	    });
+        </script>
+	
+
+<!-- <script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:\'42f0ce14-310a-4021-a7e6-ed6868063b31\', onhover: false});</script> -->
+
+
+	
+</head>
+<body class="'.$bodyClass.'">
+        ';
+        echo $output;
+        return $output;
+    }
+    
+    public static function headerTopSection(){
+        $output='
+        <div style="margin:0;padding:0;">
+  
+        <header id="header">
+          
+          <div id="masthead" class="clear">
+            
+            <div id="logo">
+              <!--a href="citycentrehouston_default.html">Thika Road Mall</a-->
+              <p></p>
+            </div><!-- /#logo -->
+            
+            <ul>
+              <li><a href="#l" class="btn">Directory</a></li>
+              <li><a href="#" class="btn btn_nav">Contact</a></li>
+              <li><a href="#" class="btn btn_nav">Newsletter</a></li>
+              <li><a href="#" class="btn btn_nav">Magazine</a></li>
+              <li><a href="#" class="btn btn_nav">Photo Gallery</a></li>
+              <!--li class="social" id="facebook">
+                <a href="http://www.facebook.com/citycentrehouston" target="_blank">Facebook</a>
+              </li>
+              <li class="social" id="twitter">
+                <a href="http://twitter.com/#!/citycentrehou" target="_blank">Twitter</a>
+              </li>
+              <li class="social" id="linkedin">
+                <a href="http://www.linkedin.com/groups?about=&gid=3641222&trk=anet_ug_grppro" target="_blank">LinkedIn</a>
+              </li>
+              <li class="social" id="google">
+                <a href="http://bit.ly/s9Jble" target="_blank">Google+</a>
+              </li>
+        	<li class="social" id="instagram">
+                <a href="http://www.instagram.com/citycentrehou" target="_blank">Instagram</a>
+              </li-->
+            </ul>
+            
+          </div><!-- /#masthead -->
+          
+        </header><!-- /#header --> 
+        ';
+        echo $output;
+        return $output;
+        
+    }
+    public static function navigation(){
+        $output='<div id="container">
+  
+
+  <header id="nav_main">
+    <ul>
+      <li id="nav_shopping">
+        <a href="#" class="drop"><strong>Shopping</strong></a>
+        <div class="dropdown">          
+          <div class="col">
+            <strong>Shopping</strong>
+          </div>
+          
+    <!-- Open and Column 1 -->
+        <div class="col start">
+           <ul>          
+              <li><a href="tenants/detail/anthropologie">Anthropologie</a></li>         
+              <li><a href="#">baby, go green</a></li>         
+              <li><a href="#">belle la vie</a></li>         
+              <li><a href="#">bevello</a></li>         
+              <li><a href="#">Charming Charlie</a></li>
+    <!-- Open and Column 1 -->
+    
+    
+      <!-- Column 2 -->   
+            </ul>
+          </div>
+          
+          <div class="col">
+            <ul>          
+                <li><a href="#">Dryden Kreps</a></li>          
+                <li><a href="#">Elaine Turner</a></li>
+                <li><a href="#">Eye Couture</a></li>          
+                <li><a href="#">Free People</a></li>          
+                <li><a href="#">ivivva</a></li>
+      <!-- Column 2 -->
+      
+      <!-- Column 3 -->            
+            </ul>
+          </div>          
+          <div class="col">
+            <ul>
+          
+                <li><a href="#">J. Crew</a></li>          
+                <li><a href="#">Kendra Scott</a></li>          
+                <li><a href="#">lululemon athletica</a></li>          
+                <li><a href="#">Muir Fine Art Gallery</a></li>          
+                <li><a href="#">OLIVE &amp; VINE</a></li>
+      
+      <!-- Column 3 --> 
+        
+      <!-- Column 4 and Close -->            
+            </ul>
+          </div>          
+          <div class="col">
+            <ul>          
+            <li><a href="#">Paper Source</a></li>          
+            <li><a href="#">Sur La Table</a></li>          
+            <li><a href="#">Urban Outfitters</a></li>
+            <li><a href="#">Z Gallerie</a></li>        
+        </ul>
+        </div>          
+        </div><!-- /div.dropdown -->
+      </li>
+      
+      <li id="nav_dining">
+        <a href="#l" class=""><strong>Dining</strong></a>        
+        <div class="dropdown">          
+          <div class="col">
+            <strong>Dining</strong>
+          </div>
+            <!-- Open and Column 1 -->
+            <div class="col start">
+             <ul>
+                <li><a href="#">BISTRO</a></li>
+                <li><a href="#">Bistro Bar</a></li>
+                <li><a href="#">BRIO Tuscan Grille</a></li>
+                <li><a href="#">Chipotle</a></li>
+                <li><a href="#">Cyclone Anaya&#8217;s</a></li>
+                <li><a href="#">Eddie V&#8217;s Prime Seafood</a></li>
+            <!-- Open and Column 1 -->
+    
+
+            <!-- Column 2 -->         
+        
+             </ul>
+            </div>          
+          <div class="col">
+            <ul>          
+                <li><a href="#">Grub Burger Bar</a></li>
+                <li><a href="#">Houston Texans Grille</a></li>
+                <li><a href="#">Jamba Juice</a></li>
+                <li><a href="#">LifeCafé</a></li>
+                <li><a href="#">Monnalisa</a></li>
+                <li><a href="#">RA Sushi</a></li>
+                
+      <!-- Column 3 -->            
+            </ul>
+          </div>          
+          <div class="col">
+            <ul>
+                <li><a href="#">Red Mango</a></li>
+                <li><a href="#">Ruggles Green</a></li>
+                <li><a href="#">Salata</a></li>
+                <li><a href="#">Seasons 52</a></li>
+                <li><a href="#">Straits Restaurant</a></li>
+                <li><a href="#">SWEET</a></li>
+    
+      <!-- Column 4 and Close -->            
+            </ul>
+          </div>          
+          <div class="col">
+            <ul>          
+                <li><a href="#">Texas de Brazil</a></li>
+                <li><a href="#">The Tasting Room</a></li>
+                <li><a href="#">Yard House</a></li>  
+        
+            </ul>
+          </div>
+        </div><!-- /div.dropdown -->        
+      </li>
+      
+      <li id="nav_lifestyle">
+        <a href="#" class=""><strong>Lifestyle + Entertainment</strong></a>
+      
+        <div class="dropdown">          
+          <div class="col">
+            <strong>Lifestyle +<br />Entertainment</strong>
+          </div>
+          <!-- Open and Column 1 -->
+            <div class="col start">
+            <ul>
+                <li><a href="#">Amegy Bank</a></li>
+                <li><a href="#">BeHuman Gallery</a></li>
+                <li><a href="#">FLOSS Dental</a></li>
+                <li><a href="#">Houston Motor Club</a></li>
+                
+      <!-- Column 2 -->    
+                </ul>
+          </div>          
+          <div class="col">
+            <ul>
+                <li><a href="#">Life Time Athletic</a></li>
+                <li><a href="#">LifeSpa | Salon</a></li>
+                <li><a href="#">Studio Movie Grill</a></li>
+            </ul>
+          </div>
+        </div><!-- /div.dropdown -->      
+      </li>
+      
+      <li id="nav_hotel">
+        <a href="#" class=""><strong>Hotel + Conference</strong></a>
+        
+        <div class="dropdown">          
+          <div class="col">
+            <strong>Hotel +<br />Conference</strong>
+          </div>
+            <!-- Open and Column 1 -->
+            <div class="col start">
+            <ul>
+                <li><a href="#">Four Points by Sheraton Houston West</a></li>
+                <li><a href="#">Hotel Sorella</a></li>
+                <li><a href="#">Hotel Sorella Meetings &amp; Events Centre</a></li>
+                <li><a href="#">Mays Business School, Texas A&amp;M</a></li>
+                <li><a href="#">Norris Conference Centers</a></li>
+                <li><a href="#">Red Oak Ballroom</a></li>
+            </ul>
+            </div>
+        </div><!-- /div.dropdown -->        
+        
+      </li>
+      
+      <li id="nav_living">
+        <a href="#" class=""><strong>Living</strong></a>
+        
+        <div class="dropdown">          
+          <div class="col">
+            <strong>Living</strong>
+          </div>
+            <!-- Open and Column 1 -->
+            <div class="col start">
+            <ul>
+                <li><a href="#">ASCENT AT NARENDRA MALL</a></li>
+                <li><a href="#">The Domain Apartments</a></li>
+                <li><a href="#">THE LOFTS NARENDRA MALL</a></li>
+                <li><a href="#">The Residences at Hotel Sorella</a></li>
+            </ul>
+            </div>
+        </div><!-- /div.dropdown -->        
+        
+      </li>
+      
+      <li><a href="#">Events + Offers</a></li>
+      
+	  <li id="nav_offices">
+        <a href="offices/list/list.html" class="">Offices</a>
+        <div class="dropdown">
+          <div class="col">
+           <strong>Offices</strong>
+          </div>
+            <!-- Open and Column 1 -->
+            <div class="col start">
+            <ul>
+                <li><a href="#">NARENDRA MALL ONE</a></li>
+                <li><a href="#">NARENDRA MALL TWO</a></li>
+                <li><a href="#">NARENDRA MALL THREE</a></li>
+                <li><a href="#">NARENDRA MALL FOUR</a></li>
+                <li><a href="#">NARENDRA MALL FIVE</a></li>
+            </ul>
+            </div>
+        </div><!-- /div.dropdown -->        
+
+      </li>
+      <li><a href="#" class="">More</a></li>
+    </ul>
+  </header><!-- /#nav_main -->
+    
+	';
+    echo $output;
+    //return $output;
+    }
+    public static function mainContent($content=""){
+        
+        $output='
+        <div id="content">';
+        $output.=$content;
+        $output.='</div><!-- /#content -->
+        </div> <!-- /#container -->';
+        echo $output;
+        //return $output;
+    }
+    public static function featured(){
+        $output="";
+        $output.='<div id="featured_promo_wrap">
+    <div id="featured_promo" class="clear">      
+      <div class="feature">
+        <a href="#">
+        <img src="images/sized/uploads/555/rawfully_organic_event_tenant-image-jpg-136x121.jpg" width="136" height="121" />
+        </a>
+        <div>
+            <h2>Rawfully Organic Produce Pick Up</h2>
+                      <p>Every Thursday | 4-8 PM</p>
+                      <p>Rawfully Organic Co-op is now distributing fruit and vegetable boxes every Thursday, from 4-8 PM, on the plaza lawn.</p>
+                      <a href="#" class="btn">More Info</a>
+    
+        </div>
+      </div><!-- /.feature -->
+      
+      <div id="featured_promo_slider">
+        <div class="slider">
+        <div>
+            <p>        	
+            	<a href="#">
+            		<img src="images/sized/uploads/306/template-inside-livemusic-136x121.jpg" width="136" height="121" /></a><a href="#">
+            		<span><em>Live Music &amp; Entertainment at NARENDRA MALL</em><strong>Event</strong></span>
+            	</a>
+            </p>
+            <p>
+            	
+            	<a href="#">
+            		<img src="images/sized/uploads/185/event_2-studiomoviegrill-jpg-136x121.jpg" width="136" height="121" /></a><a href="#">
+            		<span><em>Girls Night Out at Studio Movie Grill</em><strong>Offer</strong></span>
+            	</a>
+            </p>
+            <p>        	
+            	<a href="#">
+            		<img src="images/sized/uploads/285/canstruction_-_template-inside_event_tenant-image-jpg-136x121.jpg" width="136" height="121" /></a><a href="#">
+            		<span><em>Canstruction 2013 Results</em><strong>Event</strong></span>
+            	</a>
+            </p>
+
+        </div>
+    <div>
+        <p>
+        	
+        	<a href="#">
+        		<img src="images/sized/uploads/731/tcg-inside_event_tenant-image-jpg-136x121.jpg" width="136" height="121" /></a><a href="#">
+        		<span><em>The Capital Grille Now Open at NARENDRA MALL!</em><strong>Event</strong></span>
+        	</a>
+        </p>
+        <p>
+        	<a href="#">
+        		<img src="images/sized/uploads/18/image-lifetime-fitness-01-136x121.jpg" width="136" height="121" /></a><a href="#">
+        		<span><em>2014 Membership Incentives at LifeTime Athletic</em><strong>Offer</strong></span>
+        	</a>
+        </p>
+        <p>
+        	
+        	<a href="#">
+        		<img src="images/sized/uploads/736/salata_2_-_template-photogallery-image-jpg-136x121.jpg" width="136" height="121" /></a><a href="#">
+        		<span><em>Salata Coming Soon to NARENDRA MALL!</em><strong>Event</strong></span>
+        	</a>
+        </p>
+    </div>
+          
+    </div><!-- /.slider -->        
+        <div class="slider_nav">
+    	    <a class="prev" href=""><span>Previous</span></a>
+    	    <a class="next" href=""><span>Next</span></a>
+    	  </div><!-- /.slider_nav -->
+        
+      </div><!-- /#featured_promo_slider -->        
+      
+    </div><!-- /#featured_promo -->
+
+</div><!-- /#featured_promo_wrap -->';
+        echo $output;
+        return $output;
+    }
+    public static function footer(){
+        ?>
+        <div style="width: 1046px; margin: 10px auto; text-align: right; padding-bottom: 50px;"><a href="http://midwaycompanies.com" target="_blank" border="0"><!--img src="uploads/cc-midway-logo.png"></a--></div>
+
+<!--<div style="width: 1046px; margin: 10px auto; text-align: right; padding-bottom: 50px;">&copy; 2014 <a href="http://midwaycompanies.com" target="_blank">Midway</a></div>-->
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+
+<!-- scripts concatenated and minified via ant build script-->
+<script src="js/libs/jquery.cycle.all.js"></script>
+<script src="js/libs/jquery-easing-1.3.js"></script>
+<script src="js/libs/jquery.colorbox-min.js"></script>
+<script src="js/plugins.js"></script>
+<script src="js/script.js"></script>
+
+<script type="text/javascript" src="js/map/raphael.js"></script>
+<script type="text/javascript" src="js/map/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="http://citycentrehouston.com/js/map/mapsvg.js"></script>
+<script type="text/javascript" src="http://citycentrehouston.com/store-map/cc_map.js"></script>
+
+<!-- end scripts-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-29979707-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!--[if lt IE 7 ]>
+	<script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
+	<script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
+<![endif]-->
+
+</div>
+
+</body>
+</html>
+        <?php
+    }
+}
+
+?>

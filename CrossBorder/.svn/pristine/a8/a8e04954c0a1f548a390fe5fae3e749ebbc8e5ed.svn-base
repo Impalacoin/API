@@ -1,0 +1,359 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "Wasp"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private vMessageType As String
+Private vTelephoneNumber As String
+Private vTransactionType As String
+Private vAmount As String
+Private vLocalTime As String
+Private vLocalDate As String
+Private vBankCode As String
+Private vCardAcceptorNameLoc As String
+Private vRetReferenceNumber As String
+Private vResponseCode As String
+Private vFunctionCode As String
+Private vCardNumber As String
+Private vEchoData As String
+Private vAdditionalData As String
+
+
+Private Sub Class_Initialize()
+    vMessageType = ""
+    vTelephoneNumber = ""
+    vTransactionType = ""
+    vAmount = ""
+    vLocalTime = ""
+    vLocalDate = ""
+    vBankCode = ""
+    vCardAcceptorNameLoc = ""
+    vRetReferenceNumber = ""
+    vResponseCode = ""
+    vFunctionCode = ""
+    vCardNumber = ""
+    vEchoData = ""
+    vAdditionalData = ""
+End Sub
+
+Public Property Get waspMsgTypeId() As Variant
+    waspMsgTypeId = vMessageType
+End Property
+
+Private Property Let waspMsgTypeIdNw(ByVal vNewValue As Variant)
+    vMessageType = vNewValue
+End Property
+
+Public Property Get waspPhoneNr() As Variant
+    waspPhoneNr = vTelephoneNumber
+End Property
+
+Private Property Let waspPhoneNrNw(ByVal vNewValue As Variant)
+    vTelephoneNumber = vNewValue
+End Property
+
+Public Property Get waspTranType() As Variant
+    waspTranType = vTransactionType
+End Property
+
+Private Property Let waspTranTypeNw(ByVal vNewValue As Variant)
+    vTransactionType = vNewValue
+End Property
+
+Public Property Get waspAmount() As Variant
+    waspAmount = vAmount
+End Property
+
+Private Property Let waspAmountNw(ByVal vNewValue As Variant)
+    vAmount = vNewValue
+End Property
+
+Public Property Get waspLocalTime() As Variant
+    waspLocalTime = vLocalTime
+End Property
+
+Private Property Let waspLocalTimeNw(ByVal vNewValue As Variant)
+    vLocalTime = vNewValue
+End Property
+
+Public Property Get waspLocalDate() As Variant
+    waspLocalDate = vLocalDate
+End Property
+
+Private Property Let waspLocalDateNw(ByVal vNewValue As Variant)
+    vLocalDate = vNewValue
+End Property
+
+Public Property Get waspBankCode() As Variant
+    waspBankCode = vBankCode
+End Property
+
+Private Property Let waspBankCodeNw(ByVal vNewValue As Variant)
+    vBankCode = vNewValue
+End Property
+
+Public Property Get waspCardAccNameLoc() As Variant
+    waspCardAccNameLoc = vCardAcceptorNameLoc
+End Property
+
+Private Property Let waspCardAccNameLocNw(ByVal vNewValue As Variant)
+    vCardAcceptorNameLoc = vNewValue
+End Property
+
+Public Property Get waspRetRefNo() As Variant
+    waspRetRefNo = vRetReferenceNumber
+End Property
+
+Private Property Let waspRetRefNoNw(ByVal vNewValue As Variant)
+    vRetReferenceNumber = vNewValue
+End Property
+
+Public Property Get waspRespCode() As Variant
+    waspRespCode = vResponseCode
+End Property
+
+Private Property Let waspRespCodeNw(ByVal vNewValue As Variant)
+    vResponseCode = vNewValue
+End Property
+
+Public Property Get waspFunctionCode() As Variant
+    waspFunctionCode = vFunctionCode
+End Property
+
+Private Property Let waspFunctionCodeNw(ByVal vNewValue As Variant)
+    vFunctionCode = vNewValue
+End Property
+
+Public Property Get waspPan() As Variant
+    waspPan = vCardNumber
+End Property
+
+Private Property Let waspPanNw(ByVal vNewValue As Variant)
+    vCardNumber = vNewValue
+End Property
+
+Public Property Get waspEchoData() As Variant
+    waspEchoData = vEchoData
+End Property
+
+Private Property Let waspEchoDataNw(ByVal vNewValue As Variant)
+    vEchoData = vNewValue
+End Property
+
+Public Property Get waspAdditionalData() As Variant
+    waspAdditionalData = vAdditionalData
+End Property
+
+Private Property Let waspAdditionalDataNw(ByVal vNewValue As Variant)
+    vAdditionalData = vNewValue
+End Property
+
+Public Function CreateWaspMessage( _
+    Optional messageType As String, _
+    Optional telephone As String, _
+    Optional transactionType As String, _
+    Optional transAmount As String, _
+    Optional localTime As String, _
+    Optional localDate As String, _
+    Optional bankCode As String, _
+    Optional caNameAndLocation As String, _
+    Optional retRefNumber As String, _
+    Optional responseCode As String, _
+    Optional functionCode As String, _
+    Optional pan As String, _
+    Optional echoData As String, _
+    Optional additionalData As String _
+    ) As String
+    
+    waspMsgTypeIdNw = messageType
+    waspPhoneNrNw = telephone
+    waspTranTypeNw = transactionType
+    waspAmountNw = transAmount
+    waspLocalTimeNw = localTime
+    waspLocalDateNw = localDate
+    waspBankCodeNw = bankCode
+    waspCardAccNameLocNw = caNameAndLocation
+    waspRetRefNoNw = retRefNumber
+    waspRespCodeNw = responseCode
+    waspFunctionCodeNw = functionCode
+    waspPanNw = pan
+    waspEchoDataNw = echoData
+    waspAdditionalDataNw = additionalData
+    
+    Dim MsgType As String
+    Dim MessageToSend As String
+    Dim RspCode As String, FnCode As String, CardPan As String
+    
+    Select Case messageType
+    Case "0610", "0630":
+        messageType = "NMRS"
+        FnCode = functionCode
+        CardPan = pan
+        MessageToSend = messageType & "|" & _
+            waspPhoneNr & "|" & _
+            "|" & _
+            "|" & _
+            waspLocalTime & "|" & _
+            waspLocalDate & "|" & _
+            "|" & _
+            "|" & _
+            waspRetRefNo & "|" & _
+            waspRespCode & "|" & _
+            waspFunctionCode & "|" & _
+            "|" & _
+            "|"
+    Case "0810":
+        messageType = "NMRS"
+        RspCode = responseCode
+        FnCode = functionCode
+        MessageToSend = messageType & "|" & _
+            "|" & _
+            "|" & _
+            "|" & _
+            waspLocalTime & "|" & _
+            waspLocalDate & "|" & _
+            "|" & _
+            "|" & _
+            waspRetRefNo & "|" & _
+            waspRespCode & "|" & _
+            waspFunctionCode & "|" & _
+            "|" & _
+            "|"
+    Case "9220", "9221":
+        messageType = "SARQ"
+        MessageToSend = messageType
+        If transactionType = "31" Or transactionType = "90" Then
+            MessageToSend = MessageToSend & "|" & _
+                waspPhoneNr & "|" & _
+                waspTranType & "|" & _
+                waspAmount & "|" & _
+                waspLocalTime & "|" & _
+                waspLocalDate & "|" & _
+                waspBankCode & "|" & _
+                waspCardAccNameLoc & "|" & _
+                waspRetRefNo & "|" & _
+                "|" & _
+                "|" & _
+                "|" & _
+                waspEchoData & "|"
+        Else
+            If Val(transAmount) > 0 Then
+                'reset response code
+                MessageToSend = MessageToSend & "|" & _
+                    waspPhoneNr & "|" & _
+                    waspTranType & "|" & _
+                    waspAmount & "|" & _
+                    waspLocalTime & "|" & _
+                    waspLocalDate & "|" & _
+                    waspBankCode & "|" & _
+                    waspCardAccNameLoc & "|" & _
+                    waspRetRefNo & "|" & _
+                    "|" & _
+                    "|" & _
+                    "|" & _
+                    waspEchoData & "|" & _
+                    waspAdditionalData
+            End If
+        End If
+    Case "9230":
+        messageType = "SARS"
+        MessageToSend = messageType
+        If Mid(transactionType, 1, 1) = "3" Or Mid(transactionType, 1, 1) = "4" Then
+            MessageToSend = MessageToSend & "|" & _
+                waspPhoneNr & "|" & _
+                waspTranType & "|" & _
+                waspAmount & "|" & _
+                waspLocalTime & "|" & _
+                waspLocalDate & "|" & _
+                waspBankCode & "|" & _
+                waspCardAccNameLoc & "|" & _
+                waspRetRefNo & "|" & _
+                "00|" & _
+                "|" & _
+                "|" & _
+                waspEchoData & "|" & _
+                waspAdditionalData
+        ElseIf Mid(transactionType, 1, 1) = "1" Then
+            MessageToSend = MessageToSend & "|" & _
+                waspPhoneNr & "|" & _
+                waspTranType & "|" & _
+                waspAmount & "|" & _
+                waspLocalTime & "|" & _
+                waspLocalDate & "|" & _
+                waspBankCode & "|" & _
+                waspCardAccNameLoc & "|" & _
+                waspRetRefNo & "|" & _
+                waspRespCode & "|" & _
+                "|" & _
+                "|" & _
+                waspEchoData & "|" & _
+                waspAdditionalData
+        End If
+    Case Else
+        'ignore
+    End Select
+    MessageToSend = Format(Len(MessageToSend), "0000") & MessageToSend
+    CreateWaspMessage = MessageToSend
+End Function
+
+Public Function UnPackWaspMessage(MessageFromRemote As String) As Boolean
+    
+    Dim i As Integer
+    Dim FldLen As Integer
+    Dim StartPos As Integer
+    Dim RemainingMessagePart As String
+    Dim FldValue(14) As String
+    Dim ProcessingComplete As Boolean
+    Dim curpos As Integer
+    
+    On Error GoTo ErrorHandle
+        ProcessingComplete = False
+        
+        RemainingMessagePart = Mid(MessageFromRemote, 5, Val(Mid(MessageFromRemote, 1, 4)))
+        
+        i = 1
+        curpos = 1
+        StartPos = 1
+        For i = 1 To 13
+            FldValue(i) = Mid(RemainingMessagePart, StartPos, InStr(1, RemainingMessagePart, "|", vbTextCompare) - 1)
+            'Debug.Print FldValue(i)
+            RemainingMessagePart = Mid(RemainingMessagePart, InStr(1, RemainingMessagePart, "|", vbTextCompare) + 1, _
+            Len(RemainingMessagePart))
+            'Debug.Print RemainingMessagePart
+        Next i
+        
+        'process last field
+        FldValue(14) = RemainingMessagePart
+        
+        waspMsgTypeIdNw = FldValue(1)
+        waspPhoneNrNw = FldValue(2)
+        waspTranTypeNw = FldValue(3)
+        waspAmountNw = FldValue(4)
+        waspLocalTimeNw = FldValue(5)
+        waspLocalDateNw = FldValue(6)
+        waspBankCodeNw = FldValue(7)
+        waspCardAccNameLocNw = FldValue(8)
+        waspRetRefNoNw = FldValue(9)
+        waspRespCodeNw = FldValue(10)
+        waspFunctionCodeNw = FldValue(11)
+        waspPanNw = FldValue(12)
+        waspEchoDataNw = FldValue(13)
+        waspAdditionalDataNw = FldValue(14)
+        
+        ProcessingComplete = True
+        UnPackWaspMessage = ProcessingComplete
+    Exit Function
+ErrorHandle:
+    UnPackWaspMessage = ProcessingComplete
+
+End Function

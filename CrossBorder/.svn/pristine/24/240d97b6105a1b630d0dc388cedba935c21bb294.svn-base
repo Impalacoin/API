@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("engine.php");
+//include("includes/header.php");
+require_once("includes/output_fns.php");
+display_navigation();
+check_if_logged_in($me);
+if($me){
+$user=$facebook->api("/{$uid}");
+display_invite_friends();
+}
+?>
+       
+
+

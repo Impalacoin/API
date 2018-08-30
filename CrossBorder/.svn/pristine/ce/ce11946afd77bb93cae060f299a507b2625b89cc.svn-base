@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Cashswift Money Transfer service</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style type="text/css">
+<!--
+body {
+	background-color: #F7F7F7;
+}
+.style1 {
+	font-family: Verdana;
+	font-size: 13.5pt;
+}
+-->
+</style>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+<link rel="stylesheet" type="text/css" href="ajaxtabs/ajaxtabs.css" />
+
+<script type="text/javascript" src="ajaxtabs/ajaxtabs.js">
+
+/***********************************************
+* Ajax Tabs Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+</script>
+<style type="text/css">
+<!--
+.style2 {color: #FFFFFF}
+.style3 {font-size: 12pt}
+.style4 {
+	color: #DBF4F7;
+	font-weight: bold;
+}
+.style6 {color: #C6EFF2}
+.GW_button_green_small {font-family:Arial, Helvetica, sans-serif; font-size:13px; text-align:center; display:inline-block; padding:0; margin:0; overflow:visible; cursor:pointer; background:#CCC url(/core_path/images/mybuttons.png) 0 -144px repeat-x; border:1px solid #bbbbbb; border-radius:3px; text-decoration:none;}
+.GW_button_grey {font-family:Arial, Helvetica, sans-serif; font-size:12px; text-align:center; display:inline-block; padding:0; margin:0; overflow:visible; cursor:pointer; background:#CCC url(/core_path/images/mybuttons.png) 0 0 repeat-x; border:1px solid #bbbbbb; border-radius:3px; text-decoration:none;}
+.GW_link_blue {color: #114F8D; text-decoration: none;}
+.GW_main_box {zoom:1; border:1px solid #cccccc; position:relative; padding:0px;}
+.GW_main_box_title {font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; color:#5973a8; padding:15px 0 5px 0; border-bottom:1px solid #e9e9e9; margin:0 20px;}
+.GW_msg_info {font-size:12px; padding:10px; padding-left:50px; background-color:#d3e8fb; border:1px solid #61add8; background-image:url(/core_path/images/ico_info.png); background-position:left top; background-repeat:no-repeat;}
+.GW_selectbox {color: #333333; margin: 3px 3px 3px 0; padding: 2px;}
+.GW_textbox {color: #333333; margin: 3px 3px 3px 0; padding: 2px; width: 200px;}
+.GW_txtfieldcaption {color: #555555; font-size: 12px; font-weight: bold; padding: 3px 0;}
+.GW_txtgrey {color:#777777;}
+.GW_txtred {color:#ff0000;}
+-->
+</style>
+</head>
+<link rel="shortcut icon" href="favicon.ico" >
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" marginwidth="0" marginheight="0">
+<body> 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="20" align="left" valign="middle" background="button_1.jpg"><table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+      <tr>
+        <td><a href="index.php" class="style2">Home</a></td>
+        <td><a href="about-us.php" class="style2">About us</a></td>
+        <td><a href="faqs.php" class="style2">FAQs</a></td>
+        <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+<table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF"><table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr align="left">
+        <td valign="middle" background="banner_.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF"><table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                        <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                        <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td>
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>EXCHANGE RATE: KSH 85 </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF"><table align="center" width="960">
+          <tr>
+            <td>
+              <div class="GW_main_box"> <span class="GW_main_box_corner GW_main_box_topLeft"></span><span class="GW_main_box_corner GW_main_box_topRight"></span>
+                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><div class="GW_main_box_title">Privacy Policy</div></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td valign="top"><p>Protecting consumer privacy is a priority at
+              Cashswift Money Transfer
+              . Currently, this information concerning your privacy is only applicable to online transactions initiated by U.S. customers and visitors to our website. This online privacy statement is made in accordance with the laws of the State of Washington.</p>
+            <p>              Cashswift Money Transfer
+              limits access to your personal information to those employees of
+              Cashswift Money Transfer
+              and its affiliates who need it to fulfill their business responsibilities. Employees must adhere to
+              Cashswift Money Transfer
+              privacy policies. Employees violating these policies may be subject to disciplinary action, up to and including dismissal. Vendors and other outside contractors we engage are subject to our contractual requirements to ensure that your sensitive personal information is safeguarded. We employ appropriate measures to protect your information against unauthorized access, disclosure, alteration or destruction. These may include, among others, encryption, physical access security and other appropriate technologies.
+              Cashswift Money Transfer
+            continually reviews and enhances its security systems, as necessary.</p>
+            <p>COLLECTION OF INFORMATION:
+              Cashswift Money Transfer
+              collects personal and non-personal information in order to offer or provide services to you. We may obtain this information from a variety of sources including, but not limited to the following: (a) directly from customer applications, questionnaires and other materials submitted to us by the sender; (b) from transactions in which
+              Cashswift Money Transfer
+              and the sender are involved; (c) from clickstream activity on our website (including the use of &ldquo;cookies&rdquo; and or &ldquo;web beacons,&rdquo; as discussed below); and (d) from a variety of third-party sources, such as government repositories, consumer reporting agencies and other financial institutions.</p>
+            <br>
+            <p>USE OF COOKIES and WEB BEACONS:  A &quot;cookie&quot; is a small text file placed on your computer's hard drive by a web server and which is acknowledged by your web browser. &quot;Web beacons&quot; are transparent electronic images placed in the web code, also called &quot;clear GIFs&quot;. We use cookies and/or web beacons for a variety of purposes, including, but not limited to, the following: (a) to assist us in providing our services to you; (b) to allow you to change pages during your visit to our website without repeatedly having to re-enter your password; (c) to track activity on Our website; or (d) to determine whether you came to Our site from a banner ad or an affiliate website. You can usually set parameters on your computer that allow you to elect to accept cookies or to have your browser notify you each time a cookie is offered. You can also usually delete cookies from your hard drive. Instructions on how to accept cookies, on how to be notified that a cookie is being offered and on how to delete cookies are available through your internet Browser.</p>
+            <br>
+            <p>DISCLOSURE OF INFORMATION:
+              Cashswift Money Transfer
+              does not sell, distribute, or otherwise disclose your information to third parties without first obtaining your express written consent and giving you an opportunity to opt-out of such disclosure. There are some disclosures to third parties that are not subject to the opt-out, such as the following: disclosures necessary to effect, administer or enforce a transaction requested by you, to companies that perform services for Us, to prevent fraud; and, in addition,
+              Cashswift Money Transfer
+              may disclose information about former consumers or customers to third parties and companies with which
+              Cashswift Money Transfer
+              is affiliated. Those disclosures may consist of the following: (a) financial background information describing financial status; (b) identification information, such as name and address data; (c) transaction information, such as account activity, debit activity or credit activity; and (d) other information relating to financial matters.</p>
+            <br>
+            <p>RECIPIENTS OF INFORMATION:
+              Cashswift Money Transfer
+              may disclose your information to companies affiliated with Us. These recipients include: (a) financial institutions such as banks, credit card companies, brokerage houses, and consumer reporting agencies pursuant to the Fair Credit Reporting Act (15 U.S.C. &sect;1681 et seq.); (b) companies that process transactions or provide other services for Us including, but not limited to, attorneys, accountants, and auditors; and (c) government and law enforcement agencies in general and where specifically required or permitted under the Right to Financial Privacy Act of 1978 (12 U.S.C. &sect;3401, et seq.), to comply with federal, state, or local laws, rules, and other applicable legal requirements, as required by Title III of the federal United and Strengthening America by Providing Appropriate Tools Required to Intercept and Obstruct Terrorism Act of 2001 (USA Patriot Act; P.L. 107-56).</p>
+            <br>
+            <p>LINKS TO OTHER WEBSITES:
+              Cashswift Money Transfer
+              may create links to third party websites.
+              Cashswift Money Transfer
+              is not responsible for the content or privacy practices employed by websites that are linked from Our website.</p>
+            <p>If you have any questions or comments about
+              Cashswift Money Transfer
+              &rsquo;s Online Privacy Statement or for some reason believe We have not met our commitment to safeguard your privacy, please contact Us at the customer service number listed at the end of these Terms.</p>
+            <p>As stated above, this
+              Cashswift Money Transfer
+              Online Privacy Statement is currently only applicable to Our website customers and visitors in the U.S. As We develop websites for international customers, We may adopt additional rules and practices consistent with this statement to conform to the policies or requirements of those countries. We may alter this statement as needed for certain products and services and to abide by local laws or regulations around the world.
+              Cashswift Money Transfer
+              reserves the right to amend or modify this statement from time to time. We urge you to review this statement whenever you visit in order to obtain the most current statement.</p>
+            <br>
+            <p><b>Contacting Provider</b></p>
+            <p>If you have other questions or suggestions about this privacy and security policy, please email us at
+              <a href="mailto:support@impalapay.com" class="link1">support@impalapay.com</a> or call us on our support contacst.
+              <br>
+              <br>
+            </p></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+                  <span class="GW_main_box_corner GW_main_box_bottomLeft"></span><span class="GW_main_box_corner GW_main_box_bottomRight"></span> </div></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, Cashswift Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

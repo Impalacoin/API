@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "engine.php";
+
+NickDisplay::header();
+NickDisplay::topNavigation();
+NickDisplay::topSection();
+if(isset($_GET["bank"])){
+  NickDisplay::content(send_to_bank_form(""));  
+}else{
+    NickDisplay::content(send_to_phone_form(""));
+}
+
+NickDisplay::footer();
+//billing_information("")
+//calculate_form("test.php")
+?>

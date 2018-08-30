@@ -1,0 +1,323 @@
+/**
+ * 
+ */
+package com.impalapay.airtel.util.randomgenerator;
+
+/**
+ * used for generating  country source code,currency code e.t.c
+ * <p>
+ * Copyright (c) ImpalaPay LTD., June 14, 2014
+ *
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ * 
+ */
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.math3.random.RandomDataGenerator;
+
+
+public class Writefile {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		try{
+			
+		
+		 List<String> countries = new ArrayList();
+		 
+		 
+         countries.add("Kenya");
+         countries.add("Uganda");
+         countries.add("Rwanda");
+         countries.add("Nigeria");
+         countries.add("Niger");
+         countries.add("Chad");
+         countries.add("Burkina Faso");
+         countries.add("Democratic Republic of Congo");
+         countries.add("Gabon");
+         countries.add("Ghana");
+         countries.add("Madagascar");
+         countries.add("Malawi");
+         countries.add("Republic of Congo");
+         countries.add("Seychelles");
+         countries.add("Tanzania");
+         countries.add("Zambia");
+         countries.add("Sierra Leone");
+         
+  //for country code
+  List<String> code = new ArrayList<>();
+  		code.add("KE");
+  		code.add("UG");
+  		code.add("RW");
+  		code.add("NG");
+  		code.add("NE");
+  		code.add("TD");
+  		code.add("BF");
+  		code.add("CD");
+  		code.add("GA");
+  		code.add("GH");
+  		code.add("MG");
+  		code.add("MW");
+  		code.add("CG");
+  		code.add("SC");
+  		code.add("TZ");
+  		code.add("ZM");
+  		code.add("SL");
+  
+  List <String> currency = new ArrayList<>();
+     currency.add("KES");
+     currency.add("UGX");
+     currency.add("RWF");
+     currency.add("NGN");
+     currency.add("XOF");
+     currency.add("XAF");
+     currency.add("XOF");
+     currency.add("XAF");
+     currency.add("XAF");
+     currency.add("GHS");
+     currency.add("MGA");
+     currency.add("MWK");
+     currency.add("XAF");
+     currency.add("SCR");
+     currency.add("TZS");
+     currency.add("ZWM");
+     currency.add("SLL");
+     
+  List <Double> Exchangerate = new ArrayList<Double>();
+      Exchangerate.add(87.75);
+      Exchangerate.add(2630.00);
+      Exchangerate.add(689.00);
+      Exchangerate.add(161.77);
+      Exchangerate.add(488.28);
+      Exchangerate.add(489.28);
+      Exchangerate.add(488.28);
+      Exchangerate.add(490.28);
+      Exchangerate.add(491.28);
+      Exchangerate.add(3.42);
+      Exchangerate.add(2442.00);
+      Exchangerate.add(395.00);
+      Exchangerate.add(488.28);
+      Exchangerate.add(12.31);
+      Exchangerate.add(1658.50);
+      Exchangerate.add(5251.88);
+      Exchangerate.add(4370.00);
+    
+      //used for generating random number for calculating amount
+      
+        String finalvaluedisplay;
+        String finalresultdisplay;
+	     double value;
+	     double lowerLimit, upperLimit;
+	    
+	     String output;
+	     
+	     lowerLimit = 200.00;
+	     upperLimit =700.00;
+		
+	for(int i = 0;i<20;i++){
+	  
+      
+      
+      
+      //use decimal fomart to formart to two decimal places
+      
+     DecimalFormat twoDForm = new DecimalFormat("#.00");
+    
+    
+     
+     RandomDataGenerator generator = new RandomDataGenerator();
+     int index;
+     
+     //used for creating files for output
+     
+     File file = new File("/home/eugene/Desktop/codes2.txt");
+     
+  // if file doesnt exists, then create it
+  			if (!file.exists()) {
+  			file.createNewFile();
+  		}
+   
+  			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+  			BufferedWriter bw = new BufferedWriter(fw);
+     
+     
+     for(int j=0; j<10000; j++) {
+    	 //System.out.println("Random number is: " + generator.nextInt(0, 16));
+    	 value  = lowerLimit + ((upperLimit - lowerLimit) * Math.random());
+    	 
+    	 index = generator.nextInt(0, 16);
+    	 
+    	 Double exchange =Exchangerate.get(index);
+    	 Double amount = value;
+    	 
+    	 Double result= exchange * amount;
+    	 
+    	 finalvaluedisplay = twoDForm.format(amount);
+    	 finalresultdisplay =twoDForm.format(result);
+    	 
+    	 //System.out.println("Line data is: " +
+    			 //countries.get(index) + " " +
+    			 //code.get(index) + " " +
+    			 //currency.get(index) + "\t" + "\t" + Exchangerate.get(index)+"\t"+finalvaluedisplay+"\t"+finalresultdisplay);
+    	 
+    	 bw.write("    " +finalvaluedisplay +"|"+finalresultdisplay +"|"+ currency.get(index) +"|"+ code.get(index)+"\n");
+    	 System.out.println("Line data is: " +finalvaluedisplay +"|"+finalresultdisplay +"\t"+ currency.get(index) +"  "+ code.get(index));
+    	 
+    	
+     }
+     
+     bw.close();
+	}
+     
+	}catch (Exception e) {
+		
+		e.printStackTrace();
+		// TODO: handle exception
+	}
+     
+     
+		/*
+		
+		// TODO Auto-generated method stub
+		try {
+			
+			//test
+			//RandomDataGenerator randomDataImpl = new RandomDataGenerator();
+			 List<String> li = new ArrayList();
+			 
+	            li.add("Kenya");
+	            li.add("Uganda");
+	            li.add("Rwanda");
+	            li.add("Nigeria");
+	            li.add("Niger");
+	            li.add("Chad");
+	            li.add("Burkina Faso");
+	            li.add("Democratic Republic of Congo");
+	            li.add("Gabon");
+	            li.add("Ghana");
+	            li.add("Madagascar");
+	            li.add("Malawi");
+	            li.add("Republic of Congo");
+	            li.add("Seychelles");
+	            li.add("Tanzania");
+	            li.add("Zambia");
+	            li.add("Sierra Leone");
+	            
+	     //for country code
+	     List<String> code = new ArrayList<>();
+	     		code.add("KE");
+	     		code.add("UG");
+	     		code.add("RW");
+	     		code.add("NG");
+	     		code.add("NE");
+	     		code.add("TD");
+	     		code.add("BF");
+	     		code.add("CD");
+	     		code.add("GA");
+	     		code.add("GH");
+	     		code.add("MG");
+	     		code.add("MW");
+	     		code.add("CG");
+	     		code.add("SC");
+	     		code.add("TZ");
+	     		code.add("ZM");
+	     		code.add("SL");
+	     
+	     List <String> currency = new ArrayList<>();
+	        currency.add("kES");
+	        currency.add("UGX");
+	        currency.add("RWF");
+	        currency.add("NGN");
+	        currency.add("XOF");
+	        currency.add("XAF");
+	        currency.add("XOF");
+	        currency.add("XAF");
+	        currency.add("XAF");
+	        currency.add("GHS");
+	        currency.add("MGA");
+	        currency.add("MWK");
+	        currency.add("XAF");
+	        currency.add("SCR");
+	        currency.add("TZS");
+	        currency.add("ZWM");
+	        currency.add("SLL");
+	     
+	            
+	            
+			
+	        
+			 
+			String content = "This is the content to write into file";
+ 
+			File file = new File("/home/eugene/Desktop/codes.txt");
+			
+			//test
+			
+
+			
+			
+		//	for(int j=0; j<15; j++) {
+				//FileUtils.write(file,  li  + "\n", // smsTime						
+					//	true); // Append to file
+				
+				//+ "|"	+ code + "|"
+                              
+                               
+			//}
+			
+			
+			//test
+ 
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+			file.createNewFile();
+		}
+ 
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			//writting to file
+			
+		for(int i = 0;i<10000;i++){
+		  
+			for(String str: currency){
+				
+				
+				
+				bw.write(str +  "\n");
+				
+				
+				
+				
+			}
+			
+			
+		}
+			bw.close();
+		
+ 
+			System.out.println("Done");
+ 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} */
+
+	}
+
+}
+

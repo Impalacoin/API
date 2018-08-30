@@ -1,0 +1,175 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+$db_conn=mysql_connect("localhost","root","") or die (mysql_error());
+mysql_select_db("impalapay",$db_conn);
+function check_required_fields($required_fields){
+    $errors=array();
+    if(is_array($required_fields)){
+        foreach($required_fields as $field){
+            if(!isset($_POST[$field]) || empty($_POST[$field])){
+                $errors[]=$field;
+            }
+        }
+    }else{
+        if(!isset($_POST[$required_fields]) || empty($_POST[$required_fields])){
+                $errors[]=$field;
+            }
+    }
+    return $errors;
+}
+function redirect_to($destination=""){
+    header("location:{$destination}");
+}
+function check_is_registered($uid){
+    if(!isset($_SESSION["registered"]) & $_SESSION["registered"]!==$uid ){
+        redirect_to("register.php?notregistered");
+    }
+}
+function check_if_logged_in($me){
+    
+    
+}
+function get_user_by_id($fb_id){
+    $query="SELECT * FROM users WHERE fb_id={$fb_id}";
+    $result=mysql_query($query);
+    if(!$result){
+        return $false;
+    }else{
+        return $result;
+    }
+}
+function get_fb_id_by_email($email){
+    $query="SELECT fb_id FROM users WHERE email='{$email}'";
+    $result=mysql_query($query) or die(mysql_error());
+    $row=mysql_fetch_row($result);
+    $fb_id=$row["fb_id"];
+    return $fb_id;
+    
+}
+function getEmail($fb_id){
+    $query="SELECT email FROM users WHERE fb_id={$fb_id}";
+    $result=mysql_query($query) or die(mysql_error());
+    $email=mysql_result($result,0);
+    return $email;
+}
+
+function has_registered($fb_id){
+    $result=get_user_by_id($fb_id);
+    if($result){  
+        $stored_ids=array();
+        while($user=mysql_fetch_array($result)){
+            $stored_ids[]=$user["fb_id"];
+        }
+        if(in_array($fb_id,$stored_ids)){
+            return true;
+        }else{
+            return false;
+        }
+        /*while($user=mysql_fetch_array($result)){
+            if($fb_id==$user["fb_id"]){
+                return true;
+             }else{
+                return false;
+            }
+        }*/
+    }
+    
+}
+function mysql_prep($value){
+    $cleaned_value=trim(addslashes($value));
+    return $cleaned_value;
+}
+function get_pin($uid){
+    $query_pin="SELECT pin From users WHERE fb_id={$uid}";
+    $result_pin=mysql_query($query_pin) or die(mysql_error());
+    $pin=mysql_result($result_pin,0,"pin");
+    return $pin;
+}
+function get_transactions($account_id){
+    $query="SELECT * FROM transaction WHERE account_id={$account_id} ORDER BY time DESC";
+    $result=mysql_query($query) or die(mysql_error());
+    return $result;
+}
+function getAccount($fb_id){
+    $query="SELECT * FROM account WHERE fb_id={$fb_id}";
+    $result_set=mysql_query($query) or die(mysql_error());
+    return $result_set;
+    
+}
+function get_fb_id_by_account_id($account_id){
+    $query_id="SELECT fb_id From account WHERE id={$account_id}";
+    $result_id=mysql_query($query_id) or die(mysql_error());
+    $id=mysql_result($result_id,0,"fb_id");
+    return $id;
+}
+function getImpalaBalance(){
+    $query="SELECT amount FROM account WHERE id=1";
+    $result=mysql_query($query)or die(mysql_error());
+    $amount=mysql_result($result,0);
+    return $amount;
+}
+function login_impala_admin($username,$password){
+    $query="SELECT * FROM admin_users WHERE username='{$username}' AND password='{$password}' LIMIT 1";
+    $result=mysql_query($query) or die(mysql_error());
+    if($result){
+        $admin_id=mysql_result($result,0);
+        return $admin_id;
+    }else{
+        return false;
+    }
+    
+    
+}
+function check_if_user_exists($userId){
+    $query="SELECT * FROM users WHERE fb_id={$userId}";
+    $result=mysql_query($query) or die(mysql_error());
+    
+    if(mysql_num_rows($result)>0){
+        return true;
+    }else{
+        return false;
+    }
+    
+}
+function verify_admin_logged_in(){
+    
+}
+function CalculateImpalaCharges($sendAmount){
+    $withdrawFee=null;
+    switch($sendAmount){
+        
+        case $sendAmount<=(100): $withdrawFee=4.5;
+        break;
+        case $sendAmount>100 && $sendAmount<=150: $withdrawFee=6.6;
+        break;
+        case $sendAmount>150 && $sendAmount<=500: $withdrawFee=10;
+        break;
+        case $sendAmount>500 && $sendAmount<=1000: $withdrawFee=14;
+        break;
+        case $sendAmount>1000 && $sendAmount<=1500: $withdrawFee=19.2;
+        break;
+        case $sendAmount>1500 && $sendAmount<=2000: $withdrawFee=25;
+        break;
+        case $sendAmount>2000 && $sendAmount<=3000: $withdrawFee=27;
+        break;
+        case $sendAmount>3000 && $sendAmount<=4000: $withdrawFee=35;
+        break;
+        case $sendAmount>4000 && $sendAmount<=5000: $withdrawFee=40;
+        break;
+        case $sendAmount>5000 && $sendAmount<=6000: $withdrawFee=43;
+        break;
+        case $sendAmount>6000 && $sendAmount<=7500: $withdrawFee=48;
+        break;
+    }
+    return $withdrawFee;
+}
+function CalculatePayPalCharges($amount){
+    $payPal=$amount*(3/100);
+    $commision=number_format($payPal,2);
+    return $commision;
+}
+?>

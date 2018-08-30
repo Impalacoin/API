@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title> jqplottest </title>
+    <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css" />
+
+   
+    <script language="javascript" type="text/javascript" src="js/jqplot.bubbleRenderer.js"></script>
+
+     <script type="text/javascript">
+ var TUTORIAL_SAVVY ={
+        
+		/*Makes Ajax calls to Servlet to download student Data*/
+		downloadStudentData:function() {
+			 
+		
+			var formattedstudentListArray =[];
+			
+				$.ajax({
+					
+				  async: false,
+				  
+				  url: "StudentJsonDataServlet",
+				  
+				  dataType:"json",
+				  
+				  success: function(studentJsonData) {
+					
+					$.each(studentJsonData,function(index,aStudent){
+						
+						formattedstudentListArray.push([aStudent.mathematicsMark,aStudent.computerMark,(aStudent.mathematicsMark+aStudent.computerMark),aStudent.name]);
+					});
+				  }
+				});
+			return formattedstudentListArray;
+		},
+		
+		/*Draws Bubble Chart For Student Data*/
+		drawStudentBubbleChart: function(formattedStudentJsonData){
+			
+		 $.jqplot.config.enablePlugins = true;
+		 
+			$.jqplot('chart1',[formattedStudentJsonData],{
+				
+		        title: 'Student Marks In Mathematic And Computer',
+		        
+		        seriesDefaults:{
+					            renderer: $.jqplot.BubbleRenderer,
+					            rendererOptions: {
+					                bubbleGradients: true
+					            },
+				shadow: true
+				}
+			});
+		}
+               
+};
+
+$(document).ready(function(){
+    
+   var formatStudentData =  TUTORIAL_SAVVY.downloadStudentData();
+  
+   TUTORIAL_SAVVY.drawStudentBubbleChart(formatStudentData);
+});
+</script>
+</head>
+<body>
+
+    <div id="chart1" style="width:600px; height:250px;"></div>
+</body>
+</html>

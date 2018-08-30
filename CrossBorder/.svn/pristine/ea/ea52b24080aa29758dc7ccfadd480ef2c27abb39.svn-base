@@ -1,0 +1,420 @@
+$(function(){
+    basicSetup();
+    registration();
+    login();
+    culculateSendingFee();
+    submitToMasterCard();
+    sendToMobile();
+});
+Number.prototype.formatMoney = function(decPlaces, thouSeparator, decSeparator) {
+    var n = this,
+    decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+    decSeparator = decSeparator == undefined ? "." : decSeparator,
+    thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+    sign = n < 0 ? "-" : "",
+    i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+    j = (j = i.length) > 3 ? j % 3 : 0;
+    return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+};
+function basicSetup(){
+    $("#datepicker").datepicker({changeYear:true,changeMonth:true,dateFormat:"yy-mm-dd",yearRange:"1930:1995"});
+    $("#send-now-page").click(function(){
+        console.log("send now button clicked");
+        window.location.href="billing.php";
+        return false;
+    });
+    $(".delivery-type").each(function(){
+        $(this).click(function(){
+            if($(this).val() == "bank"){
+                window.location.href="send.php?bank";
+            }else{
+                window.location.href="send.php?mobile";
+            }
+        });
+    });
+    $(".db-record").each(function(){        
+        $(this).click(function(){  
+            $("#record-diag").dialog();
+            console.log("row clicked");
+        });
+    })
+    
+}
+function sendToMobile(){
+    var masterCard = $("#send-to-mobile");
+    var cont = $(".content");    
+    masterCard.submit(function(){
+        cont.append("<div id=js-spinner></div>");
+        var spinner = $("#js-spinner");
+        var alert_warn = $("ul.alert_warning")
+        var process = false;
+        var required_fields = $(this).find(".validate-required");
+        var empty_fields=new Array();
+        var i=0;
+        required_fields.each(function(){
+            if($(this).val()==""){
+                empty_fields[i]=$(this).parent().prev().text();
+                i++;
+            }
+        });
+        if(empty_fields.length == 0){ 
+            console.log("before the call to ajax");
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            var network = $("#selected-network").val();
+            var mobileNum =$("#mobile-number").val();
+            if(mobileNum.length<10 || mobileNum.length>12){
+                var error_shown = $("ul.register_error");            
+                if(error_shown){
+                    error_shown.remove();
+                }
+                if(alert_warn){
+                    alert_warn.remove();
+                }
+                if(spinner){
+                    spinner.remove();
+                }
+                $(this).prepend("<div class='register_error'>Phone number does not have a valid length</div>");
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                return false;
+            }
+            if(network.toUpperCase() == "AIRTEL"){
+                console.log(mobileNum.substr(0,5))
+                if(mobileNum.substr(0,3) == "073" || mobileNum.substr(0,3) == "078"){
+                    
+                }else if(mobileNum.substr(0,5) == "25473" || mobileNum.substr(0,5) == "25478"){
+                    
+                }else{
+                    var error_shown = $("div.register_error");            
+                    if(error_shown){
+                        error_shown.remove();
+                    }
+                    if(alert_warn){
+                        alert_warn.remove();
+                    }
+                    if(spinner){
+                        spinner.remove();
+                    }
+                    $(this).prepend("<div class='register_error'>Please enter a valid airtel number</div>");
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    return false;
+                }
+            }else if(network.toUpperCase() == "SAFARICOM"){
+                
+            }            
+            $.post("request/sendToMobile",$(this).serialize(),function(data){
+                try{
+                    
+                    var response =data// JSON.parse(data);
+                    console.log("Response returned "+data);
+                    if(response.status=="00"){
+                        window.location.href="account.php?success";
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        var error_shown = $("ul.register_error");            
+                        if(error_shown){
+                            error_shown.remove();
+                        }
+                        if(spinner){
+                            spinner.remove();
+                        }
+                        if(alert_warn){
+                            alert_warn.remove();
+                        }
+                        
+                    }else{
+                        var error_shown = $("ul.register_error");            
+                        if(error_shown){
+                            error_shown.remove();
+                        }
+                        if(alert_warn){
+                            alert_warn.remove();
+                        }
+                        if(spinner){
+                            spinner.remove();
+                        }
+                        masteCard.prepend("<ul class='register_error'><li>"+response.message+"</li></ul>");
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        console.log("here is the status "+response.status);
+                    }
+                }catch(err){
+                    console.log(err.message);
+                }
+                console.log(data);
+                
+            });
+            
+        }else{
+            if(spinner){
+                spinner.remove();
+            }
+            var error_shown = $("ul.register_error");            
+            if(error_shown){
+                error_shown.remove();
+            }
+            if(spinner){
+                spinner.remove();
+            }
+            if(alert_warn){
+                alert_warn.remove();
+            }
+            var response="";
+            for (var i=0;i<empty_fields.length;i++){
+                response+="<li><b>"+empty_fields[i]+ "</b> is a required field</li>";
+            }
+            $(this).prepend("<ul class='register_error'>"+response+"</ul>");
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+        return process;
+    });
+}
+function submitToMasterCard(){
+    var masterCard = $("#master-card-form");
+    var cont = $(".content");    
+    masterCard.submit(function(){
+        cont.append("<div id=js-spinner></div>");
+        var spinner = $("#js-spinner");
+        var alert_warn = $("ul.alert_warning")
+        var process = false;
+        var required_fields = $(this).find(".validate-required");
+        var empty_fields=new Array();
+        var i=0;
+        required_fields.each(function(){
+            if($(this).val()==""){
+                empty_fields[i]=$(this).parent().prev().text();
+                i++;
+            }
+        });
+        if(empty_fields.length == 0){ 
+            console.log("before the call to ajax");
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            $.post("request/processCard",$(this).serialize(),function(data){
+                try{
+                    
+                    var response =data// JSON.parse(data);
+                    console.log("Response returned "+data);
+                    if(response.status=="00"){ 
+                        console.log(response.message.toUpperCase());
+                        if(response.message.toUpperCase() == "APPROVED" ){
+                            window.location.href = "send.php";
+                        }
+                        masterCard.prepend("<ul class='alert_warning'><li>"+response.message+"</li></ul>");
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        var error_shown = $("ul.register_error");            
+                        if(error_shown){
+                            error_shown.remove();
+                        }
+                        if(spinner){
+                            spinner.remove();
+                        }
+                        if(alert_warn){
+                            alert_warn.remove();
+                        }
+                        
+                    }else{
+                        var error_shown = $("ul.register_error");            
+                        if(error_shown){
+                            error_shown.remove();
+                        }
+                        if(alert_warn){
+                            alert_warn.remove();
+                        }
+                        if(spinner){
+                            spinner.remove();
+                        }
+                        masteCard.prepend("<ul class='register_error'><li>"+response.message+"</li></ul>");
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        console.log("here is the status "+response.status);
+                    }
+                }catch(err){
+                    console.log(err.message);
+                }
+                console.log(data);
+                
+            });
+            
+        }else{
+            if(spinner){
+                spinner.remove();
+            }
+            var error_shown = $("ul.register_error");            
+            if(error_shown){
+                error_shown.remove();
+            }
+            if(spinner){
+                spinner.remove();
+            }
+            if(alert_warn){
+                alert_warn.remove();
+            }
+            var response="";
+            for (var i=0;i<empty_fields.length;i++){
+                response+="<li><b>"+empty_fields[i]+ "</b> is a required field</li>";
+            }
+            $(this).prepend("<ul class='register_error'>"+response+"</ul>");
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+        return process;
+    });
+}
+function culculateSendingFee(){
+    var calc_form = $("#calc-form");
+    var frm_val = calc_form.parent().val();
+    var re_calc =$("#re-calc");
+    re_calc.click(function(){
+        calc_form.parent().html("");
+        calc_form.parent().html(frm_val);
+        alert("yeah");
+    });
+    calc_form.submit(function(){
+        
+        calc_form.prepend("<div id='js-spinner-calc'></div>");
+        var ex_rate = "";
+        $.ajax({
+            type: "POST",
+            url: "request/rate",
+            async: false,
+            success: function(response){
+                ex_rate = parseFloat(response.message).toFixed(2);          
+            }
+        });
+        var amount = $(this).find("input:text").val();
+        var g_amount = parseInt(amount)        
+        var card_fee = (3.5/100);       
+        
+        if(g_amount>0){   
+            /*if(spinner){
+                spinner.remove();
+            }*/
+            var card_amount =(g_amount*card_fee).toFixed(2);
+            var total = (parseFloat(g_amount)+parseFloat(card_amount));
+            var total_fee = "<div class='calc-fee-result' >";
+            total_fee+="<h3>Calculator Fee</h3>";
+            total_fee+="<table>";
+            total_fee+="<tr><th>Amount to send  </th><td>$ "+g_amount+"</td></tr>";
+            total_fee+="<tr><th>Card Fee </th><td>$ "+card_amount+"</td></tr>";
+            total_fee+="<tr><th>Total </th><td>$ "+total+"</td></tr>";
+            total_fee+="<tr></tr>";
+            total_fee+="<tr class='last'><th>Payout amount </th><td>KES "+(g_amount*ex_rate).formatMoney(2,",",".")+"@"+ex_rate+"</td></tr>";
+            total_fee+="<tr><td colspan=2><input type=submit id=send-now value = 'Send&nbsp;now' /></td></tr>";
+            total_fee+="</table>";
+            total_fee+="<a href='#' id='re-calc'>Click here</a> to calcute another transaction";
+            total_fee+="</div>";
+            //alert(card_amount);
+            $(this).html(total_fee);
+            //$(this).html("");
+        }else{
+            var spinner = $("#js-spinner-calc");
+            if(spinner){
+                spinner.remove();
+            }
+            alert("Please put a value that is greater than 0");
+        }
+        return false;
+    });
+}
+function login(){
+    var login_form = $("#login-form");
+    var login_form_container = $("#login-form-container");
+    var lg_container = login_form_container.html();
+    login_form.submit(function(){
+        console.log("Login button clicked");
+        login_form_container.prepend("<div id=js-spinner></div>");
+        var spinner = $("#js-spinner");
+        $.post("request/login",$(this).serialize(),function(response){
+            
+            try{
+                if(response.status == "00"){
+                    window.location.href = "calculate.php";
+                    
+                }else{
+                    if(spinner){
+                        spinner.remove();
+                    }
+                    var error_shown = $("ul.register_error");            
+                    if(error_shown){
+                        error_shown.remove();
+                    }
+                    login_form.prepend("<ul class='register_error'><li>"+response.message+"</li></ul>");
+                    console.log(response);
+                }
+            }catch(err){
+                console.log("An error occured");
+                console.log(err.message);
+            }
+        });
+            
+            
+        
+        return false;
+    });
+}
+function registration(){
+    var reg_form = $("#reg-form");
+    //var empty_fields;
+    var process = false;
+    
+    
+    reg_form.submit(function(){
+        reg_form.prepend("<div id=js-spinner></div>");
+        var spinner = $("#js-spinner");
+        var required_fields = $(this).find('.validate-required');
+        //var js_spinner = $(this).after("<div id=js-spinner></div>");
+        var empty_fields = new Array();
+        var counter = 0;
+        required_fields.each(function(){            
+            if($(this).val()==""){
+                empty_fields[counter]=$(this).parent().prev().text();
+                counter++;
+            }
+            //console.log($(this).find("input").attr("name"));
+        });
+        if(empty_fields.length == 0){
+            //every required field is ok
+            var error_shown = $("ul.register_error"); 
+            if(error_shown){
+                error_shown.remove();
+            }
+            $.post("request/register",$(this).serialize(),function(data){
+                try{
+                    var response =data// JSON.parse(data);
+                    console.log("Response returned "+data);
+                    if(response.status=="00"){                        
+                        window.location.href="calculate.php";
+                        
+                    }else{
+                        var error_shown = $("ul.register_error");            
+                        if(error_shown){
+                            error_shown.remove();
+                        }
+                        if(spinner){
+                            spinner.remove();
+                        }
+                        reg_form.prepend("<ul class='register_error'><li>"+response.message+"</li></ul>");
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        console.log("here is the status "+response.status);
+                    }
+                }catch(err){
+                    console.log(err.message);
+                }
+                console.log(data);
+                
+            });
+        }else{ 
+            //js_spinner.css({"display":"none"});
+            //There are some required fields that are missing
+            var error_shown = $("ul.register_error");            
+            if(error_shown){
+                error_shown.remove();
+            }
+            if(spinner){
+                spinner.remove();
+            }
+            var response="";
+            for (var i=0;i<empty_fields.length;i++){
+                response+="<li><b>"+empty_fields[i]+ "</b> is a required field</li>";
+            }
+            $(this).prepend("<ul class='register_error'>"+response+"</ul>");
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+        return process;
+    });
+}

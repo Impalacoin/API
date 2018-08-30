@@ -1,0 +1,107 @@
+<?php
+session_start();
+$_SESSION['message']=$_POST['transaction'];
+$_SESSION['url']=$_POST['return'];
+include("config.php");
+require_once ("includes/process.php");
+if(isset($_POST))
+{
+$name=$_POST['country'];
+
+
+$mnth=$_POST['month'];
+$yr=$_POST['year'];
+$cvv=$_POST['cse'];
+$firstname=$_POST['firstname'];
+$lastname=$_POST['lastname'];
+$mail=$_POST['email'];
+$number=$_POST['phone'];
+
+$merchant=$_POST['merchant'];
+$transaction_no=$_POST['transaction'];
+
+$secret=$_POST['key'];
+$amount=$_POST['amount'];
+$cardNumber=$_POST['Cardno'];
+$exp=($mnth.$yr);
+$return_url=$_POST['return'];
+
+
+
+
+$response=processCard($amount,$cardNumber,$cvv,$exp);
+
+//perform calculations
+
+if(strtoupper($response["vpc_Message"]) == "APPROVED"){
+	
+	//performs all the response when it returns true
+	
+	 $Today = date('y:m:d');
+	  $status="unread";
+	  
+	  //insert data into transaction table;
+	  $insert="INSERT INTO transactions SET confirmation_code='$secret',merchant_mail='$merchant',item_name='shoppingcart',amount='$amount',date='$Today',transaction_ref='$transaction_no',payee_mail='$mail',status='$status'";
+	  
+	    $add_trans=mysql_query($insert);
+		
+	
+	 
+	 
+	 
+	 //sellect from account table where email====traansemail
+            $calc=$merchant;
+
+			$query = mysql_query("SELECT * FROM account_table WHERE email = '$calc'") or die (mysql_error()); 
+			$user_row = mysql_fetch_array($query);
+	  
+	  //perform calculations
+	         $current=$user_row['account_balance'];
+			 
+			 $calculated=$current+$amount;
+			 
+			 //update accounts table to reflect the payment;
+			 
+			 $sql3 = "UPDATE account_table SET account_balance='$calculated' WHERE email='$calc'";
+			 
+			 $result3 = mysql_query($sql3);
+			 
+			 if(mysql_affected_rows()>0){
+                       echo  "<div style='text-align:center; font-family:Georgia, Times, serif, Geneva, sans-serif, Helvetica, 				        sans-serif; font-size:25px; font-weight:bold;'>";
+ echo  "<a href='#'>Your Transaction has completed succesfully<br />thank you for using ImpalaPay</a></div>";
+
+ echo  "<div style='text-align:center; font-family: Courier, monospace, cursive, ; font-size:25px; font-weight:bold; 		color:#0CF;'>
+  		Your Transaction Reference number is...<br />
+		$transaction_no</div>";
+echo  "<div style='text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:25px; font-weight:bold;'>";
+ echo "<a href='$return_url'>Click here to be redirected.....<img src='redirect.jpg' width='100px'/><br />
+</a></div>";
+
+
+ echo "</div>";
+                  }
+			 
+      }else{
+      	      
+ echo " <div style='text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:26px; font-weight:bold;'>";
+ echo " <a href='#'>";
+ echo "dear customer your transaction failed due to<br/>";
+ echo $response["vpc_Message"].$response["vpc_Amount"];
+ 
+ echo "</a>
+ 
+ </div>";
+ echo " <div style='text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:26px; font-weight:bold;'>";
+ echo "<img src='canceled.jpg' width='100px'/>";
+ echo "</a>
+ </div>";
+
+          
+		  
+		 
+    }
+ 
+}
+	
+	
+   ?>

@@ -1,0 +1,14 @@
+﻿Public Class boardHouse
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+
+
+                UniversalHostConnection.Execute("delete from boardprice where house_name = '" & Trim(TextBox4.Text) & "' and owner = '" & Form1.OWNER & "'")
+                UniversalHostConnection.Execute("insert into boardprice values('" & Trim(TextBox1.Text) & "','" & Trim(TextBox2.Text) & "','" & Trim(TextBox3.Text) & "','" & Trim(TextBox4.Text) & "','" & Trim(TextBox11.Text) & "','" & Trim(TextBox5.Text) & "','" & Trim(TextBox7.Text) & "','" & Trim(TextBox8.Text) & "','" & Trim(TextBox9.Text) & "','" & Trim(TextBox10.Text) & "','" & Form1.OWNER & "')")
+            MsgBox("Record successully updated", vbInformation, APPNAME)
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+End Class

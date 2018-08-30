@@ -1,0 +1,102 @@
+﻿Public Class User
+
+    Private Sub User_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Top = 20
+        Me.Left = 10
+        DataRefresh()
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+
+            Dim RecX As New ADODB.Recordset
+
+
+
+            'Dim plainText As String = InputBox("ENTER COMPANY NAME:")
+            Dim password1 As String = "EZEKIEL Ihtnamik: copy #1"
+
+            'plainText = UCase(plainText) '& "|" & Format(Today(), "yyyy-MM-dd") & "|60"
+
+            Dim wrapper As New Simple3Des(password1)
+
+            Dim cipherText As String = "" 'wrapper.EncryptData(plainText)  '& "|" & Format(Today(), "yyyy-MM-dd") & "|60") 'FOR LICENCE & "|" & Today() & "|60")
+            Dim path As String
+
+            'path = AppDomain.CurrentDomain.BaseDirectory
+            'My.Computer.FileSystem.WriteAllText(path & "\licence.lic", cipherText, False)
+
+            'RCommand = New OleDb.OleDbCommand("DELETE  from syssetup ", UniversalHostConnection)
+            'RCommand.ExecuteNonQuery()
+            'RCommand = New OleDb.OleDbCommand("insert into syssetup values('" & cipherText & "')", UniversalHostConnection)
+            'RCommand.ExecuteNonQuery()
+
+            Dim AppFullname As String = Trim(TextBox1.Text)
+            Dim AppUser As String = Trim(TextBox2.Text)
+
+
+
+            password1 = Trim(TextBox3.Text)
+            Dim password2 = Trim(TextBox4.Text)
+
+            If password1 <> "" And AppUser <> "" And AppFullname <> "" And ComboBox1.SelectedItem <> "" Then
+                If password1 <> password2 Then
+                    MsgBox("    Password mismatch, Re-enter password!   ", vbExclamation, APPNAME)
+                    Exit Sub
+                End If
+
+                If ComboBox1.SelectedIndex = -1 Then
+                    MsgBox("    Select user role!   ", vbExclamation, APPNAME)
+                    Exit Sub
+                End If
+
+                wrapper = New Simple3Des(APPNAME)
+                cipherText = wrapper.EncryptData(password1)
+
+                UniversalHostConnection.Execute("DELETE  from users where user_name =  '" & Replace(AppUser, "'", "") & "'")
+                UniversalHostConnection.Execute("insert into users values('" & AppUser & "','" & AppFullname & "','" & cipherText & "'," & ComboBox1.SelectedIndex & ")")
+
+                MsgBox("    User name added successfully!   ", vbInformation, APPNAME)
+                DataRefresh()
+            Else
+                MsgBox("    Data user name or password missing!   ", vbExclamation, APPNAME)
+                Exit Sub
+
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub DataRefresh()
+        Try
+
+
+            Dim Recset As New ADODB.Recordset
+
+            Dim Str As String
+
+            Str = "select user_name, full_name,role from users"
+
+            Recset.Open(Str, UniversalHostConnection)
+            Dim n As Integer
+            DataGridView1.Rows.Clear()
+            Do While Recset.EOF = False
+                DataGridView1.Rows.Add()
+                For t As Int16 = 0 To 2
+                    DataGridView1.Rows.Item(n).Cells(t).Value = Recset.Fields(t).Value
+                Next
+                n = n + 1
+                Recset.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub User_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox2.Width = Me.Width - 30
+        GroupBox2.Height = Me.Height - 250
+    End Sub
+End Class

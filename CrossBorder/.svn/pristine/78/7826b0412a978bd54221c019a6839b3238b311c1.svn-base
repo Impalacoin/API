@@ -1,0 +1,494 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+
+require_once("functions.php");
+
+function display_navigation($text="",$code=""){
+    
+
+    ?>
+    
+  
+    <fb:fbml>
+    <fb:tabs> 
+    <fb:tab-item href='http://apps.facebook.com/impalapay/' title='home' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/index.php")echo "selected='true'";?>/>
+    <fb:tab-item href='http://apps.facebook.com/impalapay/how_it_works.php' title='How it works' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/how_it_works.php")echo "selected='true'";?>/>
+    <fb:tab-item href='http://apps.facebook.com/impalapay/register.php' title='Register' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/register.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/buy_credit.php' title='Impala Credits' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/buy_credit.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/statement.php' title='Statement' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/statement.php")echo "selected='true'";?> />
+    
+    <fb:tab-item href='http://apps.facebook.com/impalapay/send_money.php' title='Send Money' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/send_money.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/top_up.php' title='Airtime
+    ' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/top_up.php")echo "selected='true'";?> />
+    
+    <fb:tab-item href='http://apps.facebook.com/impalapay/faqs.php' title='FAQs' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/faqs.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/invite.php' title='invite Friends' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/invite.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/change_pin.php' title='Change Pin' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/change_pin.php")echo "selected='true'";?> />
+   </fb:tabs>
+   </fb:fbml>
+   
+          
+    <?php
+}
+function display_admin_navigation(){
+    
+    ?>
+    <fb:fbml>
+    <fb:tabs> 
+    <fb:tab-item href='http://apps.facebook.com/impalapay/impala_admins/' title='home' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/impala_admins/index.php")echo "selected='true'";?>/>
+    <fb:tab-item href='http://apps.facebook.com/impalapay/impala_admins/login.php' title='Login' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/impala_admins/login.php")echo "selected='true'";?>/>
+    <fb:tab-item href='http://apps.facebook.com/impalapay/impala_admins/view_all_transactions.php' title='View All Transactions' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/impala_admins/view_all_transactions.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/impala_admins/view_sent_money.php' title='View Sent Money' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/impala_admins/view_sent_money.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/impala_admins/balance.php' title='Balance' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/impala_admins/balance.php")echo "selected='true'";?> />
+    <fb:tab-item href='http://apps.facebook.com/impalapay/impala_admins/exchange_rate.php' title='Exchange Rate' <?php if($_SERVER['PHP_SELF']=="/impalapay_facebook/impala_admins/exchange_rate.php")echo "selected='true'";?> />
+    </fb:tabs>
+   </fb:fbml>
+   
+    <?php
+}
+function check_fb_login($me){
+    ?>
+    <?php if ($me): ?>
+    <a href="<?php echo $logoutUrl; ?>">
+      <img src="http://static.ak.fbcdn.net/rsrc.php/z2Y31/hash/cxrz4k7j.gif">
+    </a>
+    <?php else: ?>
+    <div>
+      Please login to access this page :<fb:login-button></fb:login-button>
+    </div>
+    
+    <?php endif ?>
+    <?php
+}
+function display_new_user_form($me,$uid=""){
+  
+    
+    ?>
+    <div id="register">
+    <fieldset style="width: 300px;">
+    <form action="register.php" method="post">
+    
+    <table>
+    <tr><td><input type="hidden" name="user_id" value="<?php echo "{$uid}" ?>" /></td></tr>    
+    <tr><td>Name:</td><td><input type="text" name="name" value="<?php echo $me["name"]; ?>"/></td></tr>
+    <tr><td>City:</td><td><input type="text" name="city" value="<?php echo $me["location"]["name"]; ?>"/></td></tr>
+    
+    <tr><td>mobile:</td><td><input type="text" name="mobile" value=""/></td></tr>
+    <tr><td>Email Address</td><td><input type="text" name="email" value="<?php echo $me["email"]; ?>"/></td></tr>
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr><td>Id/Passport Number:</td><td><input type="text" name="id" value=""/></td></tr>
+    
+    <tr><td>Pin:</td><td><input type="password" name="pin" value=""/></td></tr>
+    <tr><td>Confirm Pin:</td><td><input type="password" name="confirm_pin" value=""/></td></tr>
+    
+    <tr><td colspan="2"  ><input type="submit" name="create" value="Sign Up"/></td></tr>
+    </table>
+    </form>
+    </fieldset>
+    </div>
+    <?php
+}
+function display_send_money($me,$uid=""){
+    require_once("functions.php");
+    
+    ?>
+             
+    <div class="send_money">
+    
+    <p style="color: green;font-weight: bold;font-family:'Times New Roman',arial,sans-serrif;font-size: 13px;">
+    The current exchange rate is 1$= <?php echo GetEchangeRate(); ?>Ksh <br />
+    
+    </p>
+   
+    <form action="send_money.php" method="post">
+    
+    <table>
+    <tr>
+    <td>Friend's Name:</td><td><fb:friend-selector uid="" name="friend" idname="friends_id" prefill_id=""/></td></tr>    
+    <tr><td>Amount</td><td><input type="text" name="amount" value=""/></td></tr> 
+	 <tr><td>Mobile Provider</td>
+		<td>
+			<select name="mobile_provider">
+				<option value="safaricom">Safaricom</option>
+				<option value="airtel">Airtel</option>
+				<option value="zap">Zap</option>
+				<option value="orange">Orange</option>
+			</select>
+		</td>
+	</tr> 
+     <tr><td>Friends Mobile</td><td><input type="text" name="mobile" value=""/></td></tr>   
+    <tr><td>pin:</td><td><input type="password" name="pin" value=""/></td></tr>
+    
+    <tr><td colspan="" align="right"><input type="submit" name="send" value="Send &nbsp; Money"/></td>
+    <td colspan=""><a href="pin_change.php" >I forgot my pin</a></td></tr>
+    </table>
+    </form>
+    </div>
+    <table border="1" width="300px">
+    <tbody>
+        <tr><th>Amount</th><th>Sending Fee</th></tr>
+        <tr><td>$1-100</td><td>$4.5</td></tr>
+        <tr><td>$101-$150</td><td>$6.6</td></tr>
+        <tr><td>$150-$500</td><td>$10</td></tr>
+        <tr><td>$501-$1000</td><td>$14</td></tr>
+        <tr><td>$1001-$1500</td><td>$19.2</td></tr>
+        <tr><td>$1501-$2000</td><td>$25</td></tr>
+        <tr><td>$2001-$3000</td><td>$27</td></tr>
+        <tr><td>$3001-$4000</td><td>$35</td></tr>
+        <tr><td>$4001-$5000</td><td>$40</td></tr>
+        <tr><td>$5001-$6000</td><td>$43</td></tr>
+        <tr><td>$6001-$7500</td><td>$48</td></tr>
+        
+    </tbody>
+</table>
+   
+    <?php
+}
+function display_withdraw(){
+        ?>
+    <div class="withdraw_money">
+    <form action="withdraw.php" method="post">
+    
+    <table>
+    <tr><td>Amount:</td><td><input type="text" name="amount" value=""/></td></tr>
+    <tr><td>Phone Number:</td><td><input type="text" name="phone_number" value=""/></td></tr>    
+    <tr><td>pin:</td><td><input type="password" name="pin" value=""/></td></tr>
+    
+    <tr><td colspan="2" align="right"><input type="submit" name="withdraw" value="withdraw"/></td></tr>
+    </table>
+    </form>
+    </div>
+    <?php
+}
+function displayBuyCredit($amount=null){
+    require_once "php/functions.php";
+    require_once "includes/constants.php";
+    ?>
+<div style="margin: 5px 0px 0px 10px;">
+  <?php if(!isset($_POST["calculate_x"])){ ?> 
+  <p style="color: Green;font-weight: bold;font-family:'Times New Roman',arial,sans-serrif;font-size: 15px;">
+  Type the amount you wan't your friend to receive and then press calculate<br />
+  button to determine how much you need to send.
+  </p>
+   <form action="buy_credit.php" method="post">
+        <table style="border: 1px outset blue; ">
+          <tbody>
+            
+            <tr><td style="text-align: right;"><label>Receiving countries:</label></td>
+            
+                <td colspan=""><select>
+                    <option value="Kenya">Kenya</option>
+                </select></td>
+            </tr>
+            <tr><td style="text-align: right;"><label>Exchange Rate:</label></td><td><?php echo "<span>1$=".number_format(GetExchangeRate(),2)."Ksh</span>" ; ?></td></tr>
+            <tr><td colspan="" style="text-align: right;"><label>Amount USD:</label></td><td><input type="text" name="amount" /></td></tr>
+            <tr><td><input type="image" name="calculate" src="http://196.216.73.148/impalapay_facebook/images/calculateFeeBtn.png" /></td></tr>
+           
+          </tbody>
+        </table>
+    </form>
+    <?php } ?>
+    <?php 
+                if(isset($_POST["calculate_x"])){
+                    $APIUSERNAME=APIUSERNAME;
+                    $APIPASSWORD=APIPASSWORD;
+                    $APISIGNATURE=APISIGNATURE;
+                    $ENDPOINT=ENDPOINT;
+                    $VERSION=VERSION;
+                    $REDIRECTURL=REDIRECTURL;
+                    $cred_str = "USER=" . $APIUSERNAME . "&PWD=" . $APIPASSWORD . "&SIGNATURE=" . $APISIGNATURE . "&VERSION=" . $VERSION;
+                                   
+                    $sendAmount=trim($_POST["amount"]);
+                    
+                    $PayPal=CalculatePayPalCharges($sendAmount);
+                    $impalapay=CalculateImpalaCharges($sendAmount);
+                    $commission=$PayPal+$impalapay;
+                    $total=$PayPal+$impalapay+$sendAmount;
+                    
+                    $nvp_str  = "&METHOD=SetExpressCheckout" 
+                   . "&RETURNURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=" //set your Return URL here
+                   . "&CANCELURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=" //set your Cancel URL here
+                   . "&PAYMENTREQUEST_0_CURRENCYCODE=USD"
+                   . "&PAYMENTREQUEST_0_AMT={$total}"
+                   . "&PAYMENTREQUEST_0_ITEMAMT={$sendAmount}"
+                   . "&PAYMENTREQUEST_0_TAXAMT={$commission}"
+                   . "&PAYMENTREQUEST_0_DESC=Credit"
+                   . "&PAYMENTREQUEST_0_PAYMENTACTION=Sale"                   
+                   . "&L_PAYMENTREQUEST_0_NAME0={$sendAmount} Credit"                   
+                   . "&L_PAYMENTREQUEST_0_NUMBER0=101"
+                   . "&L_PAYMENTREQUEST_0_QTY0=1"                   
+                   . "&L_PAYMENTREQUEST_0_TAXAMT0={$commission}"                   
+                   . "&L_PAYMENTREQUEST_0_AMT0={$sendAmount}"                   
+                   . "&L_PAYMENTREQUEST_0_DESC0={$sendAmount} Credit";
+                   
+                   $req_str = $cred_str . $nvp_str;
+                    $response = PPHttpPost($ENDPOINT, $req_str);
+                    //check Response
+                    if($response['ACK'] == "Success" || $response['ACK'] == "SuccessWithWarning")
+                    {
+                    //setup redirect URL
+                    $redirect_url = $REDIRECTURL . urldecode($response['TOKEN']);
+                    }
+                    else if($response['ACK'] == "Failure" || $response['ACK'] == "FailureWithWarning")
+                    {
+                    echo "The API Call Failed";
+                    print_r($response);
+                    } 
+                    
+                    echo "<form action=buy_credit.php?buy action=post>
+                            <table border=1 border-style=groove>
+                                <tr style='color:white;background:blue;'><th>PayPal Fee</th><th>ImpalaPay Fee</th><th>Total</th></tr>
+                                <tr><td>$ {$PayPal}</td><td>$ {$impalapay}</td><td>$ {$total}</td></tr>
+                                <tr>
+                                <td colspan=3><a href=" . $redirect_url . " id='submitBtn'><img src='https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif' border='0' /></a></td>
+                                </tr>
+                            </table>
+                          </form>";
+
+                }
+            ?> 
+    
+</div>
+<?php
+}
+function display_buy_credit(){
+    ?>
+    <div class="buy">
+    <?php 
+        require_once "php/functions.php";
+        //$APIUSERNAME  = "nickje_1298362650_biz_api1.yahoo.com";
+          //$APIPASSWORD  = "1298362658";
+          //$APISIGNATURE = "AymdwE-ji6Jqb9yxr0TZBJsvkHJmALBRLawZMz0aNIpdJ2KgV2DlOqMO";
+          //$ENDPOINT     = "https://api-3t.sandbox.paypal.com/nvp";
+          //$VERSION      = "65.1"; //must be >= 65.1
+          //$REDIRECTURL  = "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=";
+          
+    $APIUSERNAME="johnm_api1.comet.co.ke";
+    $APIPASSWORD="7LPNDQQ2L9LS62N3";
+    $APISIGNATURE="AFcWxV21C7fd0v3bYYYRCpSSRl31A92bbVKthCU45ooIZiU5wm32-.bk";
+    $ENDPOINT="https://api-3t.paypal.com/nvp";
+    $VERSION="65.1";
+    $REDIRECTURL="https://www.paypal.com/webscr?cmd=_express-checkout&token=";
+    
+    //$credentials="USER={$api_usename}&PWD={$api_password}&SIGNATURE={$api_signature}&VERSION={$api_version}";
+  
+  //Build the Credential String:
+  $cred_str = "USER=" . $APIUSERNAME . "&PWD=" . $APIPASSWORD . "&SIGNATURE=" . $APISIGNATURE . "&VERSION=" . $VERSION;
+  //For Testing this is hardcoded. You would want to set these variable values dynamically
+   
+    ?>
+    <table border="1px solid blue" style="margin: 10px 0px 0px 15px;padding:5px;">
+    <tr><td colspan="3"><b>NB: Paypal charges 3% of the fee processed</b></td></tr>
+    <tr><th bgcolor="#335588" style="color: white;">100 Credit</th><th  bgcolor="#335588" style="color: white;">500 Credit</th><th bgcolor="#335588" style="color: white;">1000 Credit</th></tr>
+    
+    <tr><td align="center"><p align="center">Amount in Usd 100</p></td>
+    <td align="center"><p>Amount in Usd 500</p></td>
+    <td align="center"><p>Amount in Usd 1,000</p></td>
+    </tr>
+    <tr>
+    
+    
+    <td>
+    <?php
+    
+    $nvp_str  = "&METHOD=SetExpressCheckout" 
+   . "&RETURNURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=100" //set your Return URL here
+      . "&CANCELURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=100" //set your Cancel URL here
+            . "&PAYMENTREQUEST_0_CURRENCYCODE=USD"
+      . "&PAYMENTREQUEST_0_AMT=5.85"
+   . "&PAYMENTREQUEST_0_ITEMAMT=5"
+   . "&PAYMENTREQUEST_0_TAXAMT=0.85"
+   . "&PAYMENTREQUEST_0_DESC=Credit"
+   . "&PAYMENTREQUEST_0_PAYMENTACTION=Sale"
+   //. "&L_PAYMENTREQUEST_0_ITEMCATEGORY0=Digital"
+   //. "&L_PAYMENTREQUEST_0_ITEMCATEGORY1=Digital"
+   . "&L_PAYMENTREQUEST_0_NAME0=100 Credit"
+   //. "&L_PAYMENTREQUEST_0_NAME1=All About Cats"
+   . "&L_PAYMENTREQUEST_0_NUMBER0=101"
+   //. "&L_PAYMENTREQUEST_0_NUMBER1=102"
+   . "&L_PAYMENTREQUEST_0_QTY0=1"
+   //. "&L_PAYMENTREQUEST_0_QTY1=1"
+   . "&L_PAYMENTREQUEST_0_TAXAMT0=0.85"
+   //. "&L_PAYMENTREQUEST_0_TAXAMT1=50"
+   . "&L_PAYMENTREQUEST_0_AMT0=5"
+   //. "&L_PAYMENTREQUEST_0_AMT1=100"
+   . "&L_PAYMENTREQUEST_0_DESC0=100 Credit";
+   //. "&L_PAYMENTREQUEST_0_DESC1=Download";
+   
+//combine the two strings and make the API Call
+$req_str = $cred_str . $nvp_str;
+$response = PPHttpPost($ENDPOINT, $req_str);
+//check Response
+if($response['ACK'] == "Success" || $response['ACK'] == "SuccessWithWarning")
+{
+//setup redirect URL
+$redirect_url = $REDIRECTURL . urldecode($response['TOKEN']);
+}
+else if($response['ACK'] == "Failure" || $response['ACK'] == "FailureWithWarning")
+{
+echo "The API Call Failed";
+print_r($response);
+} 
+    
+     ?>
+ <?php echo "<a href=" . $redirect_url . " id='submitBtn'><img src='https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif' border='0' /></a>"; 
+        //echo "<br /><a href=buy_mpesa.php?value=100><img src=http://www.custompckenya.com/impalapay_facebook/images/mpesa.jpg width=100 height=30></a>";
+ ?>
+ 
+</td>
+
+
+
+
+    <td><?php
+    $nvp_str  = "&METHOD=SetExpressCheckout"
+   . "&RETURNURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=500" //set your Return URL here
+      . "&CANCELURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=500" //set your Cancel URL here
+            . "&PAYMENTREQUEST_0_CURRENCYCODE=USD"
+      . "&PAYMENTREQUEST_0_AMT=500"
+   . "&PAYMENTREQUEST_0_ITEMAMT=500"
+   . "&PAYMENTREQUEST_0_TAXAMT=0"
+   . "&PAYMENTREQUEST_0_DESC=Credit"
+   . "&PAYMENTREQUEST_0_PAYMENTACTION=Sale"
+   //. "&L_PAYMENTREQUEST_0_ITEMCATEGORY0=Digital"
+   //. "&L_PAYMENTREQUEST_0_ITEMCATEGORY1=Digital"
+   . "&L_PAYMENTREQUEST_0_NAME0=500 Credit"
+   //. "&L_PAYMENTREQUEST_0_NAME1=All About Cats"
+   . "&L_PAYMENTREQUEST_0_NUMBER0=101"
+   //. "&L_PAYMENTREQUEST_0_NUMBER1=102"
+   . "&L_PAYMENTREQUEST_0_QTY0=1"
+   //. "&L_PAYMENTREQUEST_0_QTY1=1"
+   . "&L_PAYMENTREQUEST_0_TAXAMT0=0"
+   //. "&L_PAYMENTREQUEST_0_TAXAMT1=50"
+   . "&L_PAYMENTREQUEST_0_AMT0=500"
+   //. "&L_PAYMENTREQUEST_0_AMT1=100"
+   . "&L_PAYMENTREQUEST_0_DESC0=500 Credit";
+   //. "&L_PAYMENTREQUEST_0_DESC1=Download";
+   
+//combine the two strings and make the API Call
+$req_str = $cred_str . $nvp_str;
+$response = PPHttpPost($ENDPOINT, $req_str);
+//check Response
+if($response['ACK'] == "Success" || $response['ACK'] == "SuccessWithWarning")
+{
+//setup redirect URL
+$redirect_url = $REDIRECTURL . urldecode($response['TOKEN']);
+}
+else if($response['ACK'] == "Failure" || $response['ACK'] == "FailureWithWarning")
+{
+echo "The API Call Failed";
+print_r($response);
+} 
+    
+     ?>
+ <?php echo "<a href=" . $redirect_url . " id='submitBtn'><img src='https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif' border='0' /></a>"; 
+        //echo "<br /><a href=buy_mpesa.php?value=500><img src=http://www.custompckenya.com/impalapay_facebook/images/mpesa.jpg width=100 height=30></a>";
+ ?>
+</td>
+    <td><?php
+    $nvp_str  = "&METHOD=SetExpressCheckout"
+   . "&RETURNURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=1000" //set your Return URL here
+      . "&CANCELURL=http://apps.facebook.com/impalapay/buy_credit.php?buy=1000" //set your Cancel URL here
+            . "&PAYMENTREQUEST_0_CURRENCYCODE=USD"
+      . "&PAYMENTREQUEST_0_AMT=1000"
+   . "&PAYMENTREQUEST_0_ITEMAMT=1000"
+   . "&PAYMENTREQUEST_0_TAXAMT=0"
+   . "&PAYMENTREQUEST_0_DESC=Credit"
+   . "&PAYMENTREQUEST_0_PAYMENTACTION=Sale"
+   //. "&L_PAYMENTREQUEST_0_ITEMCATEGORY0=Digital"
+   //. "&L_PAYMENTREQUEST_0_ITEMCATEGORY1=Digital"
+   . "&L_PAYMENTREQUEST_0_NAME0=1000 Credit"
+   //. "&L_PAYMENTREQUEST_0_NAME1=All About Cats"
+   . "&L_PAYMENTREQUEST_0_NUMBER0=101"
+   //. "&L_PAYMENTREQUEST_0_NUMBER1=102"
+   . "&L_PAYMENTREQUEST_0_QTY0=1"
+   //. "&L_PAYMENTREQUEST_0_QTY1=1"
+   . "&L_PAYMENTREQUEST_0_TAXAMT0=0"
+   //. "&L_PAYMENTREQUEST_0_TAXAMT1=50"
+   . "&L_PAYMENTREQUEST_0_AMT0=1000"
+   //. "&L_PAYMENTREQUEST_0_AMT1=100"
+   . "&L_PAYMENTREQUEST_0_DESC0=1000 Credit";
+   //. "&L_PAYMENTREQUEST_0_DESC1=Download";
+   
+//combine the two strings and make the API Call
+$req_str = $cred_str . $nvp_str;
+$response = PPHttpPost($ENDPOINT, $req_str);
+//check Response
+if($response['ACK'] == "Success" || $response['ACK'] == "SuccessWithWarning")
+{
+//setup redirect URL
+$redirect_url = $REDIRECTURL . urldecode($response['TOKEN']);
+}
+else if($response['ACK'] == "Failure" || $response['ACK'] == "FailureWithWarning")
+{
+echo "The API Call Failed";
+print_r($response);
+} 
+    
+     ?>
+ <?php echo "<a href=" . $redirect_url . " id='submitBtn'><img src='https://www.paypal.com/en_US/i/btn/btn_dg_pay_w_paypal.gif' border='0' /></a>"; 
+        //echo "<br /><a href=buy_mpesa.php?value=1000><img src=http://www.custompckenya.com/impalapay_facebook/images/mpesa.jpg width=100 height=30></a>";
+ ?>
+</td>
+       
+    </tr>
+    <tr>
+    <td><a href=buy_mpesa.php?value=100><img src=http://www.custompckenya.com/impalapay_facebook/images/mpesa.jpg width=100 height=30></a></td>
+    <td><a href=buy_mpesa.php?value=500><img src=http://www.custompckenya.com/impalapay_facebook/images/mpesa.jpg width=100 height=30></a></td>
+    <td><a href=buy_mpesa.php?value=1000><img src=http://www.custompckenya.com/impalapay_facebook/images/mpesa.jpg width=100 height=30></a></td>
+    </tr>
+    </table>
+    </div>
+    <?php
+}
+function display_account_info($fb_id,$username){
+    $result_set=getAccount($fb_id);
+    $balance=mysql_result($result_set,0,"amount");
+    $account_id=mysql_result($result_set,0,"id");
+    $transactions=get_transactions($account_id);
+    //$username=$facebook->api("/{$fb_id}");
+    echo "<div class=showstatem>";
+    echo "<div style='width:410px;margin:15px 0px 0px 30px;background:#eceae7;padding:5px;font-weight:bold;'> Balance <span style='float:right;'>$ {$balance}</span> </div>";
+    echo "<table border=1 style='margin:5px 0px 0px 30px;padding:5px;'><tr style='border:1px solid blue'><th bgcolor='#335588' style='color: white;'>Account holder</th><th  bgcolor='#335588' style='color: white;'>Transaction type</th><th bgcolor='#335588' style='color: white;'>Amount</th><th bgcolor='#335588' style='color: white;'>Balance</th><th  bgcolor='#335588' style='color: white;'>Last transaction</th>";
+    if(mysql_numrows($transactions)>0){
+        while($trans=mysql_fetch_array($transactions)){
+            echo "<tr><td>{$username["name"]}</td><td>";
+                if($trans["transaction"]=="w"){
+                 echo "Withdrawal";
+                }elseif($trans["transaction"]=="s"){
+                    echo "Send";
+                }elseif($trans["transaction"]=="d"){
+                    echo "Deposit";
+                }elseif($trans["transaction"]=="r"){
+                    echo "Received";
+                
+                }elseif($trans["transaction"]=="a"){
+                    echo "Airtime";
+                }
+                
+            echo "</td><td>$ {$trans["amount"]}</td><td>$ {$trans["balance"]}</td><td>".$trans["time"]."</td></tr>";
+        }
+    }else{
+        echo "<tr><td colspan=5>You have never transacted</td></tr>";
+    }
+    
+    echo "</table></div>";
+}
+function display_invite_friends(){
+    ?>
+        <fb:fbml>
+           <fb:request-form method='POST' invite=true
+            type='My Great Canvas Application'
+            content='Would you like to join me in this great application?'>
+            <fb:multi-friend-selector cols=3
+             actiontext="Invite your friends to join you in this application"
+            />
+            </fb:request-form>
+           </fb:fbml>
+    <?php
+}
+?>

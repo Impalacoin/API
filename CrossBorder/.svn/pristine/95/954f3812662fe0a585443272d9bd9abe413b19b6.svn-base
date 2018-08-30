@@ -1,0 +1,37 @@
+﻿Imports OnBarcode.Barcode
+Public Class frmPrint
+
+    Private Sub Panel1_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Private Sub frmPrint_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Dim barcode As OnBarcode.Barcode.Linear
+        ' Create linear barcode object
+        barcode = New OnBarcode.Barcode.Linear()
+        ' Set barcode symbology type to Code-39
+        barcode.Type = OnBarcode.Barcode.BarcodeType.CODE39
+        ' Set barcode data to encode
+        barcode.Data = TextBox8.Text ' "0123456789"
+        ' Set barcode bar width (X    dimension) in pixel
+        barcode.X = 1
+        ' Set barcode bar height (Y dimension) in pixel
+        barcode.Y = 60
+        ' Draw & print generated barcode to png image file
+        PictureBox1.Image = barcode.drawBarcode()
+
+        '--------------------------------------------------------
+
+        'Dim qrCode As OnBarcode.Barcode.QRCode
+        '' Create QRCode object
+        'qrCode = New OnBarcode.Barcode.QRCode()
+        '' Set QR Code data to encode
+        'qrCode.Data = "VB.NET QRCode"
+        '' Set QRCode data mode (QR-Code Barcode Settings)
+        'qrCode.DataMode = OnBarcode.Barcode.QRCodeDataMode.Auto
+        '' Draw & print generated QR Code to jpeg image file
+        'qrCode.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg
+        'qrCode.drawBarcode("C://vbnet-qrcode.jpg")
+
+    End Sub
+End Class

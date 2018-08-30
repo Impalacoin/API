@@ -1,0 +1,438 @@
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class Form1
+    Inherits System.Windows.Forms.Form
+
+    'Form overrides dispose to clean up the component list.
+    <System.Diagnostics.DebuggerNonUserCode()> _
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.  
+    'Do not modify it using the code editor.
+    <System.Diagnostics.DebuggerStepThrough()> _
+    Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Card Data Capture", 0, 0)
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Card Process Management", 2, 12, New System.Windows.Forms.TreeNode() {TreeNode1})
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("New Card Request File", 14)
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("Pull New Cards Request from Host System", 15)
+        Dim ListViewItem3 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("Card Pin Set Track", 22)
+        Dim ListViewItem4 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("Card Re-issue", 6)
+        Dim ListViewItem5 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem("Card Pin Reset Track", 20)
+        Me.TreeView1 = New System.Windows.Forms.TreeView()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.GroupBox1.SuspendLayout()
+        Me.SuspendLayout()
+        '
+        'TreeView1
+        '
+        Me.TreeView1.BackColor = System.Drawing.Color.White
+        Me.TreeView1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TreeView1.ImageIndex = 18
+        Me.TreeView1.ImageList = Me.ImageList1
+        Me.TreeView1.ImeMode = System.Windows.Forms.ImeMode.[On]
+        Me.TreeView1.Location = New System.Drawing.Point(0, 27)
+        Me.TreeView1.Name = "TreeView1"
+        TreeNode1.ImageIndex = 0
+        TreeNode1.Name = "Documentation"
+        TreeNode1.SelectedImageIndex = 0
+        TreeNode1.Text = "Card Data Capture"
+        TreeNode2.BackColor = System.Drawing.Color.White
+        TreeNode2.ImageIndex = 2
+        TreeNode2.Name = "Node0"
+        TreeNode2.SelectedImageIndex = 12
+        TreeNode2.StateImageKey = "(none)"
+        TreeNode2.Text = "Card Process Management"
+        Me.TreeView1.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode2})
+        Me.TreeView1.SelectedImageIndex = 12
+        Me.TreeView1.ShowNodeToolTips = True
+        Me.TreeView1.Size = New System.Drawing.Size(242, 414)
+        Me.TreeView1.StateImageList = Me.ImageList1
+        Me.TreeView1.TabIndex = 1
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageList1.Images.SetKeyName(0, "FORM.ICO")
+        Me.ImageList1.Images.SetKeyName(1, "BOOKS01.ICO")
+        Me.ImageList1.Images.SetKeyName(2, "CLSDFOLD.ICO")
+        Me.ImageList1.Images.SetKeyName(3, "NOTE12.ICO")
+        Me.ImageList1.Images.SetKeyName(4, "NOTE06.ICO")
+        Me.ImageList1.Images.SetKeyName(5, "NOTE07.ICO")
+        Me.ImageList1.Images.SetKeyName(6, "NOTE08.ICO")
+        Me.ImageList1.Images.SetKeyName(7, "NOTE09.ICO")
+        Me.ImageList1.Images.SetKeyName(8, "NOTE10.ICO")
+        Me.ImageList1.Images.SetKeyName(9, "NOTE10B.ICO")
+        Me.ImageList1.Images.SetKeyName(10, "NOTE10C.ICO")
+        Me.ImageList1.Images.SetKeyName(11, "NOTE11.ICO")
+        Me.ImageList1.Images.SetKeyName(12, "OPENFOLD.ICO")
+        Me.ImageList1.Images.SetKeyName(13, "PENS01.ICO")
+        Me.ImageList1.Images.SetKeyName(14, "VIEW.ICO")
+        Me.ImageList1.Images.SetKeyName(15, "POOL.ICO")
+        Me.ImageList1.Images.SetKeyName(16, "PENS03.ICO")
+        Me.ImageList1.Images.SetKeyName(17, "TABLE.ICO")
+        Me.ImageList1.Images.SetKeyName(18, "HOUSE.ICO")
+        Me.ImageList1.Images.SetKeyName(19, "SCDRESPL.ICO")
+        Me.ImageList1.Images.SetKeyName(20, "Application.ico")
+        Me.ImageList1.Images.SetKeyName(21, "config.ico")
+        Me.ImageList1.Images.SetKeyName(22, "import.ico")
+        Me.ImageList1.Images.SetKeyName(23, "snapshot.ico")
+        Me.ImageList1.Images.SetKeyName(24, "systeminfo.ico")
+        Me.ImageList1.Images.SetKeyName(25, "TRANSFRM.ICO")
+        Me.ImageList1.Images.SetKeyName(26, "LIGHTON.ICO")
+        Me.ImageList1.Images.SetKeyName(27, "LITENING.ICO")
+        Me.ImageList1.Images.SetKeyName(28, "imageres.dll_I00b2_0409.ico")
+        Me.ImageList1.Images.SetKeyName(29, "netshell.dll_I0643_0409.ico")
+        Me.ImageList1.Images.SetKeyName(30, "UIHub.dll_I0516_0409.ico")
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label2)
+        Me.GroupBox1.Controls.Add(Me.Label1)
+        Me.GroupBox1.Controls.Add(Me.ListView1)
+        Me.GroupBox1.Location = New System.Drawing.Point(248, 21)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(613, 417)
+        Me.GroupBox1.TabIndex = 3
+        Me.GroupBox1.TabStop = False
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.Label2.Location = New System.Drawing.Point(21, 287)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(264, 22)
+        Me.Label2.TabIndex = 16
+        Me.Label2.Text = "Property Owner:   Business Date:     "
+        Me.Label2.Visible = False
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 21.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.Label1.Location = New System.Drawing.Point(21, 309)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(104, 35)
+        Me.Label1.TabIndex = 15
+        Me.Label1.Text = "Label1"
+        Me.Label1.Visible = False
+        '
+        'ListView1
+        '
+        Me.ListView1.Activation = System.Windows.Forms.ItemActivation.OneClick
+        Me.ListView1.Alignment = System.Windows.Forms.ListViewAlignment.[Default]
+        Me.ListView1.AllowColumnReorder = True
+        Me.ListView1.BackColor = System.Drawing.SystemColors.Info
+        Me.ListView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ListView1.HoverSelection = True
+        ListViewItem1.StateImageIndex = 0
+        ListViewItem2.StateImageIndex = 0
+        Me.ListView1.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1, ListViewItem2, ListViewItem3, ListViewItem4, ListViewItem5})
+        Me.ListView1.LabelEdit = True
+        Me.ListView1.LargeImageList = Me.ImageList1
+        Me.ListView1.Location = New System.Drawing.Point(3, 16)
+        Me.ListView1.MultiSelect = False
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(607, 398)
+        Me.ListView1.SmallImageList = Me.ImageList1
+        Me.ListView1.TabIndex = 14
+        Me.ListView1.TileSize = New System.Drawing.Size(244, 45)
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Tile
+        Me.ListView1.Visible = False
+        '
+        'Form1
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.Color.White
+        Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.ClientSize = New System.Drawing.Size(873, 458)
+        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.TreeView1)
+        Me.HelpButton = True
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Name = "Form1"
+        Me.Text = "EmServ Smart Properties"
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        Me.ResumeLayout(False)
+
+    End Sub
+    Friend WithEvents TreeView1 As System.Windows.Forms.TreeView
+    Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
+
+    Private Sub Form1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        TreeView1.Height = Me.Height - 85
+        GroupBox1.Width = Me.Width - TreeView1.Width - 30
+        GroupBox1.Height = TreeView1.Height + 8
+       
+        'GroupBox3.Text = ""
+        'GroupBox2.Text = ""
+        'GroupBox4.Text = ""
+        'GroupBox5.Text = ""
+        'GroupBox6.Text = ""
+        'GroupBox7.Text = ""
+        'GroupBox8.Text = ""
+        'GroupBox9.Text = ""
+
+
+        ''Button 1 Menus
+        ''---skip
+
+        ''Button2 Menus
+
+        'UserButton1.Top = 7
+        'UserButton1.Label1.Text = "Rent Payments"
+        'UserButton1.Left = 1
+        'UserButton2.Top = UserButton1.Top + UserButton1.Height + 0
+        'UserButton2.Label1.Text = "Close Tenant Account"
+        'UserButton2.Left = 1
+        'UserButton3.Top = UserButton2.Top + UserButton1.Height + 0
+        'UserButton3.Label1.Text = "Adjust Monthly Rent"
+        'UserButton3.Left = 1
+        'UserButton4.Top = UserButton3.Top + UserButton1.Height + 0
+        'UserButton4.Label1.Text = "Enquiries"
+        'UserButton4.Left = 1
+
+
+
+        'GroupBox3.Left = Button2.Left
+        'GroupBox3.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox3.Height = (4 * UserButton1.Height) + 10
+
+        ''Button 3 Menus
+
+
+        'UserButton5.Top = 7
+        'UserButton5.Label1.Text = "New Deposit Account"
+        'UserButton5.Left = 1
+        'UserButton6.Top = UserButton5.Top + UserButton5.Height + 0
+        'UserButton6.Label1.Text = "Rent Deposits"
+        'UserButton6.Left = 1
+        'UserButton7.Top = UserButton6.Top + UserButton5.Height + 0
+        'UserButton7.Label1.Text = "Electricity Deposits"
+        'UserButton7.Left = 1
+        'UserButton8.Top = UserButton7.Top + UserButton5.Height + 0
+        'UserButton8.Label1.Text = "Water Deposits"
+        'UserButton8.Left = 1
+        ''UserButton9.Top = UserButton8.Top + UserButton5.Height + 0
+        ''UserButton9.Label1.Text = "Deposit Claims"
+        ''UserButton9.Left = 1
+        'GroupBox4.Left = Button3.Left
+        'GroupBox4.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox4.Height = (4 * UserButton5.Height) + 10
+        'GroupBox4.Width = GroupBox3.Width
+
+
+        ''Button 4 Menus
+
+        'UserButton10.Top = 7
+        'UserButton10.Label1.Text = "Repairs && Maintenance"
+        'UserButton10.Left = 1
+        'UserButton11.Top = UserButton10.Top + UserButton10.Height + 0
+        'UserButton11.Label1.Text = "Recurrent Bills"
+        'UserButton11.Left = 1
+        'UserButton12.Top = UserButton11.Top + UserButton10.Height + 0
+        'UserButton12.Label1.Text = "Land Rates"
+        'UserButton12.Left = 1
+
+        'GroupBox5.Left = Button4.Left
+        'GroupBox5.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox5.Height = (3 * UserButton10.Height) + 10
+        'GroupBox5.Width = GroupBox3.Width
+
+
+
+        ''Button 5 Menus
+        'UserButton13.Top = 7
+        'UserButton13.Width = UserButton1.Width
+        'UserButton13.Label1.Text = "Loan Maintenance"
+        'UserButton13.Left = 1
+        'UserButton14.Top = UserButton13.Top + UserButton13.Height + 0
+        'UserButton14.Label1.Text = "Morgage"
+        'UserButton14.Left = 1
+        'UserButton14.Width = UserButton1.Width
+        'UserButton15.Top = UserButton14.Top + UserButton13.Height + 0
+        'UserButton15.Label1.Text = "Project Development"
+        'UserButton15.Left = 1
+        'UserButton15.Width = UserButton1.Width
+        'UserButton16.Top = UserButton15.Top + UserButton13.Height + 0
+        'UserButton16.Label1.Text = "Project Reports"
+        'UserButton16.Left = 1
+        'UserButton16.Width = UserButton1.Width
+
+        'GroupBox6.Left = Button5.Left
+        'GroupBox6.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox6.Height = (4 * UserButton13.Height) + 10
+        'GroupBox6.Width = GroupBox3.Width
+
+
+
+        ''Button 6 Menus 
+        'UserButton17.Top = 7
+        'UserButton17.Label1.Text = "Cash Book"
+        'UserButton17.Left = 1
+        'UserButton18.Top = UserButton17.Top + UserButton17.Height + 0
+        'UserButton18.Label1.Text = "Bank Accounts"
+        'UserButton18.Left = 1
+
+        'UserButton19.Top = UserButton18.Top + UserButton17.Height + 0
+        'UserButton19.Label1.Text = "Cash Vouchers"
+        'UserButton19.Left = 1
+
+        'GroupBox7.Left = Button6.Left
+        'GroupBox7.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox7.Height = (3 * UserButton17.Height) + 10
+        'GroupBox7.Width = GroupBox3.Width
+
+
+        ''Button 1 Menu
+
+        'UserButton20.Top = 7
+        'UserButton20.Label1.Text = "Houses && Tenants"
+        'UserButton20.Left = 1
+        'UserButton20.Width = UserButton13.Width
+        'UserButton21.Top = UserButton20.Top + UserButton21.Height + 0
+        'UserButton21.Label1.Text = "Other Properties"
+        'UserButton21.Left = 1
+        'UserButton21.Width = UserButton13.Width
+        'GroupBox11.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox11.Width = GroupBox3.Width
+        'GroupBox11.Height = (2 * UserButton1.Height) + 10
+        'GroupBox11.Left = Button1.Left
+
+        ''Button 7 Menus
+
+        'UserButton22.Top = 7
+        'UserButton22.Width = UserButton1.Width
+        'UserButton22.Label1.Text = "Staff Accounts"
+        'UserButton22.Left = 1
+        'UserButton23.Top = UserButton22.Top + UserButton13.Height + 0
+        'UserButton23.Label1.Text = "Duty Rota"
+        'UserButton23.Left = 1
+        'UserButton23.Width = UserButton1.Width
+        'UserButton24.Top = UserButton23.Top + UserButton13.Height + 0
+        'UserButton24.Label1.Text = "Administration"
+        'UserButton24.Left = 1
+        'UserButton24.Width = UserButton1.Width
+        'UserButton25.Top = UserButton24.Top + UserButton13.Height + 0
+        'UserButton25.Label1.Text = "Budget Analysis"
+        'UserButton25.Left = 1
+        'UserButton25.Width = UserButton1.Width
+        'UserButton26.Top = UserButton25.Top + UserButton13.Height + 0
+        'UserButton26.Label1.Text = "Payroll Reports"
+        'UserButton26.Left = 1
+        'UserButton26.Width = UserButton1.Width
+        'GroupBox8.Left = Button7.Left
+        'GroupBox8.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox8.Width = GroupBox3.Width
+        'GroupBox8.Height = (5 * UserButton1.Height) + 10
+
+
+
+        ''Button 8 Menus
+        'UserButton27.Top = 7
+        'UserButton27.Width = UserButton1.Width
+        'UserButton27.Label1.Text = "Month End Process"
+        'UserButton27.Left = 1
+        'UserButton28.Top = UserButton27.Top + UserButton13.Height + 0
+        'UserButton28.Label1.Text = "Year End Process"
+        'UserButton28.Left = 1
+        'UserButton28.Width = UserButton1.Width
+        'UserButton29.Top = UserButton28.Top + UserButton13.Height + 0
+        'UserButton29.Label1.Text = "System Parameters"
+        'UserButton29.Left = 1
+        'UserButton29.Width = UserButton1.Width
+        'GroupBox9.Left = Button8.Left - 100
+        'GroupBox9.Top = GroupBox2.Top + Button1.Height - 5
+        'GroupBox9.Width = GroupBox3.Width
+        'GroupBox9.Height = (3 * UserButton1.Height) + 10
+
+
+
+
+
+
+        'ICONs
+       
+        'PictureBox9.Left = PictureBox8.Width + PictureBox8.Left
+
+
+    End Sub
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+
+    Private Sub TreeView1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TreeView1.DoubleClick
+        If TreeView1.SelectedNode.Text = "Data Transformation" Then
+            frmDataConfig.Show()
+            frmDataConfig.Left = Me.GroupBox1.Left
+            frmDataConfig.Top = Me.GroupBox1.Top + 20
+            frmDataConfig.Width = Me.GroupBox1.Width
+            frmDataConfig.Height = Me.TreeView1.Height
+        ElseIf TreeView1.SelectedNode.Text = "Reconciliation Entities" Then
+            frmReconEntity.Show()
+            frmReconEntity.Left = Me.GroupBox1.Left
+            frmReconEntity.Top = Me.GroupBox1.Top + 20
+            frmReconEntity.Height = Me.TreeView1.Height
+            frmReconEntity.Width = Me.GroupBox1.Width
+
+        ElseIf TreeView1.SelectedNode.ImageIndex = 16 Then
+            'Label1.Text = "ACTIVE PROPERTY:  " & TreeView1.SelectedNode.Text
+
+            'OWNER = TreeView1.SelectedNode.Text
+
+            'Label2.Text = "SMART PROPERTY:   BUSINESS DATE: " & Today
+            'ListView1.Visible = False
+            'ListView2.Visible = True
+            'Label1.Visible = True
+            'Label2.Visible = True
+
+            'AgencySelected = 1
+
+        ElseIf TreeView1.SelectedNode.ImageIndex = 18 Then
+
+            AgencySelected = 0
+
+            Label1.Text = "ACTIVE SERVICE:  " & TreeView1.SelectedNode.Text
+
+            OWNER = TreeView1.SelectedNode.Text
+
+            Label2.Text = "Card Manager:   Business Date: " & Today
+            ListView1.Visible = True
+            'ListView2.Visible = False
+            Label1.Visible = True
+            Label2.Visible = True
+        End If
+
+
+    End Sub
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+
+End Class

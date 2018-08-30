@@ -1,0 +1,257 @@
+-- Schema Name: airteldb2
+-- Username: airtel2
+-- Password: ThejKoyb3 
+
+-- This tables describe the database of the Airtel Gateway.
+
+-- Make sure you have created a Postgres user with the above username, password
+-- and appropriate permissions. For development environments, you can make the 
+-- database user to be a superuser to allow for copying of external files. 
+-- A postgres user with super user priviledges can be created with the following
+-- command:
+-- CREATE USER username WITH SUPERUSER PASSWORD 'password';
+-- Then run the "dbSetup.sh" script in the bin folder of this project.
+
+\c postgres
+
+-- Then execute the following:
+DROP DATABASE IF EXISTS airteldb2; 
+-- To drop a database you can't be logged into it.
+CREATE DATABASE airteldb2;
+
+\c airteldb2
+
+SET datestyle to ISO;
+
+
+-- =========================
+-- 1.Static Reference Data
+-- =========================
+
+-- ----------------
+-- Table country
+-- ----------------
+CREATE TABLE country (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    name text UNIQUE NOT NULL,
+    countrycode text UNIQUE NOT NULL,
+    currency text NOT NULL,
+    currencycode text NOT NULL,
+    airtelnetwork text UNIQUE NOT NULL,
+    countryremitip text UNIQUE,
+    countrybalanceip text UNIQUE
+);
+
+\COPY country(uuid,name,countrycode,currency,currencycode,airtelnetwork,countryremitip,countrybalanceip) FROM '/tmp/Countries.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE country OWNER TO airtel2;
+
+
+
+
+-- ==================================
+-- 2. Account and Session Management
+-- ==================================
+
+-- --------------------
+-- Table accountStatus
+-- --------------------
+CREATE TABLE accountStatus (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    description text UNIQUE NOT NULL
+);
+
+\COPY accountStatus(uuid, description) FROM '/tmp/AccountStatus.csv' WITH DELIMITER AS '|'
+ALTER TABLE accountStatus OWNER TO airtel2;
+
+-- --------------------
+-- Table account
+-- --------------------
+CREATE TABLE account (
+    accountId SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL, 
+    accountStatusUuid text ,
+    firstName text NOT NULL,
+    lastName text,
+    username text NOT NULL,
+    loginPasswd text NOT NULL,
+    apiPasswd text NOT NULL,
+    email text NOT NULL,
+    phone text,
+    creationDate timestamp with time zone NOT NULL DEFAULT now(),
+    UNIQUE (username, email)
+);
+
+\COPY account(uuid, accountStatusUuid, firstName, lastName, username, loginPasswd, apiPasswd, email, phone, creationDate) FROM '/tmp/Accounts.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE account OWNER TO airtel2;
+
+
+-- ----------------
+-- Table sessionlog
+-- ----------------
+CREATE TABLE sessionlog (
+   id SERIAL PRIMARY KEY,
+   sessionUuid text UNIQUE NOT NULL, 
+   accountUuid text REFERENCES account(uuid),
+   creationTime timestamp with time zone NOT NULL DEFAULT now(),
+   valid boolean
+   );
+
+\COPY sessionlog(sessionuuid,accountuuid,creationtime,valid) FROM '/tmp/Sessionlogs.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE sessionlog OWNER TO airtel2;
+
+
+-- ----------------
+-- Table Client Urls
+-- ----------------
+CREATE TABLE clienturl (
+   id SERIAL PRIMARY KEY,
+   uuid text UNIQUE NOT NULL,
+   accountUuid text REFERENCES account(uuid),
+   url  text NOT NULL,
+   dateActive timestamp with time zone NOT NULL DEFAULT now(),
+   dateInactive timestamp with time zone,
+   active boolean
+);
+
+\COPY clienturl(uuid, accountUuid, url, dateActive, dateInactive, active) FROM '/tmp/ClientUrls.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE clienturl OWNER TO airtel2;
+
+
+-- ------------------------
+-- Table clientBalance
+-- ------------------------
+CREATE TABLE clientbalance (
+    balanceId SERIAL PRIMARY KEY,
+    uuid text NOT NULL,
+    accountUuid text REFERENCES account(uuid),
+    balance double precision NOT NULL CHECK (balance >= 0)
+);
+
+\COPY clientbalance(uuid,accountUuid,balance) FROM '/tmp/ClientBalance.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE clientbalance OWNER TO airtel2;
+
+
+-- ---------------------
+-- Table Topup
+-- ---------------------
+CREATE TABLE topup (
+    topupId SERIAL PRIMARY KEY,
+    uuid text NOT NULL,
+    accountUuid text REFERENCES account(uuid),
+    amount double precision,
+    topupTime timestamp NOT NULL DEFAULT now()
+);
+
+\COPY topup(uuid, accountUuid,amount,topupTime) FROM '/tmp/Topups.csv'  WITH DELIMITER AS '|' CSV HEADER 
+ALTER TABLE topup OWNER TO airtel2;
+
+-- ------------------------
+-- Table BalanceByCountry
+-- ------------------------
+CREATE TABLE balancebycountry (
+    balanceId SERIAL PRIMARY KEY,
+    uuid text NOT NULL,
+    countryUuid text  REFERENCES country(uuid),
+    accountUuid text REFERENCES account(uuid),
+    balance double precision NOT NULL CHECK (balance >= 0)
+);
+
+\COPY balancebycountry(uuid,countryuuid,accountUuid,balance) FROM '/tmp/BalancebyCountry.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE balancebycountry OWNER TO airtel2;
+
+-- ---------------------
+-- TopupByCountry
+-- ---------------------
+CREATE TABLE topupbycountry (
+    topupId SERIAL PRIMARY KEY,
+    uuid text NOT NULL,
+    accountUuid text REFERENCES account(uuid),
+    countryUuid text  REFERENCES country(uuid),
+    amount double precision,
+    topupTime timestamp NOT NULL DEFAULT now()
+);
+
+\COPY topupbycountry(uuid,accountUuid,countryuuid,amount,topupTime) FROM '/tmp/Topupsbycountry.csv'  WITH DELIMITER AS '|' CSV HEADER 
+ALTER TABLE topupbycountry OWNER TO airtel2;
+
+-- ==================================
+-- 3. Transaction Management
+-- ==================================
+-- ------------------
+-- Table transactionStatus
+-- ------------------
+
+CREATE TABLE transactionStatus (
+    transactionStatusId SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    status text UNIQUE,
+    description text 
+);
+
+\COPY transactionstatus(uuid, status, description) FROM '/tmp/TransactionStatus.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE transactionStatus OWNER TO airtel2;
+
+-- --------------------
+-- Table transaction
+-- --------------------
+CREATE TABLE transaction (
+    id SERIAL PRIMARY KEY,
+    uuid text  NOT NULL, 
+    accountUuid text REFERENCES account(uuid),
+    sourceCountryCode text  NOT NULL,
+    senderName text NOT NULL,
+    recipientMobile text NOT NULL,
+    amount double precision NOT NULL,
+    currencyCode text NOT NULL,
+    recipientCountryUuid text  REFERENCES country(uuid),
+    senderToken text NOT NULL,
+    clientTime text NOT NULL,
+    serverTime timestamp with time zone NOT NULL,
+    transactionStatusUuid text  REFERENCES transactionStatus(uuid),
+    referenceNumber text
+);
+
+\COPY transaction(uuid,accountUuid,sourcecountrycode,sendername,recipientmobile,amount,currencycode,recipientcountryuuid,sendertoken,clienttime,servertime,referencenumber,transactionstatusuuid) FROM '/tmp/Transactions.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE transaction OWNER TO airtel2;
+
+
+
+
+-- ==================================
+-- 3. Audit Trail
+-- ==================================
+
+-- --------------------
+-- Table logincount
+-- --------------------
+CREATE TABLE logincount (
+    logincountId SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    accountUuid text REFERENCES account(uuid),
+    countlogin int 
+);
+
+\COPY logincount(uuid, accountUuid, countlogin) FROM '/tmp/logincount.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE logincount OWNER TO airtel2;
+
+
+-- ==================================
+-- 4. Simulation
+-- ==================================
+
+-- --------------------
+-- Table Error_simulation
+-- --------------------
+CREATE TABLE errorsimulation (
+    id SERIAL PRIMARY KEY,
+    uuid text UNIQUE NOT NULL,
+    mobilenumber text UNIQUE NOT NULL,
+    errorcode text UNIQUE NOT NULL,
+    errorname text
+   
+);
+
+\COPY errorsimulation(uuid, mobilenumber, errorcode,errorname) FROM '/tmp/errorsimulation.csv' WITH DELIMITER AS '|' CSV HEADER
+ALTER TABLE errorsimulation OWNER TO airtel2;

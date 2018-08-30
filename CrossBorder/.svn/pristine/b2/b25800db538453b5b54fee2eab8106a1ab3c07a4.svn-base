@@ -1,0 +1,112 @@
+<?php
+include("headermenu.php");
+?>
+
+</div>
+</div>
+</div>
+
+
+<div class="container">
+
+                <div class="row-fluid">
+               
+ <div class="span12">
+                    
+                        <div class="hero-unit-3">
+                        
+<?php
+
+if(isset($_GET["page"])){$page = $_GET["page"];} else{$page=1;};
+$start_from=($page-1) * 20;
+
+$mail=$user_row['email'];
+$query  = "SELECT * FROM transactions WHERE merchant_mail='" . $mail."' ORDER BY trans_id DESC LIMIT $start_from,20";
+$result = mysql_query($query);
+$count=mysql_num_rows($result);
+if($count > 0) {
+echo '<div align="left">
+
+<table width="" height="" border="0" cellspacing="1" cellpadding="2" class="table table-striped table-bordered">
+  <tr>
+    <td style="border: 0px;"><form name="form1" method="post" action="">
+<table width="" border="0" cellpadding="2" cellspacing="1" bgcolor="#CCCCCC" class="table table-striped table-bordered">
+	<tr>
+    <td align="center" style="background: #333; border: 1px solid #331; color:#fff; font-weight: bold; width: 150px;">Options</td>
+	<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>amount 	credited</strong></td>
+	<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>item 		    name</strong></td>
+	<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold; width: 166px;"><strong> 	    Transaction Date</strong></td>
+	<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>Payer 	    Email</strong></td>
+  </tr>';
+   while($rows=mysql_fetch_array($result)){
+	echo '<tr>';
+	echo '<td align="center" bgcolor="#FFFFFF"><center><input style="width: 20px;" name="checkbox[]" type="checkbox" 		     id="checkbox[]" value="' .$rows['trans_id'] .'"></center></td>';
+
+
+$message= $rows['amount']; 
+$msg = $message; 
+if($rows['status']=='unread'){
+echo '<td align="center" bgcolor="#FFFFFF"><a href="msg_stat.php?id='.$rows['trans_id'].'" style="text-decoration:none; color: #111; font-weight: bold;">' . $msg .'&nbsp;&nbsp;unread</a></td>';
+}
+if($rows['status']=='read'){
+echo '<td align="center" bgcolor="#FFFFFF"><a href="msg_stat.php?id='.$rows['trans_id'].'" style="text-decoration:none; color: #777;">' . $msg .'&nbsp;read</a></td>';
+}
+
+ echo '<td align="center" bgcolor="#FFFFFF"><font style="color:#000099;font-size: 15px;">';
+	echo $rows['item_name'];
+	
+ echo '<td align="center" bgcolor="#FFFFFF"><font style="color:#000099;font-size: 15px;">';
+	echo $rows['date'];
+echo '<td align="center" bgcolor="#FFFFFF"><font style="color:#000099;font-size: 15px;">';
+	echo $rows['payee_mail'];
+		
+			echo '</font>';
+	echo '</tr>';
+
+}
+}
+echo '<tr>';
+echo '<td style="border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px;">';
+echo '<div style="width:; margin-top: 40px;"><input name="delete" type="submit" id="delete" class="btn btn-success" value="Delete"></div</td>';
+echo '</tr></form>';
+echo '</table>';
+
+// Check if delete button active, start this
+
+if(isset($_POST['delete'])){
+$checked = $_POST["checkbox"];
+for($i=0; $i < count($checked); $i++) {
+$del_id = $checked[$i];
+$sql = "DELETE FROM transactions WHERE trans_id='$del_id'";
+$result = mysql_query($sql);
+}
+
+// if successful redirect to delete_multiple.php 
+if($result){
+echo "<meta http-equiv=\"refresh\" content=\"0;URL=mail.php\">";
+}
+}
+
+
+?>
+</div>
+ <?php
+$sql="select count(*) FROM transactions WHERE merchant_mail='" . $mail."'";
+$rs_result=mysql_query($sql);
+$row=mysql_fetch_row($rs_result);
+$total_records=$row[0];
+$total_pages=ceil($total_records/20);
+
+for($i=1;$i<=$total_pages;$i++){
+	echo"<a href='mail.php?page=".$i."'>page".$i."&nbsp;</a>";
+};
+?>
+</div>
+</div>
+
+
+
+
+
+
+  

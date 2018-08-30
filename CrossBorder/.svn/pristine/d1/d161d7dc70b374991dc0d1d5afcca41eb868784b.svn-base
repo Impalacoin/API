@@ -1,0 +1,200 @@
+package com.impalapay.airtel.persistence.util;
+
+/**
+ * Test for {@link CountUtils}
+ * <p>
+ * Copyright (c) Shujaa Solutions Ltd., Sep 23, 2013
+ *
+ * @author <a href="mailto:anthonym@shujaa.co.ke">Anthony Wafula</a>
+ * @version %I%, %G%
+ *
+ */
+import static org.junit.Assert.assertEquals;
+
+import com.impalapay.airtel.beans.accountmgmt.Account;
+import com.impalapay.airtel.beans.geolocation.Country;
+import com.impalapay.airtel.beans.transaction.TransactionStatus;
+//import com.impalapay.airtel.util.randomgenerator.PopulateTopup;
+
+
+
+
+
+
+import org.joda.time.DateMidnight;
+import org.joda.time.Hours;
+
+import java.util.Date;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+public class TestCountUtils {
+
+	final String DB_NAME = "airteldb";
+	final String DB_HOST = "localhost"; 
+	final String DB_USERNAME = "airtel"; 
+	final String DB_PASSWD = "LignuAv7";
+	final int DB_PORT = 5432;
+	
+    final String DEMO_ACCOUNT_UUID = "9756f889-811a-4a94-b13d-1c66c7655a7f";
+    final String DEMO_ACCOUNT_UUID2 = "48e249c2-856a-4269-820f-7b72c76b4957";
+    
+    final String ACCOUNT_USERNAME ="demo";
+    
+   // private CountUtils countUtils = new CountUtils(DB_NAME, DB_HOST,
+            //DB_USERNAME, DB_PASSWD, DB_PORT);
+    Account account = new Account();
+    TransactionStatus status = new TransactionStatus();
+   
+    Country country = new Country();
+    
+    private  CountUtils storage;
+
+  /**
+     * Test method for  CountUtils#getAllTransactionCount(com.impalapay.airtel.beans.accountmgmt.Account)
+     * 
+     */
+   
+    @Test
+    @Ignore
+    public void testGetAllTransactionCountString(){
+    	
+    	account.setUuid(DEMO_ACCOUNT_UUID);
+    	
+    	storage = new CountUtils(DB_NAME, DB_HOST, DB_USERNAME, DB_PASSWD, DB_PORT);
+    	System.out.println("transaction count is:" + storage.getTransactionCount(account));
+    }
+    @Test
+    @Ignore
+	public void testAllITransactionCountString() {
+		storage = new CountUtils(DB_NAME, DB_HOST, DB_USERNAME, DB_PASSWD, DB_PORT);
+		
+		System.out.println("transaction count is: " + storage.getAllTransactionCount(ACCOUNT_USERNAME));
+	}
+    
+//    /**
+//     * Test method for {@link CountUtils#getTopupCount(com.impalapay.airtel.beans.accountmgmt.Account, com.impalapay.airtel.beans.topup.TopupStatus)
+//     * }
+//     */
+//    @Test
+//    public void testGetTopupCountAccountTopupStatus() {
+//        int count = 13500;
+//
+//        account.setUuid(PopulateTopup.SHUJAA_SOLUTIONS);
+//        status.setUuid(TopupStatus.ACCEPTED_FOR_DELIVERY);
+//
+//        assertEquals(countUtils.getTopupCount(account, status), count);
+//
+//    }
+//
+//    /**
+//     * Test method for {@link CountUtils#getTopupCount(com.impalapay.airtel.beans.accountmgmt.Account, com.impalapay.airtel.beans.network.Network)
+//     * }
+//     */
+//    @Test
+//    public void testGetTopupCountAccountNetwork() {
+//        int count = 9000;
+//
+//        account.setUuid(PopulateTopup.SHUJAA_SOLUTIONS);
+//        network.setUuid(PopulateTopup.SAFARICOM);
+//
+//        assertEquals(countUtils.getTopupCount(account, network), count);
+//
+//    }
+//
+//    /**
+//     * Test method for {@link CountUtils#getTopupCount(com.impalapay.airtel.beans.accountmgmt.Account, com.impalapay.airtel.beans.network.Network, com.impalapay.airtel.beans.topup.TopupStatus)
+//     * }
+//     */
+//    @Test
+//    public void testGetTopupCountAccountNetworkTopupStatus() {
+//        int count = 4500;
+//
+//        account.setUuid(PopulateTopup.SHUJAA_SOLUTIONS);
+//        network.setUuid(PopulateTopup.SAFARICOM);
+//        status.setUuid(PopulateTopup.ACCEPTED_FOR_DELIVERY);
+//
+//        assertEquals(countUtils.getTopupCount(account, network, status), count);
+//
+//    }
+//
+//    /**
+//     * Test method for {@link CountUtils#getTopupCount(com.impalapay.airtel.beans.accountmgmt.Account, com.impalapay.airtel.beans.network.Network, com.impalapay.airtel.beans.topup.TopupStatus, java.util.Date, java.util.Date)
+//     * }
+//     */
+//    @Test
+//    public void testGetTopupCountAccountNetworkTopupStatusDateDate() {
+//
+//        DateMidnight midnight = new DateMidnight(2013, 6, 17);
+//
+//        Date startTime = new Date(midnight.getMillis());
+//
+//        DateMidnight midnight2 = midnight.plus(Hours.hours(24));
+//        Date endTime = new Date(midnight2.getMillis());
+//
+//        int count = 17;
+//
+//        account.setUuid(PopulateTopup.SHUJAA_SOLUTIONS);
+//        network.setUuid(PopulateTopup.SAFARICOM);
+//        status.setUuid(PopulateTopup.ACCEPTED_FOR_DELIVERY);
+//
+//        assertEquals(countUtils.getTopupCount(account, network, status, startTime, endTime), count);
+//
+//    }
+
+    /**
+     * Test method for  CountUtils#getTopupByUuidCount(com.impalapay.airtel.beans.accountmgmt.Account, java.lang.String)
+     * 
+     */
+    @Test
+    @Ignore
+    public void TestGetTransactionByUuidCount() {
+        String uuid = "61797229-eb8b-4f84-bb15-a0410dc5d33b";
+        account.setUuid(DEMO_ACCOUNT_UUID);
+
+        int expectedSize = storage.getTransactionByUuidCount(account, uuid);
+
+        int actualSize = 1;
+        assertEquals(expectedSize, actualSize);
+    }
+
+    /**
+     * Test method for {@link CountUtils#RecipientPhone(com.impalapay.airtel.beans.accountmgmt.Account, java.lang.String)
+     * }
+     */ 
+    @Test
+    public void TestGetTopupByRecipientPhoneCount() {
+        String phone = "254-715-266-678";
+        account.setUuid(DEMO_ACCOUNT_UUID);
+        
+        storage = new CountUtils(DB_NAME, DB_HOST, DB_USERNAME, DB_PASSWD, DB_PORT);
+        
+        int expectedSize = storage.getTransactionByRecipientmobileCount(account, phone);
+
+        int actualSize = 1;
+        assertEquals(expectedSize, actualSize);
+
+    }
+   
+    
+    /**
+     * Test method for {@link CountUtils#getTopupAmount(com.impalapay.airtel.beans.accountmgmt.Account, com.impalapay.airtel.beans.network.Network, com.impalapay.airtel.beans.topup.TopupStatus) 
+     * }
+    
+    @Test
+    public void TestGetTopupAmount() {
+        
+        account.setUuid(PopulateTopup.SHUJAA_SOLUTIONS);
+        network.setUuid(PopulateTopup.SAFARICOM);
+        status.setUuid(PopulateTopup.TOPUP_SUCCESS);
+
+        int expectedAmount = countUtils.getTopupAmount(account, network, status);
+
+        int actualAmount = 19798519;
+        
+        assertEquals(expectedAmount, actualAmount);
+
+    }
+     */
+}

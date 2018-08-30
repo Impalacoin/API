@@ -1,0 +1,268 @@
+body{
+    font:13px Trebuchet MS, Arial, Helvetica, sans-serif;
+	color:#70757a;  
+    background-image:url('../images/content_ext_img.jpg');
+    background-repeat: repeat;    
+    margin: 0;
+    padding:0;
+}
+#iguruss{    
+    background-image:url('../images/content_top.jpg');
+    background-repeat: repeat-x;
+    padding:0;
+    margin:0px;
+    width:100%;
+    height:150px;
+    
+}
+.kcb-notification
+{
+  color: #FFFFFF;
+  background-color: #4899BE;
+  font-family: Arial, Helvetica, Sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  padding: 5px;
+  margin-bottom: 0;
+  width: auto;  
+  border: 1px solid #3E4A49;
+}
+/*
+    Styling Navigation
+*/
+
+#navDiv{    
+    /*background-image:url('../images/content_top.jpg');
+    background-repeat: repeat-x;*/
+    padding:0;
+    margin:0px;
+    width:100%;
+    
+}
+ul.navigation{
+    list-style-type: none;
+    display:block;
+}
+ul.navigation li{
+    display:inline;
+    float:left;    
+    /*clear:right;*/    
+}
+ul.navigation  a {        
+    background-image:url('../images/nav_backg_img.jpg');
+    background-repeat: repeat-x;
+    font:15px Myriad Pro, Arial, Helvetica, sans-serif;
+    color:#85a6c0;
+    display:inline-block;
+    text-decoration: none;
+    width: 100px;
+    height:30px;
+    padding: 30px 5px 0 10px;
+    /*border-top-right-radius:5em ;*/
+    border-right:1px dotted white;    
+}
+
+ul.navigation  a:hover {        
+    background-image:url('../images/nav_backg_hover_img.jpg');
+    background-repeat: repeat-x;
+    font:15px Myriad Pro, Arial, Helvetica, sans-serif;
+    color:#e1e1e1;
+    display:inline-block;
+    text-decoration: none;
+    width: 100px;
+    height:30px;
+    padding: 30px 5px 0 10px;
+    border-right:1px dotted white;    
+}
+.activePage {        
+    background-image:url('../images/nav_backg_hover_img.jpg');
+    background-repeat: repeat-x;
+    color:#e1e1e1;
+    display:inline-block;
+    text-decoration: none;
+    width: 100px;
+    height:30px;
+    padding: 30px 5px 0 10px;
+    border-right:1px dotted white;    
+}
+/*
+    End of styling Navigation
+*/
+
+/*
+    Designing my form
+*/
+.pushRight{
+    clear:both;
+    margin:10px 0 0 35px;
+    float:left;
+}
+form
+{
+  width: 450px;
+  color: #3E4A49;
+  margin-right: 10px;
+  /*background-color: #FEF7D6;  original*/
+  background-color:#CABFAA;
+  padding: 20px;
+  /*border: 2px solid #4899BE; original*/
+  /*border: 2px solid #75838c;*/
+  border: 2px groove #AAB5CA;
+  font-family: "Trebuchet MS", Arial, Helvetica, Sans-serif;
+  font-size: 0.8em;
+}
+input, select
+{
+  margin: 1em 0 0 0;
+  /*width: 50%; original */
+  width:190px;
+  border: 1px solid #FEF7D6;
+  padding: 2px;
+  /*background: transparent url("../images/field_bg.gif") no-repeat 0 0; Original */
+  background: transparent url("../images/field_bg.gif") repeat-x;
+}
+
+fieldset
+{
+  padding: 0 20px 20px;
+  margin: 0 0 20px;
+  /*border: 1px solid #3E4A49;*/
+  border: 1px solid #75838c;
+  
+}
+legend
+{
+  color: #FFFFFF;
+  background-color: #4899BE;
+  font-family: Arial, Helvetica, Sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  padding: 5px;
+  margin-bottom: 0;
+  width: 9em;  
+  border: 1px solid #3E4A49;
+}
+label
+{
+  display: block;
+  float: left;
+  clear: left;
+  text-align: right;
+  width: 30%;
+  padding-top: 0.25em;
+  margin: 1em 5px 0 0;
+}
+input.button
+{
+  width: auto;
+  /*background: #FFFFFF*; origi*/
+  background:#F6F6F9;
+  /*border: 2px solid #4899BE; origi*/
+  border: 2px solid #AAB5CA;
+  padding:3px;
+}
+
+
+/*
+end form design
+*/
+
+/*
+    Designing Report Table
+*/
+.pretty-table
+{
+  padding: 0;
+  margin: 0;
+  border-collapse: collapse;
+  border: 1px solid #333;
+  font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  font-size: 0.9em;
+  
+  color: #000;
+  background: #bcd0e4 url("widget-table-bg.jpg") top left repeat-x;
+}
+
+.pretty-table caption
+{
+  caption-side: bottom;
+  font-size: 0.9em;
+  font-style: italic;
+  text-align: right;
+  padding: 0.5em 0;
+}
+
+.pretty-table th, .pretty-table td
+{
+  border: 1px dotted #666;
+  padding: 0.5em;
+  text-align: left;
+  color: #632a39;
+}
+
+.pretty-table th[scope=col]
+{
+  color: #000;
+  background-color: #8fadcc;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  border-bottom: 2px solid #333;
+  border-right: 2px solid #333;
+}
+
+.pretty-table th+th[scope=col]
+{
+  color: #fff;
+  background-color: #7d98b3;
+  border-right: 1px dotted #666;
+}
+
+.pretty-table th[scope=row]
+{
+  background-color: #b8cfe5;
+  border-right: 2px solid #333;
+}
+
+.pretty-table tr.alt th, .pretty-table tr.alt td
+{
+  color: #2a4763;
+}
+
+.pretty-table tr:hover th[scope=row], .pretty-table tr:hover td
+{
+  background-color: #632a2a;
+  color: #fff;
+}
+
+/*
+    End of Designing Report Table
+*/
+
+
+#register{
+    width: 400px;  
+    margin-left: 150px;
+}
+.floatLeft{
+    float:left;
+}
+.withdraw_money{
+     width:300px;
+    border:1px dashed red;
+    margin-left: 45px;
+}
+.buy{
+    width:300px; 
+    border:;
+    margin-left: 45px;
+}
+.showstatem{
+     margin-left: 45px;
+}
+.showstatem .balance{
+    width:410px;
+    margin:10px 0px 10px 0px;
+    background:#eceae7;
+    padding:5px;
+    font-weight:bold;
+}

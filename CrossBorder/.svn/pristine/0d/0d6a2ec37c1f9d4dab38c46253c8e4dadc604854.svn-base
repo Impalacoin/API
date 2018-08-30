@@ -1,0 +1,170 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2010
+ */
+require_once("constants.php");
+/**
+ * database
+ * 
+ * @package   
+ * @author 
+ * @copyright Nicholas N. Chege
+ * @version 2011
+ * @access public
+ */
+class Database{
+    /**
+     * First i define two global variables that stores connection 
+     * database connection hundle
+     * 
+     */
+    public static $connection;
+    public $db;
+    
+    /**
+     * database::__construct()
+     * 
+     * @return
+     */
+    public function __construct(){
+        self::$connection=mysql_connect(DB_SERVER,DB_USER,DB_PASS);
+        $this->db=mysql_select_db(DB_NAME,self::$connection) or die(mysql_error());
+    }
+    /**
+     * database::query()
+     * 
+     * @return
+     */
+    public static function query($query){
+        $result_set=mysql_query($query) or die(mysql_error());
+        
+        return $result_set;
+    }
+    /**
+     * database::fetch_array()
+     * 
+     * @return
+     */
+    public static function fetch_array($result_set){
+        $record_set=mysql_fetch_array($result_set);
+        return $record_set;
+    }
+    /**
+     * database::confirm_query()
+     * 
+     * @return
+     */
+    public static function confirm_query($result_set){
+        if(!$result_set){
+		die("Database query failed:" . mysql_error());
+	   }
+    }
+    /**
+     * database::insert_record()
+     * 
+     * @return
+     */
+    public static function insert_record($tablename, $fields){
+        
+        $query="INSERT INTO {$tablename} ";
+        $query.="SET ";
+        foreach($fields as $key=>$value){
+            if($value=='password'){
+                $data[]="{$value}='".sha1(self::mysql_prep($_POST[$value]))."' ";
+            }else
+           $data[]="{$value}='".self::mysql_prep($_POST[$value])."' ";
+        }
+        $query.=join(", ", $data);
+        $result_set=self::query($query) or die(mysql_error());
+        return $result_set;
+    }
+    /**
+     * database::mysql_prep()
+     * 
+     * @return
+     */
+    public static function mysql_prep($value){
+	   $magic_quotes_active=get_magic_quotes_gpc();
+	   $new_enough_php=function_exists("mysql_real_escape_string");//i.e. PHP>=v4.3.0;
+	   if($new_enough_php){//PHP v4.3.0 or higher
+		//undo any magic quotes effects so mysql_real_escape_string can do the work
+		  if($magic_quotes_active){$value=stripslashes($value);}
+		  //$value=htmlentities(mysql_real_escape_string(trim($value)));
+          $value=mysql_real_escape_string(trim($value));
+          
+	   }else{//before PHP v4.6.0
+		//if magic quotes aren't already on then add slashes manualy
+		  if(!$magic_quotes_active){$value=addslashes(trim($value));}	
+		//if magic quotes exists, slashes already exists.	
+	   }
+	   return $value;	
+    }
+    /**
+     * database::insert_id()
+     * 
+     * @return
+     */
+    public static function insert_id(){
+        $insert_id=mysql_insert_id(self::$connection);
+        return $insert_id;   
+    
+    }
+    /**
+     * database::delete()
+     * 
+     * @return
+     */
+    public static function delete($id, $table_name){
+        $query="DELETE FROM {$table_name} WHERE id='{$id}' LIMIT 1 ";
+        $result_set=query($query);
+    //$affected_rows=msql_affected_rows($result_set);
+    return $affected_rows;
+    }
+    /**
+     * database::update()
+     * 
+     * @return
+     */
+    public static function update($id,$table_name, $fields){
+        $query="UPDATE {$table_name} SET ";
+        foreach($fields as $key=>$value){
+            $attributes[]=$value."='".self::mysql_prep($_POST[$value])."' ";
+        }
+        $query.=join(", ", $attributes);       
+        $query.=" WHERE {$id["field"]}='{$id["value"]}' LIMIT 1 ";
+        $result_set=self::query($query);
+    //$affected_rows=mysql_affected_rows($result_set);
+        return self::affectedRows();
+    
+    }
+    public static function affectedRows(){
+        $rows=mysql_affected_rows();
+    }
+    /**
+     * database::check_required_fields()
+     * 
+     * @return
+     */
+    public static function check_required_fields($required_fields){
+        if(is_array($required_fields)){
+            $errors=array();
+            foreach($required_fields as $field){
+                if(empty($_POST[$field])){
+                    $errors[]=$field;
+                    
+                }
+            }
+            return $errors;
+        }else{
+            if(empty($_POST[$required_fields])){
+                    return $required_fields;
+                }
+        }
+    }
+
+    
+}
+
+?>

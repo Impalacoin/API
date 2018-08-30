@@ -1,0 +1,497 @@
+VERSION 5.00
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Begin VB.Form currload 
+   Caption         =   "Currency File Uplaod"
+   ClientHeight    =   5655
+   ClientLeft      =   225
+   ClientTop       =   570
+   ClientWidth     =   8400
+   Icon            =   "client2.frx":0000
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   ScaleHeight     =   5655
+   ScaleWidth      =   8400
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00E0E0E0&
+      ForeColor       =   &H00404040&
+      Height          =   5415
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   8175
+      Begin MSComDlg.CommonDialog CommonDialog1 
+         Left            =   7320
+         Top             =   120
+         _ExtentX        =   847
+         _ExtentY        =   847
+         _Version        =   393216
+      End
+      Begin VB.TextBox Text3 
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FF00FF&
+         Height          =   1935
+         Left            =   2040
+         MultiLine       =   -1  'True
+         ScrollBars      =   3  'Both
+         TabIndex        =   5
+         Top             =   840
+         Width           =   5775
+      End
+      Begin VB.CommandButton Command1 
+         BackColor       =   &H00C0FFFF&
+         Caption         =   "Load Curency File"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   1095
+         Left            =   240
+         MaskColor       =   &H00FFFF80&
+         Picture         =   "client2.frx":0442
+         Style           =   1  'Graphical
+         TabIndex        =   4
+         Top             =   840
+         Width           =   1455
+      End
+      Begin VB.TextBox Text1 
+         BackColor       =   &H00FFFFFF&
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   405
+         Left            =   2400
+         TabIndex        =   2
+         Top             =   2880
+         Width           =   5415
+      End
+      Begin VB.CommandButton Command3 
+         BackColor       =   &H00C0FFC0&
+         Caption         =   "Run"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   6600
+         MaskColor       =   &H00FFFF80&
+         Picture         =   "client2.frx":0884
+         Style           =   1  'Graphical
+         TabIndex        =   1
+         Top             =   3480
+         Width           =   1215
+      End
+      Begin VB.Label Label6 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Activity Log"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   3000
+         TabIndex        =   17
+         Top             =   600
+         Width           =   1575
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00808080&
+         BorderWidth     =   2
+         X1              =   1920
+         X2              =   1920
+         Y1              =   840
+         Y2              =   2760
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         BackStyle       =   0  'Transparent
+         Caption         =   "Original File Name"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00404040&
+         Height          =   375
+         Left            =   -360
+         TabIndex        =   3
+         Top             =   2880
+         Width           =   2655
+      End
+   End
+   Begin VB.Frame Frame2 
+      BackColor       =   &H00C0C0C0&
+      Caption         =   "Database logon"
+      Height          =   3255
+      Left            =   600
+      TabIndex        =   6
+      Top             =   240
+      Visible         =   0   'False
+      Width           =   3735
+      Begin VB.TextBox Text7 
+         Height          =   375
+         Left            =   1560
+         TabIndex        =   15
+         Top             =   1920
+         Width           =   1935
+      End
+      Begin VB.TextBox Text6 
+         Height          =   375
+         Left            =   1560
+         TabIndex        =   11
+         Top             =   1440
+         Width           =   1935
+      End
+      Begin VB.TextBox Text5 
+         BackColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   1560
+         TabIndex        =   10
+         Top             =   960
+         Width           =   1935
+      End
+      Begin VB.TextBox Text4 
+         Height          =   375
+         Left            =   1560
+         TabIndex        =   9
+         Top             =   480
+         Width           =   1935
+      End
+      Begin VB.CommandButton Command5 
+         Caption         =   "Cancel"
+         Height          =   495
+         Left            =   2640
+         TabIndex        =   8
+         Top             =   2640
+         Width           =   855
+      End
+      Begin VB.CommandButton Command2 
+         Caption         =   "OK"
+         Height          =   495
+         Left            =   1560
+         TabIndex        =   7
+         Top             =   2640
+         Width           =   855
+      End
+      Begin VB.Label Label5 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Password"
+         Height          =   375
+         Left            =   360
+         TabIndex        =   16
+         Top             =   1920
+         Width           =   1215
+      End
+      Begin VB.Label Label4 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "User Name"
+         Height          =   375
+         Left            =   360
+         TabIndex        =   14
+         Top             =   1440
+         Width           =   1215
+      End
+      Begin VB.Label Label3 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Database Name"
+         Height          =   375
+         Left            =   360
+         TabIndex        =   13
+         Top             =   960
+         Width           =   1215
+      End
+      Begin VB.Label Label2 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Server IP"
+         Height          =   375
+         Left            =   360
+         TabIndex        =   12
+         Top             =   480
+         Width           =   1215
+      End
+   End
+End
+Attribute VB_Name = "currload"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Option Explicit
+Private StrPostMessage As String
+Private Msglen As Long
+Private ImageType As String
+Private rImageData As String
+Private xTraData As String
+Private CustInfo As String
+Private Bbyte() As Byte
+Private ImgNumber As Integer
+Private DataPath As String
+Private DbCon As ADODB.Connection
+Public Enum enmReplyCode
+
+RESTART_MARKER_REPLY_101 = 101
+SERVICE_READY_SOON_120 = 120
+TRANSFER_STARTING_125 = 125
+INITIATING_DATA_CONNECTION_150 = 150
+COMMAND_OK_200 = 200
+COMMAND_UNSUPPORTED_202 = 202
+SYSTEM_STATUS_211 = 211
+DIRECTORY_STATUS_212 = 212
+FILE_STATUS_213 = 213
+HELP_MESSAGE_214 = 214
+NAME_SYSTEM_TYPE_215 = 215
+SERVICE_READY_220 = 220
+CLOSING_CONTROL_CONNECTION_221 = 221
+DATA_OPEN_NO_TRANSFER_225 = 225
+CLOSING_DATA_CONNECTION_226 = 226
+ENTERING_PASSIVE_MODE_227 = 227
+USER_LOGGED_IN_230 = 230
+FILE_ACTION_COMPLETED_250 = 250
+PATH_CREATED_257 = 257
+USER_OK_NEED_PASSWORD_331 = 331
+LOGIN_NEED_ACCOUNT_332 = 332
+FILE_ACTION_PENDING_350 = 350
+SERVICE_SHUTTING_DOWN_421 = 421
+DATA_INITIATION_FAILED_425 = 425
+TRANSFER_ABORTION_426 = 426
+FILE_UNAVAILABLE_450 = 450
+ACTION_ABORTED_LOCAL_ERROR_451 = 451
+FILE_ACTION_FAILED_SPACELESS_452 = 452
+SYNTAX_ERROR_COMMAND_500 = 500
+SYNTAX_ERROR_PARAMETER_501 = 501
+COMMAND_NOT_IMPLEMENTED_502 = 502
+BAD_SEQUENCE_COMMAND_503 = 503
+COMMAND_NOT_IMPLEMENTED_PARAMETER_504 = 504
+NOT_LOGGED_IN_530 = 530
+ACCOUNT_REQUIRED_532 = 532
+FILE_NO_ACCESS_550 = 550
+ACTION_ABORTED_UNKNOWN_PAGE_TYPE_551 = 551
+FILE_ACTION_FAILED_SPACE_EXCEEDED_552 = 552
+FILE_ACTION_FAILED_NAME_DISALLOWED_553 = 553
+End Enum
+
+Const cMyExcel = "Excel.xls"
+Dim cPath As String
+Private mvarExcel As Excel.Application
+Private Workbook As Object
+
+Private Sub Command1_Click()
+
+CommonDialog1.InitDir = App.Path
+ CommonDialog1.Filter = "Excel (*.xlsx) | *.xlsx"
+ CommonDialog1.ShowOpen
+ 'Text1.BackColor = 944
+ Text1.Text = CommonDialog1.FileName
+ Text3.Text = "File Selected..."
+End Sub
+
+Private Sub Command2_Click()
+Frame2.Visible = False
+End Sub
+
+Private Sub Command3_Click()
+  'GET VALUES FROM CELLS
+  
+   Dim xlApp As Excel.Application
+   Dim wb As Workbook
+   Dim ws As Worksheet
+   Dim country_code, X_Rate As Variant
+   Dim row, col As Integer
+   Dim RecSet As New ADODB.Recordset
+   Set xlApp = New Excel.Application
+   
+   
+   Command3.Enabled = False
+   On Error GoTo ErrTrap
+   If Text1.Text = "" Then
+     Text3.Text = Text3.Text & vbNewLine & "Please Select Card File ..."
+     GoTo ErrTrap
+   End If
+   Set wb = xlApp.Workbooks.Open(Trim(Text1.Text))
+
+   Set ws = wb.Worksheets("Sheet1") 'Specify your worksheet name
+   
+    Text3.Text = Text3.Text & vbNewLine & Date & " " & Format(Time, "HH:mm:ss") & "-->Currency File loading Running ..."
+   row = 2
+   col = 1
+  
+   Do While ws.Cells(row, 2).Value <> Empty
+    
+     country_code = ws.Cells(row, 2).Value
+     X_Rate = ws.Cells(row, 4).Value
+          
+     RecSet.Open "select * from em_currency where country_code = '" & country_code & "'", DbCon
+     If RecSet.EOF = False Then
+     DbCon.Execute ("update em_currency set fx_rate = " & X_Rate & " where country_code = '" & country_code & "'")
+     DbCon.Execute "insert into currency_history values('" & RecSet.Fields(0).Value & "','" & RecSet.Fields(1).Value & "','" & RecSet.Fields(2).Value & "'," & X_Rate & ",'" & Format(Now, "dd/MM/yyyy") & "')"
+   
+     
+     End If
+     
+     RecSet.Close
+     row = row + 1
+     
+     
+   Loop
+      
+   If row > 2 Then
+   Text3.Text = Text3.Text & vbNewLine & Date & " " & Format(Time, "HH:mm:ss") & "-->" & row - 2 & " New Exchange rates have Been update"
+   
+   Else
+   Text3.Text = Text3.Text & vbNewLine & Date & " " & Format(Time, "HH:mm:ss") & "-->0 New Exchange rates have Been update"
+   End If
+   wb.Close
+   
+   Text3.Text = Text3.Text & vbNewLine & Date & " " & Format(Time, "HH:mm:ss") & "-->Finished!"
+   Command3.Enabled = True
+
+   Set ws = Nothing
+   Set wb = Nothing
+   Set xlApp = Nothing
+   Exit Sub
+ErrTrap:
+   Set ws = Nothing
+   Set wb = Nothing
+   Set xlApp = Nothing
+   Text3.Text = Text3.Text & vbNewLine & Date & " " & Format(Time, "HH:mm:ss") & "-->Error Occurred: " & err.Description
+   Command3.Enabled = True
+End Sub
+
+Private Sub Command4_Click()
+  'PUT VALUES INTO CELLS
+  Dim row As Integer
+  Dim wb As Object
+  Dim ws As Worksheet
+  Set mvarExcel = New Excel.Application
+  
+  
+  mvarExcel.Visible = False
+  mvarExcel.Workbooks.Add
+  
+  Set wb = mvarExcel.Application.ActiveWorkbook
+  Set ws = wb.ActiveSheet
+  
+  'PUT TEXTBOX VALUES INTO EXCEL CELLS
+  For row = 1 To 5
+    ws.Rows.Cells(row, 1) = "234454"
+  Next
+  
+  
+   mvarExcel.Application.ActiveWorkbook.SaveAs App.Path & "\Replacements.xlsx"
+   mvarExcel.Application.ActiveWorkbook.Close App.Path & "\Replacements.xlsx"
+   'DBConnector.Close
+  
+  
+  Set mvarExcel = Nothing
+  Set ws = Nothing
+  Set wb = Nothing
+ 
+  
+End Sub
+
+
+Private Sub Dir1_Change()
+'Text1.Text = Dir1.Path
+'File1.Refresh
+End Sub
+
+Private Sub File1_Click()
+'Text1.Text = File1.FileName
+End Sub
+
+
+
+Private Sub Command5_Click()
+Frame2.Visible = False
+End Sub
+
+Private Sub Command8_Click()
+'sckCmd.SendData "pasv" & vbCrLf
+Shell ("ftpcom.bat")
+End Sub
+
+Private Sub Command9_Click()
+
+End Sub
+
+Private Sub Dblog_Click()
+'Frame2.Visible = True
+End Sub
+
+Private Sub embFile_Click()
+Shell ("Explorer.exe C:\Squid Emboss Files"), vbNormalFocus
+End Sub
+
+Private Sub CommonDialog1_Click()
+
+End Sub
+
+Private Sub Form_Load()
+'Dim Objfile As New Scripting.FileSystemObject
+'
+'If Objfile.FolderExists("C:\Squid Emboss Files") Then
+''Do nothing
+'Else
+'Objfile.CreateFolder ("C:\Squid Emboss Files")
+'End If
+
+'DataPath = "C:\Squid Emboss Files"
+
+Set DbCon = New ADODB.Connection
+On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+          
+'          DbCon.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\FBL MONEX\emconnect.accdb;Persist Security Info=True"
+'    DbCon.Open
+          Exit Sub
+          
+          
+ErrorTrap:
+          
+          MsgBox "Connection Error Occurred", vbExclamation, "Emserv"
+
+End Sub
+
+
+
+Private Sub CracXtradata(ByVal Data As String)
+Dim Msglen As Long
+Dim Imagedt As String
+End Sub

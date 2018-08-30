@@ -1,0 +1,249 @@
+/* Reset CSS */
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outline:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+
+/* General Styles	*/
+
+html, body {
+	margin:0;
+	padding:0;
+	min-height:100%;
+	font-family: arial, tahoma, "lucida sans", arial, sans-serif;
+	font-size: 13px;
+	line-height: 20px;
+	background: #E2E2E2 url(images/bkg.jpg) repeat;
+	color: #000;
+}
+
+input, 
+textarea {
+	font-size: 12px;
+}
+textarea {width: 100%; height: 200px;}
+
+p {
+	margin: 20px 0px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: Georgia, tahoma, serif;
+	font-weight: normal;
+	color: #863200;
+}
+
+h1 {
+	font-size: 36px;
+	margin: 10px 0px 24px 0px;
+}
+
+h2 {
+	font-size: 30px;
+	margin: 10px 0px 20px 0px;
+}
+
+h3 {
+	font-size: 24px;
+	margin: 10px 0px 20px 0px;
+}
+
+h4 {
+	font-size: 18px;
+	margin: 0px 0px 16px 0px;
+}
+
+h5 {
+	margin: 10px 0px 16px 0px;
+	font-family: 'Droid Sans', tahoma, 'lucida sans', arial, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+h6 {
+	font-size: 16px;
+	margin: 0px 0px 16px 0px;
+}
+
+.float-left, .alignleft {
+	float: left;
+}
+
+.float-right, .alignright {
+	float: right;
+}
+
+.aligncenter {
+display: block; margin: 0 auto;
+}
+.wp-caption { border: 1px solid #DDD; text-align: center; background: #F3F3F3; padding-top: 4px; margin: 10px }
+.wp-caption-text {font-style: italic; font-family: Georgia, serif; color: #666; font-size: 11px;}
+.sticky {}
+.gallery-caption {}
+.bypostauthor {}
+.link-pages {
+clear:both;
+}
+
+.clear {
+	clear: both;
+	font-size: 0px;
+	line-height: 0px;
+}
+
+.divider {
+clear: both;
+margin: 15px 0 15px;
+border-top: 1px solid #ede6e9;
+height: 1px;
+width: 100%;
+}
+
+a, a:visited,a.regular,
+a.regular:visited {
+	text-decoration: none;
+	color: #c75603;
+	border-bottom: 1px dotted #828282;
+}
+a, a:visited {
+border: 0;
+}
+
+a:hover ,a.regular:hover {
+	color: #828282;
+	border: 0px none;
+}
+
+a.arrow,
+a.arrow:visited {
+	color: #c75603;
+	border-bottom: 1px dotted #828282;
+	margin: 0px 0px 0px 12px;
+}
+
+a.arrow:hover {
+	color: #828282;
+	border: 0px none;
+}
+
+a.arrow span {
+	display: inline-block;
+	background: url(images/link_arrow_grey.png) 0px center no-repeat;
+	padding: 0px 0px 0px 12px;
+	margin: 0px 0px 0px -12px;
+}
+
+/***********************/
+/***** Main Layout *****/
+/***********************/
+
+#container {
+	position: relative; /* needed for footer positioning */
+	margin: 0 auto;
+	width: 100%;
+	height: auto !important;
+	height: 100%;
+	min-height: 100%;
+	/* Graffiti for bkg2 
+	background-image: url(images/graffiti.png);
+	background-repeat: no-repeat;
+	background-position: center top;*/
+}
+
+#content {
+	margin: 0px auto;
+	padding-bottom: 40px;
+	/*padding-bottom: 380px; /* Change the value 410 if you have a different footer */
+	width: 1000px;
+    
+}
+
+#home_special, #home_special li {
+}
+#home_special h1, #home_special h2, #home_special h3, #home_special h4, #home_special h5, #home_special h6 {
+}
+/***********************************************************************
+        My Style
+***********************************************************************/
+.content-inner{
+    width:1000px;
+    min-height:600px;
+    margin:0 auto;
+    background:url('../images/img/textarea/textarea-mm.gif') repeat;
+}
+.home-icon {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+.navigation-inner {
+	position: relative;
+	width: 1000px;
+	height: 41px;
+	line-height: 41px;
+	background-image: url(../images/navigation_bkg.png);
+	background-repeat: no-repeat;
+	margin: 0px auto;
+	margin-bottom: 30px;
+	box-shadow: 0px 2px 2px rgba(44,44,44,0.4);
+	border-radius: 0px 0px 4px 4px;
+}
+
+.navigation-inner ul {
+	list-style: none outside none;
+	margin: 0px 0px 0px 56px;
+	padding: 0;
+}
+
+.navigation-inner ul li {
+	background-image: url(../images/navigation_div.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+	display: inline;
+	float: left;
+	padding: 0px 20px;
+}
+
+.navigation-inner ul li a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.navigation-inner li ul {
+	margin: 0px;
+}
+
+.content-top {
+	width: 1000px;
+	min-height: 15px;
+	margin: 0px;
+	background-image: url(../images/contentblock_top.png);
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+
+.content-top.blog-home {
+	margin: 10px 0px 0px 0px;
+}
+
+.content-top .label-left {
+	width: 10px;
+	height: 43px;
+	background-image: url(../images/label_left2.png);
+	background-repeat: no-repeat;
+}
+
+.content-top .label-main {
+	min-width: 20px;
+	height: 43px;
+	line-height: 41px;
+	background-image: url(../images/label_repeat2.png);
+	background-repeat: repeat-x;
+	text-shadow: 0px 1px 1px #7f7f7f;
+}
+
+.content-top .label-right {
+	width: 110px;
+	height: 43px;
+	background-image: url(../images/label_right2.png);
+	background-repeat: no-repeat;
+}

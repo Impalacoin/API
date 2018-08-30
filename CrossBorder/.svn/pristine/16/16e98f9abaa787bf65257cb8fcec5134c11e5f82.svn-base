@@ -1,0 +1,246 @@
+﻿Public Class UserButton
+
+    Private Sub UserButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Click
+        Dim s As String
+        s = Me.Name
+        Call Eventhandler(s)
+    End Sub
+
+    Private Sub UserButton_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.MouseHover
+
+    End Sub
+
+    Private Sub UserButton_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.MouseLeave
+        Me.BackColor = Color.LightBlue
+        'Me.BorderStyle = Windows.Forms.BorderStyle.None
+        Me.Label1.ForeColor = Color.DimGray
+
+    End Sub
+
+    Private Sub UserButton_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseMove
+        Me.BackColor = Color.SteelBlue
+        'Me.BorderStyle = Windows.Forms.BorderStyle.FixedSingle
+        Me.Label1.ForeColor = Color.Black
+    End Sub
+
+    Private Sub Label1_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Label1.MouseLeave
+        Me.Label1.ForeColor = Color.Black
+    End Sub
+
+    Private Sub Label1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Label1.MouseMove
+        Me.BackColor = Color.SteelBlue
+        'Me.BorderStyle = Windows.Forms.BorderStyle.FixedSingle
+        Me.Label1.ForeColor = Color.Black
+        Label1.SendToBack()
+
+    End Sub
+
+    Private Sub Label1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label1.Click
+        'Dim k As Integer
+        Dim s As String
+        s = Me.Name
+        Call Eventhandler(s)
+    End Sub
+
+    Private Sub PictureBox1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox1.MouseMove
+        Me.BackColor = Color.SteelBlue
+        'Me.BorderStyle = Windows.Forms.BorderStyle.FixedSingle
+        Me.Label1.ForeColor = Color.Black
+    End Sub
+
+    Private Sub Label1_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+    Private Sub Eventhandler(ByVal ButName As String)
+        If ButName = "UserButton1" Then
+            frmRent.Show()
+            frmRent.Left = Form1.GroupBox1.Left
+            frmRent.Top = Form1.GroupBox1.Top + 110 '162
+            frmRent.Height = Form1.TreeView1.Height - 100 '142
+            frmRent.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton2" Then
+            frmCloseAccount.Show()
+            frmCloseAccount.Left = Form1.GroupBox1.Left
+            frmCloseAccount.Top = Form1.GroupBox1.Top + 110
+            frmCloseAccount.Height = Form1.TreeView1.Height - 100
+            frmCloseAccount.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton3" Then
+            frmRent.Show()
+            frmRent.Left = Form1.GroupBox1.Left
+            frmRent.Top = Form1.GroupBox1.Top + 110
+            frmRent.Height = Form1.TreeView1.Height - 100
+            frmRent.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton4" Then
+            frmEnquiry.Show()
+            frmEnquiry.Left = Form1.GroupBox1.Left
+            frmEnquiry.Top = Form1.GroupBox1.Top + 110
+            frmEnquiry.Height = Form1.TreeView1.Height - 100
+            frmEnquiry.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton5" Then
+            frmDeposit.Show()
+            frmDeposit.Left = Form1.GroupBox1.Left
+            frmDeposit.Top = Form1.GroupBox1.Top + 110
+            frmDeposit.Height = Form1.TreeView1.Height - 100
+            frmDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton6" Then
+            frmAuditConfig.Show()
+            frmAuditConfig.Left = Form1.GroupBox1.Left
+            frmAuditConfig.Top = Form1.GroupBox1.Top + 110
+            frmAuditConfig.Height = Form1.TreeView1.Height - 100
+            frmAuditConfig.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton7" Then
+            frmElecDeposit.Show()
+            frmElecDeposit.Left = Form1.GroupBox1.Left
+            frmElecDeposit.Top = Form1.GroupBox1.Top + 110
+            frmElecDeposit.Height = Form1.TreeView1.Height - 100
+            frmElecDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton8" Then
+            frmWaterDeposit.Show()
+            frmWaterDeposit.Left = Form1.GroupBox1.Left
+            frmWaterDeposit.Top = Form1.GroupBox1.Top + 110
+            frmWaterDeposit.Height = Form1.TreeView1.Height - 100
+            frmWaterDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton9" Then
+            frmRent.Show()
+            frmRent.Left = Form1.GroupBox1.Left
+            frmRent.Top = Form1.GroupBox1.Top + 110
+            frmRent.Height = Form1.TreeView1.Height - 100
+            frmRent.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton10" Then
+            frmRepairs.Show()
+            frmRepairs.Left = Form1.GroupBox1.Left
+            frmRepairs.Top = Form1.GroupBox1.Top + 110
+            frmRepairs.Height = Form1.TreeView1.Height - 100
+            frmRepairs.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton11" Then
+            frmBills.Show()
+            frmBills.Left = Form1.GroupBox1.Left
+            frmBills.Top = Form1.GroupBox1.Top + 110
+            frmBills.Height = Form1.TreeView1.Height - 100
+            frmBills.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton12" Then
+            frmDeposit.Show()
+            frmDeposit.Left = Form1.GroupBox1.Left
+            frmDeposit.Top = Form1.GroupBox1.Top + 110
+            frmDeposit.Height = Form1.TreeView1.Height - 100
+            frmDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton13" Then
+            frmAuditConfig.Show()
+            frmAuditConfig.Left = Form1.GroupBox1.Left
+            frmAuditConfig.Top = Form1.GroupBox1.Top + 110
+            frmAuditConfig.Height = Form1.TreeView1.Height - 100
+            frmAuditConfig.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton14" Then
+            frmElecDeposit.Show()
+            frmElecDeposit.Left = Form1.GroupBox1.Left
+            frmElecDeposit.Top = Form1.GroupBox1.Top + 110
+            frmElecDeposit.Height = Form1.TreeView1.Height - 100
+            frmElecDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton15" Then
+            frmWaterDeposit.Show()
+            frmWaterDeposit.Left = Form1.GroupBox1.Left
+            frmWaterDeposit.Top = Form1.GroupBox1.Top + 110
+            frmWaterDeposit.Height = Form1.TreeView1.Height - 100
+            frmWaterDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton16" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton17" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton18" Then
+            frmWaterDeposit.Show()
+            frmWaterDeposit.Left = Form1.GroupBox1.Left
+            frmWaterDeposit.Top = Form1.GroupBox1.Top + 110
+            frmWaterDeposit.Height = Form1.TreeView1.Height - 100
+            frmWaterDeposit.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton19" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+
+        ElseIf ButName = "UserButton20" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton21" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton22" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton23" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton24" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton25" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton26" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton27" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton28" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        ElseIf ButName = "UserButton29" Then
+            frmHouse.Show()
+            frmHouse.Left = Form1.GroupBox1.Left
+            frmHouse.Top = Form1.GroupBox1.Top + 110
+            frmHouse.Height = Form1.TreeView1.Height - 100
+            frmHouse.Width = Form1.GroupBox1.Width
+        End If
+
+
+
+    End Sub
+
+    
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
+        Dim s As String
+        s = Me.Name
+        Call Eventhandler(s)
+    End Sub
+
+    Private Sub UserButton_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+    End Sub
+End Class

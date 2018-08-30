@@ -1,0 +1,33 @@
+package com.impalapay.airtel.tests.gson;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+public class JavaToJsonAndBack {
+
+	public static void main(String[] args) {
+		Map<String, String> user3 = new HashMap<>();
+		user3.put("api_username", "demo");
+		user3.put("session_id", "7021637a32da4a90bad789f0e66da7db");
+		user3.put("source_country_code", "UK");
+		user3.put("sendername", "Willis luck");
+		user3.put("recipient_mobile", "254768765");
+		user3.put("recipient_currency_code", "KES");
+		user3.put("recipient_country_code", "KE");
+		user3.put("reference_number", "gguguguue");
+		user3.put("sendertoken", "ytye777");
+		user3.put("client_datetime", "2014-11-314T01:28:39±01:28");
+		user3.put("amount", "200");
+       
+		Gson g = new Gson();
+		
+		String jsonData3 = g.toJson(user3);
+
+		System.out.println(jsonData3 );
+
+	}
+
+}

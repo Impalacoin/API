@@ -1,0 +1,828 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form MchAddFrm 
+   Caption         =   "Interchanges"
+   ClientHeight    =   9060
+   ClientLeft      =   120
+   ClientTop       =   435
+   ClientWidth     =   15225
+   Icon            =   "MchAddFrm.frx":0000
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   9060
+   ScaleWidth      =   15225
+   StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Frame1 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   4215
+      Left            =   120
+      TabIndex        =   16
+      Top             =   4680
+      Width           =   15015
+      Begin VB.Frame Frame2 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   4215
+         Left            =   0
+         TabIndex        =   26
+         Top             =   120
+         Width           =   15015
+         Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+            Height          =   3735
+            Left            =   120
+            TabIndex        =   27
+            Top             =   240
+            Width           =   14775
+            _ExtentX        =   26061
+            _ExtentY        =   6588
+            _Version        =   393216
+            Rows            =   5
+            Cols            =   8
+            FixedCols       =   0
+            BackColorBkg    =   16777215
+            FocusRect       =   0
+            SelectionMode   =   1
+            AllowUserResizing=   3
+            FormatString    =   $"MchAddFrm.frx":1082
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+         End
+      End
+   End
+   Begin VB.Frame Frame5 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   4335
+      Left            =   120
+      TabIndex        =   0
+      Top             =   240
+      Width           =   15015
+      Begin VB.CheckBox Check1 
+         Caption         =   "PIN Translate?"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   435
+         Left            =   120
+         TabIndex        =   18
+         Top             =   3600
+         Width           =   1935
+      End
+      Begin VB.ComboBox Combo2 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         ItemData        =   "MchAddFrm.frx":1174
+         Left            =   2400
+         List            =   "MchAddFrm.frx":1176
+         TabIndex        =   25
+         Top             =   3600
+         Width           =   3735
+      End
+      Begin VB.TextBox Text9 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   8640
+         MaxLength       =   3
+         TabIndex        =   24
+         Top             =   1200
+         Width           =   1695
+      End
+      Begin VB.TextBox Text8 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   8640
+         MaxLength       =   3
+         TabIndex        =   23
+         Top             =   720
+         Width           =   1695
+      End
+      Begin VB.TextBox Text7 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   8640
+         MaxLength       =   20
+         TabIndex        =   19
+         Top             =   240
+         Width           =   2775
+      End
+      Begin VB.CommandButton Command2 
+         Caption         =   "Delete Interchange"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   885
+         Left            =   9360
+         Picture         =   "MchAddFrm.frx":1178
+         Style           =   1  'Graphical
+         TabIndex        =   17
+         Top             =   3120
+         Width           =   2175
+      End
+      Begin VB.TextBox Text1 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   20
+         TabIndex        =   8
+         Top             =   240
+         Width           =   3735
+      End
+      Begin VB.TextBox Text2 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   15
+         TabIndex        =   7
+         Top             =   720
+         Width           =   3735
+      End
+      Begin VB.TextBox Text3 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         Left            =   2400
+         MaxLength       =   40
+         TabIndex        =   6
+         Top             =   1200
+         Width           =   3735
+      End
+      Begin VB.TextBox Text4 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         TabIndex        =   5
+         Top             =   1680
+         Width           =   3735
+      End
+      Begin VB.CommandButton Command1 
+         Caption         =   "Save Interchange"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   885
+         Left            =   6960
+         Picture         =   "MchAddFrm.frx":15BA
+         Style           =   1  'Graphical
+         TabIndex        =   4
+         Top             =   3120
+         Width           =   2295
+      End
+      Begin VB.TextBox Text5 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   2
+         TabIndex        =   3
+         Top             =   2160
+         Width           =   2055
+      End
+      Begin VB.TextBox Text6 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   5
+         TabIndex        =   2
+         Top             =   2640
+         Width           =   2055
+      End
+      Begin VB.ComboBox Combo1 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00808080&
+         Height          =   360
+         ItemData        =   "MchAddFrm.frx":19FC
+         Left            =   2400
+         List            =   "MchAddFrm.frx":19FE
+         TabIndex        =   1
+         Text            =   "SAP Type"
+         Top             =   3120
+         Width           =   2055
+      End
+      Begin VB.Label Label3 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Currency Code"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   6840
+         TabIndex        =   22
+         Top             =   1200
+         Width           =   1575
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Country Code"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   6840
+         TabIndex        =   21
+         Top             =   765
+         Width           =   1575
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Country Name"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   6840
+         TabIndex        =   20
+         Top             =   360
+         Width           =   1695
+      End
+      Begin VB.Label Label8 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Merchant Short Name"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   315
+         Left            =   120
+         TabIndex        =   15
+         Top             =   360
+         Width           =   2175
+      End
+      Begin VB.Label Label9 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Merchant ID Code"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   345
+         Left            =   120
+         TabIndex        =   14
+         Top             =   765
+         Width           =   2175
+      End
+      Begin VB.Label Label10 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Merchant Location"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   345
+         Left            =   120
+         TabIndex        =   13
+         Top             =   1200
+         Width           =   2295
+      End
+      Begin VB.Label Label11 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "IP Addresss"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   120
+         TabIndex        =   12
+         Top             =   1680
+         Width           =   2415
+      End
+      Begin VB.Label Label12 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Connection Port"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   11
+         Top             =   2640
+         Width           =   2055
+      End
+      Begin VB.Label Label13 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Maximum Connections "
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   10
+         Top             =   2160
+         Width           =   2295
+      End
+      Begin VB.Label Label14 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "SAP Type"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   9
+         Top             =   3120
+         Width           =   2055
+      End
+   End
+End
+Attribute VB_Name = "MchAddFrm"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Private DbCon As ADODB.Connection
+Private Sub NewMerchant(ByVal merchant_id As String, ByVal merchant_name As String, ByVal location As String, ByVal IpAddress As String, ByVal Port As Long, ByVal maximum_connection As Integer, ByVal connection_mode As Integer, ByVal country As String, ByVal c_code As String, ByVal currency_code As String)
+ Dim Postmessage As String
+ Dim bCommand As ADODB.Command
+ Dim RecSet As New ADODB.Recordset
+ 
+ On Error GoTo ErroHandler
+ 
+ 
+ 
+ 
+ If merchant_id <> "" And merchant_name <> "" And location <> "" And connection_mode <> -1 And country <> "" And c_code <> "" And currency_code <> "" Then
+     
+     RecSet.Open "select * from em_merchants where merchant_id  =  '" & merchant_id & "' or merchant_name = '" & merchant_name & "'", DbCon
+     If RecSet.EOF = False Then
+     
+     MsgBox "This Merchant is already configured. Merchant ID and Merchant Name should be different", vbExclamation, "EmServ"
+     Exit Sub
+     End If
+    RecSet.Close
+    Set bCommand = New ADODB.Command
+    
+    
+    
+'    With bCommand
+'        .ActiveConnection = DbCon
+'        .CommandType = adCmdStoredProc
+'        .CommandText = "em_merchant_insert"
+'        .Parameters("@merchant_id") = merchant_id
+'        .Parameters("@merchant_name") = merchant_name
+'        .Parameters("@location") = location
+'        .Parameters("@ipaddress") = IpAddress
+'        .Parameters("@port") = CLng(port)
+'        .Parameters("@maximum_connection") = CInt(maximum_connection)
+'        .Parameters("@connection_mode") = CInt(connection_mode)
+'        .Parameters("@bin") = c_code
+'
+'        .Execute
+'    End With
+    Dim maxRecord As Long
+    maxRecord = 1
+   RecSet.Open "select MAX(RECORD_NO)from em_merchants ", DbCon
+     If IsNumeric(RecSet.Fields(0).Value) Then
+     maxRecord = RecSet.Fields(0).Value + 1
+     Else
+     maxRecord = 1
+     End If
+     RecSet.Close
+    
+      DbCon.Execute "insert into em_merchants values('" & merchant_id & "','" & merchant_name & "','" & location & "','" & IpAddress & "'," & CLng(Port) & "," & CInt(maximum_connection) & "," & CInt(connection_mode) & ",'" & c_code & "',0)"
+      DbCon.Execute "insert into em_currency values('" & currency_code & "','" & country & "','" & c_code & "',1)"
+    
+       
+       MsgBox "New Financial Instituiton Added ", vbInformation, "EmServ"
+    Set bCommand = Nothing
+ Else
+ MsgBox "Provide full details for this merchant", vbExclamation, "EmServ"
+     Exit Sub
+
+End If
+  
+'Unload Me
+Exit Sub
+ErroHandler:
+     MsgBox err.Description, vbCritical, "DataBase Error Occured"
+     Set bCommand = Nothing
+      
+    
+End Sub
+
+
+
+
+
+
+
+Private Sub Check1_Click()
+If Check1.Value = vbChecked Then
+   Combo2.Enabled = True
+Else
+   Combo2.Enabled = False
+End If
+End Sub
+
+Private Sub Command1_Click()
+On Error GoTo ErrTrap
+Call NewMerchant(Trim(Text2.Text), Trim(Text1.Text), Trim(Text3.Text), Trim(Text4.Text), Trim(Text6.Text), Trim(Text5.Text), Combo1.ListIndex, Trim(Text7.Text), Trim(Text8.Text), Trim(Text9.Text))
+
+
+
+Dim RecSet As New ADODB.Recordset
+RecSet.Open ("Select * from em_merchants order by record_no asc"), DbCon
+Dim i As Integer
+MSFlexGrid1.Rows = 1
+i = 1
+Do While Not RecSet.EOF
+col = 0
+MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+For col = 0 To 7
+MSFlexGrid1.TextMatrix(i, col) = RecSet.Fields(col).Value
+If col = 7 Then
+  If RecSet.Fields(col).Value = 0 Then
+   MSFlexGrid1.TextMatrix(i, col) = "Server"
+ElseIf RecSet.Fields(col).Value = 1 Then
+  MSFlexGrid1.TextMatrix(i, col) = "Client"
+End If
+End If
+Next col
+i = i + 1
+RecSet.MoveNext
+Loop
+RecSet.Close
+Exit Sub
+ErrTrap:
+
+MsgBox err.Description & ". Invalid Details Provided", vbExclamation, "EmServ"
+End Sub
+
+Private Sub Command2_Click()
+On Error GoTo ErrTrap
+
+DbCon.Execute "delete from em_merchants where merchant_name = '" & Trim(Text1.Text) & "'"
+DbCon.Execute "delete from em_currency where country_code = '" & Trim(Text8.Text) & "'"
+
+MsgBox "Merchant " & Text1.Text & " deleted", vbInformation, "EmServ"
+
+
+Dim RecSet As New ADODB.Recordset
+RecSet.Open ("Select * from em_merchants order by record_no asc"), DbCon
+Dim i As Integer
+MSFlexGrid1.Rows = 1
+i = 1
+Do While Not RecSet.EOF
+col = 0
+MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+For col = 0 To 7
+MSFlexGrid1.TextMatrix(i, col) = RecSet.Fields(col).Value
+If col = 7 Then
+  If RecSet.Fields(col).Value = 0 Then
+   MSFlexGrid1.TextMatrix(i, col) = "Server"
+ElseIf RecSet.Fields(col).Value = 1 Then
+  MSFlexGrid1.TextMatrix(i, col) = "Client"
+End If
+End If
+Next col
+i = i + 1
+RecSet.MoveNext
+Loop
+RecSet.Close
+
+Exit Sub
+ErrTrap:
+MsgBox "Error occurred during the process", vbCritical, "Emserv"
+End Sub
+
+Private Sub Command3_Click()
+'Frame5.BackColor = &HCFFEC0
+'47698111
+End Sub
+
+Private Sub Form_Load()
+Dim RecSet As New ADODB.Recordset
+Dim i As Long
+Dim col As Long
+Dim J As Integer
+'Me.Top = MainForm.Top + 1020
+'Me.Left = MainForm.Left + 4300
+Me.Height = MainForm.TreeView1.Height - 20
+Frame1.Height = Me.Height / 2
+Frame2.Height = Me.Height / 2
+MSFlexGrid1.Height = Me.Height / 2 - 500
+
+Combo1.AddItem "Server", 0
+Combo1.AddItem "Client", 1
+Set DbCon = New ADODB.Connection
+On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+'DbCon.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\FBL MONEX\emconnect.accdb;Persist Security Info=True"
+'    DbCon.Open
+
+RecSet.Open ("Select * from em_merchants order by record_no asc"), DbCon
+
+
+
+col = 0
+i = 1
+
+Do While Not RecSet.EOF
+col = 0
+MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+
+For col = 0 To 7
+MSFlexGrid1.TextMatrix(i, col) = RecSet.Fields(col).Value
+If col = 7 Then
+  If RecSet.Fields(col).Value = 0 Then
+   MSFlexGrid1.TextMatrix(i, col) = "Server"
+ElseIf RecSet.Fields(col).Value = 1 Then
+  MSFlexGrid1.TextMatrix(i, col) = "Client"
+End If
+End If
+Next col
+i = i + 1
+
+RecSet.MoveNext
+Loop
+RecSet.Close
+Exit Sub
+
+ErrorTrap:
+MsgBox "Please Login to Access the Configuration Console" & vbNewLine & _
+"Go to File Menu and click Database Login, " & vbNewLine & "DataBase Login Error occurred", vbCritical
+Unload Me
+'Me.Hide
+'frmODBCLogon.Show
+
+
+End Sub
+
+Private Sub Form_Resize()
+'Frame1.Height = Me.Height / 2
+'MSFlexGrid1.Height = Me.Height / 2 - 500
+'Frame1.Width = Me.Width - 200
+''MSFlexGrid1.Width = Frame1.Width - 100
+
+On Error GoTo eXITRAP
+'Me.Height = MainForm.TreeView1.Height - 20
+Frame1.Height = Me.Height / 2 - 200
+Frame2.Height = Me.Height / 2 - 300
+MSFlexGrid1.Height = Me.Height / 2 - 800
+MSFlexGrid1.Width = Me.Width - 700
+Frame5.Width = Me.Width - 400
+Frame1.Width = Me.Width - 400
+Frame2.Width = Me.Width - 400
+eXITRAP:
+
+End Sub
+
+Private Sub MSFlexGrid1_Click()
+Dim mName As String
+Dim RecSet As New ADODB.Recordset
+Dim RecSetX As New ADODB.Recordset
+
+mName = MSFlexGrid1.Text
+If MSFlexGrid1.Text = "" Then mName = "0"
+RecSet.Open "select * from em_merchants where record_no = " & mName, DbCon
+  If RecSet.EOF = False Then
+  Text1.Text = RecSet!merchant_name
+  Text2.Text = RecSet!merchant_id
+  Text3.Text = RecSet!location
+  Text4.Text = RecSet!IpAddress
+  Text5.Text = RecSet!maximum_connection
+  Text6.Text = RecSet!Port
+  
+  
+  If RecSet!connection_mode = 1 Then
+  Combo1.ListIndex = 1
+  Else
+  Combo1.ListIndex = 0
+  End If
+  
+  
+  RecSetX.Open "select * from em_currency where country_code = '" & RecSet!bin_code & "'", DbCon
+  If RecSetX.EOF = False Then
+  Text7.Text = RecSetX!country
+  Text8.Text = RecSetX!country_code
+  Text9.Text = RecSetX!currency_code
+  Else
+Text7.Text = ""
+  Text8.Text = ""
+  Text9.Text = ""
+  End If
+  End If
+
+End Sub
+
+Private Sub Text1_LostFocus()
+Text1.Text = UCase(Text1.Text)
+End Sub
+
+Private Sub Text2_LostFocus()
+Text2.Text = UCase(Text2.Text)
+End Sub
+
+Private Sub Text3_LostFocus()
+Text3.Text = UCase(Text3.Text)
+End Sub
+Private Sub Text4_LostFocus()
+Text4.Text = UCase(Text4.Text)
+End Sub
+Private Sub Text5_LostFocus()
+Text5.Text = UCase(Text5.Text)
+End Sub
+Private Sub Text6_LostFocus()
+Text6.Text = UCase(Text6.Text)
+End Sub
+

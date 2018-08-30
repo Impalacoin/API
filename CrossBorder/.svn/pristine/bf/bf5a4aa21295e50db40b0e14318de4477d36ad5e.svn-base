@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+require_once "engine.php";
+
+Display::header("Welcome to Chasebank online instant money transfer");
+Display::nonMemberNavigation();
+Display::content(Forms::contactForm("contact.php"));
+Display::footer();
+
+?>

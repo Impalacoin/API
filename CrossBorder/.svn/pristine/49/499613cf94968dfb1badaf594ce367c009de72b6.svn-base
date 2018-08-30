@@ -1,0 +1,6 @@
+uuid|Account uuid|URL|Date Active (YYYY-MM-DD HH:MM:SS)|Date Inactive (YYYY-MM-DD HH:MM:SS)|Active
+7691160b2eb346a88d0100249dba8ae6|9756f889-811a-4a94-b13d-1c66c7655a7f|http://remitone.spectreit.com/testhandler/respons...|2014-02-23 15:05:27-05||TRUE
+8ea752c927d44d9b862244821c56f6f9|9756f889-811a-4a94-b13d-1c66c7655a7f|http://localhost/demoinactive/index.html|2014-02-05 12:54:07|2014-02-23 15:05:27|FALSE
+e7806cdbc5f24e1098b3b6467af2b5bf|48e249c2-856a-4269-820f-7b72c76b4957|http://dev.assentinel.com/mhits/remit/impalapay|2014-06-05 15:05:27.235437-04||TRUE
+88b5af491d6b431fbfd74d95ab9c54b5|91fc8aae-cb76-4c64-ac45-48448fb5673f|http://www.examples.com/implement.php|2014-07-05 15:05:27.235437||TRUE
+c93dd92e1dc04bdf8d2b998d5da7eaf0|d5677a9f-5eda-4b1c-a283-7415d4a18a75|http://dev.assentinel.com/mhits/remit/impalapay|2014-11-06 05:17:06.048925-05||TRUE

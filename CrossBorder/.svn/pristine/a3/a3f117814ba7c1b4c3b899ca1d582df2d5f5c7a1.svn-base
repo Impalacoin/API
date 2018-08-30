@@ -1,0 +1,100 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title> jqplottest </title>
+    <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css" />
+   
+
+   
+    <script language="javascript" type="text/javascript" src="js/jqplot.bubbleRenderer.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jqplot.barRenderer.min.js.js"></script>
+
+     <script type="text/javascript">
+ /*var TUTORIAL_SAVVY ={
+        
+		//Makes Ajax calls to Servlet to download student Data*
+		downloadStudentData:function() {
+			 
+		
+			var formattedstudentListArray =[];
+			
+				$.ajax({
+					
+				  async: false,
+				  
+				  url: "StudentJsonDataServlet",
+				  
+				  dataType:"json",
+				  
+				  success: function(studentJsonData) {
+					
+					$.each(studentJsonData,function(index,aStudent){
+						
+						formattedstudentListArray.push([aStudent.mathematicsMark,aStudent.name]);
+
+					});
+				  }
+				});
+			return formattedstudentListArray;
+		},
+		
+		//Draws Bubble Chart For Student Data
+		drawStudentBubbleChart: function(formattedStudentJsonData){
+			
+		 $.jqplot.config.enablePlugins = true;
+		 
+			$.jqplot('chart1',[formattedStudentJsonData],{
+				
+		        title: 'Student Marks In Mathematic And Computer',
+		        
+		        seriesDefaults:{
+					            renderer: $.jqplot.BarRenderer,
+					            rendererOptions: {
+					                fillToZero: true
+					            },
+				//shadow: true
+				}
+                             
+			});
+		}
+               
+};
+
+$(document).ready(function(){
+    
+   var formatStudentData =  TUTORIAL_SAVVY.downloadStudentData();
+   
+   alert(JSON.stringify(formatStudentData));
+  
+   TUTORIAL_SAVVY.drawStudentBubbleChart(formatStudentData);
+});**/
+$(document).ready(function(){
+    var line1 = [['Nissan', 4],['Porche', 6],['Acura', 2],['Aston Martin', 5],['Rolls Royce', 6]];
+ 
+    $('#chart1').jqplot([line1], {
+        title:'Bar Chart with Varying Colors',
+        seriesDefaults:{
+            renderer:$.jqplot.BarRenderer,
+            rendererOptions: {
+                // Set the varyBarColor option to true to use different colors for each bar.
+                // The default series colors are used.
+                varyBarColor: true
+            }
+        },
+        axes:{
+            xaxis:{
+                renderer: $.jqplot.CategoryAxisRenderer
+            }
+        }
+    });
+});
+</script>
+</head>
+<body>
+
+    <div id="chart1" style="width:600px; height:250px;"></div>
+</body>
+</html>

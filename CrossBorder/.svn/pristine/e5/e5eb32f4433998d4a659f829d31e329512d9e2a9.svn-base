@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+ require_once("engine.php"); 
+    
+   
+   echo $output;
+   check_if_logged_in($me); 
+   if($me){   
+    display_navigation();
+    //echo "<p class=pushRight>".formatMobile("+254727717168")."</p>";
+?>
+    <table class="pushRight"><tr>
+        <td valign="top"><img src="https://graph.facebook.com/<?php echo $uid; ?>/picture" /></td>
+        <td valign="top" style="padding: 0px 0px 0px 10px;"><b><p>Welcome to ImpalaPay  <?php echo $me['name'];?></p></b>
+        <p>Impalapay provides money transfer, airtime top ups token and voucher through social networks, blogs, community portals etc.<br />
+        The philosopy is to create a secure enabling platform for close knit circle of friends, family and cummunity to reach out and make their day rewarding.
+         Try us out.</p></td>
+        </tr></table>
+            
+        
+       <!--iframe src="http://www.facebook.com/plugins/like.php?app_id=140784829316432&amp;href=apps.facebook.com%2Fimpalapay%2F&amp;send=true&amp;layout=standard&amp;width=450&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe-->
+       <!--iframe src="http://www.facebook.com/plugins/like.php?href=apps.facebook.com/impalapay/"
+        scrolling="no" frameborder="0"
+        style="border:none; width:450px; height:80px"><iframe-->
+
+<?php
+
+     }
+     
+//require_once "includes/footer.php"
+?>

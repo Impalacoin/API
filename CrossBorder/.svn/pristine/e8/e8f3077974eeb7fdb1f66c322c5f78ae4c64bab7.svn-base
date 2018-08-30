@@ -1,0 +1,10 @@
+<?php 
+
+$id = $_GET['id'];
+
+mysql_query("UPDATE transactions SET status='read' WHERE trans_id='$id'");
+
+header("location: read_message.php?id=$id");
+exit();
+mysql_close($con);
+?>

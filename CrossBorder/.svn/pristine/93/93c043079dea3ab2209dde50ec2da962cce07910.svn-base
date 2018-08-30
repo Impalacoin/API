@@ -1,0 +1,22 @@
+<?php
+session_start();
+/**
+ * @author 
+ * @copyright 2010
+ */
+ //These are the sites directory structure variables that makes navigation of folders easier
+ 
+define("DS",DIRECTORY_SEPARATOR);
+//defined();
+define("ROOT","C:/xampp/htdocs/chase_express/");
+define("LIB_PATH",ROOT.DS."includes".DS);
+define("PUBLIC_PATH",ROOT.DS."public".DS);
+
+//this is the database information
+define("DB_SERVER","localhost");
+define("DB_USER","root");
+define("DB_PASS","");
+define("DB_NAME","instant_money_transfer");
+
+
+?>

@@ -1,0 +1,1701 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "MyClass"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+'=========================================================================================
+' Whereever an Sql Has to be Fired in this module please use the variable connection_no
+' Whenever Functions/Variables of the Module are to be used any form/module please use
+' MyClass.function/variable name
+'=========================================================================================
+Public Company_Name As String, gUnifyDb As String, ForeignDb As String, gPlatForm As Byte, Branch_Working_Date As Date, Branch_Open_Flag As Byte
+Public Connection_No As Integer, Unit_Code As Integer, Current_User As Byte
+Public Sys_Pkg_Code As Byte, Sys_Btn_Id As Integer, Sys_Menu_Id As Integer, Sys_Sub_Menu_Id As Integer
+Public Num_Forms_loaded As Integer, Layout_Sel_Allowed As Byte, Layout_Upd_Allowed As Byte
+Public Loan_CBK_Process_Flag As Byte
+Public Access_Right As Boolean, Add_Right As Boolean, Modify_Right As Boolean, Delete_right As Boolean
+Private Form_Loaded(10) As String, I As Integer, J As Integer
+Public Menu_BG_Color As Long, Main_Button_Color As Long, Sub_Button_Color As Long, HighLight_Button_Color As Long
+Public ATM_Implemented_Flag As Byte
+
+Private Num_WAN_Branch As Integer, WAN_Branches(100) As Integer
+
+Private CA_Type As Byte, CA_Code As String, CA_Name As String, CA_Entry_Amt As Currency, CA_DbCr As Byte, CA_NUM As Byte
+Private CA_ANA_Code(100) As String, CA_ANA_AMT(100) As Currency, CA_ANA_DBCR(100) As Byte, CA_View_Flag As Byte
+
+Private Hotline_Unit As Integer, Hotline_Ac As String
+Private Memo_Ent_Gate As Byte, MBK_Type As Byte, MBk_Code As Integer, MVoc_No As Long
+
+Private Narration_Code As String, Narration_Name As String
+Private Child_Narration As String
+
+Public Master_Gl_Code As String, Branch_Freeze_Date As Date, Accounting_Year_Begin_Date As Date
+
+Private Entry_Gate As Byte, BookType As Byte, BookCode As Integer, RecPayFlag As Byte
+Private AcPeriod As Integer, PassedFlag As Byte, VoucherNo As Long, ActionFlag As Byte
+
+Private Anal_Code As String, Anal_Name As String
+Private Child_Anal As String
+
+Private Cost_Code As String, Cost_Name As String
+Private Child_Cost As String
+
+Private Caloc_Code As String, Caloc_Name As String, Temp_Ledg As String
+Private Child_Caloc As String
+
+Private GLAc_Code As String, GLAC_Name As String
+Private Child_GLAc As String
+
+Private GL_Group_Ac As String, GL_Group_Name As String
+Private Child_GL_Group As String
+
+Private GL_SubGroup_Ac As String, GL_SubGroup_Name As String, Child_GL_SubGroup As String
+Private Temp_Group As String, Temp_Group_Name As String
+
+Private Cust_Code As Long, Cust_Name As String, Field_Code As Integer, Field_Name As String
+Private txtCode As UcDataField, TxtName As TextBox, Num_Boxes As Byte, Esc_Flag As Byte
+Private Edit_Flag As Byte
+Private Save_Cust_Child As Long, Save_AcType As Integer, Save_AcNo As Long
+Private Alloc_Call_Type As Byte, Alloc_CustId As Long, Sec_Lien_Flag As Byte, Security_Num As Long
+Private Rsch_AcType As Integer, Rsch_AcNo As Long
+Private Disb_AcType As Integer, Disb_AcNo As Long
+Public Cust_Sel_Allowed As Byte, Cust_Upd_Allowed As Byte 'For Customer Browser
+Public Anal_Sel_Allowed As Byte, Anal_Upd_Allowed As Byte 'For Analysis Browser
+Public Cost_Sel_Allowed As Byte, Cost_Upd_Allowed As Byte 'For Cost Centre
+Public Narration_Sel_Allowed As Byte, Narration_Upd_Allowed As Byte 'For Narration
+Public Caloc_Sel_Allowed As Byte, Caloc_Upd_Allowed As Byte 'For Cash Allocation
+Public Ac_Sel_Allowed As Byte, Ac_Upd_Allowed As Byte 'For GL Accounts
+Public GLGroup_Sel_Allowed As Byte, GLGroup_Upd_Allowed As Byte 'For GL Accounts
+Public GLSubGroup_Sel_Allowed As Byte, GLSubGroup_Upd_Allowed As Byte 'For GL Accounts
+
+Public Field_Sel_Allowed As Byte, Field_Upd_Allowed As Byte 'For Field Browser
+Private Acnt_Type As Integer, Acnt_SrNo As Long
+Private Call_Type As Integer, CustId_Security As Long
+Private SOrd_Number As Long, Child_Layout_No As Integer, Layout_no As Integer, Layout_Name As String
+Public gs_BranchName As String, Pkg_Begin_Date As Date, Child_CustId As Long
+Public gn_Cust_Branch As Integer, gn_Cust_ID As Long, gn_Cust_Ac_Type As Integer, gn_Cust_Ac_No As Long
+Private Prev_Ip_Branch_Code As Integer, Prev_Ip_Adrs As String, Prev_Pwd As String, Prev_Login As String, Prev_Server_Type As Byte, Prev_Photo_Dir As String, Prev_Sig_Dir As String
+Public Home_Branch_Connection_Available_Flag As Byte
+
+Public Foreign_Connection As Integer, Foreign_Connection_Branch As Integer
+Public GLDb As String, ATM_DB As String
+Public Prev_WAN_Branch As Integer
+
+'For ATM Purposes
+Public Home_Branch_Connect_Str As String, Home_Branch_Db_Platform As Byte
+Public Home_Branch_Db_Provider As String, Home_Branch_Db_Path As String, Home_Branch_Db As String
+
+Private BRDB_Unit(200) As Integer, BRDB_Connect_Str(200) As String
+Private BRDB_Platform(200) As Byte, BRDB_Provider(200) As String, BRDB_DBPath(200) As String
+Private BRDB_DBName(200) As String, Num_BRDB As Integer
+
+Public Sub Get_BRDB_Spec()
+Dim Sqlstr As String, Recset As New ADODB.Recordset
+Dim UCode As Integer
+Dim DB_Platform As Byte, DSN_Name As String, DBase_Name As String
+Dim DB_Path As String, Db_Provider As String
+Dim Connect_String As String
+
+    Num_BRDB = 0
+    Sqlstr = "select unit_code,units.database_ID,database_name,database_platform,database_server,database_userid,database_password" & _
+             " from units,databases where units.database_id = databases.database_id and unit_code <>0 order by unit_code"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, 0, recs_read, True)
+    If Sql_Error <> 0 Then Exit Sub
+    Do While Recset.EOF = False
+        If Num_BRDB >= 200 Then Exit Sub
+        UCode = Recset!Unit_Code
+        DB_Platform = Recset!database_platform
+        DSN_Name = ""
+        DBase_Name = ""
+        ' We will store DSN Name in field database_server in case of DSN Connections
+        If DB_Platform = 2 Or DB_Platform = 3 Then
+             DBase_Name = Trim$(Recset!DataBase_Name)
+             DSN_Name = Trim$(Recset!database_server)
+        End If
+    
+        DB_Path = ""
+        ' DB Path is relevant only in case of ACCESS (MDB)
+        If DB_Platform = 0 Then
+            DB_Path = Trim$(Recset!DataBase_Name)
+            If UCase(Right$(DB_Path, 3)) <> "MDB" Then DB_Path = DB_Path + ".mdb"
+        End If
+    
+        ' Set Db Provider here
+        Db_Provider = "Microsoft.Jet.OLEDB.4.0"
+        If DB_Platform = 1 Then Db_Provider = "SQLOLEDB"
+        If DB_Platform = 2 Or DB_Platform = 3 Then Db_Provider = ""
+    
+        ' Set Connect String here
+        Connect_String = "UserID=" & Trim$(Recset!database_userid) & ";Password=" & Trim$(Recset!database_password) & ";"
+        If DB_Platform = 1 Then Connect_String = "SERVER=" + Trim$(Recset!database_server) + ";Database=" + Trim$(Recset!DataBase_Name) + ";" + "User ID=" & Trim$(Recset!database_userid) & ";Password=" & Trim$(Recset!database_password) & ";"
+'        If DB_Platform = 2 Then Connect_String = "DSN=" & DSN_Name & "; UID=" & Trim$(Recset!database_userid) & "; PWD=" & Trim$(Recset!database_password)    ' Case 3 in UNIFY Dataserver
+      If DB_Platform = 2 Then Connect_String = "Provider=MSDAORA;User ID=" & Trim$(Recset!database_userid) & "; Password=" & Trim$(Recset!database_password) & ";Data Source=" & Trim$(Recset!database_server)
+        
+        
+        
+        If DB_Platform = 3 Then
+            Db_Provider = ""
+            Connect_String = "DSN=" & DSN_Name & "; UID=" & Trim$(Recset!database_userid) & ";Password=" & Trim$(Recset!database_password) & ";"
+        End If
+    
+        Num_BRDB = Num_BRDB + 1
+        BRDB_Unit(Num_BRDB) = UCode
+        BRDB_Connect_Str(Num_BRDB) = Connect_String
+        BRDB_Platform(Num_BRDB) = DB_Platform
+        BRDB_DBPath(Num_BRDB) = DB_Path
+        BRDB_Provider(Num_BRDB) = Db_Provider
+        BRDB_DBName(Num_BRDB) = ""
+        If DB_Platform = 3 Then BRDB_DBName(Num_BRDB) = DBase_Name & "."
+        Recset.MoveNext
+    Loop
+    Exit Sub
+End Sub
+
+
+
+Public Sub Open_MDB_Connection()
+Dim DB_Path As String, Err_Flag As Integer
+Dim Temp_String As String, Num_Bytes As Integer, Connect_String As String, Db_Provider As String
+Dim Error_Flag As Byte
+
+    DB_Path = ""
+    Pkg_Path = CurDir + "\"
+    gMaster_Location = 0
+    If Len(Dir("AKSSYS.MDB")) > 0 Then
+        gMaster_Location = 1
+        GoTo DataBase_Found
+    End If
+    
+    Call aksfile_open("PKG.ini", 1, Err_Flag)
+    Temp_String = Space(400)
+    Num_Bytes = 400
+    Call aksfile_read(1, Temp_String, Num_Bytes)
+    Call aksfile_close(1, Err_Flag)
+    If Num_Bytes <= 0 Then Exit Sub
+    ' PKG.INI contains database path
+    Temp_String = Trim$(Left$(Temp_String, Num_Bytes))
+    If Len(Temp_String) <= 0 Then Exit Sub
+    If Right$(Temp_String, 1) <> "\" Then Temp_String = Temp_String + "\"
+    If Len(Dir(Temp_String + "AKSSYS.MDB")) > 0 Then
+        Pkg_Path = Temp_String
+        GoTo DataBase_Found
+    End If
+
+DataBase_Found:
+    
+    DB_Path = Pkg_Path + "AKSSYS.mdb"
+    Connect_String = "UserID=admin;Password=kln;"
+    Db_Provider = "Microsoft.Jet.OLEDB.4.0"
+    Call Open_DB_Connection(0, 1, 0, Connect_String, DB_Path, Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then
+        Call Err_Message("Not Able to Open System Database", 1)
+        Exit Sub
+    End If
+End Sub
+
+Public Sub PrintCustomerLog(ByVal DateFrom As Date, ByVal DateTill As Date)
+Dim Rs_Customer As New ADODB.Recordset, Rs_Customer_Log As New ADODB.Recordset
+Dim Rs_Select As New ADODB.Recordset
+'''''''''
+Dim CustId As Long, FileName As String, Lg_Cust_Resi_Phone As Long
+Dim Lg_Cust_offi_Phone As Long, Ld_Cust_CustDOB As Date
+Dim Ls_Cust_Telex As String, Ls_Cust_Bus_Servno As String, Ls_Cust_Memo As String
+Dim Lc_Iss_Share_Capital As Currency, Lc_Credit_Limit As Currency
+Dim Ls_Cust_FstName As String, Ls_Cust_MidName As String, Ls_Cust_SurName As String
+Dim Ls_cust_mailaddr As String, Ls_cust_mailaddr2 As String, Ls_Cust_City As String
+Dim Ls_Tax_Code As String, Ls_sign_auth_instruc As String
+Dim Ls_Cust_AlphaName As String, Ls_Cust_Comp_Type As String
+Dim Lg_Cust_Fax  As Long, Ls_Industory_Code As String, Ls_DepAnl_Code As String
+
+''''''''''''
+
+''''' Variable for Customer
+Dim Ls_Cust_AlphaName_New As String
+Dim Ls_TaxCode_New As String, Ls_Cust_Status_New As String
+Dim Ls_Industory_Code_New As Long, Ls_Prov_Code As String
+Dim Lg_Cust_Resi_Phone_New As Long, Lg_Cust_Offi_Phone_New As Long
+Dim Ls_Cust_Telex_New As String
+Dim Lg_Cust_Fax_New As Long, Ls_Cust_Bus_Servno_New As String
+Dim Ls_Cust_Comp_Type_New As String
+Dim Lc_Iss_Share_Capital_New As Currency, Ls_Tax_Code_New As String
+Dim Lc_Credit_Limit_New As Currency, Ls_DepAnl_Code_New As String
+Dim Ld_Cust_Reg_Date As Date
+Dim Ls_Cust_Memo_New As String, Ls_Cust_Card_Name_New  As String
+Dim Ls_Instruction_New As String
+Dim Ld_CustDOB_New  As Date
+
+'''''Variable for Customer_Nlog Table
+Dim Ls_cust_alphaName_Old As String
+Dim Ls_TaxCode_Old As String, Ls_Cust_Status_Old As String
+Dim Ls_Industory_Code_Old As Long, Ls_Prov_Code_Old As String
+Dim Lg_Cust_Resi_Phone_Old As Long, Lg_Cust_Offi_Phone_Old As Long
+Dim Ls_Cust_Telex_Old As String
+Dim Lg_Cust_Fax_Old As Long, Ls_Cust_Bus_Servno_Old As String
+Dim Ls_Cust_Comp_Type_Old As String
+Dim Lc_Iss_Share_Capital_Old As Currency, Ls_Tax_Code_Old As String
+Dim Lc_Credit_Limit_Old As Currency, Ls_DepAnl_Code_Old As String
+Dim Ls_Cust_Memo_Old As String, Ls_Cust_Card_Name_Old  As String, Ls_Instruction_Old As String
+
+Dim Ls_Cust_FstName_New As String, Ls_Cust_MidName_New As String, Ls_Cust_SurName_New As String
+Dim Ls_cust_mailaddr_New As String, Ls_cust_mailaddr2_New As String, Ls_Cust_City_New As String
+Dim Ls_sign_auth_instruc_New As String
+Dim Ld_CustDOB_Old  As Date
+
+
+Dim Ls_Cust_FstName_Old As String, Ls_Cust_MidName_Old As String, Ls_Cust_SurName_Old As String
+Dim Ls_cust_mailaddr_Old As String, Ls_cust_mailaddr2_Old As String, Ls_Cust_City_Old As String
+Dim Ls_sign_auth_instruc_Old As String
+Dim Ls_Officer_Code As String, Ls_Cust_Status As String, Ls_Officer_Time As String
+Dim Ld_Officer_Date As Date
+Dim BranchCode As Integer
+Dim CustId_Var As Long
+
+
+BranchCode = Unit_Code
+    
+'create file to dump any changed data of customer
+FileName = App.Path & "\Custlog.dat"
+Call file_create(FileName, 0)
+    
+Sqlstr = "select distinct cust_idno from " & gUnifyDb & "customer_nlog" & _
+        " where br_code=" & Unit_Code & _
+        " and officer_date >='" & Format(DateFrom, "dd-mmm-yyyy") & "'" & _
+        " and officer_date <='" & Format(DateTill + 1, "dd-mmm-yyyy") & "'" & _
+        " order by cust_idno "
+Call Fire_Sql(Sqlstr, Rs_Select, Sql_Error, Connection_No, recs_read)
+If Sql_Error <> 0 Then Call Abort_Program(Me, "PrintCustomerLog_1")
+
+Do While Not Rs_Select.EOF
+    CustId = IIf(IsNull(Rs_Select!Cust_IdNo), "", Rs_Select!Cust_IdNo)
+    
+    Sqlstr = " select cust_idno,cust_surname,cust_fstname,cust_midname,cust_alpha," & _
+             " cust_mailaddr,cust_city,officer_code, tax_code,cust_status," & _
+             " sign_auth_instruc,officer_date, officer_time,cust_mailaddr2," & _
+             " ind_code,prov_code,cust_resi_phone,cust_offi_phone,cust_telex,cust_fax," & _
+             " cust_bus_servno,cust_comp_type,iss_share_cap,credit_limit,depanl_code," & _
+             " cust_reg_date,cust_card_name" & _
+             " from " & gUnifyDb & "customer " & _
+             " where br_code=" & Unit_Code & _
+             " and cust_idno = " & CustId
+    Call Fire_Sql(Sqlstr, Rs_Customer, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "PrintCustomerLog_2")
+
+    Ls_Officer_Code = IIf(IsNull(Rs_Customer!Officer_Code), "", Rs_Customer!Officer_Code)
+        
+    Sqlstr = " select cust_idno,cust_surname,cust_fstname,cust_midname,cust_alpha," & _
+             " cust_mailaddr,cust_city,officer_code, tax_code,cust_status," & _
+             " sign_auth_instruc,officer_date, officer_time,cust_mailaddr2," & _
+             " ind_code,prov_code,cust_resi_phone,cust_offi_phone,cust_telex,cust_fax," & _
+             " cust_bus_servno,cust_comp_type,iss_share_cap,credit_limit," & _
+             " depanl_code,cust_reg_date,cust_card_name" & _
+             " from " & gUnifyDb & "customer_nlog where br_code=" & Unit_Code & _
+             " and cust_idno = " & CustId & " and officer_date >='" & Format(DateFrom, "dd-mmm-yyyy") & "'" & _
+             " and officer_date <='" & Format(DateTill, "dd-mmm-yyyy") & "'" & _
+             " order by officer_date desc "
+    Call Fire_Sql(Sqlstr, Rs_Customer_Log, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "PrintCustomerLog_3")
+        
+        
+    'if no record found in the customer loag table them read next record of customer in the log table
+    If Rs_Customer_Log.EOF Then GoTo Next_Record_Customer
+    
+    Ls_Officer_Time = IIf(IsNull(Rs_Customer_Log!officer_time), "00:00", get_Formated_Time(Rs_Customer_Log!officer_time))
+    Ld_Officer_Date = Format(IIf(IsNull(Rs_Customer_Log!officer_date), #1/1/1900#, Rs_Customer_Log!officer_date), "dd-mmm-yyyy")
+    
+    
+    Ls_Cust_FstName_New = IIf(IsNull(Rs_Customer!Cust_FstName), "", Rs_Customer!Cust_FstName)
+    Ls_Cust_MidName_New = IIf(IsNull(Rs_Customer!Cust_MidName), "", Rs_Customer!Cust_MidName)
+    Ls_Cust_SurName_New = IIf(IsNull(Rs_Customer!Cust_SurName), "", Rs_Customer!Cust_SurName)
+    Ls_cust_mailaddr_New = IIf(IsNull(Rs_Customer!cust_mailaddr), "", Rs_Customer!cust_mailaddr)
+    Ls_cust_mailaddr2_New = IIf(IsNull(Rs_Customer!cust_mailaddr2), "", Rs_Customer!cust_mailaddr2)
+    Ls_Cust_City_New = IIf(IsNull(Rs_Customer!Cust_City), "", Rs_Customer!Cust_City)
+    Ls_Tax_Code_New = IIf(IsNull(Rs_Customer!Tax_Code), "", Rs_Customer!Tax_Code)
+    Ls_sign_auth_instruc_New = IIf(IsNull(Rs_Customer!sign_auth_instruc), "", Rs_Customer!sign_auth_instruc)
+    Ls_Cust_Status_New = IIf(IsNull(Rs_Customer!Cust_Status), "O", Rs_Customer!Cust_Status)
+    
+    Ls_Cust_AlphaName_New = IIf(IsNull(Rs_Customer!cust_alpha), "", Rs_Customer!cust_alpha)
+    Ls_Tax_Code_New = IIf(IsNull(Rs_Customer!Tax_Code), "", Rs_Customer!Tax_Code)
+    Ls_Industory_Code_New = IIf(IsNull(Rs_Customer!Ind_Code), 0, Rs_Customer!Ind_Code)
+    Ls_Prov_Code = IIf(IsNull(Rs_Customer!Prov_Code), "", Rs_Customer!Prov_Code)
+    Lg_Cust_Resi_Phone_New = IIf(IsNull(Rs_Customer!cust_resi_phone), 0, Rs_Customer!cust_resi_phone)
+    Lg_Cust_Offi_Phone_New = IIf(IsNull(Rs_Customer!cust_offi_phone), 0, Rs_Customer!cust_offi_phone)
+    Ls_Cust_Telex_New = IIf(IsNull(Rs_Customer!Cust_Telex), "", Rs_Customer!Cust_Telex)
+    Lg_Cust_Fax_New = IIf(IsNull(Rs_Customer!cust_fax), 0, Rs_Customer!cust_fax)
+    Ls_Cust_Bus_Servno_New = IIf(IsNull(Rs_Customer!cust_bus_servno), "", Rs_Customer!cust_bus_servno)
+    Ls_Cust_Comp_Type_New = IIf(IsNull(Rs_Customer!cust_comp_type), "", Rs_Customer!cust_comp_type)
+    Lc_Iss_Share_Capital_New = IIf(IsNull(Rs_Customer!iss_share_cap), 0, Rs_Customer!iss_share_cap)
+    Lc_Credit_Limit_New = IIf(IsNull(Rs_Customer!Credit_Limit), 0, Rs_Customer!Credit_Limit)
+    Ls_DepAnl_Code_New = IIf(IsNull(Rs_Customer!DepAnl_Code), "", Rs_Customer!DepAnl_Code)
+    Ld_Cust_Reg_Date = IIf(IsNull(Rs_Customer!cust_reg_date), #1/1/1900#, Rs_Customer!cust_reg_date)
+    Ls_Cust_Memo_New = ""
+    Ls_Cust_Card_Name_New = IIf(IsNull(Rs_Customer!cust_card_name), "", Rs_Customer!cust_card_name)
+    
+    
+    Ls_Cust_FstName_Old = IIf(IsNull(Rs_Customer_Log!Cust_FstName), "", Rs_Customer_Log!Cust_FstName)
+    Ls_Cust_MidName_Old = IIf(IsNull(Rs_Customer_Log!Cust_MidName), "", Rs_Customer_Log!Cust_MidName)
+    Ls_Cust_SurName_Old = IIf(IsNull(Rs_Customer_Log!Cust_SurName), "", Rs_Customer_Log!Cust_SurName)
+    Ls_cust_mailaddr_Old = IIf(IsNull(Rs_Customer_Log!cust_mailaddr), "", Rs_Customer_Log!cust_mailaddr)
+    Ls_cust_mailaddr2_Old = IIf(IsNull(Rs_Customer_Log!cust_mailaddr2), "", Rs_Customer_Log!cust_mailaddr2)
+    Ls_Cust_City_Old = IIf(IsNull(Rs_Customer_Log!Cust_City), "", Rs_Customer_Log!Cust_City)
+    Ls_Tax_Code_Old = IIf(IsNull(Rs_Customer_Log!Tax_Code), "", Rs_Customer_Log!Tax_Code)
+    Ls_sign_auth_instruc_Old = IIf(IsNull(Rs_Customer_Log!sign_auth_instruc), "", Rs_Customer_Log!sign_auth_instruc)
+    Ls_Cust_Status_Old = IIf(IsNull(Rs_Customer_Log!Cust_Status), "O", Rs_Customer_Log!Cust_Status)
+           
+    Ls_cust_alphaName_Old = IIf(IsNull(Rs_Customer_Log!cust_alpha), "", Rs_Customer_Log!cust_alpha)
+      
+    Ls_Tax_Code_Old = IIf(IsNull(Rs_Customer_Log!Tax_Code), "", Rs_Customer_Log!Tax_Code)
+    Ls_Industory_Code_Old = IIf(IsNull(Rs_Customer_Log!Ind_Code), 0, Rs_Customer_Log!Ind_Code)
+    Ls_Prov_Code_Old = IIf(IsNull(Rs_Customer_Log!Prov_Code), "", Rs_Customer_Log!Prov_Code)
+    Lg_Cust_Resi_Phone_Old = IIf(IsNull(Rs_Customer_Log!cust_resi_phone), 0, Rs_Customer_Log!cust_resi_phone)
+    Lg_Cust_Offi_Phone_Old = IIf(IsNull(Rs_Customer_Log!cust_offi_phone), 0, Rs_Customer_Log!cust_offi_phone)
+    Ls_Cust_Telex_Old = IIf(IsNull(Rs_Customer_Log!Cust_Telex), "", Rs_Customer_Log!Cust_Telex)
+    Lg_Cust_Fax_Old = IIf(IsNull(Rs_Customer_Log!cust_fax), 0, Rs_Customer_Log!cust_fax)
+    Ls_Cust_Bus_Servno_Old = IIf(IsNull(Rs_Customer_Log!cust_bus_servno), "", Rs_Customer_Log!cust_bus_servno)
+    Ls_Cust_Comp_Type_Old = IIf(IsNull(Rs_Customer_Log!cust_comp_type), "", Rs_Customer_Log!cust_comp_type)
+    Lc_Iss_Share_Capital_Old = IIf(IsNull(Rs_Customer_Log!iss_share_cap), 0, Rs_Customer_Log!iss_share_cap)
+    Lc_Credit_Limit_Old = IIf(IsNull(Rs_Customer_Log!Credit_Limit), 0, Rs_Customer_Log!Credit_Limit)
+    Ls_DepAnl_Code_Old = IIf(IsNull(Rs_Customer_Log!DepAnl_Code), "", Rs_Customer_Log!DepAnl_Code)
+    Ls_Cust_Memo_Old = ""
+    Ls_Cust_Card_Name_Old = IIf(IsNull(Rs_Customer_Log!cust_card_name), "", Rs_Customer_Log!cust_card_name)
+        
+    Ls_Cust_FstName = " - "
+    Ls_Cust_MidName = " - "
+    Ls_Cust_SurName = " - "
+    Ls_cust_mailaddr = " - "
+    Ls_cust_mailaddr2 = " - "
+    Ls_Cust_City = " - "
+    Ls_Tax_Code = Rs_Customer_Log!Tax_Code
+    Ls_sign_auth_instruc = " - "
+    Ls_Cust_Status = " - "
+    
+    ''' add by ravi
+    Ls_Cust_AlphaName = " - "
+    Ls_Cust_Bus_Servno = " - "
+    Ls_Cust_Telex = " - "
+    Ls_Cust_Comp_Type = " - "
+    Ls_Industory_Code = " - "
+    Ls_DepAnl_Code = " - "
+    
+    If Ls_Cust_FstName_New <> Ls_Cust_FstName_Old Then Ls_Cust_FstName = Ls_Cust_FstName_Old
+    If Ls_Cust_MidName_New <> Ls_Cust_MidName_Old Then Ls_Cust_MidName = Ls_Cust_MidName_Old
+    If Ls_Cust_SurName_New <> Ls_Cust_SurName_Old Then Ls_Cust_SurName = Ls_Cust_SurName_Old
+    If Ls_cust_mailaddr_New <> Ls_cust_mailaddr_Old Then Ls_cust_mailaddr = Ls_cust_mailaddr_Old
+    If Ls_cust_mailaddr2_New <> Ls_cust_mailaddr2_Old Then Ls_cust_mailaddr2 = Ls_cust_mailaddr2_Old
+    If Ls_Cust_City_New <> Ls_Cust_City_Old Then Ls_Cust_City = Ls_Cust_City_Old
+    If Ls_Tax_Code_New <> Ls_Tax_Code_Old Then Ls_Tax_Code = Ls_Tax_Code_Old
+    If Ls_sign_auth_instruc_New <> Ls_sign_auth_instruc_Old Then Ls_sign_auth_instruc = Ls_sign_auth_instruc_Old
+    If Ls_Cust_Status_New <> Ls_Cust_Status_Old Then Ls_Cust_Status = Ls_Cust_Status_Old
+    
+    '''' add by ravi
+    If Lg_Cust_Resi_Phone_New <> Lg_Cust_Resi_Phone_Old Then Lg_Cust_Resi_Phone = Lg_Cust_Resi_Phone_Old
+    If Lg_Cust_Offi_Phone_New <> Lg_Cust_Offi_Phone_Old Then Lg_Cust_offi_Phone = Lg_Cust_Offi_Phone_Old
+    If Lc_Credit_Limit_New <> Lc_Credit_Limit_Old Then Lc_Credit_Limit = Lc_Credit_Limit_Old
+    If Ls_Cust_AlphaName_New <> Ls_cust_alphaName_Old Then Ls_Cust_AlphaName = Ls_cust_alphaName_Old
+    If Ld_CustDOB_New <> Ld_CustDOB_Old Then Ld_Cust_CustDOB = Ld_CustDOB_Old
+    If Ls_Cust_Bus_Servno_New <> Ls_Cust_Bus_Servno_Old Then Ls_Cust_Bus_Servno = Ls_Cust_Card_Name_Old
+    If Lg_Cust_Fax_New <> Lg_Cust_Fax_Old Then Lg_Cust_Fax = Lg_Cust_Fax_Old
+    If Ls_Cust_Telex_New <> Ls_Cust_Telex_Old Then Ls_Cust_Telex = Ls_Cust_Telex_Old
+    If Lc_Iss_Share_Capital_New <> Lc_Iss_Share_Capital_Old Then Lc_Iss_Share_Capital = Lc_Iss_Share_Capital_Old
+    If Ls_Cust_Comp_Type_New <> Ls_Cust_Comp_Type_Old Then Ls_Cust_Comp_Type = Ls_Cust_Comp_Type_Old
+    If Ls_Industory_Code_New <> Ls_Industory_Code_Old Then Ls_Industory_Code = Ls_Industory_Code_Old
+    If Ls_DepAnl_Code_New <> Ls_DepAnl_Code_Old Then Ls_DepAnl_Code = Ls_DepAnl_Code_Old
+    
+    Call put_data(Unit_Code, 2, 0, 3, 1, 1)
+    Call put_data(Pad(gs_BranchName, 15, 0), 0, 0, 15, 0, 1)
+    
+    Call put_data(CStr(Format(DateFrom, "dd-mm-yyyy")), 0, 0, 10, 0, 1)
+    Call put_data(CStr(Format(DateTill, "dd-mm-yyyy")), 0, 0, 10, 0, 1)
+    
+    CustId_Var = Val(Right$("000" + CStr(BranchCode), 3) + Right$("000000" + CStr(CustId), 6))
+    Call put_data(CustId_Var, 3, 0, 9, 1, 1)
+    Call put_data(Pad(Ls_Cust_FstName_New, 20, 0), 0, 0, 20, 0, 1)
+    Call put_data(Pad(Ls_Cust_MidName_New, 20, 0), 0, 0, 20, 0, 1)
+    Call put_data(Pad(Ls_Cust_SurName_New, 50, 0), 0, 0, 50, 0, 1)
+    Call put_data(Pad(Ls_cust_mailaddr_New, 15, 0), 0, 0, 15, 0, 1)
+    Call put_data(Pad(Ls_cust_mailaddr2_New, 15, 0), 0, 0, 15, 0, 1)
+    Call put_data(Pad(Ls_Cust_City_New, 15, 0), 0, 0, 15, 0, 1)
+    Call put_data(Pad(Ls_sign_auth_instruc_New, 80, 0), 0, 0, 80, 0, 1)
+    
+    Call put_data(Pad(Ls_Cust_AlphaName_New, 20, 0), 0, 0, 20, 0, 1)
+    Call put_data(Pad(Ls_Tax_Code_New, 2, 0), 0, 0, 2, 0, 1)
+    Call put_data(Pad(Ls_Industory_Code_New, 4, 0), 0, 0, 4, 1, 1)
+    Call put_data(Pad(Ls_Prov_Code, 6, 0), 0, 0, 6, 1, 1)
+    Call put_data(Lg_Cust_Resi_Phone_New, 3, 0, 9, 1, 1)
+    Call put_data(Lg_Cust_Offi_Phone_New, 3, 0, 9, 1, 1)
+    Call put_data(Pad(Ls_Cust_Telex_New, 30, 0), 0, 0, 30, 1, 1)
+    Call put_data(Lg_Cust_Fax_New, 3, 0, 9, 1, 1)
+    Call put_data(Pad(Ls_Cust_Bus_Servno_New, 30, 0), 0, 0, 30, 1, 1)
+    Call put_data(Pad(Ls_Cust_Comp_Type_New, 6, 0), 0, 0, 6, 1, 1)
+    Call put_data(Lc_Iss_Share_Capital_New, 4, 0, 13, 1, 1)
+    Call put_data(Lc_Credit_Limit_New, 4, 0, 13, 1, 1)
+    Call put_data(Pad(Ls_DepAnl_Code_New, 4, 0), 0, 0, 4, 1, 1)
+    Call put_data(CStr(Format(Ld_Cust_Reg_Date, "dd-mm-yyyy")), 0, 0, 10, 1, 1)
+    Call put_data(Pad(Ls_Cust_Memo_New, 16, 0), 0, 0, 16, 1, 1)
+    Call put_data(Pad(Ls_Cust_Card_Name_New, 45, 0), 0, 0, 45, 1, 1)
+    Call put_data(Pad(Ls_sign_auth_instruc_New, 80, 0), 0, 0, 80, 1, 1)
+    
+    Ls_Tax_Code_New = "NO"
+    If Ls_Tax_Code_New = "Y" Then Ls_Tax_Code_New = "YES"
+    
+    Call put_data(Pad(Ls_Tax_Code_New, 3, 0), 0, 0, 3, 0, 1)
+    Call put_data(Pad(Ls_Cust_Status_New, 6, 0), 0, 0, 6, 1, 1)
+        
+    Call put_data(Pad(Ls_Cust_FstName, 20, 0), 0, 0, 20, 1, 1)
+    Call put_data(Pad(Ls_Cust_MidName, 20, 0), 0, 0, 20, 1, 1)
+    Call put_data(Pad(Ls_Cust_SurName, 50, 0), 0, 0, 50, 1, 1)
+    Call put_data(Pad(Ls_cust_mailaddr, 15, 0), 0, 0, 15, 1, 1)
+    Call put_data(Pad(Ls_cust_mailaddr2, 15, 0), 0, 0, 15, 1, 1)
+    Call put_data(Pad(Ls_Cust_City, 15, 0), 0, 0, 15, 1, 1)
+    Call put_data(Pad(Ls_sign_auth_instruc, 80, 0), 0, 0, 80, 1, 1)
+    
+    Call put_data(Lg_Cust_Resi_Phone, 3, 0, 9, 1, 1)
+    Call put_data(Lg_Cust_offi_Phone, 3, 0, 9, 1, 1)
+    Call put_data(Lc_Credit_Limit, 4, 0, 13, 1, 1)
+    Call put_data(Pad(Ls_Cust_AlphaName, 30, 0), 0, 0, 30, 1, 1)
+    Call put_data(CStr(Format(Ld_Cust_CustDOB, "dd-mm-yyyy")), 0, 0, 10, 1, 1)
+    Call put_data(Pad(Ls_Cust_Bus_Servno, 30, 0), 0, 0, 30, 1, 1)
+    Call put_data(Lg_Cust_Fax, 3, 0, 9, 1, 1)
+    Call put_data(Pad(Ls_Cust_Telex, 30, 0), 0, 0, 30, 1, 1)
+    Call put_data(Lc_Iss_Share_Capital, 4, 0, 13, 1, 1)
+    Call put_data(Pad(Ls_Cust_Comp_Type, 6, 0), 0, 0, 6, 1, 1)
+    Call put_data(Pad(Ls_Industory_Code, 4, 0), 0, 0, 4, 1, 1)
+    Call put_data(Pad(Ls_DepAnl_Code, 4, 0), 0, 0, 4, 1, 1)
+
+    Ls_Tax_Code = "NO"
+    If Ls_Tax_Code = "Y" Then Ls_Tax_Code = "YES"
+    
+    Call put_data(Pad(Ls_Tax_Code, 3, 0), 0, 0, 3, 1, 1)
+    Call put_data(Pad(Ls_Cust_Status, 6, 0), 0, 0, 6, 1, 1)
+    
+    Call put_data(Pad(Ls_Officer_Code, 3, 0), 0, 0, 3, 1, 1)
+    Call put_data(Pad(Ls_Officer_Time, 5, 0), 0, 0, 5, 1, 1)
+    Call put_data(CStr(Format(Ld_Officer_Date, "dd-mm-yyyy")), 0, 0, 10, 1, 0)
+    Call flush
+    
+Next_Record_Customer:
+    Rs_Select.MoveNext
+Loop
+    
+    Call file_close
+    
+IO_Error:
+
+    Exit Sub
+End Sub
+
+Public Sub Get_Branch_Ip_Details(ByVal Source_Branch As Integer, ByRef Br_Ip_Adrs As String, ByRef Br_Pwd As String, ByRef Br_Login As String, _
+                                ByRef Br_Server_Type As Byte, ByRef Br_Photo_Dir As String, ByRef Br_Sig_Dir As String)
+
+Dim Sqlstr As String, Recset As New ADODB.Recordset
+Dim Br_Pwd1 As String, Br_Pwd2 As String, Dir_Char As String
+
+    If Source_Branch = Prev_Ip_Branch_Code Then
+        Br_Ip_Adrs = Prev_Ip_Adrs
+        Br_Pwd = Prev_Pwd
+        Br_Login = Prev_Login
+        Br_Server_Type = Prev_Server_Type
+        Br_Photo_Dir = Prev_Photo_Dir
+        Br_Sig_Dir = Prev_Sig_Dir
+        Exit Sub
+    End If
+    
+    Br_Ip_Adrs = ""
+    Br_Pwd = ""
+    Br_Login = ""
+    Br_Server_Type = 2
+    Br_Photo_Dir = ""
+    Br_Sig_Dir = ""
+    
+    Sqlstr = "select br_ipaddress,br_pwd1,br_pwd2,br_login,br_server_type,br_photo_dir,br_sig_dir from " & gUnifyDb & "branch where br_code = " & Source_Branch
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "Get_Branch_IP_Details_1")
+    If Not Recset.EOF Then
+        Br_Ip_Adrs = Trim$(IIf(IsNull(Recset!br_ipaddress), "", Recset!br_ipaddress))
+        Br_Pwd1 = Trim$(IIf(IsNull(Recset!Br_Pwd1), "", Recset!Br_Pwd1))
+        Br_Pwd2 = Trim$(IIf(IsNull(Recset!Br_Pwd2), "", Recset!Br_Pwd2))
+        If Trim$(Br_Pwd1) <> "" Or Trim$(Br_Pwd2) <> "" Then Call Vb_DeCrypt_Passwd(Br_Pwd1, Br_Pwd2, 0, 1, 1, Br_Pwd)
+        Br_Login = Trim$(IIf(IsNull(Recset!Br_Login), "", Recset!Br_Login))
+        Br_Server_Type = IIf(IsNull(Recset!Br_Server_Type), 2, Recset!Br_Server_Type)
+        
+        ' --------------------------------------------
+        ' For WAN Branches, Hard Code Server Type to 3
+'        If Source_Branch <> Unit_Code Then Br_Server_Type = 3
+        ' --------------------------------------------
+        
+        Br_Photo_Dir = Trim$(IIf(IsNull(Recset!Br_Photo_Dir), "", Recset!Br_Photo_Dir))
+        Br_Sig_Dir = Trim$(IIf(IsNull(Recset!Br_Sig_Dir), "", Recset!Br_Sig_Dir))
+        Dir_Char = "\"
+        If Br_Server_Type = 3 Then
+            Dir_Char = "/"
+            Br_Photo_Dir = Replace(Br_Photo_Dir, "\", "/")
+            Br_Sig_Dir = Replace(Br_Sig_Dir, "\", "/")
+        End If
+        
+        If Right$(Br_Photo_Dir, 1) <> Dir_Char Then Br_Photo_Dir = Br_Photo_Dir + Dir_Char
+        If Right$(Br_Sig_Dir, 1) <> Dir_Char Then Br_Sig_Dir = Br_Sig_Dir + Dir_Char
+
+        Prev_Ip_Branch_Code = Source_Branch
+        Prev_Ip_Adrs = Br_Ip_Adrs
+        Prev_Pwd = Br_Pwd
+        Prev_Login = Br_Login
+        Prev_Server_Type = Br_Server_Type
+        Prev_Photo_Dir = Br_Photo_Dir
+        Prev_Sig_Dir = Br_Sig_Dir
+    End If
+    Exit Sub
+End Sub
+
+Public Sub ReOpen_Main_Connection(ByVal Conn_No As Integer, ByRef Err_Flag As Byte)
+Dim DB_Platform As Byte, Db_Provider As String, Connect_String As String
+Dim Read_Write As Byte, Error_Flag As Byte
+Dim Db_Id As Byte, DSN_Name As String, DBase_Name As String, DB_Path As String
+
+    Home_Branch_Connection_Available_Flag = 0
+    Err_Flag = 1
+    DB_Platform = Home_Branch_Db_Platform
+    Connect_String = Home_Branch_Connect_Str
+    DB_Path = Home_Branch_Db_Path
+    Db_Provider = Home_Branch_Db_Provider
+    Connection_No = Conn_No
+    Read_Write = 1
+    Call Open_DB_Connection(Connection_No, Read_Write, DB_Platform, Connect_String, DB_Path, Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then
+        Call Close_Info_Window
+        Call Err_Message("Not Able to Connect to Branch Database.", 1)
+        Exit Sub
+    End If
+    Err_Flag = 0
+    Home_Branch_Connection_Available_Flag = 1
+    Exit Sub
+End Sub
+
+Public Sub Inform_Loading(ByRef Calling_Form As Form)
+    Call Reset_Idle_Timer
+    Num_Forms_loaded = Num_Forms_loaded + 1
+    Form_Loaded(Num_Forms_loaded) = Calling_Form.Name
+    Call Set_SysDll_Form(Calling_Form.Name)
+    If Num_Forms_loaded > 1 Then
+        For I = 1 To Forms.Count - 1
+            If Forms(I).Name <> "InfoSplash" Then
+                If Forms(I).Name = Form_Loaded(Num_Forms_loaded - 1) And Forms(I).MyClass.Unit_Code = Unit_Code Then
+                        If Forms(Num_Forms_loaded - 1).Name = "MenuForm" And Forms(I).MyClass.Unit_Code = Unit_Code Then Forms(I).WindowState = 2
+                        Forms(I).Enabled = False
+                        Exit Sub
+                End If
+            End If
+        Next I
+    End If
+    Exit Sub
+End Sub
+Public Sub Inform_UnLoading(ByRef Calling_Form As Form)
+    Call Reset_Idle_Timer
+    Call Activate_Parent(Calling_Form)
+    J = 0
+    For I = 1 To Num_Forms_loaded
+    If Calling_Form.Name = Form_Loaded(I) Then J = I
+    Next I
+    If J = 0 Then
+        Call Display_Message("Error In Routine Inform_Unloading", Product_Name, 1)
+        Exit Sub
+    End If
+    If J = Num_Forms_loaded Then GoTo Move_Over
+    For I = J To Num_Forms_loaded - 1
+    Form_Loaded(I) = Form_Loaded(I + 1)
+    Next I
+
+Move_Over:
+
+    Num_Forms_loaded = Num_Forms_loaded - 1
+    Exit Sub
+End Sub
+Private Sub Activate_Parent(ByRef Calling_Form As Form)
+Dim Parent_Form As String
+    J = 0
+    For I = 1 To Num_Forms_loaded
+    If Calling_Form.Name = Form_Loaded(I) Then J = I
+    Next I
+    If J <= 1 Then
+        Parent_Form = "MainMDI"
+        GoTo Activate_Here
+    End If
+    Parent_Form = Form_Loaded(J - 1)
+
+Activate_Here:
+
+    If Forms.Count >= 2 Then
+        For I = 1 To Forms.Count - 1
+            If Forms(I).Name <> "MainMDI" And Forms(I).Name <> "InfoSplash" Then
+                If Forms(I).Name = Parent_Form And Forms(I).MyClass.Unit_Code = Unit_Code Then
+                    If Forms(I).Name = "MenuForm" Then Forms(I).WindowState = 2
+                    Call Set_SysDll_Form(Forms(I).Name)
+                    Forms(I).Enabled = True
+                    Forms(I).SetFocus
+                    
+                    Exit Sub
+                End If
+            End If
+        Next I
+    End If
+    Exit Sub
+End Sub
+Public Sub Display_Message(ByVal strMessage As String, Optional ByVal Num_Buttons As Byte, Optional ByRef RetValue As Integer)
+Dim KOpt As Integer
+Dim strVar As String
+    
+    strVar = ""
+    strVar = Product_Name
+    strVar = strVar + " : " + Company_Name
+    If Num_Buttons = 0 Then Num_Buttons = 1
+    If Num_Buttons = 1 Then
+        KOpt = MsgBox(strMessage, vbOKOnly, strVar)
+        RetValue = 0
+        Exit Sub
+    End If
+    If Num_Buttons = 2 Then
+        KOpt = MsgBox(strMessage, vbYesNo + vbDefaultButton2, strVar)
+        RetValue = KOpt
+        Exit Sub
+    End If
+End Sub
+Public Sub FillCombo_NameId(MyCombo As ComboBox, ByVal TableName As String, ByVal TitleField As String, _
+                            ByVal IDField As String, Optional ByVal strArgString As String)
+Dim TmpRs As New ADODB.Recordset, TitleStr As String, IdStr As String, TitleIDStr As String, I As Integer
+Dim Sqlstr As String
+
+    If MyCombo.Enabled = False Then MyCombo.Enabled = True
+    Sqlstr = " Select " & TitleField & "," & IDField & " from " & gUnifyDb & "" & TableName & " "
+    If Len(strArgString) > 0 Then Sqlstr = Sqlstr & strArgString
+    Call Fire_Sql(Sqlstr, TmpRs, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "MyClass/FillCombo_NameID_1")
+    If Not TmpRs.EOF Then
+        MyCombo.Clear
+        Do While TmpRs.EOF = False
+            TitleStr = ""
+            TitleStr = TmpRs(0)
+            IdStr = Dropspl(CStr(TmpRs(1)))
+            TitleIDStr = Pad(TitleStr, 70, 0) & IdStr
+            MyCombo.AddItem TitleIDStr
+            TmpRs.MoveNext
+        Loop
+        If MyCombo.ListCount > 0 Then MyCombo.ListIndex = 0
+    End If
+    Exit Sub
+End Sub
+Public Sub Get_AcForm(ByRef P_cust_code As Long, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As TextBox, ByRef p_Num_Boxes As Byte)
+P_cust_code = Cust_Code
+p_Cust_Name = Cust_Name
+Set p_txtCode = txtCode
+Set p_txtName = TxtName
+p_Esc_Flag = Esc_Flag
+p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_AcForm(ByVal P_cust_code As Long, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByVal p_txtCode As UcDataField, ByVal p_txtName As TextBox, ByVal p_Num_Boxes As Byte)
+
+Cust_Code = P_cust_code
+Cust_Name = p_Cust_Name
+Set txtCode = p_txtCode
+Set TxtName = p_txtName
+Esc_Flag = p_Esc_Flag
+Num_Boxes = p_Num_Boxes
+End Sub
+
+Public Sub Get_Cust_Form(ByRef P_cust_code As Long, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = Cust_Code
+    p_Cust_Name = Cust_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_Cust_Form(ByVal P_cust_code As Long, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    Cust_Code = P_cust_code
+    Cust_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+
+Public Sub Get_Cust_Child(ByRef P_cust_code As Long, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_CustId
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Cust_Child(ByVal P_cust_code As Long, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_CustId = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+
+Public Sub Get_Anal_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = Anal_Code
+    p_Cust_Name = Anal_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_Anal_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    Anal_Code = P_cust_code
+    Anal_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+
+Public Sub Get_Anal_Child(ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_Anal
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Anal_Child(ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_Anal = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+
+Public Sub Get_GLAC_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = GLAc_Code
+    p_Cust_Name = GLAC_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_GLAC_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    GLAc_Code = P_cust_code
+    GLAC_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+
+Public Sub Get_GLAC_Child(ByRef Send_Ledger As String, ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_GLAc
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+    Send_Ledger = Temp_Ledg
+End Sub
+Public Sub Set_GLAC_Child(ByVal Send_Ledger As String, ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_GLAc = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+    Temp_Ledg = Send_Ledger
+End Sub
+
+
+'--------
+Public Sub Get_Cost_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = Cost_Code
+    p_Cust_Name = Cost_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_Cost_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    Cost_Code = P_cust_code
+    Cost_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+
+Public Sub Get_Cost_Child(ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_Cost
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Cost_Child(ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_Cost = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+'===========================
+Public Sub Get_Caloc_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = Caloc_Code
+    p_Cust_Name = Caloc_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_Caloc_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    Caloc_Code = P_cust_code
+    Caloc_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+Public Sub Get_Caloc_Child(ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_Caloc
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Caloc_Child(ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_Caloc = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+
+Public Sub Get_GLGroup_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = GL_Group_Ac
+    p_Cust_Name = GL_Group_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_GLGroup_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    GL_Group_Ac = P_cust_code
+    GL_Group_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+Public Sub Get_GLGroup_Child(ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_GL_Group
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_GLGroup_Child(ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_GL_Group = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+
+Public Sub Get_GLSubGroup_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = GL_SubGroup_Ac
+    p_Cust_Name = GL_SubGroup_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_GLSubGroup_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    GL_SubGroup_Ac = P_cust_code
+    GL_SubGroup_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+Public Sub Get_GLSubGroup_Child(ByRef Group_Code As String, ByRef Group_Name As String, ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_GL_SubGroup
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+    Group_Code = Temp_Group
+    Group_Name = Temp_Group_Name
+End Sub
+Public Sub Set_GLSubGroup_Child(ByVal Group_Code As String, ByVal Group_Name As String, ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_GL_SubGroup = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+    Temp_Group = Group_Code
+    Temp_Group_Name = Group_Name
+End Sub
+
+
+
+Public Sub Get_Save_Mst_Chd(ByRef P_cust_code As Long, ByRef p_AcType As Integer, ByRef p_AcNo As Long, _
+                            ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Save_Cust_Child
+    p_AcType = Save_AcType
+    p_AcNo = Save_AcNo
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Save_Mst_Chd(ByVal P_cust_code As Long, ByVal p_AcType As Integer, ByVal p_AcNo As Long, _
+                            ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Save_Cust_Child = P_cust_code
+    Save_AcType = p_AcType
+    Save_AcNo = p_AcNo
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+Public Sub Get_Alloc_Security(ByRef p_Alloc_Call_Type As Byte, ByRef p_Alloc_CustId As Long, _
+                              ByRef p_Sec_Lien_Flag As Byte, ByRef p_Security_Num As Long, ByRef p_Esc_Flag)
+    p_Alloc_Call_Type = Alloc_Call_Type
+    p_Alloc_CustId = Alloc_CustId
+    p_Sec_Lien_Flag = Sec_Lien_Flag
+    p_Security_Num = Security_Num
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Alloc_Security(ByVal p_Alloc_Call_Type As Byte, ByVal p_Alloc_CustId As Long, _
+                              ByVal p_Sec_Lien_Flag As Byte, ByVal p_Security_Num As Long, ByVal p_Esc_Flag)
+    Alloc_Call_Type = p_Alloc_Call_Type
+    Alloc_CustId = p_Alloc_CustId
+    Sec_Lien_Flag = p_Sec_Lien_Flag
+    Security_Num = p_Security_Num
+    Esc_Flag = p_Esc_Flag
+End Sub
+Public Sub Set_Loan_Chd(ByVal p_Sel_Acnt_Type As Integer, ByVal p_Sel_Acnt_SrNo As Long, _
+                        ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Acnt_Type = p_Sel_Acnt_Type
+    Acnt_SrNo = p_Sel_Acnt_SrNo
+    Esc_Flag = p_Esc_Flag
+    Edit_Flag = p_Edit_Flag
+End Sub
+Public Sub Get_Loan_Chd(ByRef p_Sel_Acnt_Type As Integer, ByRef p_Sel_Acnt_SrNo As Long, _
+                        ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    p_Sel_Acnt_Type = Acnt_Type
+    p_Sel_Acnt_SrNo = Acnt_SrNo
+    p_Esc_Flag = Esc_Flag
+    p_Edit_Flag = Edit_Flag
+End Sub
+Public Sub Set_FD_Chd(ByVal p_Sel_Acnt_Type As Integer, ByVal p_Cust As Long, ByVal p_Sel_Acnt_SrNo As Long, _
+                        ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Acnt_Type = p_Sel_Acnt_Type
+    Acnt_SrNo = p_Sel_Acnt_SrNo
+    Cust_Code = p_Cust
+    Esc_Flag = p_Esc_Flag
+    Edit_Flag = p_Edit_Flag
+End Sub
+Public Sub Get_FD_Chd(ByRef p_Sel_Acnt_Type As Integer, ByRef p_Cust As Long, ByRef p_Sel_Acnt_SrNo As Long, _
+                        ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    p_Sel_Acnt_Type = Acnt_Type
+    p_Sel_Acnt_SrNo = Acnt_SrNo
+    p_Esc_Flag = Esc_Flag
+    p_Cust = Cust_Code
+    p_Edit_Flag = Edit_Flag
+End Sub
+
+Public Sub Get_Disb(ByRef P_Acnt_Type As Integer, ByRef P_Acnt_No As Long)
+    P_Acnt_Type = Disb_AcType
+    P_Acnt_No = Disb_AcNo
+End Sub
+Public Sub Set_Disb(ByVal P_Acnt_Type As Integer, ByVal P_Acnt_No As Long)
+    Disb_AcType = P_Acnt_Type
+    Disb_AcNo = P_Acnt_No
+End Sub
+Public Sub Get_Cust_Secuity(ByRef p_CallType As Integer, ByRef p_Cust_Security As Long)
+    p_CallType = Call_Type
+    p_Cust_Security = CustId_Security
+End Sub
+Public Sub Set_Cust_Secuity(ByVal p_CallType As Integer, ByVal p_Cust_Security As Long)
+    Call_Type = p_CallType
+    CustId_Security = p_Cust_Security
+End Sub
+Public Sub Get_Schd(ByRef P_Acnt_Type As Integer, ByRef P_Acnt_No As Long)
+    P_Acnt_Type = Rsch_AcType
+    P_Acnt_No = Rsch_AcNo
+End Sub
+Public Sub Set_Schd(ByVal P_Acnt_Type As Integer, ByVal P_Acnt_No As Long)
+    Rsch_AcType = P_Acnt_Type
+    Rsch_AcNo = P_Acnt_No
+End Sub
+Public Sub Get_SOrd_Child(ByRef p_Sord_No As Long, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    p_Sord_No = SOrd_Number
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_SOrd_Child(ByVal p_Sord_No As Long, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    SOrd_Number = p_Sord_No
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+Public Sub Fetch_Sig_Photo(ByVal Cust_Branch As Integer, ByVal Cust_Number As Long, ByVal Sig_Photo_Flag As Byte, ByVal Num_Signatories As Byte, ByRef Num_Sig As Byte, ByRef Num_Photo As Byte, Optional Target_Directory As String)
+Dim Sig_File_Name As String, Photo_File_Name As String, Cust_No As String, I As Integer, Retry_Kount As Byte
+Dim Byte_Flag As Byte, Pc_Sig_Dir As String, Pc_Phot_Dir As String, Dest_Dir_File_Together As String
+Dim JJ As Byte
+
+On Error GoTo Sub_Error
+
+    ' We can supply Alien Customer's signature from his Branch's Database only if connection to his branch has been made
+        If Cust_Branch <> Unit_Code And Find_Connection_Status(Foreign_Connection) <> CONN_OPEN Then Exit Sub
+    
+    ' Sig_Photo_Flag = 1 implies Bring Signatures ONLY
+    '                = 2 implies Bring Photographs ONLY
+    '                = 3 implies Bring BOTH; Signatures as well as Photographs
+    If Sig_Photo_Flag < 1 Or Sig_Photo_Flag > 3 Then
+        MsgBox "Invalid Call to Function Fetch Signatures"
+        Exit Sub
+    End If
+    If Num_Signatories < 1 Then Num_Signatories = 1
+    If Num_Signatories > 4 Then Num_Signatories = 4
+    
+    ' Target Directory is assumed to be C:\SIGN
+    Pc_Sig_Dir = "C:\SIGN\"
+    If Sig_Photo_Flag <> 2 Then
+        If Trim$(Target_Directory) <> "" Then Pc_Sig_Dir = Trim$(Target_Directory)
+        If Right$(Pc_Sig_Dir, 1) <> "\" Then Pc_Sig_Dir = Pc_Sig_Dir + "\"
+    End If
+    
+    Pc_Phot_Dir = "C:\SIGN\"
+    If Sig_Photo_Flag <> 1 Then
+        If Trim$(Target_Directory) <> "" Then Pc_Phot_Dir = Trim$(Target_Directory)
+        If Right$(Pc_Phot_Dir, 1) <> "\" Then Pc_Phot_Dir = Pc_Phot_Dir + "\"
+    End If
+    Cust_No = Right$("000000" + CStr(Cust_Number), 6)
+    
+    Num_Sig = 0
+    Num_Photo = 0
+    For JJ = 1 To Num_Signatories
+        Sig_File_Name = "SG" + Cust_No + ".0" + CStr(JJ)
+        Photo_File_Name = "PH" + Cust_No + ".0" + CStr(JJ)
+        ' Delete Existing Files, if any, in Destination Directory; Actually Deletion is required only in case of NT server since FTP Unix automatically Kills
+        If Sig_Photo_Flag <> 2 Then
+            Retry_Kount = 0
+            Dest_Dir_File_Together = Pc_Sig_Dir + "SIGN" + CStr(JJ) + ".bmp"
+Try_Sig_Again:
+            Call Get_Remote_File(Cust_Branch, 0, Sig_File_Name, Dest_Dir_File_Together, Byte_Flag)
+            If Byte_Flag <> 0 Then
+                If Retry_Kount <= 2 Then
+                    Retry_Kount = Retry_Kount + 1
+                    GoTo Try_Sig_Again
+                End If
+            End If
+        End If
+        'See if we have been successful in getting the Signature File
+        If Dir(Dest_Dir_File_Together) <> "" Then Num_Sig = Num_Sig + 1
+    
+        If Sig_Photo_Flag <> 1 Then
+            Retry_Kount = 0
+            Dest_Dir_File_Together = Pc_Phot_Dir + "PHOTO" + CStr(JJ) + ".bmp"
+Try_Photo_Again:
+            Call Get_Remote_File(Cust_Branch, 1, Photo_File_Name, Dest_Dir_File_Together, Byte_Flag)
+            If Byte_Flag <> 0 Then
+                If Retry_Kount <= 2 Then
+                    Retry_Kount = Retry_Kount + 1
+                    GoTo Try_Photo_Again
+                End If
+            End If
+        End If
+        'See if we have been successful in getting the Photo File
+        If Dir(Dest_Dir_File_Together) <> "" Then Num_Photo = Num_Photo + 1
+    Next JJ
+    Exit Sub
+
+Sub_Error:
+    
+    'If unix machine is not found message will return as 'ActiveX component can't create object
+    If Err.Number = 429 Then Exit Sub
+    'if signatory photo directory/file not found or network pc not connected
+    If Err.Number = 52 Then Exit Sub
+    'Other unForeseen Errors
+    MsgBox " Unexpected Error Description = " & Err.Description
+    Exit Sub
+End Sub
+
+Private Sub Get_Remote_File(ByVal Cust_Branch As Integer, ByVal Sig_or_Photo As Byte, ByVal Source_File_Name As String, ByVal Dest_File_Name As String, ByRef Error_Flag As Byte)
+Dim Dummy_String As String, Long_Var As Long, Server_Photo_Dir As String, Server_Sig_Dir As String
+
+On Error GoTo Proc_Error
+    ''Sig_or_Photo = 0 Signature
+    ''Sig_or_Photo = 1 Photo
+
+    Call Get_Branch_Ip_Details(Cust_Branch, Source_Computer, Pass_Word, Login_Name, Source_Server_Type, Server_Photo_Dir, Server_Sig_Dir)
+    
+    Error_Flag = 0
+    Source_Dir_File_Together = Server_Sig_Dir + Source_File_Name
+    If Sig_or_Photo = 1 Then Source_Dir_File_Together = Server_Photo_Dir + Source_File_Name
+    
+    If Dir(Dest_File_Name) <> "" Then Kill Dest_File_Name
+    
+    ' For Local Unix Server i.e. through FileCopy Command since Server Directory has been mapped
+    If Source_Server_Type = 2 Then
+        If Dir("//" & Source_Computer & Source_Dir_File_Together) <> "" Then Call FileCopy("//" & Source_Computer & Source_Dir_File_Together, Dest_File_Name)
+'        Call GetFile(Source_Computer, Login_Name, Pass_Word, Source_Dir_File_Together, Dest_File_Name, Long_Var, Dummy_String)
+'        If Error_Flag <> 0 And Error_Flag <> 6 And Error_Flag <> 1 Then MsgBox "FTP Error " + Dummy_String
+    End If
+
+    ' For Remote Unix Server i.e. through FTP
+    If Source_Server_Type = 3 Then
+        Call GetFile(Source_Computer, Login_Name, Pass_Word, Source_Dir_File_Together, Dest_File_Name, Long_Var, Dummy_String)
+        If Error_Flag <> 0 And Error_Flag <> 6 And Error_Flag <> 1 Then MsgBox "FTP Error " + Dummy_String
+    End If
+
+
+    'For NT Server
+    If Source_Server_Type = 1 Then If Dir("//" & Source_Computer & Source_Dir_File_Together) <> "" Then Call FileCopy("//" & Source_Computer & Source_Dir_File_Together, Dest_File_Name)
+    'For Local Desktop M/c; use COPY Command. In this case Source computer will have Drive Name e.g. C:
+    If Source_Server_Type = 0 Then If Dir(Source_Computer & Source_Dir_File_Together) <> "" Then Call FileCopy(Source_Computer & Source_Dir_File_Together, Dest_File_Name)
+    Exit Sub
+
+Proc_Error:
+    Error_Flag = 1
+    Exit Sub
+End Sub
+
+Public Sub Set_Branch_Open_Status()
+Dim Recset As New ADODB.Recordset, Sqlstr As String
+
+    Sqlstr = "Select curr_workdate, close_ind from " & gUnifyDb & "applic_date where br_code = " & Unit_Code & " And sys_type_code = 1"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "MyClass/Set_Branch_Open_Status")
+    Branch_Open_Flag = 1
+    Branch_Working_Date = #1/1/1920#
+    If Not Recset.EOF Then
+        Branch_Working_Date = IIf(IsNull(Recset!curr_workdate), Branch_Working_Date, Recset!curr_workdate)
+        If UCase(IIf(IsNull(Recset!Close_Ind), "Y", Recset!Close_Ind)) = "Y" Then Branch_Open_Flag = 0
+    End If
+    Exit Sub
+End Sub
+
+Public Sub Get_Layout_Child(ByRef p_Layout_No As Integer, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    p_Layout_No = Child_Layout_No
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Layout_Child(ByVal p_Layout_No As Integer, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_Layout_No = p_Layout_No
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+Public Sub Get_Layout_Form(ByRef p_Layout_No As Integer, ByRef p_Layout_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As TextBox, ByRef p_Num_Boxes As Byte)
+    p_Layout_No = Layout_no
+    p_Layout_Name = Layout_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_Layout_Form(ByVal p_Layout_No As Integer, ByVal p_Layout_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As TextBox, ByVal p_Num_Boxes As Byte)
+    Layout_no = p_Layout_No
+    Layout_Name = p_Layout_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+Public Sub Insert_Teller_Auth_Request(ByVal A_BrCode As Integer, ByVal A_Teller As String, ByVal A_CustID As Long, _
+                                     ByVal A_AcType As Integer, ByVal A_AcSrno As Long, ByVal A_Auth_Whom As Byte, _
+                                     ByVal A_AuthDate As Date, ByVal A_AuthTime As Integer, ByVal A_AuthType As Byte, _
+                                     ByVal A_Txn_Amt As Currency)
+Dim Recset As New ADODB.Recordset, Sqlstr As String
+
+    Sqlstr = "insert into " & gUnifyDb & "authreq(br_code,teller_id,cust_idno,type_code,ac_srno,auth_whom,auth_date," & _
+            "auth_time,auth_type,txn_amt,allow_flag)" & _
+            " values(" & A_BrCode & ",'" & A_Teller & "'," & A_CustID & "," & A_AcType & "," & A_AcSrno & "," & A_Auth_Whom & ", " & _
+            " '" & Format(A_AuthDate, "dd-mmm-yyyy") & "'," & A_AuthTime & "," & A_AuthType & "," & A_Txn_Amt & ",0)"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "MyClass/Insert_Teller_Auth_Request_1")
+    Exit Sub
+End Sub
+
+Public Sub Delete_Teller_Auth_Request(ByVal A_Teller_ID As String, ByVal A_TxnAmt As Currency, _
+                                        ByVal A_Allow_Flag As Byte)
+Dim Sqlstr As String, Recset As New ADODB.Recordset
+    
+    Sqlstr = "delete from " & gUnifyDb & "authreq where teller_id = '" & A_Teller_ID & "' and txn_amt = " & A_TxnAmt & " and allow_flag = " & A_Allow_Flag
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "myclass/Delete_Teller_Auth_Request_1")
+    Exit Sub
+End Sub
+
+Public Function Get_Save_AcType_Name(ByVal Account_Type As Integer) As String
+Dim Recset As New ADODB.Recordset, Sqlstr As String
+    Get_Save_AcType_Name = ""
+    Sqlstr = "select type_name from " & gUnifyDb & "ac_type where type_code = " & Account_Type & " and sys_type_code =1"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "Get_Save_AcType_Name_1")
+    If Recset.EOF = False Then Get_Save_AcType_Name = Trim$(IIf(IsNull(Recset!Type_Name), "", Recset!Type_Name))
+    Exit Function
+End Function
+
+Public Sub Set_Field_Form(ByVal p_Field_Code As Integer, ByVal p_Field_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As TextBox, ByVal p_Num_Boxes As Byte)
+    Field_Code = p_Field_Code
+    Field_Name = p_Field_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+
+Public Sub Get_Field_Form(ByRef p_Field_Code As Integer, ByRef p_Field_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As TextBox, ByRef p_Num_Boxes As Byte)
+    p_Field_Code = Field_Code
+    p_Field_Name = Field_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+
+Public Sub Get_Modem_Machine_Name()
+Dim Sqlstr As String, Recset As New ADODB.Recordset
+
+    Modem_Machine = "Day-Begin"
+    ATM_Machine = "ATMCLIENT"
+    Sqlstr = "select daybegin_mcname"
+    If Unit_Code = 999 Then Sqlstr = Sqlstr + ",atm_mcname "
+    Sqlstr = Sqlstr + " from " & gUnifyDb & "nsav_sysparam where home_branch = " & Unit_Code
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "Get_Modem_Machine_Name")
+    If Recset.EOF = False Then
+        Modem_Machine = Trim$(IIf(IsNull(Recset!daybegin_mcname), "Day-Begin", Recset!daybegin_mcname))
+        If Unit_Code = 999 Then ATM_Machine = Trim$(IIf(IsNull(Recset!atm_mcname), "ATMCLIENT", Recset!atm_mcname))
+    End If
+End Sub
+
+Public Sub Get_Wan_Branches()
+Dim Recset As New ADODB.Recordset, Sqlstr As String
+
+    'Num_WAN_Branch As Integer, WAN_Branches(100) As Integer
+    Num_WAN_Branch = 0
+    Sqlstr = "select br_code from " & gUnifyDb & "branch " & _
+             " where br_code <> " & Unit_Code & " and br_wan >= 1"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "Get_Wan_Branches")
+    Do While Recset.EOF = False
+        Num_WAN_Branch = Num_WAN_Branch + 1
+        WAN_Branches(Num_WAN_Branch) = Recset!Br_Code
+        Recset.MoveNext
+    Loop
+End Sub
+
+Public Sub Open_WAN_Branch1(ByVal Br_Code As Integer, ByRef Success_Flag As Byte)
+Dim DB_Platform As Byte, Db_Provider As String, Connect_String As String
+Dim Company_ID As Integer, DSN_Name As String, DBase_Name As String
+Dim Read_Write As Byte, Error_Flag As Byte
+Dim DB_Path As String
+
+
+    If Br_Code = Unit_Code Then Exit Sub
+    
+    Success_Flag = 0
+    ' If Connection for Desired Branch is already Open, Then Do Nothing
+    If Find_Connection_Status(Foreign_Connection) = CONN_OPEN Then
+        If Foreign_Connection_Branch = Br_Code Then
+            Success_Flag = 1
+            Exit Sub
+        End If
+        Call Foreign_Connection_Close
+    End If
+    Foreign_Connection_Branch = 0
+    
+    If Num_WAN_Branch > 0 Then
+        For I = 1 To Num_WAN_Branch
+            If Br_Code = WAN_Branches(I) Then GoTo Try_To_Open
+        Next I
+    End If
+    Exit Sub
+    
+Try_To_Open:
+
+    If Num_BRDB = 0 Then Exit Sub
+    For I = 1 To Num_BRDB
+        If BRDB_Unit(I) = Br_Code Then
+            DB_Platform = BRDB_Platform(I)
+            Connect_String = BRDB_Connect_Str(I)
+            DBase_Name = BRDB_DBName(I)
+            Db_Provider = BRDB_Provider(I)
+            DB_Path = BRDB_DBPath(I)
+            GoTo Found_DB
+        End If
+    Next I
+    Call Display_Message("Remote Branch Connection Details not Found")
+    Exit Sub
+    
+Found_DB:
+
+    
+    Foreign_Connection = Connection_No + 8
+    Read_Write = 1
+    Call Open_DB_Connection(Foreign_Connection, Read_Write, DB_Platform, Connect_String, DB_Path, Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then
+        Call Display_Message("Not Able to Connect to Foreign Branch Database.", 1)
+        GoTo Exit_Sub
+    End If
+    
+    ForeignDb = DBase_Name
+    Success_Flag = 1
+    Foreign_Connection_Branch = Br_Code
+
+Exit_Sub:
+    
+    Call Close_Info_Window
+    Exit Sub
+End Sub
+Public Sub Open_ATM_Connection(ByRef Success_Flag As Byte)
+Dim Db_Provider As String, Connect_String As String
+Dim Read_Write As Byte, Error_Flag As Byte, DB_Platform As Byte, DB_Path As String
+Dim Byte_Flag As Byte
+Dim Sqlstr As String, Recset As New ADODB.Recordset
+Dim Err_Narration As String
+
+    '------------------------------------------------------
+    'For ATM Connection from Branches use Connection No 16
+    '------------------------------------------------------
+    ' If Connection for Desired Branch is already Open, Then Do Nothing
+    If Find_Connection_Status(ATM_Connection) = CONN_OPEN Then Exit Sub
+    Success_Flag = 0
+    ' Set Connect String for sqlserver
+    'Connect_String = "SERVER=" + Trim$(Recset!database_server) + ";Database=" + Trim$(Recset!DataBase_Name) + ";" + "User ID=" & Trim$(Recset!database_userid) & ";Password=" & Trim$(Recset!database_password) & ";"
+    Db_Provider = "SQLOLEDB"
+    Read_Write = 1
+    DB_Platform = 1
+    DB_Path = ""
+    Call Open_DB_Connection(ATM_Connection, Read_Write, DB_Platform, ATM_Connect_Str, DB_Path, Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then GoTo Error_Sub
+    Success_Flag = 1
+
+Exit_Sub:
+    
+    Exit Sub
+    
+Error_Sub:
+    
+    
+    Err_Narration = "Not Connected"
+    Sqlstr = "insert into " & gUnifyDb & "atm_log(err_date,err_time,err_branch,err_flag,err_recs,err_msg) " & _
+              " values ('" & Format(Branch_Working_Date, "dd-mmm-yyyy") & "'," & Format(Now(), "HHMM") & ", " & _
+              " " & Unit_Code & ",1,0,'" & Err_Narration & "')"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Connection_No, recs_read)
+
+    MsgBox "Unable to Connect ATM Manager "
+    Exit Sub
+End Sub
+
+Public Sub Open_ATM_HB_Connection(ByRef Success_Flag As Byte)
+Dim Read_Write As Byte, Error_Flag As Byte
+
+    '---------------------------------------------------------------------
+    'Connection No has to be opened as 15 for ATM HOME BRANCH Connections
+    '---------------------------------------------------------------------
+    If Find_Connection_Status(ATM_Branch_Connection) = CONN_OPEN Then Exit Sub
+    Success_Flag = 0
+    Read_Write = 1
+    Call Open_DB_Connection(ATM_Branch_Connection, Read_Write, Home_Branch_Db_Platform, Home_Branch_Connect_Str, Home_Branch_Db_Path, Home_Branch_Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then GoTo Error_Sub
+    ATM_DB = Home_Branch_Db
+    Success_Flag = 1
+
+Exit_Sub:
+    Exit Sub
+
+Error_Sub:
+    Call Display_Message("Not Able to Connect to Branch For Posting of ATM Transactions.", 1)
+    Exit Sub
+End Sub
+Public Sub Open_BalServer_Connection(ByRef Success_Flag As Byte)
+Dim Read_Write As Byte, Error_Flag As Byte
+
+    '---------------------------------------------------------------------
+    'Connection No has to be opened as 17 for Balserver Connections
+    '---------------------------------------------------------------------
+    If Find_Connection_Status(Bal_Connection) = CONN_OPEN Then Exit Sub
+    Success_Flag = 0
+    Read_Write = 1
+    Call Open_DB_Connection(Bal_Connection, Read_Write, Home_Branch_Db_Platform, Home_Branch_Connect_Str, Home_Branch_Db_Path, Home_Branch_Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then GoTo Error_Sub
+    Success_Flag = 1
+
+Exit_Sub:
+    Exit Sub
+
+Error_Sub:
+    Call Display_Message("Not Able to Connect to Branch For Posting of Bal Transactions.", 1)
+    Exit Sub
+End Sub
+
+Public Sub Open_GL_Connection(ByVal Br_Code As Integer, ByRef Success_Flag As Byte)
+Dim DB_Platform As Byte, Db_Provider As String, Connect_String As String
+Dim DSN_Name As String, DBase_Name As String, DB_Path As String
+Dim Read_Write As Byte, Error_Flag As Byte
+Dim I As Integer
+
+    Success_Flag = 0
+    If Br_Code = Unit_Code Then Exit Sub
+    
+    ' If Connection for Desired Branch is already Open, Then Do Nothing
+    If Find_Connection_Status(GL_Connection) = CONN_OPEN Then Call GL_Connection_Close
+    
+    If Num_BRDB = 0 Then Exit Sub
+    For I = 1 To Num_BRDB
+        If BRDB_Unit(I) = Br_Code Then
+            DB_Platform = BRDB_Platform(I)
+            Connect_String = BRDB_Connect_Str(I)
+            DBase_Name = BRDB_DBName(I)
+            Db_Provider = BRDB_Provider(I)
+            DB_Path = BRDB_DBPath(I)
+            GoTo Found_DB
+        End If
+    Next I
+    Call Display_Message("Remote Branch Connection Details not Found")
+    Exit Sub
+    
+Found_DB:
+    
+    Read_Write = 1
+    Call Open_DB_Connection(GL_Connection, Read_Write, DB_Platform, Connect_String, DB_Path, Db_Provider, Error_Flag)
+    If Error_Flag <> 0 Then
+        Call Display_Message("Not Able to Connect to Remote Branch.", 1)
+        GoTo Exit_Sub
+    End If
+    
+    GLDb = DBase_Name
+    Success_Flag = 1
+
+Exit_Sub:
+    Exit Sub
+End Sub
+
+Public Sub Open_WAN_Branch(ByVal Br_Code As Integer, ByRef Success_Flag As Byte)
+Dim Sqlstr As String, Recset As New ADODB.Recordset
+Dim Temp_Date As Date
+
+    Call Open_WAN_Branch1(Br_Code, Success_Flag)
+    If Success_Flag <> 1 Then Exit Sub
+    
+    Sqlstr = "select curr_workdate,close_ind from " & ForeignDb & "applic_date where br_code = " & _
+                Foreign_Connection_Branch & " and sys_type_code = 1"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, Foreign_Connection, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(, "MyClass/Open_WAN_Connection")
+    If Recset.EOF = True Then
+
+Continue_1:
+        
+        Call Foreign_Connection_Close
+        Success_Flag = 0
+        Call Display_Message("WAN Connectivity Could not be made because of Branch is not Open")
+        Exit Sub
+    End If
+    
+    If UCase(Trim$(IIf(IsNull(Recset!Close_Ind), "", Recset!Close_Ind))) <> "N" Then GoTo Continue_1
+    Temp_Date = Recset!curr_workdate
+    If Temp_Date <> Branch_Working_Date Then
+        Call Foreign_Connection_Close
+        Success_Flag = 0
+        Call Display_Message("WAN Connectivity Could not be made. Working Date is not same.")
+        Exit Sub
+    End If
+    Exit Sub
+End Sub
+
+
+Public Sub ATM_Connection_Close()
+    If Find_Connection_Status(ATM_Connection) = CONN_OPEN Then Call Close_DB_Connection(ATM_Connection)
+    Exit Sub
+End Sub
+
+Public Sub GL_Connection_Close()
+    If GL_Connection = 0 Then Exit Sub
+    If Find_Connection_Status(GL_Connection) = CONN_OPEN Then
+        Call Close_DB_Connection(GL_Connection)
+        GLDb = ""
+    End If
+    Exit Sub
+End Sub
+
+Public Sub ATM_HB_Connection_Close()
+    If Find_Connection_Status(ATM_Branch_Connection) = CONN_OPEN Then Call Close_DB_Connection(ATM_Branch_Connection)
+    Exit Sub
+End Sub
+
+
+Public Sub Foreign_Connection_Close()
+    If Foreign_Connection = 0 Then Exit Sub
+    If Find_Connection_Status(Foreign_Connection) = CONN_OPEN Then
+        Call Close_DB_Connection(Foreign_Connection)
+        Foreign_Connection_Branch = 0
+    End If
+    Exit Sub
+End Sub
+
+Private Sub Class_Initialize()
+    Foreign_Connection_Branch = 0
+    Prev_WAN_Branch = 1000
+End Sub
+
+Public Sub FaVoch_Get_1(ByRef a_BookType As Byte, ByRef a_BookCode As Integer, _
+                        ByRef a_RecPayFlag As Byte)
+    'Voucher Entry Form is Called From Voucher Browser For Fresh Voucher
+    a_BookType = BookType
+    a_BookCode = BookCode
+    a_RecPayFlag = RecPayFlag
+End Sub
+Public Sub FaVoch_Set_1(ByVal a_BookType As Byte, ByVal a_BookCode As Integer, _
+                        ByVal a_RecPayFlag As Byte)
+    'Voucher Entry Form is Called From Voucher Browser For Fresh Voucher
+    BookType = a_BookType
+    BookCode = a_BookCode
+    RecPayFlag = a_RecPayFlag
+End Sub
+
+
+Public Sub FaVoch_Get_51(ByRef a_AcPeriod As Integer, ByRef a_BookType As Byte, _
+                        ByRef a_BookCode As Integer, ByRef a_PassedFlag As Byte, ByRef a_VoucherNo As Long, _
+                        ByRef a_RecPayFlag As Byte, ByRef a_ActionFlag As Byte)
+'Same Procedure tobe Used For GATE 51,91, and 92 ,60 and 70
+'VoucerNo field will have control no in case of unpassed vouchers
+    a_AcPeriod = AcPeriod
+    a_BookType = BookType
+    a_BookCode = BookCode
+    a_PassedFlag = PassedFlag
+    a_VoucherNo = VoucherNo
+    a_RecPayFlag = RecPayFlag
+    a_ActionFlag = ActionFlag
+    Exit Sub
+
+Exit Sub
+End Sub
+
+Public Sub FaVoch_Set_51(ByVal a_AcPeriod As Integer, ByVal a_BookType As Byte, _
+                        ByVal a_BookCode As Integer, ByVal a_PassedFlag As Byte, ByVal a_VoucherNo As Long, _
+                        ByVal a_RecPayFlag As Byte, ByVal a_ActionFlag As Byte)
+'Same Procedure tobe Used For GATE 51,91, and 92
+'VoucerNo field will have control no in case of unpassed vouchers
+    AcPeriod = a_AcPeriod
+    BookType = a_BookType
+    BookCode = a_BookCode
+    PassedFlag = a_PassedFlag
+    VoucherNo = a_VoucherNo
+    RecPayFlag = a_RecPayFlag
+    ActionFlag = a_ActionFlag
+    Exit Sub
+End Sub
+
+Public Sub FA_Set_Entry_Gate(ByVal a_Entry_Gate As Byte)
+    Entry_Gate = a_Entry_Gate
+End Sub
+Public Sub FA_Get_Entry_Gate(ByRef a_Entry_Gate As Byte)
+    a_Entry_Gate = Entry_Gate
+End Sub
+
+
+Public Sub FaVochCAC_Set(ByVal a_Call_Type As Byte, ByVal a_AcntCode As String, ByVal a_AcntName As String, _
+                        ByVal a_EntryAmt As Currency, ByVal a_DbCrFlag As Byte, ByVal a_Num_Analysis As Byte, _
+                        ByRef a_Analysis_Code() As String, ByRef a_Analysis_Amt() As Currency, _
+                        ByRef a_DbcrArr() As Byte, ByVal a_View_Flag As Byte)
+Dim I As Byte
+    CA_Type = a_Call_Type
+    CA_Code = a_AcntCode
+    CA_Name = a_AcntName
+    CA_Entry_Amt = a_EntryAmt
+    CA_DbCr = a_DbCrFlag
+    CA_NUM = a_Num_Analysis
+    If a_Num_Analysis > 0 Then
+        For I = 1 To a_Num_Analysis
+            CA_ANA_Code(I) = a_Analysis_Code(I)
+            CA_ANA_AMT(I) = a_Analysis_Amt(I)
+            CA_ANA_DBCR(I) = a_DbcrArr(I)
+        Next I
+    End If
+    CA_View_Flag = a_View_Flag
+End Sub
+Public Sub FaVochCAC_Get(ByRef a_Call_Type As Byte, ByRef a_AcntCode As String, ByRef a_AcntName As String, _
+                        ByRef a_EntryAmt As Currency, ByRef a_DbCrFlag As Byte, ByRef a_Num_Analysis As Byte, _
+                        ByRef a_Analysis_Code() As String, ByRef a_Analysis_Amt() As Currency, _
+                        ByRef a_DbcrArr() As Byte, ByRef a_View_Flag As Byte)
+Dim I As Byte
+
+    a_Call_Type = CA_Type
+    a_AcntCode = CA_Code
+    a_AcntName = CA_Name
+    a_EntryAmt = CA_Entry_Amt
+    a_DbCrFlag = CA_DbCr
+    a_Num_Analysis = CA_NUM
+    If CA_NUM > 0 Then
+        For I = 1 To CA_NUM
+            a_Analysis_Code(I) = CA_ANA_Code(I)
+            a_Analysis_Amt(I) = CA_ANA_AMT(I)
+            a_DbcrArr(I) = CA_ANA_DBCR(I)
+        Next I
+    End If
+    a_View_Flag = CA_View_Flag
+End Sub
+
+'=============================
+Public Sub Get_Narration_Form(ByRef P_cust_code As String, ByRef p_Cust_Name As String, ByRef p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByRef p_Num_Boxes As Byte)
+    P_cust_code = Narration_Code
+    p_Cust_Name = Narration_Name
+    Set p_txtCode = txtCode
+    Set p_txtName = TxtName
+    p_Esc_Flag = Esc_Flag
+    p_Num_Boxes = Num_Boxes
+End Sub
+Public Sub Set_Narration_Form(ByVal P_cust_code As String, ByVal p_Cust_Name As String, ByVal p_Esc_Flag As Byte, _
+                      ByRef p_txtCode As UcDataField, ByRef p_txtName As UcDataField, ByVal p_Num_Boxes As Byte)
+    Narration_Code = P_cust_code
+    Narration_Name = p_Cust_Name
+    Set txtCode = p_txtCode
+    Set TxtName = p_txtName
+    Esc_Flag = p_Esc_Flag
+    Num_Boxes = p_Num_Boxes
+End Sub
+
+
+Public Sub Get_Narration_Child(ByRef P_cust_code As String, ByRef p_Edit_Flag As Byte, ByRef p_Esc_Flag As Byte)
+    P_cust_code = Child_Narration
+    p_Edit_Flag = Edit_Flag
+    p_Esc_Flag = Esc_Flag
+End Sub
+Public Sub Set_Narration_Child(ByVal P_cust_code As String, ByVal p_Edit_Flag As Byte, ByVal p_Esc_Flag As Byte)
+    Child_Narration = P_cust_code
+    Edit_Flag = p_Edit_Flag
+    Esc_Flag = p_Esc_Flag
+End Sub
+
+
+Public Sub Inform_Hotline(ByVal a_unit As Integer, ByVal a_Acnt_Code As String)
+    Hotline_Unit = a_unit
+    Hotline_Ac = a_Acnt_Code
+End Sub
+
+Public Sub Retrieve_HotLine(ByRef a_unit As Integer, ByRef a_Acnt_Code As String)
+    a_unit = Hotline_Unit
+    a_Acnt_Code = Hotline_Ac
+End Sub
+
+
+Public Sub Memo_Set_Gate(ByVal a_Gate As Byte)
+    Memo_Ent_Gate = a_Gate
+End Sub
+Public Sub Memo_Get_Gate(ByRef a_Gate As Byte)
+     a_Gate = Memo_Ent_Gate
+End Sub
+Public Sub Memo_Set_Chd(ByVal a_Bktype As Byte, ByVal a_BkCode As Integer, ByVal a_VochNo As Long)
+    MBK_Type = a_Bktype
+    MBk_Code = a_BkCode
+    MVoc_No = a_VochNo
+End Sub
+Public Sub Memo_Get_Chd(ByRef a_Bktype As Byte, ByRef a_BkCode As Integer, ByRef a_VochNo As Long)
+    a_Bktype = MBK_Type
+    a_BkCode = MBk_Code
+    a_VochNo = MVoc_No
+End Sub
+

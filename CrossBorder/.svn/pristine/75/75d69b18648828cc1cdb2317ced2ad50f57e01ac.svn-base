@@ -1,0 +1,547 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form frmHSM 
+   BorderStyle     =   1  'Fixed Single
+   Caption         =   "Host Security Module"
+   ClientHeight    =   8790
+   ClientLeft      =   45
+   ClientTop       =   390
+   ClientWidth     =   13845
+   Icon            =   "frmHSM.frx":0000
+   LinkTopic       =   "Form2"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   8790
+   ScaleWidth      =   13845
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame5 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   3735
+      Left            =   0
+      TabIndex        =   2
+      Top             =   0
+      Width           =   13815
+      Begin VB.Frame Frame2 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   2175
+         Left            =   7920
+         TabIndex        =   19
+         Top             =   240
+         Width           =   5655
+         Begin VB.CommandButton Command3 
+            Caption         =   "Save"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   495
+            Left            =   3120
+            TabIndex        =   24
+            Top             =   1320
+            Width           =   1815
+         End
+         Begin VB.TextBox Text3 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   350
+            Left            =   3120
+            MaxLength       =   20
+            TabIndex        =   22
+            Top             =   720
+            Width           =   1815
+         End
+         Begin VB.TextBox Text2 
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   350
+            Left            =   2040
+            MaxLength       =   20
+            TabIndex        =   21
+            Top             =   240
+            Width           =   2895
+         End
+         Begin VB.Label Label2 
+            BackStyle       =   0  'Transparent
+            Caption         =   "Communication Port"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   23
+            Top             =   720
+            Width           =   1815
+         End
+         Begin VB.Label Label1 
+            BackStyle       =   0  'Transparent
+            Caption         =   "HSM IP"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   9.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   255
+            Left            =   120
+            TabIndex        =   20
+            Top             =   240
+            Width           =   1815
+         End
+      End
+      Begin VB.ComboBox Combo3 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         ItemData        =   "frmHSM.frx":0442
+         Left            =   2400
+         List            =   "frmHSM.frx":044F
+         TabIndex        =   18
+         Top             =   1200
+         Width           =   2415
+      End
+      Begin VB.ComboBox Combo2 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         ItemData        =   "frmHSM.frx":0480
+         Left            =   2400
+         List            =   "frmHSM.frx":048D
+         TabIndex        =   17
+         Top             =   720
+         Width           =   2415
+      End
+      Begin VB.ComboBox Combo1 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00404040&
+         Height          =   360
+         ItemData        =   "frmHSM.frx":04A0
+         Left            =   2400
+         List            =   "frmHSM.frx":04A2
+         TabIndex        =   9
+         Top             =   3120
+         Width           =   5775
+      End
+      Begin VB.TextBox Text6 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   16
+         TabIndex        =   8
+         Top             =   2640
+         Width           =   3735
+      End
+      Begin VB.TextBox Text5 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   16
+         TabIndex        =   7
+         Top             =   2160
+         Width           =   3735
+      End
+      Begin VB.CommandButton Command1 
+         Caption         =   "Save Key"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   885
+         Left            =   8520
+         MaskColor       =   &H00808080&
+         Picture         =   "frmHSM.frx":04A4
+         Style           =   1  'Graphical
+         TabIndex        =   6
+         Top             =   2640
+         Width           =   2295
+      End
+      Begin VB.TextBox Text4 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   16
+         TabIndex        =   5
+         Top             =   1680
+         Width           =   3735
+      End
+      Begin VB.TextBox Text1 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   350
+         Left            =   2400
+         MaxLength       =   20
+         TabIndex        =   4
+         Top             =   240
+         Width           =   3735
+      End
+      Begin VB.CommandButton Command2 
+         Caption         =   "Delete Key"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   885
+         Left            =   10920
+         MaskColor       =   &H00E0E0E0&
+         Picture         =   "frmHSM.frx":08E6
+         Style           =   1  'Graphical
+         TabIndex        =   3
+         Top             =   2640
+         Width           =   2175
+      End
+      Begin VB.Label Label14 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Parent"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   16
+         Top             =   3120
+         Width           =   2055
+      End
+      Begin VB.Label Label13 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Part 2"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   15
+         Top             =   2160
+         Width           =   2295
+      End
+      Begin VB.Label Label12 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Part 3"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   120
+         TabIndex        =   14
+         Top             =   2640
+         Width           =   2055
+      End
+      Begin VB.Label Label11 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Part 1"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   225
+         Left            =   120
+         TabIndex        =   13
+         Top             =   1680
+         Width           =   2295
+      End
+      Begin VB.Label Label10 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Length "
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   345
+         Left            =   120
+         TabIndex        =   12
+         Top             =   1200
+         Width           =   2295
+      End
+      Begin VB.Label Label9 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Type"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   345
+         Left            =   120
+         TabIndex        =   11
+         Top             =   765
+         Width           =   2175
+      End
+      Begin VB.Label Label8 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Key Name"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   315
+         Left            =   120
+         TabIndex        =   10
+         Top             =   360
+         Width           =   2175
+      End
+   End
+   Begin VB.Frame Frame1 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   5055
+      Left            =   0
+      TabIndex        =   0
+      Top             =   3720
+      Width           =   13815
+      Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+         Height          =   4575
+         Left            =   120
+         TabIndex        =   1
+         Top             =   240
+         Width           =   13575
+         _ExtentX        =   23945
+         _ExtentY        =   8070
+         _Version        =   393216
+         Rows            =   5
+         Cols            =   8
+         FixedCols       =   0
+         BackColorBkg    =   16777215
+         FocusRect       =   0
+         SelectionMode   =   1
+         AllowUserResizing=   3
+         FormatString    =   $"frmHSM.frx":0D28
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+   End
+End
+Attribute VB_Name = "frmHSM"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Private DbCon As ADODB.Connection
+
+Private Sub Command3_Click()
+  If Trim(Text2.Text) <> "" And IsNumeric(Trim(Text3.Text)) Then
+     DbCon.Execute "delete from em_hsm"
+     DbCon.Execute "insert into em_hsm values('" & Trim(Text2.Text) & "'," & Trim(Text3.Text) & ",1)"
+     MsgBox "HSM updated successfully", vbInformation
+     Else
+     
+     MsgBox "Invalid data", vbExclamation
+  End If
+End Sub
+
+Private Sub Form_Load()
+Dim RecSet As New ADODB.Recordset
+Dim i As Long
+Dim col As Long
+Dim J As Integer
+'Me.Top = MainForm.Top + 1020
+'Me.Left = MainForm.Left + 4300
+'Me.Height = MainForm.TreeView1.Height - 20
+'Frame1.Height = Me.Height / 2
+'MSFlexGrid1.Height = Me.Height / 2 - 500
+
+Set DbCon = New ADODB.Connection
+On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+RecSet.Open ("Select * from em_hsm"), DbCon
+If RecSet.EOF = False Then
+   Text2.Text = RecSet!ip_address
+   Text3.Text = RecSet!port
+End If
+RecSet.Close
+
+col = 0
+i = 1
+
+RecSet.Open ("Select key_name, key_type,key_length,key_part1,key_part2,key_part2,key_under_parent from em_hsm_keys order by key_code asc"), DbCon
+Do While Not RecSet.EOF
+MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+
+For col = 0 To 6
+MSFlexGrid1.TextMatrix(i, col) = IIf(IsNull(RecSet.Fields(col).value), "", RecSet.Fields(col).value)
+'If col = 7 Then
+'  If RecSet.Fields(col).value = 0 Then
+'   MSFlexGrid1.TextMatrix(i, col) = "Server"
+'ElseIf RecSet.Fields(col).value = 1 Then
+'  MSFlexGrid1.TextMatrix(i, col) = "Client"
+'End If
+'End If
+Next col
+i = i + 1
+RecSet.MoveNext
+Loop
+RecSet.Close
+Exit Sub
+
+ErrorTrap:
+MsgBox err.Description, vbCritical
+
+End Sub

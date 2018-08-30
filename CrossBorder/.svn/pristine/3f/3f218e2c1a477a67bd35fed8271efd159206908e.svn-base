@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Fast Lane Pay home, Send and Receive money worldwide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style type="text/css">
+<!--
+body {
+	background-color: #F7F7F7;
+}
+.style1 {
+	font-family: Verdana;
+	font-size: 13.5pt;
+}
+-->
+</style></head>
+<link rel="shortcut icon" href="favicon.ico" >
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" marginwidth="0" marginheight="0">
+<body> 
+<table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF"><table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr align="left">
+        <td valign="middle" background="banner_.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left">
+              <td height="90" valign="middle" bgcolor="#FFFFFF"><img src="logo.jpg"> </td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td valign="middle" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="center" valign="middle" bgcolor="#0094DE">
+              <td bgcolor="#C0DFED">
+                <div align="center">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr align="center" valign="middle">
+                      <td width="187" height="29" background="button_1.jpg">
+                        <div align="center"> <font color="#000000"><strong><img src="arrow.png" border="0"> </strong><a href="home.html"><strong><font color="#FFFFFF">Home</font></strong></a></font></div></td>
+                      <td height="29" background="button_1.jpg">
+                        <div align="center"> <font color="#000000"><strong><img src="arrow.png" border="0"></strong> <a href="about.html"><strong><font color="#FFFFFF"> About us</font></strong></a></font></div></td>
+                      <td height="29" background="button_1.jpg">
+                        <div align="center"> <font color="#000000"><strong><img src="arrow.png" border="0"> </strong><a href="contact_us.html"><strong><font color="#003366"><font color="#FFFFFF">Contact Us</font></font></strong></a> </font></div></td>
+                    </tr>
+                  </table>
+              </div></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="258" align="left" valign="top">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr align="left" valign="top">
+                    <td bgcolor="#F8BE8F"><div align="left"> <font color="#999999"> </font> </div>
+                        <table width="100%" border="0" cellspacing="1" cellpadding="3">
+                          <tr>
+                            <td height="28" align="left" valign="top" background="button_2.jpg"><font color="#003366"><img src="arrow2.png" border="0"></font> <a href="send-money.html"><font color="#003366"><font color="#FFFFFF">Send Money</font></font></a></td>
+                          </tr>
+                          <tr>
+                            <td height="28" align="left" valign="top" background="button_2.jpg" bgcolor="#0071BB"><font color="#003366"><img src="arrow2.png" border="0"> </font> <font color="#000000"><a href="receive-money.html"><font color="#FFFFFF">Receive Money </font></a></font></td>
+                          </tr>
+                          <tr>
+                            <td height="28" align="left" valign="top" background="button_2.jpg" bgcolor="#0071BB"><font color="#003366"><img src="arrow2.png" border="0"></font> <a href="services.html"><font color="#003366"><font color="#FFFFFF">Other Services </font></font></a></td>
+                          </tr>
+                      </table></td>
+                  </tr>
+                </table>
+                <br>
+                <a href="#"><img src="facebook.jpg" border="0"></a> <a href="#"><img src="twitter.jpg" border="0"></a><br>
+                <img src="fastlane.jpg"></td>
+              <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td align="left" valign="top">
+                      <div align="left"></div>
+                      <div align="center">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                          <tr align="left" valign="top">
+                            <td>
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td align="left" valign="top">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="1">
+                                      <tr>
+                                        <td align="left" valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                                            <tr>
+                                              <td align="left" valign="top">
+                                                <div style="width:100%;min-height:300px;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;border:1px solid #CCC8C9;background-color:#ffffff;">
+                                                  <table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                                                    <tr>
+                                                      <td align="left" valign="top"><p><span class="style1"><span style="">About FastLanePay </span></span></p>
+                                                          <p>FastLanePay, an Agent for Impala Pay offers innovative online money transfer services enabling customers to send money to family and friends back home using various payment options including debit cards, credit cards etc. </p>
+                                                          <p>FastLanePay has built a robust compliance system that eliminates common problems and risks associated with money laundering and card fraud in international money services. FastLanePay now offers online money transfer to many countries worldwide. .</p>
+                                                          <p><img src="payments-processing.jpg"></p></td>
+                                                    </tr>
+                                                  </table>
+                                              </div></td>
+                                            </tr>
+                                        </table></td>
+                                      </tr>
+                                  </table></td>
+                                </tr>
+                            </table></td>
+                          </tr>
+                        </table>
+                    </div></td>
+                  </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, FastLanePay, All Rights Reserved</p>
+                    <p><a href="index.html"><u>Home</u></a> | <a href="contact_us.html"><u>Contact Us</u></a></p></td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

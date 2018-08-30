@@ -1,0 +1,34 @@
+<?php
+ $total = 0;
+if( isset($_POST["_checkout_many"]) ){
+	
+	$merchant=$_POST["merchant"];
+	$secret=$_POST["secretkey"];
+		if (!isset($_POST["item_name"]) || !isset($_POST["item_desc"]) || !isset($_POST["item_qty"]) )	{
+			echo "Please send all the required parameters<br/>";
+			exit();
+		}
+		if(is_array($_POST["item_name"]) && is_array($_POST["item_qty"]) && is_array($_POST["item_desc"])){
+			//everything is array. process as array
+			echo '<ul>';
+			for($i=0;$i<count($_POST["item_name"]);$i++){
+				echo '<li class="cart-itm">';
+       
+				echo '<h3>'.$_POST["item_name"][$i].'</h3>';				
+				echo '<div class="p-qty">Qty : '.$_POST["item_qty"][$i].'</div>';
+				echo '<div class="p-price">Price :'.$_POST["item_desc"][$i].'</div>';
+				echo '</li>';
+				
+				
+				 $subtotal = ($_POST["item_qty"][$i]*$_POST["item_desc"][$i]);
+       			 $total = ($total + $subtotal);
+			}
+			echo '</ul>';
+			
+			echo '<strong>Total : '.$currency.$total.'</strong>  ';
+		}else{
+			//process as a single item
+		}
+}
+
+?>

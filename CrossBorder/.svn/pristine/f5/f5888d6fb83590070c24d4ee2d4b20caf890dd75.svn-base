@@ -1,0 +1,349 @@
+<?php 
+require_once "engine.php";
+Display::header("Send money");
+Display::topNavigation();
+Display::signUp();
+?>
+
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF"><table align="center" width="960">
+          <tr>
+            <td>
+              <!-- beginning of style table -->
+		       <table align="center" width="960">
+		<tr>
+			<td>	
+
+<form action="<?php $_SERVER['PHP_SELF']?>" method="post">
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div class="style-info">You are required to choose your recipient in Kenya and also select the payment (billing) method on this page.</div></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+    <div class="GW_input_transfer_box">
+   	<span></span>
+   	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+
+     <td colspan="3" class="GW_input_transfer_box_title">1. Amount you want to send</td>
+            </tr>
+          <tr><td colspan="3">&nbsp;</td></tr>
+          <tr>
+            <td width="30%" class="GW_txtfieldcaption">Amount ($)</td>
+            <td width="5%" class="GW_txtfieldcaption">:</td>
+            <td><input type="hidden" name="amount" value="100" autocomplete="off" size="9">
+        		<strong>100.00</strong>            
+            </td>
+          </tr>
+          <tr>
+            <td height="35">&nbsp;</td>
+            <td class="GW_txtfieldcaption">&nbsp;</td>
+            <td valign="bottom">
+            <button type="button" class="GW_button_grey" onClick="location.href='send-now.php'"><span>Change amount</span></button></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td class="GW_txtgrey"><div style="padding-top:3px;"><em>click the above button to change the amount you want to send</em></div></td>
+          </tr>
+          <tr>
+            <td height="10" colspan="3"></td>
+            </tr>
+            
+          <tr>
+            <td class="GW_txtfieldcaption">Fees ($)</td>
+            <td class="GW_txtfieldcaption">:</td>
+            <td>
+            
+            
+        	
+         
+            
+            
+				   <strong>5</strong>
+	        
+			
+        	
+          		<input type="hidden" name="true_fee" value="5">
+	        
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="GW_txtfieldcaption">Amount in KES</td>
+            <td class="GW_txtfieldcaption">:</td>
+            <td><strong>8480</strong>
+            
+			<input type="hidden" name="interest">
+            </td>
+          </tr>
+          </table>
+        </td>
+        <td width="2%" class="GW_input_transfer_box_vertical_divider">&nbsp;</td>
+        <td width="32%" valign="top">
+        
+	
+  	
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+  
+  <tr>
+    <td colspan="3" class="GW_input_transfer_box_title">2. Choose your recipient</td>
+  </tr>
+  <tr>
+    <td colspan="3">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td width="30%" class="GW_txtfieldcaption">Select recipient</td>
+    <td width="5%" class="GW_txtfieldcaption">:</td>
+    <td><select name="recipient_id" id="recipient_id" class="GW_selectbox" >
+    <option value="261156" selected="selected">Lksjdf-mpesa</option>
+
+      </select></td>
+  </tr>
+  <tr>
+    <td height="35" colspan="2" class="GW_txtfieldcaption">&nbsp;</td>
+    <td valign="bottom"><button type="button" class="GW_button_grey" onclick="location.href='add-recipient-information.php'"><span>Add new recipient</span></button></td>
+  </tr>
+  <tr>
+    <td height="30" colspan="2">&nbsp;</td>
+    <td class="GW_txtgrey"><div style="padding-top:3px;"><em>click the above button to add a new recipient</em></div></td>
+  </tr>
+  
+
+  
+</table>
+  	
+
+        </td>
+        <td width="2%" class="GW_input_transfer_box_vertical_divider">&nbsp;</td>
+        <td width="30%" valign="top">
+        
+        
+        
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td colspan="3" class="GW_input_transfer_box_title">3. Choose your billing information</td>
+    </tr>
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="30%" class="GW_txtfieldcaption">Pay using</td>
+      <td width="5%" class="GW_txtfieldcaption">:</td>
+      <td><select name="method_id" id="method_id" class="GW_selectbox" >
+    <option value="219246" selected="selected">Visa-0005</option>
+</select>
+        <input type="hidden" name="no_method_id" value="0"></td>
+    </tr>
+    <tr>
+      <td height="35">&nbsp;</td>
+      <td height="35">&nbsp;</td>
+      <td valign="bottom"><button type="button" class="GW_button_grey" onClick="location.href='add-billing.php'"><span>Add billing information</span></button></td>
+    </tr>
+    <tr>
+      <td height="30">&nbsp;</td>
+      <td height="30">&nbsp;</td>
+      <td class="GW_txtgrey"><div style="padding-top:3px;"><em>click the above button to add a new billing information</em></div></td>
+    </tr>
+  </table>
+  
+        </td>
+        <td width="2%">&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="GW_input_transfer_box_horizontal_divider">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="GW_bgwhite">&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="GW_bgwhite"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="2%">&nbsp;</td>
+        <td width="30%" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="GW_input_transfer_box_title">
+            Message to recipient <span class="GW_txtgrey">(optional)</span>
+           	</td>
+          </tr>
+          <tr>
+            <td height="30" class="GW_txtgrey"><div style="padding-top:3px;"><em>If you have any special message for your recipient, please enter below</em></div></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>
+<script language="JavaScript" type="text/javascript">
+function limitText(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
+</script>
+            <textarea name="message" rows="2" id="message" class="GW_textarea" onkeydown="limitText(this.form.message,this.form.countdown1,155);" onkeyup="limitText(this.form.message,this.form.countdown1,155);"></textarea></td>
+          </tr>
+          <tr>
+            <td height="30">
+            <input name="countdown1" type="text" id="countdown1" size="2" maxlength="50" value="155" readonly /> 
+              <span class="GW_txtgrey">characters left</span>
+            </td>
+          </tr>
+        </table>
+        </td>
+        <td width="2%">&nbsp;</td>
+        <td width="32%" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="GW_input_transfer_box_title">
+            Instruction for PoaPay.com <span class="GW_txtgrey">(optional)</span></td>
+          </tr>
+          <tr>
+            <td height="30" class="GW_txtgrey"><div style="padding-top:3px;"><em>If you have any special instruction for PoaPay.com, please enter below</em></div></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>
+            <textarea name="instruction" rows="2" id="instruction" class="GW_textarea" onkeydown="limitText(this.form.instruction,this.form.countdown2,155);" onkeyup="limitText(this.form.instruction,this.form.countdown2,155);"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td height="30"><input name="countdown2" type="text" id="countdown2" size="2" maxlength="50" value="155" readonly /> 
+              <span class="GW_txtgrey">characters left</span></td>
+          </tr>
+        </table>
+        </td>
+        <td width="2%">&nbsp;</td>
+        <td width="30%" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+          	
+            <td class="GW_input_transfer_box_title">Discount coupon <span class="GW_txtgrey">(optional)</span></td>
+          </tr>
+          <tr>
+            <td height="30" class="GW_txtgrey"><div style="padding-top:3px;"><em>enter discount coupon if it has been provided to you by PoaPay.com</em></div></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td>
+            <input type="text" name="coupon_id" size="25" maxlength="50" class="GW_textbox" />
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+        </td>
+        <td width="2%">&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td class="GW_bgwhite GW_input_transfer_box_horizontal_divider">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td>&nbsp;</td>
+        <td valign="top">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td valign="top">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td valign="top">&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td valign="top"><button type="button" class="GW_button_green_big" onclick="location.href='index.cfm?fuseaction=admin'"><span>&laquo; Cancel</span></button>
+        <input type="hidden" name="client_id" value="269021">
+		
+			<input type="hidden" name="first_time" value="no">
+		
+		
+		
+		
+        </td>
+        <td>&nbsp;</td>
+        <td valign="top">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td valign="top" class="GW_alignright">
+        <input type="hidden" name="fuseaction" value="review">
+        <button type="submit" class="GW_button_green_big"><span>Proceed to Review &raquo;</span></button></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="2%">&nbsp;</td>
+        <td width="30%" valign="top">&nbsp;</td>
+        <td width="2%">&nbsp;</td>
+        <td width="32%" valign="top">&nbsp;</td>
+        <td width="2%">&nbsp;</td>
+        <td width="30%" valign="top">&nbsp;</td>
+        <td width="2%">&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+     <span class="GW_input_transfer_box_corner GW_input_transfer_box_bottomLeft"></span><span class="GW_input_transfer_box_corner GW_input_transfer_box_bottomRight"></span>
+  </div>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</form>
+
+ 
+		
+
+           
+	</td>
+		</tr>
+	</table>
+ <!-- End of style table --></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, Cashswift Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2014
+ */
+
+require_once "Class.Display.php";
+
+Display::header("home");
+Display::headerTopSection();
+Display::navigation();
+$output='	    
+        <div id="main" role="main">
+	    <div class="slider" style="position: relative;
+width: 1046px;
+height: 476px;
+overflow: hidden">
+
+            	    
+  	      <img src="http://citycentrehouston.com/img/home/sweet-homepage-image-JPG.jpg" alt="" />
+            	    
+  	      <img src="img/home/CC3-homepage-image-JPG.jpg" alt="" />
+            	    
+  	      <img src="http://citycentrehouston.com/img/home/hotel_sorella-homepage-image-JPG.jpg" alt="" />
+            	    
+  	      <img src="http://citycentrehouston.com/img/home/cyclone-homepage-image-JPG.jpg" alt="" />
+            	    
+  	      <img src="img/home/grub-homepage-image-JPG2.jpg" alt="" />
+            	    
+  	      <img src="http://citycentrehouston.com/img/home/bevello-homepage-image-JPG.jpg" alt="" />
+            
+  	    
+  	    </div><!-- /.slider -->
+  	  
+  	    <div class="slider_nav">
+  	      <a class="prev" href="citycentrehouston_default.html#">Previous</a>
+  	      <a class="next" href="citycentrehouston_default.html#">Next</a>
+  	    </div><!-- /.slider_nav -->
+	    </div><!-- /#main -->
+        
+	  ';
+
+Display::mainContent($output);
+Display::featured();
+Display::footer();
+
+?>

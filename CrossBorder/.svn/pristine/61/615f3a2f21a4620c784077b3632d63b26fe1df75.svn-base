@@ -1,0 +1,192 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+class Display{
+    public static function header($title,$jquery=""){
+        $output='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+            <html>
+            <head>
+            <title>Cashswift Money Transfer service</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />  
+            <link rel="stylesheet" href="css/default.css" media="screen" />
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+            <script type="text/javascript" src="js/default.js"></script>
+            <script type="text/javascript" >
+            '.$jquery.'
+            </script>
+            <style type="text/css">
+            <!--
+            body {
+            	background-color: #F7F7F7;
+            }
+            .style1 {
+            	font-family: Verdana;
+            	font-size: 13.5pt;
+            }
+            -->
+            </style>
+            
+            
+            
+            <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+            
+            <link rel="stylesheet" type="text/css" href="ajaxtabs/ajaxtabs.css" />
+            
+            <script type="text/javascript" src="ajaxtabs/ajaxtabs.js">
+            
+            /***********************************************
+            * Ajax Tabs Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+            * This notice MUST stay intact for legal use
+            * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+            ***********************************************/
+            
+            </script>
+            <style type="text/css">
+            <!--
+            .style2 {color: #FFFFFF}
+            .style3 {font-size: 12pt}
+            .style4 {
+            	color: #DBF4F7;
+            	font-weight: bold;
+            }
+            
+            .style6 {color: #C6EFF2}
+            .style2 {color: #FFFFFF}
+.style3 {font-size: 12pt}
+.style4 {
+	color: #DBF4F7;
+	font-weight: bold;
+}
+.style6 {color: #C6EFF2}
+.GW_button_green_small {font-family:Arial, Helvetica, sans-serif; font-size:13px; text-align:center; display:inline-block; padding:0; margin:0; overflow:visible; cursor:pointer; background:#CCC url(mybuttons.png) 0 -144px repeat-x; border:1px solid #bbbbbb; border-radius:3px; text-decoration:none;}
+.GW_button_grey {font-family:Arial, Helvetica, sans-serif; font-size:12px; text-align:center; display:inline-block; padding:0; margin:0; overflow:visible; cursor:pointer; background:#CCC url(mybuttons.png) 0 0 repeat-x; border:1px solid #bbbbbb; border-radius:3px; text-decoration:none;}
+.GW_link_blue {color: #114F8D; text-decoration: none;}
+.GW_main_box {zoom:1; border:1px solid #cccccc; position:relative; padding:0px;}
+.GW_main_box_title {font-family:Arial, Helvetica, sans-serif; font-size:18px; font-weight:bold; color:#5973a8; padding:15px 0 5px 0; border-bottom:1px solid #e9e9e9; margin:0 20px;}
+.GW_msg_info {font-size:12px; padding:10px; padding-left:50px; background-color:#d3e8fb; border:1px solid #61add8; background-image:url(ico_info.png); background-position:left top; background-repeat:no-repeat;}
+.GW_selectbox {color: #333333; margin: 3px 3px 3px 0; padding: 2px;}
+.GW_textbox {color: #333333; margin: 3px 3px 3px 0; padding: 2px; width: 200px;}
+.GW_txtfieldcaption {color: #555555; font-size: 12px; font-weight: bold; padding: 3px 0;}
+.GW_txtgrey {color:#777777;}
+.GW_txtred {color:#ff0000;}
+            -->
+            </style>
+            </head>
+            <link rel="shortcut icon" href="favicon.ico" >
+            <link href="style.css" rel="stylesheet" type="text/css"/>
+            <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" marginwidth="0" marginheight="0">
+             ';
+        echo $output;
+    }
+    public static function topNavigation(){
+        $output='<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="20" align="left" valign="middle" background="button_1.jpg">
+            <table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+              <tr>
+                <td><a href="index.php" class="style2">Home</a></td>
+                <td><a href="about-us.php" class="style2">About us</a></td>
+                <td><a href="faqs.php" class="style2">FAQs</a></td>
+                <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table></td>
+          </tr>
+        </table>
+        <table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF">
+    <table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr align="left">
+        <td valign="middle" background="banner_.jpg">
+    ';
+        echo $output;
+    }
+    public static function signUp(){
+        if(!isset($_SESSION["chasebank_user"])){
+            
+        
+        $output = '
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF">
+              <table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>
+                  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td><a href="signup.php">SIGN UP</a></td>
+                        <td><a href="sign-in-now.php">SIGN IN</a></td>
+                        <td><a href="forgot-password.php">FORGOT PASSWORD</a></td>
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>Exchange Rate:1 USD = KSH '.getExchangeRate().' </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>';
+
+}else{
+    $output = '
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF">
+              <table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>
+                  <table border="0" cellspacing="5" cellpadding="0">
+                      <tr>
+                        <td>You are logged in as </td>
+                        <td><a href="logout.php"><strong>logout</strong></a></td>
+                        <!--td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td-->
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>Exchange Rate:1 USD = KSH '.getExchangeRate().' </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>';
+
+}
+        echo $output;
+    }
+    public static function displayContent(){
+        $output='';
+    }
+    
+    public static function footer(){
+        $output = '
+        </table></td>
+  </tr>
+</table>
+        </body>
+        </html>';
+        echo $output;
+    }
+    
+}
+
+
+
+?>

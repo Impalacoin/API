@@ -1,0 +1,119 @@
+﻿Public Class frmNewHouse
+    'Private UniversalHostConnection As ADODB.Connection
+    Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        MonthCalendar1.Visible = True
+    End Sub
+
+    Private Sub MonthCalendar1_DateChanged(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DateRangeEventArgs) Handles MonthCalendar1.DateChanged
+        TextBox2.Text = MonthCalendar1.SelectionRange.Start
+        MonthCalendar1.Visible = False
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Me.Dispose()
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim RecSet As New ADODB.Recordset
+        Dim SqlStr As String
+        Try
+
+
+
+            If Trim(TextBox1.Text) <> "" And Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) <> "" And Trim(TextBox4.Text) <> "" And
+               ComboBox1.SelectedItem <> "" And ComboBox2.SelectedItem <> "" And Trim(TextBox5.Text) <> "" And Trim(TextBox6.Text) <> "" And Trim(TextBox7.Text) <> "" And Trim(TextBox8.Text) <> "" And
+               Trim(TextBox9.Text) <> "" And Trim(TextBox10.Text) <> "" And Trim(TextBox11.Text) <> "" Then
+
+                SqlStr = "Insert into house_details values('" & Trim(TextBox1.Text) & "','" & Trim(TextBox2.Text) & "','" & Trim(TextBox3.Text) & "','" & Trim(TextBox4.Text) & "','" & _
+               ComboBox1.SelectedItem & "'," & Trim(TextBox5.Text) & "," & Trim(TextBox6.Text) & ",'" & Trim(TextBox7.Text) & "','" & Trim(TextBox8.Text) & "','" & _
+               Trim(TextBox9.Text) & "','" & Trim(TextBox10.Text) & "',0,0," & Trim(TextBox11.Text) & "," & ComboBox2.SelectedIndex & ",'" & Form1.OWNER & "')"
+
+                '0 -- RENTAL
+                '1-- LODGING
+                RecSet.Open("select * from house_details where reg_no = '" & Trim(TextBox1.Text) & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                If RecSet.EOF = True Then
+                    UniversalHostConnection.Execute(UCase(SqlStr))
+                    UniversalHostConnection.Execute(UCase("insert into INCOME values('" & TextBox4.Text & "'," & 1 & ",'" & Form1.OWNER & "')"))
+
+                    'UniversalHostConnection.Execute(UCase("insert into expense values('" & TextBox4.Text & "'," & 1 & ",'" & Form1.OWNER & "')"))
+
+
+                    MsgBox("A House Added: " & Trim(TextBox4.Text), vbInformation)
+
+                Else
+                    If MsgBox("A House Registered With This Number Already Exits. Do you want to modify?", vbYesNo, APPNAME) = vbYes Then
+                        UniversalHostConnection.Execute("delete from house_details where reg_no = '" & Trim(TextBox1.Text) & "'")
+
+                        UniversalHostConnection.Execute(UCase(SqlStr))
+
+                        UniversalHostConnection.Execute("delete from INCOME where income_description = '" & Trim(TextBox4.Text) & "'")
+                        UniversalHostConnection.Execute(UCase("insert into INCOME values('" & Trim(TextBox4.Text) & "'," & 1 & ",'" & Form1.OWNER & "')"))
+
+                        'UniversalHostConnection.Execute("delete from expense where exp_description = '" & Trim(TextBox4.Text) & "'")
+                        'UniversalHostConnection.Execute(UCase("insert into expense values('" & TextBox4.Text & "'," & 1 & ",'" & Form1.OWNER & "')"))
+
+
+
+                        MsgBox("A House Modified: " & Trim(TextBox4.Text), vbInformation)
+
+                    End If
+
+                    Exit Sub
+                End If
+
+
+            Else
+                MsgBox("One or More Data Missing.", vbExclamation)
+                Exit Sub
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub frmNewHouse_BackgroundImageChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.BackgroundImageChanged
+
+    End Sub
+
+    Private Sub frmNewHouse_Disposed(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Disposed
+
+    End Sub
+
+    Private Sub frmNewHouse_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        'Try
+        '    UniversalHostConnection.Close()
+        'Catch ex As Exception
+
+        'End Try
+    End Sub
+
+    Private Sub frmNewHouse_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+        Me.Left = frmHouse.Left + 30
+        Me.Top = frmHouse.Top + 110
+
+        'Me.Left = frmTenant.Left + 10
+        'Me.Top = frmTenant.Top + 95
+        Try
+
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+           
+
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    Private Sub Label2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label2.Click
+
+    End Sub
+
+    Private Sub Label1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label1.Click
+
+    End Sub
+End Class

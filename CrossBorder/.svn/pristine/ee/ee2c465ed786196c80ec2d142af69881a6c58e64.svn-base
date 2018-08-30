@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+require_once "engine.php";
+$output='<table class="calc-res">
+        <tr><td class="GW_txtfieldcaption">Amount to send</td><td>USD '.$_SESSION["payment"]["amount"].'</td></tr>
+        <tr><td class="GW_txtfieldcaption">Sending Fee</td><td>Free</td></tr>
+        <tr><td class="GW_txtfieldcaption">Card proccessing Fee</td><td> USD'.$_SESSION["payment"]["cardFee"].'</td></tr>
+        <tr><td class="GW_txtfieldcaption">Total</td><td>USD'.$_SESSION["payment"]["total"].'</td></tr>
+        <tr><td class="GW_txtfieldcaption">Beneficiary will receive </td><td>KES '.$_SESSION["payment"]["amount"].' @ '.$_SESSION["payment"]["ex_rate"].'</td></tr>
+        
+        </table>';
+
+NickDisplay::header();
+NickDisplay::topNavigation();
+NickDisplay::topSection();
+NickDisplay::content($output.billing_information("billing.php"));
+NickDisplay::footer();
+
+?>

@@ -1,0 +1,482 @@
+﻿Public Class frmCommission
+    Private COMMISSION As Double
+    Private COM_PERCENT As Double
+    Private COM_AMNT_FIXED As Double
+    Private COM_AMNT_PERCENT As Double
+    Private COMPAID As Double
+
+    Private Sub GroupBox3_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox3.Enter
+
+    End Sub
+
+    Private Sub frmCommission_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        'Label8.Text = "PROPERTY:   " & Form1.OWNER
+
+        Try
+            Me.Text = Form1.OWNER & ":  REPAIRS AND MAINTENANCE"
+            Dim RecSet As New ADODB.Recordset
+            Dim Str As String = ""
+            Dim RecID As Integer = 1
+
+            'ComboBox3.Text = UserName
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+
+            RecSet.Open("select * from prop_holdings ", UniversalHostConnection)
+            ComboBox2.Items.Clear()
+            Do While RecSet.EOF = False
+                ComboBox2.Items.Add(RecSet.Fields(1).Value)
+                RecSet.MoveNext()
+            Loop
+            RecSet.Close()
+
+
+            'RecSet.Open("select distinct house_name from house_details where owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            'ComboBox1.Items.Clear()
+            'Do While RecSet.EOF = False
+            '    ComboBox1.Items.Add(RecSet.Fields(0).Value)
+            '    RecSet.MoveNext()
+            'Loop
+            'RecSet.Close()
+
+
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    Private Sub frmCommission_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 25
+        GroupBox2.Width = Me.Width - 25
+        GroupBox5.Width = Me.Width - 25
+        GroupBox1.Height = Me.Height - 270
+        GroupBox5.Height = Me.Height - 270
+
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox2.SelectedIndexChanged
+        Try
+            Dim RecSet As New ADODB.Recordset
+
+            RecSet.Open("select distinct house_name from house_details where owner = '" & ComboBox2.SelectedItem & "'", UniversalHostConnection)
+            ComboBox1.Items.Clear()
+            Do While RecSet.EOF = False
+                ComboBox1.Items.Add(RecSet.Fields(0).Value)
+                RecSet.MoveNext()
+            Loop
+            GroupBox5.Visible = True
+            GroupBox1.Visible = False
+            RecSet.Close()
+            Datarefresh()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Datarefresh()
+
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim n As Integer
+            RecSet.Open("select * from commission where owner = '" & ComboBox2.SelectedItem & "' ", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            DataGridView2.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView2.Rows.Add()
+                For t As Integer = 0 To 9
+                    DataGridView2.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+                Next
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+            'For i As Integer = 0 To DataGridView1.RowCount - 1
+            '    If IsNothing(DataGridView1.Rows(i).Cells(4).Value) = False Then
+            '        If DataGridView1.Rows(i).Cells(4).Value = "" Then
+            '            DataGridView1.Rows(i).DefaultCellStyle.BackColor = Color.LightGreen
+            '            DataGridView1.Rows(i).Cells(4).Value = "LANDLORD"
+            '        End If
+            '    Else
+            '        DataGridView1.Rows(i).DefaultCellStyle.BackColor = Color.LightGreen
+            '        DataGridView1.Rows(i).Cells(4).Value = "LANDLORD"
+            '    End If
+            'Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Try
+
+            GroupBox5.Visible = False
+            GroupBox1.Visible = True
+            If ComboBox5.SelectedItem <> "" And ComboBox3.SelectedItem <> "" Then
+            Else
+                MsgBox("Select Month and Year", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+
+            If ComboBox2.SelectedItem <> "" And ComboBox1.SelectedItem <> "" Then
+                DatarefreshX()
+            Else
+                MsgBox("Select House Name", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Private Sub DatarefreshX()
+
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim RecSetX As New ADODB.Recordset
+            Dim n As Integer
+            Dim Amount As Double = 0
+            RecSetX.Open("select * from houserooms where house_name = '" & ComboBox1.SelectedItem & "' order by unit_number asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            TextBox9.Text = "0.00"
+            DataGridView1.Rows.Clear()
+            Do While RecSetX.EOF = False
+                DataGridView1.Rows.Add()
+                RecSet.Open("select * from commissionIncome where owner = '" & ComboBox2.SelectedItem & "' and  house_name = '" & ComboBox1.SelectedItem & "' and house_no = '" & RecSetX.Fields(2).Value & "' and monthe = " & ComboBox5.SelectedItem & "  and yeare = " & ComboBox3.SelectedItem, UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+                If Not RecSet.EOF Then
+                    For t As Integer = 0 To 7
+                        DataGridView1.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+                    Next
+                    Amount = Amount + RecSet.Fields(6).Value + RecSet.Fields(7).Value
+                Else
+                    DataGridView1.Rows.Item(n).Cells(0).Value = ComboBox1.SelectedItem
+                    DataGridView1.Rows.Item(n).Cells(1).Value = RecSetX.Fields(2).Value
+                End If
+                n = n + 1
+                RecSet.Close()
+                RecSetX.MoveNext()
+            Loop
+            RecSetX.Close()
+            RecSet.Open("select * from commissionIncome where owner = '" & ComboBox2.SelectedItem & "' and cust_name = 'LANDLORD' AND  house_name = '" & ComboBox1.SelectedItem & "' and monthe = " & ComboBox5.SelectedItem & "  and yeare = " & ComboBox3.SelectedItem, UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For t As Integer = 0 To 7
+                    DataGridView1.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+                Next
+                Amount = Amount + RecSet.Fields(6).Value + RecSet.Fields(7).Value
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+            TextBox9.Text = Amount
+
+            For i As Integer = 0 To DataGridView1.RowCount - 1
+                If IsNothing(DataGridView1.Rows(i).Cells(2).Value) = False Then
+                    If DataGridView1.Rows(i).Cells(2).Value = "" Then
+                        DataGridView1.Rows(i).DefaultCellStyle.BackColor = Color.LightGreen
+                        'DataGridView1.Rows(i).Cells(2).Value = "LANDLORD"
+                    End If
+                Else
+                    'DataGridView1.Rows(i).DefaultCellStyle.BackColor = Color.LightGreen
+                    'DataGridView1.Rows(i).Cells(2).Value = "LANDLORD"
+                End If
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+            Dim RecSet As New ADODB.Recordset
+
+            GroupBox5.Visible = True
+            GroupBox1.Visible = False
+
+            RecSet.Open("select * from commission where house_name = '" & ComboBox1.SelectedItem & "' and owner = '" & ComboBox2.SelectedItem & "'", UniversalHostConnection)
+            If RecSet.EOF = False Then
+                If MsgBox("This commission structure already exist, do you to replace?", vbYesNo, APPNAME) = vbYes Then
+                    UniversalHostConnection.Execute("delete from commission where house_name = '" & ComboBox1.SelectedItem & "' and owner = '" & ComboBox2.SelectedItem & "'")
+                    UniversalHostConnection.Execute("insert into commission values('" & ComboBox1.SelectedItem & "','','" & Format(DateTimePicker1.Value, "dd-MM-yyyy") & "'," & Trim(TextBox3.Text) & "," & Trim(TextBox8.Text) & "," & Trim(TextBox4.Text) & "," & Trim(TextBox7.Text) & "," & Trim(TextBox6.Text) & "," & Trim(TextBox5.Text) & "," & Trim(TextBox1.Text) & ",'" & ComboBox2.SelectedItem & "')")
+                    MsgBox("Record updated successfully", vbInformation, APPNAME)
+
+                    Datarefresh()
+
+                End If
+            Else
+
+                UniversalHostConnection.Execute("insert into commission values('" & ComboBox1.SelectedItem & "','','" & Format(DateTimePicker1.Value, "dd-MM-yyyy") & "'," & Trim(TextBox3.Text) & "," & Trim(TextBox8.Text) & "," & Trim(TextBox4.Text) & "," & Trim(TextBox7.Text) & "," & Trim(TextBox6.Text) & "," & Trim(TextBox5.Text) & "," & Trim(TextBox1.Text) & ",'" & ComboBox2.SelectedItem & "')")
+                MsgBox("Record updated successfully", vbInformation, APPNAME)
+                Datarefresh()
+            End If
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbExclamation, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        GroupBox5.Visible = True
+        GroupBox1.Visible = False
+        Datarefresh()
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        If ComboBox5.SelectedItem <> "" And ComboBox3.SelectedItem <> "" Then
+        Else
+            MsgBox("Select Month and Year", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        If ComboBox2.SelectedItem <> "" Then
+        Else
+            MsgBox("Select Property Owner", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        If MsgBox("Do you want to run " & ComboBox2.SelectedItem & " Commission Earning for selected: " & ComboBox5.SelectedItem & " Month of Year: " & ComboBox3.SelectedItem, vbYesNo, APPNAME) = vbYes Then
+            CommissionCalc()
+        End If
+    End Sub
+
+    Private Sub Button4_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button4.MouseLeave
+        Button4.BackColor = Color.LightSalmon
+    End Sub
+
+    Private Sub Button4_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button4.MouseMove
+        Button4.BackColor = Color.Red
+    End Sub
+
+    Private Sub COMMISSIONCALC()
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim RecSetX As New ADODB.Recordset
+            Dim RecSetC As New ADODB.Recordset
+            Dim AMountTotal As Double = 0
+            Dim Str As String = ""
+            Dim RecID As Integer
+            Dim VAT As Double = 0.0
+            Dim Vatable As Integer = 0
+            Dim Qter As Int16 = 1
+            Dim Yr As Integer = CInt(ComboBox3.SelectedItem)
+
+            RecSet.Open("select * from HOUSE_DETAILS where OWNER = '" & ComboBox2.SelectedItem & "'", UniversalHostConnection)
+            Do While Not RecSet.EOF
+                RecSetX.Open("select * from commission where house_name = '" & RecSet.Fields(3).Value & "'", UniversalHostConnection)
+                If RecSetX.EOF = False Then
+                    COM_AMNT_FIXED = RecSetX.Fields(4).Value
+                    COMMISSION = RecSetX.Fields(5).Value
+                    COM_AMNT_PERCENT = RecSetX.Fields(7).Value
+                    COM_PERCENT = RecSetX.Fields(8).Value
+                Else
+                    COMMISSION = 0
+                    COM_PERCENT = 0
+                    COM_AMNT_FIXED = 0
+                    COM_AMNT_PERCENT = 0
+
+
+                End If
+                RecSetX.Close()
+                If COMMISSION > 0 Or COM_PERCENT > 0 Then
+                    AMountTotal = 0
+                    COMPAID = 0
+                    RecSetC.Open("select * from rtransaction where house_name = '" & RecSet.Fields(3).Value & "' and for_month = '" & ComboBox5.SelectedItem & "-" & ComboBox3.SelectedItem & "' and tran_type = 'RENT'", UniversalHostConnection)
+                    UniversalHostConnection.Execute("delete from commissionIncome where monthe = " & ComboBox5.SelectedItem & " and yeare = " & ComboBox3.SelectedItem & " and owner = '" & ComboBox2.SelectedItem & "' and house_name = '" & RecSet.Fields(3).Value & "'")
+                    UniversalHostConnection.Execute("delete from itransaction where monthe = " & ComboBox5.SelectedItem & " and yeare = " & ComboBox3.SelectedItem & " and owner = '" & Form1.OWNER & "' and income_source = '" & RecSet.Fields(3).Value & "' and bus_reason = 'AGENT COMMISSION'")
+                    UniversalHostConnection.Execute("delete from etransactionX where monthe = " & ComboBox5.SelectedItem & " and yeare = " & ComboBox3.SelectedItem & " and owner = '" & ComboBox2.SelectedItem & "' and expense_type = 'AGENT COMMISSION'  and house_name = '" & RecSet.Fields(3).Value & "'")
+
+                    Do While Not RecSetC.EOF
+                        If COMMISSION > 0 Then
+                            UniversalHostConnection.Execute("INSERT INTO commissionIncome VALUES('" & RecSet.Fields(3).Value & "','" & RecSetC.Fields(4).Value & "','" & RecSetC.Fields(2).Value & "','" & RecSetC.Fields(1).Value & "','" & RecSetC.Fields(6).Value & "'," & RecSetC.Fields(5).Value & ",0," & COMMISSION & "," & ComboBox5.SelectedItem & "," & ComboBox3.SelectedItem & ",'" & ComboBox2.SelectedItem & "','" & UserName & "')")
+                            COMPAID = COMPAID + COMMISSION
+                        ElseIf COM_PERCENT > 0 Then
+                            UniversalHostConnection.Execute("INSERT INTO commissionIncome VALUES('" & RecSet.Fields(3).Value & "','" & RecSetC.Fields(4).Value & "','" & RecSetC.Fields(2).Value & "','" & RecSetC.Fields(1).Value & "','" & RecSetC.Fields(6).Value & "'," & RecSetC.Fields(5).Value & ",0," & RecSetC.Fields(5).Value * COM_PERCENT / 100 & "," & ComboBox5.SelectedItem & "," & ComboBox3.SelectedItem & ",'" & ComboBox2.SelectedItem & "','" & UserName & "')")
+                            COMPAID = COMPAID + RecSetC.Fields(5).Value * COM_PERCENT / 100
+                        End If
+                        AMountTotal = AMountTotal + RecSetC.Fields(5).Value
+                        RecSetC.MoveNext()
+                    Loop
+                    RecSetC.Close()
+                    If COMPAID > 0 Then
+
+                       
+
+                        If ComboBox5.SelectedItem = 1 Or ComboBox5.SelectedItem = 2 Or ComboBox5.SelectedItem = 3 Then
+                            Qter = 1
+                        ElseIf ComboBox5.SelectedItem = 4 Or ComboBox5.SelectedItem = 5 Or ComboBox5.SelectedItem = 6 Then
+                            Qter = 2
+                        ElseIf ComboBox5.SelectedItem = 7 Or ComboBox5.SelectedItem = 8 Or ComboBox5.SelectedItem = 9 Then
+                            Qter = 3
+                        ElseIf ComboBox5.SelectedItem = 10 Or ComboBox5.SelectedItem = 11 Or ComboBox5.SelectedItem = 12 Then
+                            Qter = 4
+                        End If
+
+
+                        RecSetC.Open("select max(rec_id) from etransactionX ", UniversalHostConnection)
+                        If IsNumeric(RecSetC.Fields(0).Value) Then
+                            RecID = RecSetC.Fields(0).Value + 1
+                        Else
+                            RecID = 1
+                        End If
+                        RecSetC.Close()
+                        RecSetC.Open("select VATable from expense where exp_description = 'AGENT COMMISSION'", UniversalHostConnection)
+                        If RecSet.EOF = False Then
+                            Vatable = RecSetC.Fields(0).Value
+                        Else
+                            Vatable = 0
+                        End If
+                        RecSetC.Close()
+                        If Vatable = 1 Then
+                            VAT = COMPAID * (16 / 100)
+                        Else
+                            VAT = 0
+                        End If
+
+                        Str = "insert into etransactionX values(" & RecID & ",'05-" & Format(ComboBox5.SelectedItem, "00") & "-" & ComboBox3.SelectedItem & "','AGENT COMMISSION','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "'," & COMPAID & "," & VAT & ",'AGENT COMMISSION','ALL','" & RecSet.Fields(3).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & ComboBox5.SelectedItem & ",'" & ComboBox2.SelectedItem & "')"
+                        UniversalHostConnection.Execute(UCase(Str))
+
+                        RecSetC.Open("select max(rec_id) from itransaction ", UniversalHostConnection)
+                        If IsNumeric(RecSetC.Fields(0).Value) Then
+                            RecID = RecSetC.Fields(0).Value + 1
+                        Else
+                            RecID = 1
+                        End If
+                        RecSetC.Close()
+                        RecSetC.Open("select VATable from income where income_description = 'AGENT COMMISSION'", UniversalHostConnection)
+                        If RecSet.EOF = False Then
+                            Vatable = RecSetC.Fields(0).Value
+                        Else
+                            Vatable = 0
+                        End If
+                        RecSetC.Close()
+                        If Vatable = 1 Then
+                            VAT = COMPAID * (16 / 100)
+                        Else
+                            VAT = 0
+                        End If
+
+                        Str = "insert into itransaction values(" & RecID & ",'05-" & Format(CInt(ComboBox5.SelectedItem), "00") & "-" & ComboBox3.SelectedItem & "','" & RecSet.Fields(3).Value & "','" & DateTimePicker1.Value & "',''," & COMPAID & "," & VAT & ",'AGENT COMMISSION','','ALL','" & UserName & "'," & Qter & "," & Yr & "," & ComboBox5.SelectedItem & ",'" & Form1.OWNER & "')"
+                        UniversalHostConnection.Execute(UCase(Str))
+
+                    End If
+
+                End If
+
+                If COM_AMNT_PERCENT > 0 Then
+                    UniversalHostConnection.Execute("INSERT INTO commissionIncome VALUES('" & RecSet.Fields(3).Value & "','','','LANDLORD','" & DateTimePicker1.Value & "'," & AMountTotal & ",0," & AMountTotal * COM_AMNT_PERCENT / 100 & "," & ComboBox5.SelectedItem & "," & ComboBox3.SelectedItem & ",'" & ComboBox2.SelectedItem & "','" & UserName & "')")
+
+
+                    RecSetC.Open("select VATable from income where income_description = 'AGENT COMMISSION'", UniversalHostConnection)
+                    If RecSet.EOF = False Then
+                        Vatable = RecSetC.Fields(0).Value
+                    Else
+                        Vatable = 0
+                    End If
+                    RecSetC.Close()
+                    If Vatable = 1 Then
+                        VAT = (AMountTotal * COM_AMNT_PERCENT / 100) * 16 / 100
+                    Else
+                        VAT = 0
+                    End If
+
+                    RecSetC.Open("select max(rec_id) from itransaction ", UniversalHostConnection)
+                    If IsNumeric(RecSetC.Fields(0).Value) Then
+                        RecID = RecSetC.Fields(0).Value + 1
+                    Else
+                        RecID = 1
+                    End If
+                    RecSetC.Close()
+                    Str = "insert into itransaction values(" & RecID & ",'05-" & Format(CInt(ComboBox5.SelectedItem), "00") & "-" & ComboBox3.SelectedItem & "','" & RecSet.Fields(3).Value & "','" & DateTimePicker1.Value & "',''," & AMountTotal * COM_AMNT_PERCENT / 100 & "," & VAT & ",'AGENT COMMISSION','','ALL','" & UserName & "'," & Qter & "," & Yr & "," & ComboBox5.SelectedItem & ",'" & Form1.OWNER & "')"
+                    UniversalHostConnection.Execute(UCase(Str))
+
+
+                    RecSetC.Open("select VATable from expense where exp_description = 'AGENT COMMISSION'", UniversalHostConnection)
+                    If RecSet.EOF = False Then
+                        Vatable = RecSetC.Fields(0).Value
+                    Else
+                        Vatable = 0
+                    End If
+                    RecSetC.Close()
+                    If Vatable = 1 Then
+                        VAT = (AMountTotal * COM_AMNT_PERCENT / 100) * 16 / 100
+                    Else
+                        VAT = 0
+                    End If
+
+                    RecSetC.Open("select max(rec_id) from etransactionX ", UniversalHostConnection)
+                    If IsNumeric(RecSetC.Fields(0).Value) Then
+                        RecID = RecSetC.Fields(0).Value + 1
+                    Else
+                        RecID = 1
+                    End If
+
+                    Str = "insert into etransactionX values(" & RecID & ",'05-" & Format(CInt(ComboBox5.SelectedItem), "00") & "-" & ComboBox3.SelectedItem & "','AGENT COMMISSION','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "'," & AMountTotal * COM_AMNT_PERCENT / 100 & "," & VAT & ",'PERCENTAGE FIXED COMMISSION','ALL','" & RecSet.Fields(3).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & ComboBox5.SelectedItem & ",'" & ComboBox2.SelectedItem & "')"
+                    UniversalHostConnection.Execute(UCase(Str))
+
+
+
+                ElseIf COM_AMNT_FIXED > 0 Then
+                    UniversalHostConnection.Execute("INSERT INTO commissionIncome VALUES('" & RecSet.Fields(3).Value & "','','','LANDLORD','" & DateTimePicker1.Value & "'," & AMountTotal & ",0," & COM_AMNT_FIXED & "," & ComboBox5.SelectedItem & "," & ComboBox3.SelectedItem & ",'" & ComboBox2.SelectedItem & "','" & UserName & "')")
+
+                    RecSetC.Open("select VATable from income where income_description = 'AGENT COMMISSION'", UniversalHostConnection)
+                    If RecSet.EOF = False Then
+                        Vatable = RecSetC.Fields(0).Value
+                    Else
+                        Vatable = 0
+                    End If
+                    RecSetC.Close()
+                    If Vatable = 1 Then
+                        VAT = COM_AMNT_FIXED * 16 / 100
+                    Else
+                        VAT = 0
+                    End If
+
+                    RecSetC.Open("select max(rec_id) from itransaction ", UniversalHostConnection)
+                    If IsNumeric(RecSetC.Fields(0).Value) Then
+                        RecID = RecSetC.Fields(0).Value + 1
+                    Else
+                        RecID = 1
+                    End If
+
+                    Str = "insert into itransaction values(" & RecID & ",'05-" & Format(CInt(ComboBox5.SelectedItem), "00") & "-" & ComboBox3.SelectedItem & "','" & RecSet.Fields(3).Value & "','" & DateTimePicker1.Value & "',''," & COM_AMNT_FIXED & "," & VAT & ",'AGENT COMMISSION','','ALL','" & UserName & "'," & Qter & "," & Yr & "," & ComboBox5.SelectedItem & ",'" & Form1.OWNER & "')"
+                    UniversalHostConnection.Execute(UCase(Str))
+                    RecSetC.Close()
+
+                    RecSetC.Open("select VATable from expense where exp_description = 'AGENT COMMISSION'", UniversalHostConnection)
+                    If RecSet.EOF = False Then
+                        Vatable = RecSetC.Fields(0).Value
+                    Else
+                        Vatable = 0
+                    End If
+                    RecSetC.Close()
+                    If Vatable = 1 Then
+                        VAT = COM_AMNT_FIXED * 16 / 100
+                    Else
+                        VAT = 0
+                    End If
+
+                    RecSetC.Open("select max(rec_id) from etransactionX ", UniversalHostConnection)
+                    If IsNumeric(RecSetC.Fields(0).Value) Then
+                        RecID = RecSetC.Fields(0).Value + 1
+                    Else
+                        RecID = 1
+                    End If
+                    RecSetC.Close()
+                    Str = "insert into etransactionX values(" & RecID & ",'05-" & Format(CInt(ComboBox5.SelectedItem), "00") & "-" & ComboBox3.SelectedItem & "','AGENT COMMISSION','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "'," & COM_AMNT_FIXED & "," & VAT & ",'AGENT FIXED COMMISSION','ALL','" & RecSet.Fields(3).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & ComboBox5.SelectedItem & ",'" & ComboBox2.SelectedItem & "')"
+                    UniversalHostConnection.Execute(UCase(Str))
+
+
+
+                End If
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+End Class

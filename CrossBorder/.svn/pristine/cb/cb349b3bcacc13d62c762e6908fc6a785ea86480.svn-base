@@ -1,0 +1,36 @@
+<?php 
+require_once('php-sdk/facebook.php');
+ 
+$facebook = new Facebook(array(
+'appId'  => '140784829316432',
+'secret' => '5a6e718cb5f833452602eccca1542139',
+'cookie' => true,
+));
+$output="";
+$logo="<img src='images/edit.png'>";
+//$logo="<img src='images/fblogo.jpg' style='width:auto;height:80px'>";
+ $user = $facebook->getUser();
+ //make sure to uncomment this line
+ //$user="1131371938";
+$me = null;
+// Session based API call.
+if ($user) {    
+    $uid = $user;
+    $me = $facebook->api('/'.$uid);                   
+} else{
+    $loginUrl=$facebook->getLoginUrl(
+        array("display"=>"popup",
+              "redirect_uri"=>"https://apps.facebook.com/impalapay",
+              "scope"=>"email"
+        )
+    );
+        $output.="<p class='pushRight'><a href='{$loginUrl}' target='_top' >Login</a></p>";
+        //$output.="<fb:login-button show-faces='true' width='200' max-rows='1'></fb:login-button>";
+} 
+     
+//echo "<img src='http://www.custompckenya.com/impalapay_facebook/edit.png'>";
+
+//echo "<h1 style='font-size:16px; margin-bottom:10px'>Impalapay Credits</h1>";
+    
+
+?>

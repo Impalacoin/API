@@ -1,0 +1,824 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "BalServer"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Public MyClass As MyClass, MyLibClass As MyLibClass
+'Public ExportImport As New ExportImport
+Public ExportStart_Time As Integer, ExportStop_Time As Integer, Export_Frequency As Integer
+    
+'Private Const record_length = 46
+
+'Private FTPServer As String, FtpPwd As String
+'Private DialUpPwd As String, PhoneNumber As String
+'Private msBCode As String, StartTime As Long
+'Private Err_Flag As Integer
+
+'Private lpOSInfo As OSVERSIONINFO
+
+''''''''''''''''''''''''''
+'Private lngRASErrorNumber As Long, lngLastRASConnection As Long
+'Description
+'Private strRASDescription As String, lngWindowVersion As Long
+'combined Major/minor version in initialize
+'Private sngOSVersion As Single
+'variable for instance count on the RAS DLL
+'Private hRASDLLInstance As Long
+
+'Private Type RASDIALPARAMS   ''For Version Other than 95
+'    'set dwsize to 736 unless winver >= 400 then set to 1052
+'    dwSize As Long
+'    szEntryName(RAS_MaxEntryName) As Byte
+'    szPhoneNumber(RAS_MaxPhoneNumber) As Byte
+'    szCallbackNumber(RAS_MaxCallbackNumber) As Byte
+'    szUserName(UNLEN) As Byte
+'    szPassword(PWLEN) As Byte
+'    szDomain(DNLEN) As Byte
+'End Type
+
+'Private Type RASDIALPARAMS95 ''For '95 Only
+'    'set dwsize to 1052
+'    dwSize As Long
+'    szEntryName(RAS95_MaxEntryName) As Byte
+'    szPhoneNumber(RAS_MaxPhoneNumber) As Byte
+'    szCallbackNumber(RAS95_MaxCallbackNumber) As Byte
+'    szUserName(UNLEN) As Byte
+'    szPassword(PWLEN) As Byte
+'    szDomain(DNLEN) As Byte
+'End Type
+
+'Private Type RASENTRYNAME
+'    'set dwsize to 28 unless winver >= 400 then set to 264
+'    dwSize As Long
+'    szEntryName(RAS_MaxEntryName) As Byte
+'End Type
+'
+'Private Type RASENTRYNAME95
+'    'set dwsize to 264
+'    dwSize As Long
+'    szEntryName(RAS95_MaxEntryName) As Byte
+'End Type
+
+'Private Type Loan_Pay
+'    BrCode As Integer
+'    TypeCode As Integer
+'    AcSrno As Long
+'    NextInstDate As Date
+'End Type
+
+
+'Private Type NOTIFYICONDATA
+'    cbSize As Long
+'    hWND As Long
+'    uID As Long
+'    uFlags As Long
+'    uCallbackMessage As Long
+'    hIcon As Long
+'    szTip As String * 64
+'End Type
+
+'**********************************
+'*   RAS Function Declarations    *
+'**********************************
+'I keep type checking wherever possible.
+'Some functions need a ByVal sometimes and ByRef others. I declare ByRef and issue ByVal in function call.
+'These functions should be good for all cases if the ByVal is added to the call wherever needed.
+'Private Declare Function RasCreatePhonebookEntry Lib "RasApi32.DLL" Alias "RasCreatePhonebookEntryA" (ByVal hWND As Long, ByVal lpszPhonebook As String) As Long
+'Private Declare Function RasDial Lib "RasApi32.DLL" Alias "RasDialA" (lpRasDialExtensions As Any, ByVal lpszPhonebook As String, lprasdialparams As Any, ByVal dwNotifierType As Long, lpvNotifier As Long, lphRasConn As Long) As Long
+'Private Declare Function RasEditPhonebookEntry Lib "RasApi32.DLL" Alias "RasEditPhonebookEntryA" (ByVal hWND As Long, ByVal lpszPhonebook As String, ByVal lpszEntryName As String) As Long
+'Private Declare Function RasEnumConnections Lib "RasApi32.DLL" Alias "RasEnumConnectionsA" (lprasconn As Any, lpcb As Long, lpcConnections As Long) As Long
+'Private Declare Function RASEnumEntries Lib "RasApi32.DLL" Alias "RasEnumEntriesA" (ByVal reserved As String, ByVal lpszPhonebook As String, lprasentryname As Any, lpcb As Long, lpcEntries As Long) As Long
+'Private Declare Function RasGetConnectStatus Lib "RasApi32.DLL" Alias "RasGetConnectStatusA" (ByVal hRasConn As Long, lprasconnstatus As Any) As Long
+'Private Declare Function RasGetEntryDialParams Lib "RasApi32.DLL" Alias "RasGetEntryDialParamsA" (ByVal lpszPhonebook As String, lprasdialparams As Any, lpfPassword As Long) As Long
+'Private Declare Function RasGetErrorString Lib "RasApi32.DLL" Alias "RasGetErrorStringA" (ByVal uErrorValue As Long, ByVal lpszErrorString As String, ByVal cBufSize As Long) As Long
+'Private Declare Function RasGetProjectionInfo Lib "RasApi32.DLL" Alias "RasGetProjectionInfoA" (ByVal hRasConn As Long, ByVal rasprojection As Long, lpprojection As Any, lpcb As Long) As Long
+'Private Declare Function RasHangUp Lib "RasApi32.DLL" Alias "RasHangUpA" (ByVal hRasConn As Long) As Long
+'Private Declare Function RasSetEntryDialParams Lib "RasApi32.DLL" Alias "RasSetEntryDialParamsA" (ByVal lpszPhonebook As String, lprasdialparams As Any, ByVal fRemovePassword As Long) As Long
+
+'Variables for General Ledger
+' Source_Server = 0 LOCAL M/c (In this case Drive  Name  will be there in variable Source_Computer)
+' Source Server = 1 NT Server (In this case Server Name  will be there in variable Source_Computer)
+' Source Server = 2 Unix Server (In this case IP address will be there in variable Source_Computer)
+
+Public Sub Routine_Timer_Export()
+
+Dim Curr_Time As Integer
+Dim NextExport_Time As Integer
+
+    ' Do NOT Export if the Branch is closed
+    If MyClass.Branch_Open_Flag = 0 Then Exit Sub
+    
+    Curr_Time = Hour(Time) * 60 + Minute(Time)
+    
+    ''' Check if  export is due
+    If Curr_Time < ExportStart_Time Or Curr_Time > ExportStop_Time Then GoTo Proc_Exit
+    
+    NextExport_Time = ExportStart_Time
+Time_Loop:
+    If Curr_Time = NextExport_Time Then GoTo Now_Export
+    If Curr_Time < NextExport_Time Then GoTo Proc_Exit
+    NextExport_Time = NextExport_Time + Export_Frequency
+    If NextExport_Time > ExportStop_Time Then GoTo Proc_Exit
+    GoTo Time_Loop
+    
+Now_Export:
+    
+    '''' If no LOcal Branches Then Delete Hourly files & Exit
+    If GNum_LocalBranches < 1 Then
+        If Test_Flag <> 1 Then Call ExportImport.Delete_HourlyFiles
+        GoTo Proc_Exit
+    End If
+    'Call Export_Hourly
+    Call ExportImport.Export_Hourly
+    
+Proc_Exit:
+    Exit Sub
+End Sub
+
+Public Sub Routine_Timer_Import()
+    ' Do NOT Import if the Branch is closed
+    If MyClass.Branch_Open_Flag = 0 Then Exit Sub
+    Call ExportImport.Import_Hourly
+    Exit Sub
+End Sub
+
+'Public Sub Routine_Timer_Server()
+'Dim RetAmt As Currency, FileLength As Integer
+'Dim Input_File_Name As String, strBuffer As String * 46
+'Dim CallType As Byte, Suc_Flag As Byte, Ctr As Byte, NumRecords As Byte
+'Dim DlrInfo() As DialerInfo, Old_Size As Long, New_Size As Long
+'Dim TxnIntDate As Integer, BigAmt As Big_Amount
+'Dim RsUnpostedTxn As New ADODB.Recordset, Block_Amt As Currency
+'
+'On Error GoTo Sub_Error
+'
+'    ' Do NOT Process This Timer if the Branch is closed
+'    If MyClass.Branch_Open_Flag = 0 Then Exit Sub
+'
+'    Suc_Flag = 0
+'    RetAmt = 0
+'
+'    Input_File_Name = "C:\Port\Saving\AcBal.Bin"
+'    If Len(Dir(Input_File_Name)) = 0 Then GoTo Exit_Here
+'
+'    ' Delete Output (Response File)
+'    If Len(Dir("C:\Port\Saving\RetAcBal.Bin")) > 0 Then Kill "C:\Port\Saving\RetAcBal.Bin"
+'
+'    ''Check If The Size Of the File is 46 Bytes Or Not
+'    ''If Not then Don't call the function and send Suc_Flag=5 and RetAmout=0
+'B0:
+'    ' Make sure that the File is NOT BEING copied by FTP
+'    Old_Size = FileLen(Input_File_Name)
+'    StartTime = Timer
+'A0:
+'    If Timer <= StartTime + 1 Then GoTo A0
+'    New_Size = FileLen(Input_File_Name)
+'    If New_Size <> Old_Size Then GoTo B0
+'
+'    'Make sure that the File Size is exact multiple of 46
+'    Call Do_Events
+'    If (New_Size Mod record_length) <> 0 Then
+'        Suc_Flag = 5
+'        RetAmt = 0
+'        GoTo Return_Response
+'    End If
+'    FileLength = New_Size
+'
+'    ''now Open The File To Read The Info
+'    ReDim DlrInfo(0) As DialerInfo
+'
+'    Call aksfile_open(Input_File_Name, 1, Err_Flag)
+'    Call aksfile_read(1, strBuffer, record_length)
+'    Call move_databack(strBuffer, DlrInfo(0).CallingBranch, 2, 1, 2)
+'    Call move_databack(strBuffer, DlrInfo(0).CalledBranch, 2, 3, 2)
+'    Call move_databack(strBuffer, DlrInfo(0).AcNo, 3, 5, 4)
+'    Call move_databack(strBuffer, DlrInfo(0).AcType, 2, 9, 2)
+'    Call move_databack(strBuffer, DlrInfo(0).Chq_No, 3, 11, 4)
+'    Call move_databack(strBuffer, DlrInfo(0).CustId, 3, 15, 4)
+'    Call move_databack(strBuffer, DlrInfo(0).Trans_Loan_Flag, 1, 19, 1)
+'    Call move_databack(strBuffer, TxnIntDate, 2, 20, 2)
+'    Call Move_I2D(TxnIntDate, DlrInfo(0).Txn_Clear_Date)
+'    Call move_databack(strBuffer, DlrInfo(0).Txn_Code, 0, 22, 3)
+'    Call move_databack(strBuffer, TxnIntDate, 2, 25, 2)
+'    Call Move_I2D(TxnIntDate, DlrInfo(0).Txn_Date)
+'    Call move_databack(strBuffer, DlrInfo(0).Txn_No, 3, 27, 4)
+'    Call move_databack(strBuffer, DlrInfo(0).Txn_Time, 0, 31, 5)
+'    Call move_databack(strBuffer, BigAmt.Rupees, 3, 36, 4)
+'    Call move_databack(strBuffer, BigAmt.Paise, 1, 40, 1)
+'    Call Move_BigAmount_To_Currency(BigAmt, DlrInfo(0).Txn_Bnk_Chg)
+'    Call move_databack(strBuffer, BigAmt.Rupees, 3, 41, 4)
+'    Call move_databack(strBuffer, BigAmt.Paise, 1, 45, 1)
+'    Call Move_BigAmount_To_Currency(BigAmt, DlrInfo(0).WDAmt)
+'    Call move_databack(strBuffer, CallType, 1, 46, 1)
+'    Call aksfile_close(1, Err_Flag)
+'
+'    RetAmt = 0
+'    ' There will be only ONE Record for Call Type = 0
+'    If CallType = 0 Then
+'        ' This Function Does NOT Take care of Unposted Card Transactions. However we do not have any unposted card transactions anymore since they are immediately posted
+'        Call MyLibClass.Get_Savings_Drawing_Power(DlrInfo(0).CalledBranch, DlrInfo(0).CustId, _
+'                                DlrInfo(0).AcType, DlrInfo(0).AcNo, RetAmt, Block_Amt)
+'        If RetAmt < DlrInfo(0).WDAmt Then Suc_Flag = 1
+'    End If
+'    ' We have to update the Database for Call Type 1
+'    If CallType >= 1 Then
+'            NumRecords = FileLength \ record_length
+'            ReDim DlrInfo(0 To NumRecords - 1)
+'            Call aksfile_open(Input_File_Name, 1, Err_Flag)
+'            For Ctr = 0 To NumRecords - 1
+'                strBuffer = Space(record_length)
+'                Call aksfile_read(1, strBuffer, record_length)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).CallingBranch, 2, 1, 2)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).CalledBranch, 2, 3, 2)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).AcNo, 3, 5, 4)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).AcType, 2, 9, 2)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).Chq_No, 3, 11, 4)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).CustId, 3, 15, 4)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).Trans_Loan_Flag, 1, 19, 1)
+'                Call move_databack(strBuffer, TxnIntDate, 2, 20, 2)
+'
+'                Call Move_I2D(TxnIntDate, DlrInfo(Ctr).Txn_Clear_Date)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).Txn_Code, 0, 22, 3)
+'                Call move_databack(strBuffer, TxnIntDate, 2, 25, 2)
+'                Call Move_I2D(TxnIntDate, DlrInfo(Ctr).Txn_Date)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).Txn_No, 3, 27, 4)
+'                Call move_databack(strBuffer, DlrInfo(Ctr).Txn_Time, 0, 31, 5)
+'                Call move_databack(strBuffer, BigAmt.Rupees, 3, 36, 4)
+'                Call move_databack(strBuffer, BigAmt.Paise, 1, 40, 1)
+'                Call Move_BigAmount_To_Currency(BigAmt, DlrInfo(Ctr).Txn_Bnk_Chg)
+'                Call move_databack(strBuffer, BigAmt.Rupees, 3, 41, 4)
+'                Call move_databack(strBuffer, BigAmt.Paise, 1, 45, 1)
+'                Call Move_BigAmount_To_Currency(BigAmt, DlrInfo(Ctr).WDAmt)
+'                Call move_databack(strBuffer, CallType, 1, 46, 1)
+'
+'
+'                 Sqlstr = "insert into " & MyClass.gUnifyDb & "unposted_card_txn (txn_br_code,txn_date,txn_no,txn_time," & _
+'                         "txn_clear_date,txn_amt,txn_bnk_chg,txn_code,chq_no,trans_loan_flag,txn_hbr_cd,cust_idno," & _
+'                         "type_code,ac_srno) values (" & _
+'                         DlrInfo(Ctr).CallingBranch & ",'" & Format(DlrInfo(Ctr).Txn_Date, "dd-mmm-yyyy") & "'," & DlrInfo(Ctr).Txn_No & ",'" & Format(DlrInfo(Ctr).Txn_Time, "hh:mm") & "','" & _
+'                         Format(DlrInfo(Ctr).Txn_Clear_Date, "dd-mmm-yyyy") & "'," & DlrInfo(Ctr).WDAmt & "," & DlrInfo(Ctr).Txn_Bnk_Chg & ",'" & _
+'                         DlrInfo(Ctr).Txn_Code & "'," & DlrInfo(Ctr).Chq_No & "," & DlrInfo(Ctr).Trans_Loan_Flag & "," & DlrInfo(Ctr).CalledBranch & "," & DlrInfo(Ctr).CustId & "," & DlrInfo(Ctr).AcType & "," & DlrInfo(Ctr).AcNo & ")"
+'
+'                Call Fire_Sql(Sqlstr, RsUnpostedTxn, Sql_Error, MyClass.Connection_No, recs_read)
+'                If Sql_Error <> 0 Then Call Abort_Program(, "BalServer/Routine_Time_Server_2")
+'                If recs_read <= 0 Then MsgBox "Unable to Insert Records in Unposted Transactions File"
+'            Next Ctr
+'            Call aksfile_close(1, Err_Flag)
+'        End If
+'
+'
+'Return_Response:
+'
+'    If Len(Dir(Input_File_Name)) > 0 Then Kill Input_File_Name
+'    ' Create File to Write The Ac Info
+'    Call aksfile_create("C:\Port\Saving\RetAcBal.Bin", 2, Err_Flag)
+'    strBuffer = Space(6)
+'    Call move_data(Suc_Flag, 1, strBuffer, 1, 1)
+'    Call Move_Currency_To_BigAmount(RetAmt, BigAmt)
+'    Call move_data(BigAmt.Rupees, 3, strBuffer, 2, 4)
+'    Call move_data(BigAmt.Paise, 1, strBuffer, 6, 1)
+'    Call aksfile_write(2, strBuffer, 6)
+'    Call aksfile_close(2, Err_Flag)
+'
+'Exit_Here:
+'
+'    Exit Sub
+'
+'Sub_Error:
+'
+'    Suc_Flag = 5
+'    RetAmt = 0
+'    Call aksfile_close(1, Err_Flag)
+'    GoTo Return_Response
+'End Sub
+'
+'Private Sub GetBranchInfo(ByVal CalledBranchCode As Integer, _
+'                          ByRef FTPName As String, _
+'                          ByRef FTPUName As String, _
+'                          ByRef FtpPwd As String, _
+'                          ByRef DialUpPwd As String, _
+'                          ByRef PhoneNo As String, _
+'                          ByRef Suc_Flag As Byte)
+'Dim rsTxn As New ADODB.Recordset
+'Dim SQLStr As String, Sql_Erroror As Long, recs_read As Long
+'
+'On Error GoTo Sub_Error
+'    Suc_Flag = 1
+'    SQLStr = "select * from " & MyClass.gUnifyDb & "branch where br_code=" & CalledBranchCode
+'    Call Fire_Sql(SQLStr, rsTxn, Sql_Erroror, MyClass.Connection_No)
+'    If Sql_Erroror <> 0 Then GoTo Sub_Error
+'    If rsTxn.EOF Then GoTo Sub_Error
+'    FTPName = Trim(rsTxn!br_ipadd)
+'    FTPUName = Trim(rsTxn!br_ftpuser)
+'    FtpPwd = Trim(rsTxn!br_ftppwd)
+'    DialUpPwd = Trim(rsTxn!br_dialuppwd)
+'    PhoneNo = Trim(rsTxn!br_phone)
+'    Suc_Flag = 0
+'    Exit Sub
+'Sub_Error:
+'    Exit Sub
+'End Sub
+
+
+'Private Function DialNumber(ByVal strConnName As String, ByVal strPhoneNumber As String, _
+'                           ByVal strCallbackNumber As String, ByVal strUsername As String, _
+'                           ByVal strPassword As String, ByVal strDomain As String, _
+'                           ByVal boolAsync As Boolean) As Long
+'''This Function will dial the number with the specified Connection Name
+'''Basically UserName And Domain Name is optional but password is necessary for logical handshaking
+'''boolAsync is boolean value specifying whether we require Asynchronous or Synchronous connection
+'''For our purpose we will always be using Asynchronous connection
+'Dim lngRetCode As Long
+'Dim hRasConn As Long
+'Dim lngRetlstrcpy As Long
+'Dim intLooper As Integer
+'Dim lngRetHangUp As Long
+'Dim dwNotifier As Long
+'
+'On Error GoTo Sub_Error
+'
+'        strRASDescription = ""
+'        lngRASErrorNumber = 0
+'        strUsername = GsUserName        ''Added on 10-12-2002 to incorporate win 2000 calling
+'
+'         dwNotifier = APINULL
+'         If boolAsync Then dwNotifier = &HFFFFFFFF                    ' Asynchronous
+'
+'       'We are running NT
+'      If lngWindowVersion = 2 Then
+'         Dim lprasdialparams As RASDIALPARAMS
+'         lprasdialparams.dwSize = 736
+'         ''Using lstrCopy because strconv function here will not work
+'         lngRetlstrcpy = lstrcpy(lprasdialparams.szEntryName(0), strConnName)
+'         lngRetlstrcpy = lstrcpy(lprasdialparams.szPhoneNumber(0), strPhoneNumber)
+'         lngRetlstrcpy = lstrcpy(lprasdialparams.szCallbackNumber(0), strCallbackNumber)
+'         lngRetlstrcpy = lstrcpy(lprasdialparams.szUserName(0), strUsername)
+'         lngRetlstrcpy = lstrcpy(lprasdialparams.szPassword(0), strPassword) ''Not sure whether password is required here
+'         lngRetlstrcpy = lstrcpy(lprasdialparams.szDomain(0), strDomain)
+'         'Call RASDial
+'
+'Port_Open:
+'         lngRetCode = RasDial(ByVal APINULL, vbNullString, lprasdialparams, dwNotifier, ByVal APINULL, hRasConn)
+'         If lngRetCode = 602 Then GoTo Port_Open
+'
+'         'Test for failure
+'         If lngRetCode Then
+'            lngRASErrorNumber = lngRetCode
+'            strRASDescription = RASErrorString()
+'            lngRetHangUp = RasHangUp(hRasConn)
+'            DialNumber = lngRetCode
+'            GoTo Sub_Error
+'         Else
+'            'Just giving time so that Connections is updated properly
+'            Call Do_Events
+'            DialNumber = lngRetCode
+'         End If
+'
+'         Exit Function
+'      End If
+'
+'    'We are running 95 (lngWindowVersion =1)
+'    Dim lprasdialparams95 As RASDIALPARAMS95
+'    lprasdialparams95.dwSize = 1052
+'
+'    lngRetlstrcpy = lstrcpy(lprasdialparams95.szEntryName(0), strConnName)
+'    lngRetlstrcpy = lstrcpy(lprasdialparams95.szPhoneNumber(0), strPhoneNumber)
+'    lngRetlstrcpy = lstrcpy(lprasdialparams95.szCallbackNumber(0), strCallbackNumber)
+'    lngRetlstrcpy = lstrcpy(lprasdialparams95.szUserName(0), strUsername)
+'    lngRetlstrcpy = lstrcpy(lprasdialparams95.szPassword(0), strPassword)
+'    lngRetlstrcpy = lstrcpy(lprasdialparams95.szDomain(0), strDomain)
+'
+'Port_Open_95:
+'    'Call RASDial
+'    lngRetCode = RasDial(ByVal APINULL, vbNullString, lprasdialparams95, dwNotifier, ByVal APINULL, hRasConn)
+'    If lngRetCode = 602 Then GoTo Port_Open_95
+'
+'    If lngRetCode Then
+'       lngRASErrorNumber = lngRetCode
+'       strRASDescription = RASErrorString()
+'       lngRetHangUp = RasHangUp(hRasConn)
+'       DialNumber = lngRetCode
+'       GoTo Sub_Error
+'    Else
+'       'Just giving time so that Connections is updated properly
+'       Call Do_Events
+'       DialNumber = lngRetCode
+'       lngLastRASConnection = hRasConn
+'    End If
+'
+'
+'Exit Function
+'
+'Sub_Error:
+'    Exit Function
+'End Function
+'
+'Private Function RASErrorString() As String
+'
+'On Error GoTo Sub_Error
+'   Dim lngRetCode As Long
+'   Dim strRASErrorString As String
+'   'Fill string
+'   ''This Will Return me The error Occured during Dialing/Connecting
+'   strRASErrorString = Space$(256)
+'   'lngRASErrorNumber is the RAS error number in class decl
+'   Select Case lngRASErrorNumber
+'      Case Is >= 600
+'         lngRetCode = RasGetErrorString(lngRASErrorNumber, strRASErrorString, 256&)
+'         If lngRetCode Then
+'            ''It should never happen
+'            RASErrorString = "Call To RasGetErrorString Failed. Error Retrieving The Error String!!!"
+'         Else
+'            'Return string
+'            RASErrorString = strRASErrorString
+'         End If
+'      Case NOT_SUPPORTED
+'         RASErrorString = "Function Is Not Supported On This Version of Windows."
+'      Case Else
+'         RASErrorString = "Unexpected Error!!!"
+'   End Select
+'Exit Function
+'
+'Sub_Error:
+'    Resume Next
+'End Function
+
+'Private Function CheckRASEnumEntries(ByVal ConnStr As String) As Boolean
+'
+'Dim lngRetCode As Long
+'Dim lpszreserved As String
+'Dim lpszPhonebook As String
+'Dim lpcb As Long
+'Dim lpcEntries As Long
+'Dim lnArraySize As Integer
+'Dim lnCtr As Long, lnTmpCtr As Integer, ChkFlag As Integer
+'Dim ConnName() As String
+'Dim lsTmpConName As String, DelConName As String
+'   ''This function will verify whether all the connections are available which corresponds
+'   ''to each branch Code
+'   lpszreserved = vbNullString
+'   lpszPhonebook = vbNullString
+'   'Putting a maximum of 256 Entries. If it fails then we resize
+'   lnArraySize = 255
+'   If lngWindowVersion = 2 Then
+'      'We are running NT
+'      ReDim lprasentryname(lnArraySize) As RASENTRYNAME
+'      lprasentryname(0).dwSize = 28
+'      lpcb = 256 * lprasentryname(0).dwSize
+'      lngRetCode = RASEnumEntries(lpszreserved, lpszPhonebook, lprasentryname(0), lpcb, lpcEntries)
+'   Else
+'      'We are running 95 (lngWindowVersion =1)
+'      ReDim lprasentryname95(lnArraySize) As RASENTRYNAME95
+'      lprasentryname95(0).dwSize = 264
+'      lpcb = 256 * lprasentryname95(0).dwSize
+'      lngRetCode = RASEnumEntries(lpszreserved, lpszPhonebook, lprasentryname95(0), lpcb, lpcEntries)
+'   End If
+'   Select Case lngRetCode
+'      Case SUCCESS
+'         If lpcEntries > 0 Then
+'            'resize array so that it is correct size based on return from function
+'            ReDim ConnName(lpcEntries - 1) As String
+'            If lngWindowVersion = 2 Then
+'                'running NT
+'               For lnCtr = 0 To UBound(ConnName())
+'                  ConnName(lnCtr) = TrimNulls(StrConv(lprasentryname(lnCtr).szEntryName, vbUnicode))
+'               Next lnCtr
+'            Else
+'               'running 95
+'               For lnCtr = 0 To UBound(ConnName())
+'                  ConnName(lnCtr) = TrimNulls(StrConv(lprasentryname95(lnCtr).szEntryName, vbUnicode))
+'               Next lnCtr
+'            End If
+'         End If
+'         ''Now Check For all Available Connections
+'         CheckRASEnumEntries = False
+'         For lnTmpCtr = 0 To lpcEntries - 1
+'                If UCase(ConnName(lnTmpCtr)) = ConnStr Then CheckRASEnumEntries = True: Exit For
+'         Next lnTmpCtr
+'         If CheckRASEnumEntries = False Then
+'            Sleep (1000)
+'            Exit Function
+'         End If
+'      Case Else
+'         lngRASErrorNumber = lngRetCode
+'         strRASDescription = RASErrorString()
+'   End Select
+'
+'End Function
+'Private Function TrimNulls(ByVal strFullofNulls As String) As String
+'   'This function just gets rid of the Nulls that StrConv leaves on 95
+'   'passing like this is odd, but it I'd no other option
+'   If (InStr(strFullofNulls, Chr$(0))) Then TrimNulls = Left$(strFullofNulls, InStr(strFullofNulls, Chr$(0)) - 1)
+'End Function
+
+'Private Function LoadandCheckRAS() As Long
+'
+'   'Checks out RAS and loads DLLs at startup so faster later.
+'    hRASDLLInstance = LoadLibrary("RASAPI32.DLL")
+'    LoadandCheckRAS = 0
+'    If hRASDLLInstance <> 0 Then LoadandCheckRAS = GetLastError()
+'
+'End Function
+
+'Private Function UnloadRAS() As Long
+'
+'Dim lngRetCode As Long
+'
+'   'Just freeing the library
+'   lngRetCode = FreeLibrary(hRASDLLInstance)
+'   If lngRetCode Then
+'      UnloadRAS = 0
+'   Else
+'      UnloadRAS = GetLastError()
+'   End If
+'
+'End Function
+
+'Private Sub Initialize_Dialer(ByRef Suc_Flag As Byte)
+'Dim ConnStr As String
+'Dim lngErrNum As Long
+'On Error GoTo Sub_Error
+'    Suc_Flag = 5
+'    lngErrNum = LoadandCheckRAS()
+'    If lngErrNum Then
+'      'Failed so raise error to fail
+'      GoTo Sub_Error
+'    Else
+'      'We have RAS on system and it is now running
+'      'Have to set the structure size
+'      'Have to get windows version for all RAS functions
+'      lpOSInfo.dwOSVersionInfoSize = 148
+'      If (GetVersionEx(lpOSInfo)) Then
+'         'set the global version variable for use in all other RAS functions. This is decl in the BAS file.
+'         lngWindowVersion = lpOSInfo.dwPlatformId
+'         'Have to combine the two DWORDS into a Single
+'         sngOSVersion = CSng(lpOSInfo.dwMajorVersion) + CSng(Val("." & str$(lpOSInfo.dwMinorVersion)))
+'      Else
+'         lngErrNum = GetLastError()
+'         'This will cause Initialization failure
+'         GoTo Sub_Error
+'      End If
+'   End If
+'   Suc_Flag = 0
+'   Exit Sub
+'Sub_Error:
+'    Exit Sub
+'End Sub
+
+
+'Public Sub Routine_Timer_Dial(ByRef Inet1 As Inet)
+'
+'Dim Input_File_Name As String, strBuffer As String, FileName_ToSend As String, RecptFile_Name As String
+'Dim RetAmount As Currency, CalledBrCode As Integer, FileLength As Integer, CallingBrCode As Integer
+'Dim BytErr_Flag As Byte, Output_File_Name As String, Connection_Name As String
+'Dim BigAmt As Big_Amount
+'Dim lnTmpCtr As Byte, lnDialCode As Long
+'
+'On Error GoTo Sub_Error
+'
+'    ' Do NOT Process This Timer if the Branch is closed
+'    If MyClass.Branch_Open_Flag = 0 Then Exit Sub
+'
+'    Input_File_Name = "C:\Port\Saving\*.DIO"
+'    If Len(Dir(Input_File_Name)) <= 0 Then GoTo Exit_Here
+'
+'    StartTime = Timer
+'    RetAmount = 0
+'
+'    ''Fortunately VB Selects the File which is chronologically the first file in the folder
+'    ''Hence get the file name along with the path stored in Input_File_Name
+'    FileName_ToSend = Dir(Input_File_Name)
+'    Input_File_Name = "C:\Port\Saving\" & FileName_ToSend
+'    Output_File_Name = Left$(Input_File_Name, Len(Input_File_Name) - 4) & ".DII"
+'
+'    ''Now Check for the length of the File and see if it is divisible by 46
+'    If FileLen(Input_File_Name) Mod record_length <> 0 Then
+'        BytErr_Flag = 5
+'        GoTo SkipThis
+'    End If
+'
+'    ''Now Read The Called Branch Code from the File
+'    Call aksfile_open(Input_File_Name, 1, Err_Flag)
+'    strBuffer = Space(4)
+'    Call aksfile_read(1, strBuffer, 4)
+'    Call move_databack(strBuffer, CalledBrCode, 2, 3, 2)
+'    Call aksfile_close(1, Err_Flag)
+'
+'    ' Delete Output (DII) File for this branch
+'    If Len(Dir(Output_File_Name)) > 0 Then Kill Output_File_Name
+'
+'    Call Initialize_Dialer(BytErr_Flag)
+'    If BytErr_Flag <> 0 Then GoTo SkipThis
+'
+'    ''Call This Function To get The Connection And FTP Info Of the Dialing Branch
+'    Call GetBranchInfo(CalledBrCode, FTPServer, FtpUser, FtpPwd, DialUpPwd, PhoneNumber, BytErr_Flag)
+'    If BytErr_Flag <> 0 Then GoTo SkipThis
+'
+'    ''Dial The Number
+'    Connection_Name = "FFBS"
+'    ''Check For Existence Of Connection
+'    If CheckRASEnumEntries(Connection_Name) = False Then
+'        BytErr_Flag = 2
+'        GoTo SkipThis
+'    End If
+'
+'    ''Once EveryThing is Thru' Start Dialing
+'    For lnTmpCtr = 1 To MaxRetry       ''Try for 25 times
+'Port_Open:
+'        lnDialCode = DialNumber(Connection_Name, PhoneNumber, "", "", DialUpPwd, "", False)
+'        If lnDialCode = ERROR_PORT_ALREADY_OPEN Then GoTo Port_Open
+'        ''Case Of Either Port Or Modem Problem
+'        If (lnDialCode = ERROR_PORT_NOT_CONNECTED) Or _
+'            (lnDialCode = ERROR_DEVICE_DOES_NOT_EXIST) Or _
+'            (lnDialCode = ERROR_PORT_NOT_OPEN) Or _
+'            (lnDialCode = ERROR_PORT_NOT_AVAILABLE) Or _
+'            (lnDialCode = ERROR_HARDWARE_FAILURE) Or _
+'            (lnDialCode = ERROR_DEVICE_NOT_READY) Or _
+'            (lnDialCode = ERROR_PORT_NOT_CONFIGURED) Then
+'            Call RasHangUp(lngLastRASConnection)
+'            BytErr_Flag = 9
+'            GoTo SkipThis
+'        End If
+'        ''Case Of Connectivity Problem
+'        If (lnDialCode = ERROR_ROUTE_NOT_AVAILABLE) Or _
+'            (lnDialCode = ERROR_ROUTE_NOT_ALLOCATED) Or _
+'            (lnDialCode = ERROR_NO_ANSWER) Or _
+'            (lnDialCode = ERROR_NO_DIALTONE) Or _
+'            (lnDialCode = ERROR_NO_CARRIER) Or _
+'            (lnDialCode = ERROR_NO_DIALIN_PERMISSION) Then
+'            Call RasHangUp(lngLastRASConnection)
+'            BytErr_Flag = 8
+'            GoTo SkipThis
+'        End If
+'        If (lnDialCode = ERROR_NO_RESPONSES) Or (lnDialCode = ERROR_LINE_BUSY) Then
+'            Call RasHangUp(lngLastRASConnection)
+'            BytErr_Flag = 7
+'            GoTo SkipThis
+'        End If
+'
+'        If lnDialCode = 0 Then
+'            Connection_Name = CStr(CalledBrCode)
+'            GoTo Start_FTP
+'        End If
+'    Next lnTmpCtr
+'
+'    BytErr_Flag = 4
+'    lnDialCode = RasHangUp(lngLastRASConnection)
+'    lngLastRASConnection = 0
+'    GoTo SkipThis
+'
+'Start_FTP:
+'
+'    ''Once Number Had Been Dialled Do The File Transfer Operation
+'    If PutFiles(FileName_ToSend, Inet1) = 1 Then
+'        BytErr_Flag = 7
+'        lnDialCode = RasHangUp(lngLastRASConnection)
+'        lngLastRASConnection = 0
+'        GoTo SkipThis
+'    End If
+'
+'    ''Now Wait For The Response From Remote M/c To Come
+'    StartTime = Timer
+'    lnTmpCtr = 0
+'
+'Wait_again:
+'
+'    Call Do_Events
+'    If (Timer - StartTime) > Permissible_Time_Limit Then
+'        BytErr_Flag = 6
+'        Call RasHangUp(lngLastRASConnection)
+'        lngLastRASConnection = 0
+'        GoTo SkipThis
+'    End If
+'
+'    ''Get The File after killing the previous file
+'    RecptFile_Name = "C:\Port\Saving\RetAcBal.Bin"
+'    If Len(Dir(RecptFile_Name)) > 0 Then Kill RecptFile_Name
+'    lnTmpCtr = GetFiles("RetAcBal.BIN", Inet1)
+'    If lnTmpCtr <> 0 Then GoTo Wait_again
+'
+'    ''Close The Connection
+'    Call RasHangUp(lngLastRASConnection)
+'    lngLastRASConnection = 0
+'
+'    ''Read The File Recieved
+'    Call aksfile_open(RecptFile_Name, 1, Err_Flag)
+'    Call aksfile_read(1, strBuffer, 6)
+'    Call aksfile_close(1, Err_Flag)
+'
+'    Call move_databack(strBuffer, BytErr_Flag, 1, 1, 1)
+'    Call move_databack(strBuffer, BigAmt.Rupees, 3, 2, 4)
+'    Call move_databack(strBuffer, BigAmt.Paise, 1, 6, 1)
+'    Call Move_BigAmount_To_Currency(BigAmt, RetAmount)
+'
+'SkipThis:
+'
+'    ''Now Write The Return Amount and Success Flag in the File
+'    strBuffer = Space(6)
+'    Call move_data(BytErr_Flag, 1, strBuffer, 1, 1)
+'    Call Move_Currency_To_BigAmount(RetAmount, BigAmt)
+'    Call move_data(BigAmt.Rupees, 3, strBuffer, 2, 4)
+'    Call move_data(BigAmt.Paise, 1, strBuffer, 6, 1)
+'
+'    Call aksfile_create(Output_File_Name, 1, Err_Flag)
+'    Call aksfile_write(1, strBuffer, 6)
+'    Call aksfile_close(1, Err_Flag)
+'
+'    ' Delete Input File (DIO) here
+'    If Len(Dir(Input_File_Name)) > 0 Then Kill Input_File_Name
+'
+'Exit_Here:
+'
+'    Exit Sub
+'
+'Sub_Error:
+'
+'    BytErr_Flag = 5
+'    RetAmount = 0
+'    GoTo SkipThis
+'End Sub
+'
+'Private Function GetFiles(ByRef sFileList As String, ByRef Inet1 As Inet) As Long
+'Dim sFile As String
+'Dim sTemp As String
+'Dim p As Integer, lnCtr As Integer, lnTmpCtr As Integer
+'On Error GoTo Sub_Error
+'    Inet1.URL = "ftp://" & FTPServer
+'    Inet1.UserName = FtpUser
+'    Inet1.Password = FtpPwd
+'    Inet1.Protocol = icFTP
+'    GetFiles = 0
+'
+'    For lnCtr = 0 To 2      ''Three Attempts Max
+'        Inet1.Execute Inet1.URL, "GET \Saving\" & sFileList & " C:\Port\Saving\" & sFileList
+'        Do
+'            Call Do_Events
+'        Loop Until Not Inet1.StillExecuting
+'        If Inet1.ResponseCode = 0 Then
+'            ''Now There Is A Problem. Cerberus FTP Server Will Return A 0 Byte File
+'            ''If That Particular File Is Not Available at The Remote M/C. This is
+'            ''not in Accordance With other FTP Server. Cerberus FTP Server Will also
+'            ''Return a Successful Return code In This Case. Thus Only Thing Left For Me
+'            ''is To Delete That 0  Byte File And Bring File Again
+'            If FileLen("C:\Port\Saving\" & sFileList) = 0 Then
+'                Kill "C:\Port\Saving\" & sFileList
+'                GetFiles = 1
+'            Else
+'                For lnTmpCtr = 1 To 5
+'                    Inet1.Execute Inet1.URL, "DELETE \Saving\RetAcBal.Bin"
+'                    Do
+'                        Call Do_Events
+'                    Loop Until Not Inet1.StillExecuting
+'                    If Inet1.ResponseCode = 0 Then Exit For
+'                Next lnTmpCtr
+'                GetFiles = 0
+'                GoTo Proc_Exit
+'            End If
+'        End If
+'    Next lnCtr
+'    If Inet1.ResponseCode <> 0 Then GetFiles = 1
+'Proc_Exit:
+'    Exit Function
+'Sub_Error:
+'    GetFiles = 1
+'    Exit Function
+'End Function
+'
+'Private Function PutFiles(ByRef sFileList As String, ByRef Inet1 As Inet) As Long
+'Dim sFile As String
+'Dim sTemp As String
+'Dim p As Integer, lnCtr As Integer
+'On Error GoTo Sub_Error
+'    Inet1.URL = "ftp://" & FTPServer
+'    Inet1.UserName = FtpUser
+'    Inet1.Password = FtpPwd
+'    Inet1.Protocol = icFTP
+'    sTemp = sFileList
+'    PutFiles = 0
+'
+'    For lnCtr = 0 To 2      ''Three Attempts Max
+'        Inet1.Execute Inet1.URL, "SEND C:\Port\Saving\" & sTemp & " \Saving\AcBal.Bin"
+'        Do
+'            Call Do_Events
+'        Loop Until Not Inet1.StillExecuting
+'        If Inet1.ResponseCode = 0 Then Exit For
+'    Next lnCtr
+'    If Inet1.ResponseCode <> 0 Then PutFiles = 1
+'    Exit Function
+'
+'Sub_Error:
+'
+'    PutFiles = 1
+'    Exit Function
+'End Function
+'

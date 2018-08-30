@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+require_once "engine.php";
+
+$user = new Users();
+$response =array();
+if($user->checkIfUserExists($_POST["email"])){
+    $response=array("status"=>"58","message"=>"Email already exists in our record.");
+    echo json_encode($response);
+    exit();
+}
+$userId=$user->register();
+if($userId){
+    //make sure to use the user id for session
+    $response = array("status"=>"00","message"=>"Account was successfully created.");
+    echo json_encode($response);
+}else{
+    $response=array("status"=>"56","message"=>"An error occured while creating account, please try again later.");
+    echo json_encode($response);
+}
+?>

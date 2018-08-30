@@ -1,0 +1,2503 @@
+VERSION 1.0 CLASS
+BEGIN
+MultiUse = -1  'True
+Persistable = 0  'NotPersistable
+DataBindingBehavior = 0  'vbNone
+DataSourceBehavior = 0   'vbNone
+MTSTransactionMode = 0   'NotAnMTSObject
+End
+Attribute VB_Name = "MenuClass"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Public Sub Execute_Option(ByVal Button_Id As Integer, ByVal Menu_Id As Integer, ByVal SubMenu_Id As Integer,  _
+                          ByRef Temp_Sys As MyClass,ByRef Temp_Lib as MyLibClass)
+    Temp_Sys.Sys_Pkg_Code = Current_Package
+    Temp_Sys.Sys_Btn_Id = Button_Id
+    Temp_Sys.Sys_Menu_Id = Menu_Id
+    Temp_Sys.Sys_Sub_Menu_Id = SubMenu_Id
+
+Package_1:
+
+    If Current_package <> 1 then goto package_Over
+
+    'Data Correction
+    If Button_id = 1 and Menu_id = 11 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Loan Data Correction
+    If Button_id = 1 and Menu_id = 11 and SubMenu_id = 1101 Then
+         set loan_data = New loan_data
+         set loan_data.MyClass = Temp_Sys
+         set loan_data.MyLibClass = Temp_Lib
+         loan_data.show
+         Exit Sub
+    End If
+
+    'Match ALR - ALC
+    If Button_id = 1 and Menu_id = 11 and SubMenu_id = 1102 Then
+         set matchalc = New matchalc
+         set matchalc.MyClass = Temp_Sys
+         set matchalc.MyLibClass = Temp_Lib
+         matchalc.show
+         Exit Sub
+    End If
+
+    'Correct Interest Entries
+    If Button_id = 1 and Menu_id = 11 and SubMenu_id = 1103 Then
+         set adjust_int = New adjust_int
+         set adjust_int.MyClass = Temp_Sys
+         set adjust_int.MyLibClass = Temp_Lib
+         adjust_int.show
+         Exit Sub
+    End If
+
+    'Match LOG - LOD
+    If Button_id = 1 and Menu_id = 11 and SubMenu_id = 1104 Then
+         set MatchLOD = New MatchLOD
+         set MatchLOD.MyClass = Temp_Sys
+         set MatchLOD.MyLibClass = Temp_Lib
+         MatchLOD.show
+         Exit Sub
+    End If
+
+    'Rectify Loan Entries
+    If Button_id = 1 and Menu_id = 11 and SubMenu_id = 1105 Then
+         set updateltran = New updateltran
+         set updateltran.MyClass = Temp_Sys
+         set updateltran.MyLibClass = Temp_Lib
+         updateltran.show
+         Exit Sub
+    End If
+
+    'Other Databank
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Fund Sources
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1012 Then
+         set source_mst = New source_mst
+         set source_mst.MyClass = Temp_Sys
+         set source_mst.MyLibClass = Temp_Lib
+         source_mst.show
+         Exit Sub
+    End If
+
+    'Credit Purposes
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1013 Then
+         set credit_purpose = New credit_purpose
+         set credit_purpose.MyClass = Temp_Sys
+         set credit_purpose.MyLibClass = Temp_Lib
+         credit_purpose.show
+         Exit Sub
+    End If
+
+    'Sectors
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1014 Then
+         set sect_mst = New sect_mst
+         set sect_mst.MyClass = Temp_Sys
+         set sect_mst.MyLibClass = Temp_Lib
+         sect_mst.show
+         Exit Sub
+    End If
+
+    'Industries
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1015 Then
+         set industry_mst = New industry_mst
+         set industry_mst.MyClass = Temp_Sys
+         set industry_mst.MyLibClass = Temp_Lib
+         industry_mst.show
+         Exit Sub
+    End If
+
+    'Loan Account Categories
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1016 Then
+         set loan_ac_categ = New loan_ac_categ
+         set loan_ac_categ.MyClass = Temp_Sys
+         set loan_ac_categ.MyLibClass = Temp_Lib
+         loan_ac_categ.show
+         Exit Sub
+    End If
+
+    'GL Posting Codes
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1017 Then
+         set frmloan_post = New frmloan_post
+         set frmloan_post.MyClass = Temp_Sys
+         set frmloan_post.MyLibClass = Temp_Lib
+         frmloan_post.show
+         Exit Sub
+    End If
+
+    'Province
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1018 Then
+         set frmprovince = New frmprovince
+         set frmprovince.MyClass = Temp_Sys
+         set frmprovince.MyLibClass = Temp_Lib
+         frmprovince.show
+         Exit Sub
+    End If
+
+    'Insurance Premium Rate
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1019 Then
+         set insurance_rate_mst = New insurance_rate_mst
+         set insurance_rate_mst.MyClass = Temp_Sys
+         set insurance_rate_mst.MyLibClass = Temp_Lib
+         insurance_rate_mst.show
+         Exit Sub
+    End If
+
+    'Implementation Program
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1020 Then
+         set frmimplement = New frmimplement
+         set frmimplement.MyClass = Temp_Sys
+         set frmimplement.MyLibClass = Temp_Lib
+         frmimplement.show
+         Exit Sub
+    End If
+
+    'Change Savings Link in Loans
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1021 Then
+         set ch_ln_ac = New ch_ln_ac
+         set ch_ln_ac.MyClass = Temp_Sys
+         set ch_ln_ac.MyLibClass = Temp_Lib
+         ch_ln_ac.show
+         Exit Sub
+    End If
+
+    'Update Loan Master with Installment Amount
+    If Button_id = 1 and Menu_id = 101 and SubMenu_id = 1022 Then
+         set ln_upd_mast = New ln_upd_mast
+         set ln_upd_mast.MyClass = Temp_Sys
+         set ln_upd_mast.MyLibClass = Temp_Lib
+         ln_upd_mast.show
+         Exit Sub
+    End If
+
+    'Installments Computation Query
+    If Button_id = 1 and Menu_id = 102 and SubMenu_id = 0 Then
+         set inst_enq = New inst_enq
+         set inst_enq.MyClass = Temp_Sys
+         set inst_enq.MyLibClass = Temp_Lib
+         inst_enq.show
+         Exit Sub
+    End If
+
+    'Loan Reports
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Loan Statement/Ledger
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1031 Then
+         set frmloan_stmt = New frmloan_stmt
+         set frmloan_stmt.MyClass = Temp_Sys
+         set frmloan_stmt.MyLibClass = Temp_Lib
+         frmloan_stmt.show
+         Exit Sub
+    End If
+
+    'Loan Securities
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1032 Then
+         set frmsec_rep = New frmsec_rep
+         set frmsec_rep.MyClass = Temp_Sys
+         set frmsec_rep.MyLibClass = Temp_Lib
+         frmsec_rep.show
+         Exit Sub
+    End If
+
+    'Loan Disbursement Reports
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1033 Then
+         set frmloan_disbrep = New frmloan_disbrep
+         set frmloan_disbrep.MyClass = Temp_Sys
+         set frmloan_disbrep.MyLibClass = Temp_Lib
+         frmloan_disbrep.show
+         Exit Sub
+    End If
+
+    'Recovery
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1034 Then
+         set frmlrecov = New frmlrecov
+         set frmlrecov.MyClass = Temp_Sys
+         set frmlrecov.MyLibClass = Temp_Lib
+         frmlrecov.show
+         Exit Sub
+    End If
+
+    'Ageing Analysis
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1036 Then
+         set frmloanage = New frmloanage
+         set frmloanage.MyClass = Temp_Sys
+         set frmloanage.MyLibClass = Temp_Lib
+         frmloanage.show
+         Exit Sub
+    End If
+
+    'Signatory wise List of Accounts
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1038 Then
+         set frmsig_list = New frmsig_list
+         set frmsig_list.MyClass = Temp_Sys
+         set frmsig_list.MyLibClass = Temp_Lib
+         frmsig_list.show
+         Exit Sub
+    End If
+
+    'Maturing Loans
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 1039 Then
+         set frmloan_mature = New frmloan_mature
+         set frmloan_mature.MyClass = Temp_Sys
+         set frmloan_mature.MyLibClass = Temp_Lib
+         frmloan_mature.show
+         Exit Sub
+    End If
+
+    'Loans Between Specified Amounts
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10310 Then
+         set frmloan_amt = New frmloan_amt
+         set frmloan_amt.MyClass = Temp_Sys
+         set frmloan_amt.MyLibClass = Temp_Lib
+         frmloan_amt.show
+         Exit Sub
+    End If
+
+    'Transaction Listing
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10311 Then
+         set frmltransrpt = New frmltransrpt
+         set frmltransrpt.MyClass = Temp_Sys
+         set frmltransrpt.MyLibClass = Temp_Lib
+         frmltransrpt.show
+         Exit Sub
+    End If
+
+    'Interest Accured but not Received
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10312 Then
+         set frmint_accured = New frmint_accured
+         set frmint_accured.MyClass = Temp_Sys
+         set frmint_accured.MyLibClass = Temp_Lib
+         frmint_accured.show
+         Exit Sub
+    End If
+
+    'Trial Balance
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10313 Then
+         set frmloan_trial = New frmloan_trial
+         set frmloan_trial.MyClass = Temp_Sys
+         set frmloan_trial.MyLibClass = Temp_Lib
+         frmloan_trial.show
+         Exit Sub
+    End If
+
+    'Connected Bad Loans
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10314 Then
+         set frmvalid_ac = New frmvalid_ac
+         set frmvalid_ac.MyClass = Temp_Sys
+         set frmvalid_ac.MyLibClass = Temp_Lib
+         frmvalid_ac.show
+         Exit Sub
+    End If
+
+    'Loan Payment Schedules
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10315 Then
+         set lrepay_schd = New lrepay_schd
+         set lrepay_schd.MyClass = Temp_Sys
+         set lrepay_schd.MyLibClass = Temp_Lib
+         lrepay_schd.show
+         Exit Sub
+    End If
+
+    'Ageing Analysis for Officers
+    If Button_id = 1 and Menu_id = 103 and SubMenu_id = 10316 Then
+         set frmloanage1 = New frmloanage1
+         set frmloanage1.MyClass = Temp_Sys
+         set frmloanage1.MyLibClass = Temp_Lib
+         frmloanage1.show
+         Exit Sub
+    End If
+
+    'Loan Accounts
+    If Button_id = 1 and Menu_id = 104 and SubMenu_id = 0 Then
+         set loanmst = New loanmst
+         set loanmst.MyClass = Temp_Sys
+         set loanmst.MyLibClass = Temp_Lib
+         loanmst.show
+         Exit Sub
+    End If
+
+    'Securities Against Loan
+    If Button_id = 1 and Menu_id = 105 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Securities
+    If Button_id = 1 and Menu_id = 105 and SubMenu_id = 1051 Then
+         set cust_security = New cust_security
+         set cust_security.MyClass = Temp_Sys
+         set cust_security.MyLibClass = Temp_Lib
+         cust_security.show
+         Exit Sub
+    End If
+
+    'Alloc./Release Securities
+    If Button_id = 1 and Menu_id = 105 and SubMenu_id = 1052 Then
+         set allocate_security = New allocate_security
+         set allocate_security.MyClass = Temp_Sys
+         set allocate_security.MyLibClass = Temp_Lib
+         allocate_security.show
+         Exit Sub
+    End If
+
+    'Loan Transactions
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Internal Trfr. Credits
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1061 Then
+         set internal_credits = New internal_credits
+         set internal_credits.MyClass = Temp_Sys
+         set internal_credits.MyLibClass = Temp_Lib
+         internal_credits.show
+         Exit Sub
+    End If
+
+    'Internal Transfer Debits
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1062 Then
+         set internal_debit = New internal_debit
+         set internal_debit.MyClass = Temp_Sys
+         set internal_debit.MyLibClass = Temp_Lib
+         internal_debit.show
+         Exit Sub
+    End If
+
+    'Additional Sanction Amt
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1063 Then
+         set Addnl_sanc = New Addnl_sanc
+         set Addnl_sanc.MyClass = Temp_Sys
+         set Addnl_sanc.MyLibClass = Temp_Lib
+         Addnl_sanc.show
+         Exit Sub
+    End If
+
+    'Mark Loan A/cs With NP
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1064 Then
+         set ln_np = New ln_np
+         set ln_np.MyClass = Temp_Sys
+         set ln_np.MyLibClass = Temp_Lib
+         ln_np.show
+         Exit Sub
+    End If
+
+    'Disbursal of Loan Amount
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1065 Then
+         set loan_disburse = New loan_disburse
+         set loan_disburse.MyClass = Temp_Sys
+         set loan_disburse.MyLibClass = Temp_Lib
+         loan_disburse.show
+         Exit Sub
+    End If
+
+    'Settlement of Loan A/c
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1066 Then
+         set settle_loanac = New settle_loanac
+         set settle_loanac.MyClass = Temp_Sys
+         set settle_loanac.MyLibClass = Temp_Lib
+         settle_loanac.show
+         Exit Sub
+    End If
+
+    'Loan Write Offs
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1067 Then
+         set frmloanwriteoff = New frmloanwriteoff
+         set frmloanwriteoff.MyClass = Temp_Sys
+         set frmloanwriteoff.MyLibClass = Temp_Lib
+         frmloanwriteoff.show
+         Exit Sub
+    End If
+
+    'Enquiry on Transactions
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1068 Then
+         set frmltenq = New frmltenq
+         set frmltenq.MyClass = Temp_Sys
+         set frmltenq.MyLibClass = Temp_Lib
+         frmltenq.show
+         Exit Sub
+    End If
+
+    'Post ITC from Flat File
+    If Button_id = 1 and Menu_id = 106 and SubMenu_id = 1069 Then
+         set frmpostitc = New frmpostitc
+         set frmpostitc.MyClass = Temp_Sys
+         set frmpostitc.MyLibClass = Temp_Lib
+         frmpostitc.show
+         Exit Sub
+    End If
+
+    'Re-Schedule Loans
+    If Button_id = 1 and Menu_id = 107 and SubMenu_id = 0 Then
+         set reschedule = New reschedule
+         set reschedule.MyClass = Temp_Sys
+         set reschedule.MyLibClass = Temp_Lib
+         reschedule.show
+         Exit Sub
+    End If
+
+    'Customers Databank
+    If Button_id = 1 and Menu_id = 109 and SubMenu_id = 0 Then
+         set cust_mast = New cust_mast
+         set cust_mast.MyClass = Temp_Sys
+         set cust_mast.MyLibClass = Temp_Lib
+         cust_mast.show
+         Exit Sub
+    End If
+
+    'Loan Enquiries
+    If Button_id = 1 and Menu_id = 111 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Loan Accounts On CBK
+    If Button_id = 1 and Menu_id = 111 and SubMenu_id = 1111 Then
+         set lnaccbk = New lnaccbk
+         set lnaccbk.MyClass = Temp_Sys
+         set lnaccbk.MyLibClass = Temp_Lib
+         lnaccbk.show
+         Exit Sub
+    End If
+
+    'Loan Transaction Enquiry
+    If Button_id = 1 and Menu_id = 111 and SubMenu_id = 1112 Then
+         set lntrenq = New lntrenq
+         set lntrenq.MyClass = Temp_Sys
+         set lntrenq.MyLibClass = Temp_Lib
+         lntrenq.show
+         Exit Sub
+    End If
+
+    'Out Standing Salary Advances
+    If Button_id = 1 and Menu_id = 111 and SubMenu_id = 1113 Then
+         set outsaladv = New outsaladv
+         set outsaladv.MyClass = Temp_Sys
+         set outsaladv.MyLibClass = Temp_Lib
+         outsaladv.show
+         Exit Sub
+    End If
+
+    'Salary Advance Trial Balance
+    If Button_id = 1 and Menu_id = 111 and SubMenu_id = 1114 Then
+         set saladv_tb = New saladv_tb
+         set saladv_tb.MyClass = Temp_Sys
+         set saladv_tb.MyLibClass = Temp_Lib
+         saladv_tb.show
+         Exit Sub
+    End If
+
+    'Other Report
+    If Button_id = 1 and Menu_id = 112 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Loan Opening Detail
+    If Button_id = 1 and Menu_id = 112 and SubMenu_id = 1121 Then
+         set loanopac = New loanopac
+         set loanopac.MyClass = Temp_Sys
+         set loanopac.MyLibClass = Temp_Lib
+         loanopac.show
+         Exit Sub
+    End If
+
+    'Loan Recovery Analysis
+    If Button_id = 1 and Menu_id = 112 and SubMenu_id = 1122 Then
+         set ln_recov_anal = New ln_recov_anal
+         set ln_recov_anal.MyClass = Temp_Sys
+         set ln_recov_anal.MyLibClass = Temp_Lib
+         ln_recov_anal.show
+         Exit Sub
+    End If
+
+    'Monthly Interest Debited
+    If Button_id = 1 and Menu_id = 112 and SubMenu_id = 1123 Then
+         set ln_month_rpt = New ln_month_rpt
+         set ln_month_rpt.MyClass = Temp_Sys
+         set ln_month_rpt.MyLibClass = Temp_Lib
+         ln_month_rpt.show
+         Exit Sub
+    End If
+
+    'List of A/cs Marked as NP
+    If Button_id = 1 and Menu_id = 112 and SubMenu_id = 1124 Then
+         set ln_np1 = New ln_np1
+         set ln_np1.MyClass = Temp_Sys
+         set ln_np1.MyLibClass = Temp_Lib
+         ln_np1.show
+         Exit Sub
+    End If
+
+    'List of Bad Loans
+    If Button_id = 1 and Menu_id = 112 and SubMenu_id = 1125 Then
+         set frmbadloanrpt = New frmbadloanrpt
+         set frmbadloanrpt.MyClass = Temp_Sys
+         set frmbadloanrpt.MyLibClass = Temp_Lib
+         frmbadloanrpt.show
+         Exit Sub
+    End If
+
+    'Day-End Process
+    If Button_id = 2 and Menu_id = 202 and SubMenu_id = 0 Then
+         set dayend_processing = New dayend_processing
+         set dayend_processing.MyClass = Temp_Sys
+         set dayend_processing.MyLibClass = Temp_Lib
+         dayend_processing.show
+         Exit Sub
+    End If
+
+    'Day-Begin Process
+    If Button_id = 2 and Menu_id = 203 and SubMenu_id = 0 Then
+         set daybegin_processing = New daybegin_processing
+         set daybegin_processing.MyClass = Temp_Sys
+         set daybegin_processing.MyLibClass = Temp_Lib
+         daybegin_processing.show
+         Exit Sub
+    End If
+
+    'Parameters
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Base Rates
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2041 Then
+         set frmbase_ratemst = New frmbase_ratemst
+         set frmbase_ratemst.MyClass = Temp_Sys
+         set frmbase_ratemst.MyLibClass = Temp_Lib
+         frmbase_ratemst.show
+         Exit Sub
+    End If
+
+    'Account Categories
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2042 Then
+         set frmac_catg = New frmac_catg
+         set frmac_catg.MyClass = Temp_Sys
+         set frmac_catg.MyLibClass = Temp_Lib
+         frmac_catg.show
+         Exit Sub
+    End If
+
+    'Holidays Data
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2043 Then
+         set hol_mast = New hol_mast
+         set hol_mast.MyClass = Temp_Sys
+         set hol_mast.MyLibClass = Temp_Lib
+         hol_mast.show
+         Exit Sub
+    End If
+
+    'Amity System Parameters
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2044 Then
+         set frmaks_param = New frmaks_param
+         set frmaks_param.MyClass = Temp_Sys
+         set frmaks_param.MyLibClass = Temp_Lib
+         frmaks_param.show
+         Exit Sub
+    End If
+
+    'Old System Parameters
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2045 Then
+         set frmFsys_param = New frmFsys_param
+         set frmFsys_param.MyClass = Temp_Sys
+         set frmFsys_param.MyLibClass = Temp_Lib
+         frmFsys_param.show
+         Exit Sub
+    End If
+
+    'Account Types
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2046 Then
+         set frmac_type = New frmac_type
+         set frmac_type.MyClass = Temp_Sys
+         set frmac_type.MyLibClass = Temp_Lib
+         frmac_type.show
+         Exit Sub
+    End If
+
+    'Transaction Types
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2047 Then
+         set frmtxn_type = New frmtxn_type
+         set frmtxn_type.MyClass = Temp_Sys
+         set frmtxn_type.MyLibClass = Temp_Lib
+         frmtxn_type.show
+         Exit Sub
+    End If
+
+    'Deposit Analysis Codes
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2048 Then
+         set frmdep_anal = New frmdep_anal
+         set frmdep_anal.MyClass = Temp_Sys
+         set frmdep_anal.MyLibClass = Temp_Lib
+         frmdep_anal.show
+         Exit Sub
+    End If
+
+    'Interest Rates
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 2049 Then
+         set frmint_rate = New frmint_rate
+         set frmint_rate.MyClass = Temp_Sys
+         set frmint_rate.MyLibClass = Temp_Lib
+         frmint_rate.show
+         Exit Sub
+    End If
+
+    'Bank Commission Charges
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 20410 Then
+         set bank_chgs = New bank_chgs
+         set bank_chgs.MyClass = Temp_Sys
+         set bank_chgs.MyLibClass = Temp_Lib
+         bank_chgs.show
+         Exit Sub
+    End If
+
+    'Periods
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 20411 Then
+         set frmperiod_mnt = New frmperiod_mnt
+         set frmperiod_mnt.MyClass = Temp_Sys
+         set frmperiod_mnt.MyLibClass = Temp_Lib
+         frmperiod_mnt.show
+         Exit Sub
+    End If
+
+    'Officers
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 20412 Then
+         set frmofficer_mst = New frmofficer_mst
+         set frmofficer_mst.MyClass = Temp_Sys
+         set frmofficer_mst.MyLibClass = Temp_Lib
+         frmofficer_mst.show
+         Exit Sub
+    End If
+
+    'Savings A/c Categories
+    If Button_id = 2 and Menu_id = 204 and SubMenu_id = 20413 Then
+         set frmsav_accateg = New frmsav_accateg
+         set frmsav_accateg.MyClass = Temp_Sys
+         set frmsav_accateg.MyLibClass = Temp_Lib
+         frmsav_accateg.show
+         Exit Sub
+    End If
+
+    'Additional Parameters
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Branch Master
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 22 Then
+         set branchmaster = New branchmaster
+         set branchmaster.MyClass = Temp_Sys
+         set branchmaster.MyLibClass = Temp_Lib
+         branchmaster.show
+         Exit Sub
+    End If
+
+    'Savings System Parameters
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2051 Then
+         set frmsav_sysparam = New frmsav_sysparam
+         set frmsav_sysparam.MyClass = Temp_Sys
+         set frmsav_sysparam.MyLibClass = Temp_Lib
+         frmsav_sysparam.show
+         Exit Sub
+    End If
+
+    'Banks
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2052 Then
+         set frmbank_mst = New frmbank_mst
+         set frmbank_mst.MyClass = Temp_Sys
+         set frmbank_mst.MyLibClass = Temp_Lib
+         frmbank_mst.show
+         Exit Sub
+    End If
+
+    'Teller Opening
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2054 Then
+         set frmteller_txn = New frmteller_txn
+         set frmteller_txn.MyClass = Temp_Sys
+         set frmteller_txn.MyLibClass = Temp_Lib
+         frmteller_txn.show
+         Exit Sub
+    End If
+
+    'Txn Type Link Parameters
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2055 Then
+         set ac_txn_type = New ac_txn_type
+         set ac_txn_type.MyClass = Temp_Sys
+         set ac_txn_type.MyLibClass = Temp_Lib
+         ac_txn_type.show
+         Exit Sub
+    End If
+
+    'Salary Organizations
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2056 Then
+         set salcompany = New salcompany
+         set salcompany.MyClass = Temp_Sys
+         set salcompany.MyLibClass = Temp_Lib
+         salcompany.show
+         Exit Sub
+    End If
+
+    'Salary Import Designs
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2057 Then
+         set sallayout = New sallayout
+         set sallayout.MyClass = Temp_Sys
+         set sallayout.MyLibClass = Temp_Lib
+         sallayout.show
+         Exit Sub
+    End If
+
+    'Salary External Branches Definition
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2508 Then
+         set salbranch = New salbranch
+         set salbranch.MyClass = Temp_Sys
+         set salbranch.MyLibClass = Temp_Lib
+         salbranch.show
+         Exit Sub
+    End If
+
+    'Define ATM Machines
+    If Button_id = 2 and Menu_id = 205 and SubMenu_id = 2509 Then
+         set atm_mcs = New atm_mcs
+         set atm_mcs.MyClass = Temp_Sys
+         set atm_mcs.MyLibClass = Temp_Lib
+         atm_mcs.show
+         Exit Sub
+    End If
+
+    'FDR Parameters
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'FDR Schemes
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 2061 Then
+         set fdrschemes = New fdrschemes
+         set fdrschemes.MyClass = Temp_Sys
+         set fdrschemes.MyLibClass = Temp_Lib
+         fdrschemes.show
+         Exit Sub
+    End If
+
+    'Scheme Rates
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 2062 Then
+         set fdschrates = New fdschrates
+         set fdschrates.MyClass = Temp_Sys
+         set fdschrates.MyLibClass = Temp_Lib
+         fdschrates.show
+         Exit Sub
+    End If
+
+    'FDR GL Posting Codes
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 2063 Then
+         set fdr_posts = New fdr_posts
+         set fdr_posts.MyClass = Temp_Sys
+         set fdr_posts.MyLibClass = Temp_Lib
+         fdr_posts.show
+         Exit Sub
+    End If
+
+    'FDR Tax Exemptions
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 2064 Then
+         set fdr_exemptions = New fdr_exemptions
+         set fdr_exemptions.MyClass = Temp_Sys
+         set fdr_exemptions.MyLibClass = Temp_Lib
+         fdr_exemptions.show
+         Exit Sub
+    End If
+
+    'Convert FD Data to New System
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 2067 Then
+         set fd_conversion = New fd_conversion
+         set fd_conversion.MyClass = Temp_Sys
+         set fd_conversion.MyLibClass = Temp_Lib
+         fd_conversion.show
+         Exit Sub
+    End If
+
+    'Correct FDR
+    If Button_id = 2 and Menu_id = 206 and SubMenu_id = 2068 Then
+         set correctfdr = New correctfdr
+         set correctfdr.MyClass = Temp_Sys
+         set correctfdr.MyLibClass = Temp_Lib
+         correctfdr.show
+         Exit Sub
+    End If
+
+    'General Ledger Parameters
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Export Chart of A/cs to Branches
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 1 Then
+         set gl_export_chart = New gl_export_chart
+         set gl_export_chart.MyClass = Temp_Sys
+         set gl_export_chart.MyLibClass = Temp_Lib
+         gl_export_chart.show
+         Exit Sub
+    End If
+
+    'Map Old Chart to New Chat
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 2 Then
+         set map_old_chart = New map_old_chart
+         set map_old_chart.MyClass = Temp_Sys
+         set map_old_chart.MyLibClass = Temp_Lib
+         map_old_chart.show
+         Exit Sub
+    End If
+
+    'Convert Old Gl Data to New Gl Data
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 3 Then
+         set conv_gl_data = New conv_gl_data
+         set conv_gl_data.MyClass = Temp_Sys
+         set conv_gl_data.MyLibClass = Temp_Lib
+         conv_gl_data.show
+         Exit Sub
+    End If
+
+    'New Chart of Account
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 4 Then
+         set new_chart = New new_chart
+         set new_chart.MyClass = Temp_Sys
+         set new_chart.MyLibClass = Temp_Lib
+         new_chart.show
+         Exit Sub
+    End If
+
+    'Data Strip
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 5 Then
+         set data_strip = New data_strip
+         set data_strip.MyClass = Temp_Sys
+         set data_strip.MyLibClass = Temp_Lib
+         data_strip.show
+         Exit Sub
+    End If
+
+    'Import Chart of A/cs from HO
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 6 Then
+         set gl_import_chart = New gl_import_chart
+         set gl_import_chart.MyClass = Temp_Sys
+         set gl_import_chart.MyLibClass = Temp_Lib
+         gl_import_chart.show
+         Exit Sub
+    End If
+
+    'Rectify Screen Differences
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 7 Then
+         set gl_diff = New gl_diff
+         set gl_diff.MyClass = Temp_Sys
+         set gl_diff.MyLibClass = Temp_Lib
+         gl_diff.show
+         Exit Sub
+    End If
+
+    'Update Loans Screen Differences
+    If Button_id = 2 and Menu_id = 207 and SubMenu_id = 8 Then
+         set upd_loans = New upd_loans
+         set upd_loans.MyClass = Temp_Sys
+         set upd_loans.MyLibClass = Temp_Lib
+         upd_loans.show
+         Exit Sub
+    End If
+
+    'Export Foreign Txns
+    If Button_id = 2 and Menu_id = 208 and SubMenu_id = 0 Then
+         set import_foreign = New import_foreign
+         set import_foreign.MyClass = Temp_Sys
+         set import_foreign.MyLibClass = Temp_Lib
+         import_foreign.show
+         Exit Sub
+    End If
+
+    'Import Foreign Txns
+    If Button_id = 2 and Menu_id = 209 and SubMenu_id = 0 Then
+         set imp_foreign = New imp_foreign
+         set imp_foreign.MyClass = Temp_Sys
+         set imp_foreign.MyLibClass = Temp_Lib
+         imp_foreign.show
+         Exit Sub
+    End If
+
+    'Save Customer Pic/Sign
+    If Button_id = 2 and Menu_id = 210 and SubMenu_id = 0 Then
+         set SaveCustPic = New SaveCustPic
+         set SaveCustPic.MyClass = Temp_Sys
+         set SaveCustPic.MyLibClass = Temp_Lib
+         SaveCustPic.show
+         Exit Sub
+    End If
+
+    'Load Existing Pic/Sign
+    If Button_id = 2 and Menu_id = 211 and SubMenu_id = 0 Then
+         set saveCustPicAuto = New saveCustPicAuto
+         set saveCustPicAuto.MyClass = Temp_Sys
+         set saveCustPicAuto.MyLibClass = Temp_Lib
+         saveCustPicAuto.show
+         Exit Sub
+    End If
+
+    'Teller Operations
+    If Button_id = 3 and Menu_id = 31 and SubMenu_id = 0 Then
+         set Transactions = New Transactions
+         set Transactions.MyClass = Temp_Sys
+         set Transactions.MyLibClass = Temp_Lib
+         Transactions.show
+         Exit Sub
+    End If
+
+    'Manager Operations
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Authorizations
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3201 Then
+         set authorise = New authorise
+         set authorise.MyClass = Temp_Sys
+         set authorise.MyLibClass = Temp_Lib
+         authorise.show
+         Exit Sub
+    End If
+
+    'Reversal Entries
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3202 Then
+         set reversalentry = New reversalentry
+         set reversalentry.MyClass = Temp_Sys
+         set reversalentry.MyLibClass = Temp_Lib
+         reversalentry.show
+         Exit Sub
+    End If
+
+    'Discount Cheques
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3204 Then
+         set discount_chq = New discount_chq
+         set discount_chq.MyClass = Temp_Sys
+         set discount_chq.MyLibClass = Temp_Lib
+         discount_chq.show
+         Exit Sub
+    End If
+
+    'Activate Dormant Accounts
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3205 Then
+         set frmactive_dormant = New frmactive_dormant
+         set frmactive_dormant.MyClass = Temp_Sys
+         set frmactive_dormant.MyLibClass = Temp_Lib
+         frmactive_dormant.show
+         Exit Sub
+    End If
+
+    'OD Limits for Fluctuating Loans
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3206 Then
+         set frmodlimits = New frmodlimits
+         set frmodlimits.MyClass = Temp_Sys
+         set frmodlimits.MyLibClass = Temp_Lib
+         frmodlimits.show
+         Exit Sub
+    End If
+
+    'Reversal of ALR entries
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3207 Then
+         set ReversalALREntry = New ReversalALREntry
+         set ReversalALREntry.MyClass = Temp_Sys
+         set ReversalALREntry.MyLibClass = Temp_Lib
+         ReversalALREntry.show
+         Exit Sub
+    End If
+
+    'Customer Paging
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3208 Then
+         set cust_page = New cust_page
+         set cust_page.MyClass = Temp_Sys
+         set cust_page.MyLibClass = Temp_Lib
+         cust_page.show
+         Exit Sub
+    End If
+
+    'Additional Salary Advance
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3209 Then
+         set adnl_sal_adv = New adnl_sal_adv
+         set adnl_sal_adv.MyClass = Temp_Sys
+         set adnl_sal_adv.MyLibClass = Temp_Lib
+         adnl_sal_adv.show
+         Exit Sub
+    End If
+
+    'Verify Customer Photos & Signatures
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3210 Then
+         set Validate_photo = New Validate_photo
+         set Validate_photo.MyClass = Temp_Sys
+         set Validate_photo.MyLibClass = Temp_Lib
+         Validate_photo.show
+         Exit Sub
+    End If
+
+    'Manual Salary Advance Repayment
+    If Button_id = 3 and Menu_id = 32 and SubMenu_id = 3211 Then
+         set closesalaryadvance = New closesalaryadvance
+         set closesalaryadvance.MyClass = Temp_Sys
+         set closesalaryadvance.MyLibClass = Temp_Lib
+         closesalaryadvance.show
+         Exit Sub
+    End If
+
+    'Standing Orders
+    If Button_id = 3 and Menu_id = 33 and SubMenu_id = 0 Then
+         set standingorders = New standingorders
+         set standingorders.MyClass = Temp_Sys
+         set standingorders.MyLibClass = Temp_Lib
+         standingorders.show
+         Exit Sub
+    End If
+
+    'Enquiries
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Customer Account Info
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 9 Then
+         set cust_ac_info = New cust_ac_info
+         set cust_ac_info.MyClass = Temp_Sys
+         set cust_ac_info.MyLibClass = Temp_Lib
+         cust_ac_info.show
+         Exit Sub
+    End If
+
+    'Search for New Account
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3401 Then
+         set oldaccount = New oldaccount
+         set oldaccount.MyClass = Temp_Sys
+         set oldaccount.MyLibClass = Temp_Lib
+         oldaccount.show
+         Exit Sub
+    End If
+
+    'Issue Account Statement
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3402 Then
+         set account_statement = New account_statement
+         set account_statement.MyClass = Temp_Sys
+         set account_statement.MyLibClass = Temp_Lib
+         account_statement.show
+         Exit Sub
+    End If
+
+    'Teller Balance Query
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3403 Then
+         set teller_balance = New teller_balance
+         set teller_balance.MyClass = Temp_Sys
+         set teller_balance.MyLibClass = Temp_Lib
+         teller_balance.show
+         Exit Sub
+    End If
+
+    'Customer Search
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3404 Then
+         set custenquiry = New custenquiry
+         set custenquiry.MyClass = Temp_Sys
+         set custenquiry.MyLibClass = Temp_Lib
+         custenquiry.show
+         Exit Sub
+    End If
+
+    'Teller Transactions Listing
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3405 Then
+         set transenquiry = New transenquiry
+         set transenquiry.MyClass = Temp_Sys
+         set transenquiry.MyLibClass = Temp_Lib
+         transenquiry.show
+         Exit Sub
+    End If
+
+    'Customer Transactions Enquiry
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3407 Then
+         set custtrans = New custtrans
+         set custtrans.MyClass = Temp_Sys
+         set custtrans.MyLibClass = Temp_Lib
+         custtrans.show
+         Exit Sub
+    End If
+
+    'Customer History Transaction
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3408 Then
+         set CustHistTrans = New CustHistTrans
+         set CustHistTrans.MyClass = Temp_Sys
+         set CustHistTrans.MyLibClass = Temp_Lib
+         CustHistTrans.show
+         Exit Sub
+    End If
+
+    'Branch Earnings
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3409 Then
+         set nsav_txn_enq = New nsav_txn_enq
+         set nsav_txn_enq.MyClass = Temp_Sys
+         set nsav_txn_enq.MyLibClass = Temp_Lib
+         nsav_txn_enq.show
+         Exit Sub
+    End If
+
+    'Savings DPF Report
+    If Button_id = 3 and Menu_id = 34 and SubMenu_id = 3410 Then
+         set dpfreport = New dpfreport
+         set dpfreport.MyClass = Temp_Sys
+         set dpfreport.MyLibClass = Temp_Lib
+         dpfreport.show
+         Exit Sub
+    End If
+
+    'Reports
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'List of Balances
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3501 Then
+         set Listbalance = New Listbalance
+         set Listbalance.MyClass = Temp_Sys
+         set Listbalance.MyLibClass = Temp_Lib
+         Listbalance.show
+         Exit Sub
+    End If
+
+    'Overdrawn Accounts
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3502 Then
+         set overdrawnac = New overdrawnac
+         set overdrawnac.MyClass = Temp_Sys
+         set overdrawnac.MyLibClass = Temp_Lib
+         overdrawnac.show
+         Exit Sub
+    End If
+
+    'Withdrawls above Limit
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3503 Then
+         set overlimitwd = New overlimitwd
+         set overlimitwd.MyClass = Temp_Sys
+         set overlimitwd.MyLibClass = Temp_Lib
+         overlimitwd.show
+         Exit Sub
+    End If
+
+    'Cust. Turnover Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3505 Then
+         set custturnover = New custturnover
+         set custturnover.MyClass = Temp_Sys
+         set custturnover.MyLibClass = Temp_Lib
+         custturnover.show
+         Exit Sub
+    End If
+
+    'A/c Open-Close Summary
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3506 Then
+         set acopenclosereport = New acopenclosereport
+         set acopenclosereport.MyClass = Temp_Sys
+         set acopenclosereport.MyLibClass = Temp_Lib
+         acopenclosereport.show
+         Exit Sub
+    End If
+
+    'A/c Open-Close Detail
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3507 Then
+         set accountreport = New accountreport
+         set accountreport.MyClass = Temp_Sys
+         set accountreport.MyLibClass = Temp_Lib
+         accountreport.show
+         Exit Sub
+    End If
+
+    'Modified Accounts
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3508 Then
+         set customerlog = New customerlog
+         set customerlog.MyClass = Temp_Sys
+         set customerlog.MyLibClass = Temp_Lib
+         customerlog.show
+         Exit Sub
+    End If
+
+    'Earning Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3509 Then
+         set activity_earnings = New activity_earnings
+         set activity_earnings.MyClass = Temp_Sys
+         set activity_earnings.MyLibClass = Temp_Lib
+         activity_earnings.show
+         Exit Sub
+    End If
+
+    'GL Summary Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3510 Then
+         set GLPrinting = New GLPrinting
+         set GLPrinting.MyClass = Temp_Sys
+         set GLPrinting.MyLibClass = Temp_Lib
+         GLPrinting.show
+         Exit Sub
+    End If
+
+    'Savings Interest Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3511 Then
+         set reportsavint = New reportsavint
+         set reportsavint.MyClass = Temp_Sys
+         set reportsavint.MyLibClass = Temp_Lib
+         reportsavint.show
+         Exit Sub
+    End If
+
+    'Live/Dormat A/c Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3512 Then
+         set frmactivedormantrep = New frmactivedormantrep
+         set frmactivedormantrep.MyClass = Temp_Sys
+         set frmactivedormantrep.MyLibClass = Temp_Lib
+         frmactivedormantrep.show
+         Exit Sub
+    End If
+
+    'GL Transaction Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3513 Then
+         set frmgltrans = New frmgltrans
+         set frmgltrans.MyClass = Temp_Sys
+         set frmgltrans.MyLibClass = Temp_Lib
+         frmgltrans.show
+         Exit Sub
+    End If
+
+    'Zero Balance Report
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3514 Then
+         set zerobalac = New zerobalac
+         set zerobalac.MyClass = Temp_Sys
+         set zerobalac.MyLibClass = Temp_Lib
+         zerobalac.show
+         Exit Sub
+    End If
+
+    'Account Opened - Detailed
+    If Button_id = 3 and Menu_id = 35 and SubMenu_id = 3515 Then
+         set RepOpnAccDetl = New RepOpnAccDetl
+         set RepOpnAccDetl.MyClass = Temp_Sys
+         set RepOpnAccDetl.MyLibClass = Temp_Lib
+         RepOpnAccDetl.show
+         Exit Sub
+    End If
+
+    'Batch Jobs
+    If Button_id = 3 and Menu_id = 36 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Bounced Cheque Entries
+    If Button_id = 3 and Menu_id = 36 and SubMenu_id = 3601 Then
+         set frmchq_bounce = New frmchq_bounce
+         set frmchq_bounce.MyClass = Temp_Sys
+         set frmchq_bounce.MyLibClass = Temp_Lib
+         frmchq_bounce.show
+         Exit Sub
+    End If
+
+    'Change Cheque Clear Dates
+    If Button_id = 3 and Menu_id = 36 and SubMenu_id = 3602 Then
+         set frmchangeeffdate = New frmchangeeffdate
+         set frmchangeeffdate.MyClass = Temp_Sys
+         set frmchangeeffdate.MyLibClass = Temp_Lib
+         frmchangeeffdate.show
+         Exit Sub
+    End If
+
+    'Interest Computations
+    If Button_id = 3 and Menu_id = 36 and SubMenu_id = 3604 Then
+         set savingsint = New savingsint
+         set savingsint.MyClass = Temp_Sys
+         set savingsint.MyLibClass = Temp_Lib
+         savingsint.show
+         Exit Sub
+    End If
+
+    'Rework FIC Installments
+    If Button_id = 3 and Menu_id = 36 and SubMenu_id = 3607 Then
+         set frmreworkFIC = New frmreworkFIC
+         set frmreworkFIC.MyClass = Temp_Sys
+         set frmreworkFIC.MyLibClass = Temp_Lib
+         frmreworkFIC.show
+         Exit Sub
+    End If
+
+    'Savings Trial Balance
+    If Button_id = 3 and Menu_id = 36 and SubMenu_id = 3608 Then
+         set frmsav_tb = New frmsav_tb
+         set frmsav_tb.MyClass = Temp_Sys
+         set frmsav_tb.MyLibClass = Temp_Lib
+         frmsav_tb.show
+         Exit Sub
+    End If
+
+    'Supervisor Utilities
+    If Button_id = 3 and Menu_id = 37 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Update A/c Balance
+    If Button_id = 3 and Menu_id = 37 and SubMenu_id = 3701 Then
+         set sbal_batchupdate = New sbal_batchupdate
+         set sbal_batchupdate.MyClass = Temp_Sys
+         set sbal_batchupdate.MyLibClass = Temp_Lib
+         sbal_batchupdate.show
+         Exit Sub
+    End If
+
+    'Search Undefined GL Codes
+    If Button_id = 3 and Menu_id = 37 and SubMenu_id = 3702 Then
+         set GLPostingCodes = New GLPostingCodes
+         set GLPostingCodes.MyClass = Temp_Sys
+         set GLPostingCodes.MyLibClass = Temp_Lib
+         GLPostingCodes.show
+         Exit Sub
+    End If
+
+    'Search & Correrct A/c Balance
+    If Button_id = 3 and Menu_id = 37 and SubMenu_id = 3703 Then
+         set checkcustbal = New checkcustbal
+         set checkcustbal.MyClass = Temp_Sys
+         set checkcustbal.MyLibClass = Temp_Lib
+         checkcustbal.show
+         Exit Sub
+    End If
+
+    'Correct FIC Clear Dt < TxnDt
+    If Button_id = 3 and Menu_id = 37 and SubMenu_id = 3704 Then
+         set frmficcorrection = New frmficcorrection
+         set frmficcorrection.MyClass = Temp_Sys
+         set frmficcorrection.MyLibClass = Temp_Lib
+         frmficcorrection.show
+         Exit Sub
+    End If
+
+    'Update Checksum Balance
+    If Button_id = 3 and Menu_id = 37 and SubMenu_id = 3705 Then
+         set CheckSumBal = New CheckSumBal
+         set CheckSumBal.MyClass = Temp_Sys
+         set CheckSumBal.MyLibClass = Temp_Lib
+         CheckSumBal.show
+         Exit Sub
+    End If
+
+    'Salary Processing
+    If Button_id = 3 and Menu_id = 38 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Import Salary Data
+    If Button_id = 3 and Menu_id = 38 and SubMenu_id = 3803 Then
+         set salaryposting = New salaryposting
+         set salaryposting.MyClass = Temp_Sys
+         set salaryposting.MyLibClass = Temp_Lib
+         salaryposting.show
+         Exit Sub
+    End If
+
+    'Enter Salary Data
+    If Button_id = 3 and Menu_id = 38 and SubMenu_id = 3805 Then
+         set frmsalary = New frmsalary
+         set frmsalary.MyClass = Temp_Sys
+         set frmsalary.MyLibClass = Temp_Lib
+         frmsalary.show
+         Exit Sub
+    End If
+
+    'Misc. Reports
+    If Button_id = 3 and Menu_id = 40 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Report on Authorisations
+    If Button_id = 3 and Menu_id = 40 and SubMenu_id = 401 Then
+         set authrep = New authrep
+         set authrep.MyClass = Temp_Sys
+         set authrep.MyLibClass = Temp_Lib
+         authrep.show
+         Exit Sub
+    End If
+
+    'List of Reversed Entries
+    If Button_id = 3 and Menu_id = 40 and SubMenu_id = 402 Then
+         set revdata = New revdata
+         set revdata.MyClass = Temp_Sys
+         set revdata.MyLibClass = Temp_Lib
+         revdata.show
+         Exit Sub
+    End If
+
+    'Uncleared Entries
+    If Button_id = 3 and Menu_id = 40 and SubMenu_id = 403 Then
+         set uncleared = New uncleared
+         set uncleared.MyClass = Temp_Sys
+         set uncleared.MyLibClass = Temp_Lib
+         uncleared.show
+         Exit Sub
+    End If
+
+    'List of Salary Advances
+    If Button_id = 3 and Menu_id = 40 and SubMenu_id = 404 Then
+         set advlist = New advlist
+         set advlist.MyClass = Temp_Sys
+         set advlist.MyLibClass = Temp_Lib
+         advlist.show
+         Exit Sub
+    End If
+
+    'Other Operations
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Notice for Account Closure
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 3930 Then
+         set frmclose_notice = New frmclose_notice
+         set frmclose_notice.MyClass = Temp_Sys
+         set frmclose_notice.MyLibClass = Temp_Lib
+         frmclose_notice.show
+         Exit Sub
+    End If
+
+    'Open New Account
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 3931 Then
+         set saveac_mst = New saveac_mst
+         set saveac_mst.MyClass = Temp_Sys
+         set saveac_mst.MyLibClass = Temp_Lib
+         saveac_mst.show
+         Exit Sub
+    End If
+
+    'Close Account
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 3932 Then
+         set closeaccount = New closeaccount
+         set closeaccount.MyClass = Temp_Sys
+         set closeaccount.MyLibClass = Temp_Lib
+         closeaccount.show
+         Exit Sub
+    End If
+
+    'ATM Registration
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 3933 Then
+         set register_for_atm = New register_for_atm
+         set register_for_atm.MyClass = Temp_Sys
+         set register_for_atm.MyLibClass = Temp_Lib
+         register_for_atm.show
+         Exit Sub
+    End If
+
+    'List of ATM Applications Received
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 3934 Then
+         set rpt_amt_reg = New rpt_amt_reg
+         set rpt_amt_reg.MyClass = Temp_Sys
+         set rpt_amt_reg.MyLibClass = Temp_Lib
+         rpt_amt_reg.show
+         Exit Sub
+    End If
+
+    'ATM Card Issuance
+    If Button_id = 3 and Menu_id = 393 and SubMenu_id = 3935 Then
+         set atm_issue = New atm_issue
+         set atm_issue.MyClass = Temp_Sys
+         set atm_issue.MyLibClass = Temp_Lib
+         atm_issue.show
+         Exit Sub
+    End If
+
+    'FDR Maintenance
+    If Button_id = 4 and Menu_id = 401 and SubMenu_id = 0 Then
+         set fdr_mst = New fdr_mst
+         set fdr_mst.MyClass = Temp_Sys
+         set fdr_mst.MyLibClass = Temp_Lib
+         fdr_mst.show
+         Exit Sub
+    End If
+
+    'FDR Transactions
+    If Button_id = 4 and Menu_id = 404 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Capitalize FDR
+    If Button_id = 4 and Menu_id = 404 and SubMenu_id = 4042 Then
+         set encash_principal = New encash_principal
+         set encash_principal.MyClass = Temp_Sys
+         set encash_principal.MyLibClass = Temp_Lib
+         encash_principal.show
+         Exit Sub
+    End If
+
+    'Pay Interest
+    If Button_id = 4 and Menu_id = 404 and SubMenu_id = 4043 Then
+         set encash_fdr = New encash_fdr
+         set encash_fdr.MyClass = Temp_Sys
+         set encash_fdr.MyLibClass = Temp_Lib
+         encash_fdr.show
+         Exit Sub
+    End If
+
+    'FD Transaction Enquiry
+    If Button_id = 4 and Menu_id = 405 and SubMenu_id = 0 Then
+         set frmfd_trans_enq = New frmfd_trans_enq
+         set frmfd_trans_enq.MyClass = Temp_Sys
+         set frmfd_trans_enq.MyLibClass = Temp_Lib
+         frmfd_trans_enq.show
+         Exit Sub
+    End If
+
+    'FD Reports
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'FD Accounts Alphabetic List
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4061 Then
+         set frmfd_account = New frmfd_account
+         set frmfd_account.MyClass = Temp_Sys
+         set frmfd_account.MyLibClass = Temp_Lib
+         frmfd_account.show
+         Exit Sub
+    End If
+
+    'Unclaimed Matured FDR Listing
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4062 Then
+         set fd_listing = New fd_listing
+         set fd_listing.MyClass = Temp_Sys
+         set fd_listing.MyLibClass = Temp_Lib
+         fd_listing.show
+         Exit Sub
+    End If
+
+    'Daily Transaction Listing
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4063 Then
+         set FD_daily_enq = New FD_daily_enq
+         set FD_daily_enq.MyClass = Temp_Sys
+         set FD_daily_enq.MyLibClass = Temp_Lib
+         FD_daily_enq.show
+         Exit Sub
+    End If
+
+    'Maturity Report
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4064 Then
+         set fd_maturity = New fd_maturity
+         set fd_maturity.MyClass = Temp_Sys
+         set fd_maturity.MyLibClass = Temp_Lib
+         fd_maturity.show
+         Exit Sub
+    End If
+
+    'FDR Trial Balance
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4065 Then
+         set fd_trial_bal = New fd_trial_bal
+         set fd_trial_bal.MyClass = Temp_Sys
+         set fd_trial_bal.MyLibClass = Temp_Lib
+         fd_trial_bal.show
+         Exit Sub
+    End If
+
+    'FDR Customer Statement
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4067 Then
+         set fd_statement = New fd_statement
+         set fd_statement.MyClass = Temp_Sys
+         set fd_statement.MyLibClass = Temp_Lib
+         fd_statement.show
+         Exit Sub
+    End If
+
+    'FDR Maturity Letters
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4068 Then
+         set fd_maturitydt = New fd_maturitydt
+         set fd_maturitydt.MyClass = Temp_Sys
+         set fd_maturitydt.MyLibClass = Temp_Lib
+         fd_maturitydt.show
+         Exit Sub
+    End If
+
+    'FDR Lien Amount
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4069 Then
+         set fd_lien = New fd_lien
+         set fd_lien.MyClass = Temp_Sys
+         set fd_lien.MyLibClass = Temp_Lib
+         fd_lien.show
+         Exit Sub
+    End If
+
+    'FDR Auto Renew Report
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4070 Then
+         set fd_autorenew = New fd_autorenew
+         set fd_autorenew.MyClass = Temp_Sys
+         set fd_autorenew.MyLibClass = Temp_Lib
+         fd_autorenew.show
+         Exit Sub
+    End If
+
+    'FDR Account Opened Report
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4071 Then
+         set fd_acopndtl = New fd_acopndtl
+         set fd_acopndtl.MyClass = Temp_Sys
+         set fd_acopndtl.MyLibClass = Temp_Lib
+         fd_acopndtl.show
+         Exit Sub
+    End If
+
+    'List of FDR Accrued Interest
+    If Button_id = 4 and Menu_id = 406 and SubMenu_id = 4072 Then
+         set fd_acrint = New fd_acrint
+         set fd_acrint.MyClass = Temp_Sys
+         set fd_acrint.MyLibClass = Temp_Lib
+         fd_acrint.show
+         Exit Sub
+    End If
+
+    'Other FDR Reports
+    If Button_id = 4 and Menu_id = 407 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Weighted Avg. Interest Report
+    If Button_id = 4 and Menu_id = 407 and SubMenu_id = 4071 Then
+         set fd_cbk = New fd_cbk
+         set fd_cbk.MyClass = Temp_Sys
+         set fd_cbk.MyLibClass = Temp_Lib
+         fd_cbk.show
+         Exit Sub
+    End If
+
+    'List of Largest Depositors
+    If Button_id = 4 and Menu_id = 407 and SubMenu_id = 4072 Then
+         set fd_lar_depositer = New fd_lar_depositer
+         set fd_lar_depositer.MyClass = Temp_Sys
+         set fd_lar_depositer.MyLibClass = Temp_Lib
+         fd_lar_depositer.show
+         Exit Sub
+    End If
+
+    'Vouchers
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Cash Receipts
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 1 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Cash Payments
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 2 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Bank Receipts
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 3 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Bank Payments
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 4 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Journal Vouchers
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 5 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Debit Notes
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 6 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Credit Notes
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 7 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Memo Entries
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 8 Then
+         set gl_memobrow = New gl_memobrow
+         set gl_memobrow.MyClass = Temp_Sys
+         set gl_memobrow.MyLibClass = Temp_Lib
+         gl_memobrow.show
+         Exit Sub
+    End If
+
+    'Cashier Scroll
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 9 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Cheque Maker
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 10 Then
+         set gl_voch_brow = New gl_voch_brow
+         set gl_voch_brow.MyClass = Temp_Sys
+         set gl_voch_brow.MyLibClass = Temp_Lib
+         gl_voch_brow.show
+         Exit Sub
+    End If
+
+    'Import Inter Branch Transactions
+    If Button_id = 5 and Menu_id = 5001 and SubMenu_id = 11 Then
+         set gl_batch_inter = New gl_batch_inter
+         set gl_batch_inter.MyClass = Temp_Sys
+         set gl_batch_inter.MyLibClass = Temp_Lib
+         gl_batch_inter.show
+         Exit Sub
+    End If
+
+    'Accounts Databank
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Account Heads
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 1 Then
+         set gl_ac_mst = New gl_ac_mst
+         set gl_ac_mst.MyClass = Temp_Sys
+         set gl_ac_mst.MyLibClass = Temp_Lib
+         gl_ac_mst.show
+         Exit Sub
+    End If
+
+    'Block Account Heads
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 2 Then
+         set gl_block_ac = New gl_block_ac
+         set gl_block_ac.MyClass = Temp_Sys
+         set gl_block_ac.MyLibClass = Temp_Lib
+         gl_block_ac.show
+         Exit Sub
+    End If
+
+    'Cost Centres
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 3 Then
+         set glcost_mst = New glcost_mst
+         set glcost_mst.MyClass = Temp_Sys
+         set glcost_mst.MyLibClass = Temp_Lib
+         glcost_mst.show
+         Exit Sub
+    End If
+
+    'Analysis Codes
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 4 Then
+         set glanalsys_mst = New glanalsys_mst
+         set glanalsys_mst.MyClass = Temp_Sys
+         set glanalsys_mst.MyLibClass = Temp_Lib
+         glanalsys_mst.show
+         Exit Sub
+    End If
+
+    'Account Group Listing
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 5 Then
+         set gl_grouplist = New gl_grouplist
+         set gl_grouplist.MyClass = Temp_Sys
+         set gl_grouplist.MyLibClass = Temp_Lib
+         gl_grouplist.show
+         Exit Sub
+    End If
+
+    'Account Groups
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 6 Then
+         set gl_ac_group = New gl_ac_group
+         set gl_ac_group.MyClass = Temp_Sys
+         set gl_ac_group.MyLibClass = Temp_Lib
+         gl_ac_group.show
+         Exit Sub
+    End If
+
+    'Account Sub Groups
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 8 Then
+         set gl_acsubgroup = New gl_acsubgroup
+         set gl_acsubgroup.MyClass = Temp_Sys
+         set gl_acsubgroup.MyLibClass = Temp_Lib
+         gl_acsubgroup.show
+         Exit Sub
+    End If
+
+    'Display Blocked A/c Heads
+    If Button_id = 5 and Menu_id = 5002 and SubMenu_id = 9 Then
+         set gl_unblock_ac = New gl_unblock_ac
+         set gl_unblock_ac.MyClass = Temp_Sys
+         set gl_unblock_ac.MyLibClass = Temp_Lib
+         gl_unblock_ac.show
+         Exit Sub
+    End If
+
+    'Queries
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Cash/Bank Balance
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 1 Then
+         set gl_cshbal = New gl_cshbal
+         set gl_cshbal.MyClass = Temp_Sys
+         set gl_cshbal.MyLibClass = Temp_Lib
+         gl_cshbal.show
+         Exit Sub
+    End If
+
+    'GL Transaction Enquiry
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 2 Then
+         set gl_hotline = New gl_hotline
+         set gl_hotline.MyClass = Temp_Sys
+         set gl_hotline.MyLibClass = Temp_Lib
+         gl_hotline.show
+         Exit Sub
+    End If
+
+    'Explorer
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 3 Then
+         set gl_explorer = New gl_explorer
+         set gl_explorer.MyClass = Temp_Sys
+         set gl_explorer.MyLibClass = Temp_Lib
+         gl_explorer.show
+         Exit Sub
+    End If
+
+    'Display Bank Position
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 4 Then
+         set glbankexp = New glbankexp
+         set glbankexp.MyClass = Temp_Sys
+         set glbankexp.MyLibClass = Temp_Lib
+         glbankexp.show
+         Exit Sub
+    End If
+
+    'List Non-displayable Accounts
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 5 Then
+         set gl_displayac = New gl_displayac
+         set gl_displayac.MyClass = Temp_Sys
+         set gl_displayac.MyLibClass = Temp_Lib
+         gl_displayac.show
+         Exit Sub
+    End If
+
+    'List of Unpassed Vouchers
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 6 Then
+         set gl_list_unpass = New gl_list_unpass
+         set gl_list_unpass.MyClass = Temp_Sys
+         set gl_list_unpass.MyLibClass = Temp_Lib
+         gl_list_unpass.show
+         Exit Sub
+    End If
+
+    'Inter Branch Transactions
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 7 Then
+         set gl_inter_br_txn = New gl_inter_br_txn
+         set gl_inter_br_txn.MyClass = Temp_Sys
+         set gl_inter_br_txn.MyLibClass = Temp_Lib
+         gl_inter_br_txn.show
+         Exit Sub
+    End If
+
+    'Export Inter Branch Txns
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 8 Then
+         set gl_inter_export = New gl_inter_export
+         set gl_inter_export.MyClass = Temp_Sys
+         set gl_inter_export.MyLibClass = Temp_Lib
+         gl_inter_export.show
+         Exit Sub
+    End If
+
+    'Inter Branch Transaction Search
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 9 Then
+         set gl_inter_enq = New gl_inter_enq
+         set gl_inter_enq.MyClass = Temp_Sys
+         set gl_inter_enq.MyLibClass = Temp_Lib
+         gl_inter_enq.show
+         Exit Sub
+    End If
+
+    'Transaction Search
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 10 Then
+         set gl_txn_enq = New gl_txn_enq
+         set gl_txn_enq.MyClass = Temp_Sys
+         set gl_txn_enq.MyLibClass = Temp_Lib
+         gl_txn_enq.show
+         Exit Sub
+    End If
+
+    'Month Debit & Credits
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 11 Then
+         set gl_month_bal = New gl_month_bal
+         set gl_month_bal.MyClass = Temp_Sys
+         set gl_month_bal.MyLibClass = Temp_Lib
+         gl_month_bal.show
+         Exit Sub
+    End If
+
+    'Export Old Inter Branch Transactions
+    If Button_id = 5 and Menu_id = 5003 and SubMenu_id = 12 Then
+         set gl_export_old = New gl_export_old
+         set gl_export_old.MyClass = Temp_Sys
+         set gl_export_old.MyLibClass = Temp_Lib
+         gl_export_old.show
+         Exit Sub
+    End If
+
+    'Reports
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Day Books
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 1 Then
+         set gl_daybk = New gl_daybk
+         set gl_daybk.MyClass = Temp_Sys
+         set gl_daybk.MyLibClass = Temp_Lib
+         gl_daybk.show
+         Exit Sub
+    End If
+
+    'Trial Balance
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 2 Then
+         set gl_explorer = New gl_explorer
+         set gl_explorer.MyClass = Temp_Sys
+         set gl_explorer.MyLibClass = Temp_Lib
+         gl_explorer.show
+         Exit Sub
+    End If
+
+    'Ledger Printing
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 3 Then
+         set gl_ledger = New gl_ledger
+         set gl_ledger.MyClass = Temp_Sys
+         set gl_ledger.MyLibClass = Temp_Lib
+         gl_ledger.show
+         Exit Sub
+    End If
+
+    'List of Account Heads
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 4 Then
+         set gl_ac_head = New gl_ac_head
+         set gl_ac_head.MyClass = Temp_Sys
+         set gl_ac_head.MyLibClass = Temp_Lib
+         gl_ac_head.show
+         Exit Sub
+    End If
+
+    'Trial Balance (Balance Sheet Groups)
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 5 Then
+         set gl_trial_bs = New gl_trial_bs
+         set gl_trial_bs.MyClass = Temp_Sys
+         set gl_trial_bs.MyLibClass = Temp_Lib
+         gl_trial_bs.show
+         Exit Sub
+    End If
+
+    'List of A/c Opening Balances
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 6 Then
+         set gl_list_opbal = New gl_list_opbal
+         set gl_list_opbal.MyClass = Temp_Sys
+         set gl_list_opbal.MyLibClass = Temp_Lib
+         gl_list_opbal.show
+         Exit Sub
+    End If
+
+    'Daily Transaction Listing
+    If Button_id = 5 and Menu_id = 5004 and SubMenu_id = 5005 Then
+         set gl_daily_txn = New gl_daily_txn
+         set gl_daily_txn.MyClass = Temp_Sys
+         set gl_daily_txn.MyLibClass = Temp_Lib
+         gl_daily_txn.show
+         Exit Sub
+    End If
+
+    'VAT W/H Tax
+    If Button_id = 5 and Menu_id = 5005 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'VAT W/H Tax Browser
+    If Button_id = 5 and Menu_id = 5005 and SubMenu_id = 1 Then
+         set gl_wht_browser = New gl_wht_browser
+         set gl_wht_browser.MyClass = Temp_Sys
+         set gl_wht_browser.MyLibClass = Temp_Lib
+         gl_wht_browser.show
+         Exit Sub
+    End If
+
+    'Tag VAT W/H  with Treasury Receipt No
+    If Button_id = 5 and Menu_id = 5005 and SubMenu_id = 2 Then
+         set gl_updating_challan = New gl_updating_challan
+         set gl_updating_challan.MyClass = Temp_Sys
+         set gl_updating_challan.MyLibClass = Temp_Lib
+         gl_updating_challan.show
+         Exit Sub
+    End If
+
+    'VAT Certificate Printing
+    If Button_id = 5 and Menu_id = 5005 and SubMenu_id = 3 Then
+         set gl_cert_print = New gl_cert_print
+         set gl_cert_print.MyClass = Temp_Sys
+         set gl_cert_print.MyLibClass = Temp_Lib
+         gl_cert_print.show
+         Exit Sub
+    End If
+
+    'Bank Reconciliation
+    If Button_id = 5 and Menu_id = 5006 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Import Bank Statement
+    If Button_id = 5 and Menu_id = 5006 and SubMenu_id = 1 Then
+         set gl_bnkstmtimport = New gl_bnkstmtimport
+         set gl_bnkstmtimport.MyClass = Temp_Sys
+         set gl_bnkstmtimport.MyLibClass = Temp_Lib
+         gl_bnkstmtimport.show
+         Exit Sub
+    End If
+
+    'Perform Bank Reconciliation
+    If Button_id = 5 and Menu_id = 5006 and SubMenu_id = 2 Then
+         set gl_banksettle = New gl_banksettle
+         set gl_banksettle.MyClass = Temp_Sys
+         set gl_banksettle.MyLibClass = Temp_Lib
+         gl_banksettle.show
+         Exit Sub
+    End If
+
+    'Bank Statement Checklist
+    If Button_id = 5 and Menu_id = 5006 and SubMenu_id = 3 Then
+         set gl_bankrecolist = New gl_bankrecolist
+         set gl_bankrecolist.MyClass = Temp_Sys
+         set gl_bankrecolist.MyLibClass = Temp_Lib
+         gl_bankrecolist.show
+         Exit Sub
+    End If
+
+    'Reconciliation Statement
+    If Button_id = 5 and Menu_id = 5006 and SubMenu_id = 4 Then
+         set gl_brs = New gl_brs
+         set gl_brs.MyClass = Temp_Sys
+         set gl_brs.MyLibClass = Temp_Lib
+         gl_brs.show
+         Exit Sub
+    End If
+
+    'Bank Interest Computations
+    If Button_id = 5 and Menu_id = 5006 and SubMenu_id = 5 Then
+         set gl_bankintcalc = New gl_bankintcalc
+         set gl_bankintcalc.MyClass = Temp_Sys
+         set gl_bankintcalc.MyLibClass = Temp_Lib
+         gl_bankintcalc.show
+         Exit Sub
+    End If
+
+    'Budgets && Analysis
+    If Button_id = 5 and Menu_id = 5007 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Financial Budgets
+    If Button_id = 5 and Menu_id = 5007 and SubMenu_id = 1 Then
+         set gl_budget = New gl_budget
+         set gl_budget.MyClass = Temp_Sys
+         set gl_budget.MyLibClass = Temp_Lib
+         gl_budget.show
+         Exit Sub
+    End If
+
+    'GL Budget Analysis
+    If Button_id = 5 and Menu_id = 5007 and SubMenu_id = 4 Then
+         set gl_budgetanalsis = New gl_budgetanalsis
+         set gl_budgetanalsis.MyClass = Temp_Sys
+         set gl_budgetanalsis.MyLibClass = Temp_Lib
+         gl_budgetanalsis.show
+         Exit Sub
+    End If
+
+    'Monthly Budgets
+    If Button_id = 5 and Menu_id = 5007 and SubMenu_id = 6 Then
+         set gl_mth_bud = New gl_mth_bud
+         set gl_mth_bud.MyClass = Temp_Sys
+         set gl_mth_bud.MyLibClass = Temp_Lib
+         gl_mth_bud.show
+         Exit Sub
+    End If
+
+    'Cumulative Budgets
+    If Button_id = 5 and Menu_id = 5007 and SubMenu_id = 7 Then
+         set gl_cum_budget = New gl_cum_budget
+         set gl_cum_budget.MyClass = Temp_Sys
+         set gl_cum_budget.MyLibClass = Temp_Lib
+         gl_cum_budget.show
+         Exit Sub
+    End If
+
+    'Parameters && Administration
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Define Day Books
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 1 Then
+         set daybank = New daybank
+         set daybank.MyClass = Temp_Sys
+         set daybank.MyLibClass = Temp_Lib
+         daybank.show
+         Exit Sub
+    End If
+
+    'Define Subsidiary Ledgers
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 2 Then
+         set subledger = New subledger
+         set subledger.MyClass = Temp_Sys
+         set subledger.MyLibClass = Temp_Lib
+         subledger.show
+         Exit Sub
+    End If
+
+    'Withholding Tax Codes
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 3 Then
+         set gl_wht_mst = New gl_wht_mst
+         set gl_wht_mst.MyClass = Temp_Sys
+         set gl_wht_mst.MyLibClass = Temp_Lib
+         gl_wht_mst.show
+         Exit Sub
+    End If
+
+    'Branch Freeze Dates
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 4 Then
+         set gl_freeze_dt = New gl_freeze_dt
+         set gl_freeze_dt.MyClass = Temp_Sys
+         set gl_freeze_dt.MyLibClass = Temp_Lib
+         gl_freeze_dt.show
+         Exit Sub
+    End If
+
+    'Define Accounting Year
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 5 Then
+         set gl_ac_year = New gl_ac_year
+         set gl_ac_year.MyClass = Temp_Sys
+         set gl_ac_year.MyLibClass = Temp_Lib
+         gl_ac_year.show
+         Exit Sub
+    End If
+
+    'Account Opening Balances
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 6 Then
+         set ac_opbal = New ac_opbal
+         set ac_opbal.MyClass = Temp_Sys
+         set ac_opbal.MyLibClass = Temp_Lib
+         ac_opbal.show
+         Exit Sub
+    End If
+
+    'Change Account Code
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 7 Then
+         set gl_changeac = New gl_changeac
+         set gl_changeac.MyClass = Temp_Sys
+         set gl_changeac.MyLibClass = Temp_Lib
+         gl_changeac.show
+         Exit Sub
+    End If
+
+    'Standard Narrations
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 8 Then
+         set gl_code_narration = New gl_code_narration
+         set gl_code_narration.MyClass = Temp_Sys
+         set gl_code_narration.MyLibClass = Temp_Lib
+         gl_code_narration.show
+         Exit Sub
+    End If
+
+    'Define Document Routing
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 9 Then
+         set gl_rt_routing = New gl_rt_routing
+         set gl_rt_routing.MyClass = Temp_Sys
+         set gl_rt_routing.MyLibClass = Temp_Lib
+         gl_rt_routing.show
+         Exit Sub
+    End If
+
+    'Bank Insturments
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 10 Then
+         set gl_binst = New gl_binst
+         set gl_binst.MyClass = Temp_Sys
+         set gl_binst.MyLibClass = Temp_Lib
+         gl_binst.show
+         Exit Sub
+    End If
+
+    'Routing Delegation
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 11 Then
+         set gl_delegation = New gl_delegation
+         set gl_delegation.MyClass = Temp_Sys
+         set gl_delegation.MyLibClass = Temp_Lib
+         gl_delegation.show
+         Exit Sub
+    End If
+
+    'Year End Program
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 12 Then
+         set gl_close_book = New gl_close_book
+         set gl_close_book.MyClass = Temp_Sys
+         set gl_close_book.MyLibClass = Temp_Lib
+         gl_close_book.show
+         Exit Sub
+    End If
+
+    'Update GL Balrec
+    If Button_id = 5 and Menu_id = 5008 and SubMenu_id = 13 Then
+         set gl_bal_rec = New gl_bal_rec
+         set gl_bal_rec.MyClass = Temp_Sys
+         set gl_bal_rec.MyLibClass = Temp_Lib
+         gl_bal_rec.show
+         Exit Sub
+    End If
+
+    'MIS Reports
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Consolidated Trial Balance
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 1 Then
+         set gl_cons_trial = New gl_cons_trial
+         set gl_cons_trial.MyClass = Temp_Sys
+         set gl_cons_trial.MyLibClass = Temp_Lib
+         gl_cons_trial.show
+         Exit Sub
+    End If
+
+    'Profit & Loss Statement
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 2 Then
+         set gl_profitstmt = New gl_profitstmt
+         set gl_profitstmt.MyClass = Temp_Sys
+         set gl_profitstmt.MyLibClass = Temp_Lib
+         gl_profitstmt.show
+         Exit Sub
+    End If
+
+    'Balance Sheet
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 3 Then
+         set gl_bsheet = New gl_bsheet
+         set gl_bsheet.MyClass = Temp_Sys
+         set gl_bsheet.MyLibClass = Temp_Lib
+         gl_bsheet.show
+         Exit Sub
+    End If
+
+    'Monthly Trends in P&L
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 4 Then
+         set gl_profit_mth = New gl_profit_mth
+         set gl_profit_mth.MyClass = Temp_Sys
+         set gl_profit_mth.MyLibClass = Temp_Lib
+         gl_profit_mth.show
+         Exit Sub
+    End If
+
+    'Comparative P&L For Period
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 5 Then
+         set gl_profit_compare = New gl_profit_compare
+         set gl_profit_compare.MyClass = Temp_Sys
+         set gl_profit_compare.MyLibClass = Temp_Lib
+         gl_profit_compare.show
+         Exit Sub
+    End If
+
+    'Monthly Trends in Groups
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 6 Then
+         set gl_profit_mth_acgroup = New gl_profit_mth_acgroup
+         set gl_profit_mth_acgroup.MyClass = Temp_Sys
+         set gl_profit_mth_acgroup.MyLibClass = Temp_Lib
+         gl_profit_mth_acgroup.show
+         Exit Sub
+    End If
+
+    'Comparative Statement Group wise
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 7 Then
+         set gl_profit_compare_acgroup = New gl_profit_compare_acgroup
+         set gl_profit_compare_acgroup.MyClass = Temp_Sys
+         set gl_profit_compare_acgroup.MyLibClass = Temp_Lib
+         gl_profit_compare_acgroup.show
+         Exit Sub
+    End If
+
+    'Deposit Accounts Categorisation
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 8 Then
+         set gl_mis1 = New gl_mis1
+         set gl_mis1.MyClass = Temp_Sys
+         set gl_mis1.MyLibClass = Temp_Lib
+         gl_mis1.show
+         Exit Sub
+    End If
+
+    'Loan Accounts Categorisation
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 9 Then
+         set gl_mis2 = New gl_mis2
+         set gl_mis2.MyClass = Temp_Sys
+         set gl_mis2.MyLibClass = Temp_Lib
+         gl_mis2.show
+         Exit Sub
+    End If
+
+    'Current Period Growth
+    If Button_id = 5 and Menu_id = 5009 and SubMenu_id = 10 Then
+         set gl_mis3 = New gl_mis3
+         set gl_mis3.MyClass = Temp_Sys
+         set gl_mis3.MyLibClass = Temp_Lib
+         gl_mis3.show
+         Exit Sub
+    End If
+
+    'CBK Reports
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 0 Then
+         Exit Sub
+    End If
+
+    'Deposit Protection Fund Report
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 1 Then
+         set cbk_dep = New cbk_dep
+         set cbk_dep.MyClass = Temp_Sys
+         set cbk_dep.MyLibClass = Temp_Lib
+         cbk_dep.show
+         Exit Sub
+    End If
+
+    'DPF Summary
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 2 Then
+         set cbk_dep2 = New cbk_dep2
+         set cbk_dep2.MyClass = Temp_Sys
+         set cbk_dep2.MyLibClass = Temp_Lib
+         cbk_dep2.show
+         Exit Sub
+    End If
+
+    'CBK Deposit Maturity Analysis
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 3 Then
+         set cbk_dep3 = New cbk_dep3
+         set cbk_dep3.MyClass = Temp_Sys
+         set cbk_dep3.MyLibClass = Temp_Lib
+         cbk_dep3.show
+         Exit Sub
+    End If
+
+    'Maturity Analysis of Loans & Deposits
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 4 Then
+         set cbk_dep4 = New cbk_dep4
+         set cbk_dep4.MyClass = Temp_Sys
+         set cbk_dep4.MyLibClass = Temp_Lib
+         cbk_dep4.show
+         Exit Sub
+    End If
+
+    'Risk Analysis of Assets and Advances
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 5 Then
+         set cbk_dep5 = New cbk_dep5
+         set cbk_dep5.MyClass = Temp_Sys
+         set cbk_dep5.MyLibClass = Temp_Lib
+         cbk_dep5.show
+         Exit Sub
+    End If
+
+    'Performance of Loans
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 6 Then
+         set loan_cbk3 = New loan_cbk3
+         set loan_cbk3.MyClass = Temp_Sys
+         set loan_cbk3.MyLibClass = Temp_Lib
+         loan_cbk3.show
+         Exit Sub
+    End If
+
+    'Fifty Largest Loans & Advances
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 7 Then
+         set loan_cbk2 = New loan_cbk2
+         set loan_cbk2.MyClass = Temp_Sys
+         set loan_cbk2.MyLibClass = Temp_Lib
+         loan_cbk2.show
+         Exit Sub
+    End If
+
+    'List of Largest Depositors
+    If Button_id = 5 and Menu_id = 5010 and SubMenu_id = 8 Then
+         set cbk_dep6 = New cbk_dep6
+         set cbk_dep6.MyClass = Temp_Sys
+         set cbk_dep6.MyLibClass = Temp_Lib
+         cbk_dep6.show
+         Exit Sub
+    End If
+
+    'Allot Card Number
+    If Button_id = 6 and Menu_id = 61 and SubMenu_id = 0 Then
+         set allotcards = New allotcards
+         set allotcards.MyClass = Temp_Sys
+         set allotcards.MyLibClass = Temp_Lib
+         allotcards.show
+         Exit Sub
+    End If
+
+    'Issue New Card
+    If Button_id = 6 and Menu_id = 62 and SubMenu_id = 0 Then
+         set issuecard = New issuecard
+         set issuecard.MyClass = Temp_Sys
+         set issuecard.MyLibClass = Temp_Lib
+         issuecard.show
+         Exit Sub
+    End If
+
+    'Card Lost Report
+    If Button_id = 6 and Menu_id = 63 and SubMenu_id = 0 Then
+         set cardlost = New cardlost
+         set cardlost.MyClass = Temp_Sys
+         set cardlost.MyLibClass = Temp_Lib
+         cardlost.show
+         Exit Sub
+    End If
+
+    'Hotlisting
+    If Button_id = 6 and Menu_id = 64 and SubMenu_id = 0 Then
+         set hotlist_card_ac = New hotlist_card_ac
+         set hotlist_card_ac.MyClass = Temp_Sys
+         set hotlist_card_ac.MyLibClass = Temp_Lib
+         hotlist_card_ac.show
+         Exit Sub
+    End If
+
+    'View Card
+    If Button_id = 6 and Menu_id = 65 and SubMenu_id = 0 Then
+         set cardtransactions = New cardtransactions
+         set cardtransactions.MyClass = Temp_Sys
+         set cardtransactions.MyLibClass = Temp_Lib
+         cardtransactions.show
+         Exit Sub
+    End If
+
+
+
+Package_Over:
+
+    Exit Sub
+End Sub

@@ -1,0 +1,207 @@
+﻿Public Class pnl
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+    Private Sub DataRefresh()
+        Try
+
+            Dim MonthE As Int16 = Month(DateTimePicker1.Value)
+            Dim RecSet As New ADODB.Recordset
+            Dim n As Integer
+            RecSet.Open("select top 12 * from pnl where monthE <= " & MonthE & " and owner = '" & Form1.OWNER & "'  order by monthE desc", UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For t As Integer = 0 To 8
+                    If t > 3 Then
+                        DataGridView1.Rows.Item(n).Cells(t).Value = IIf(RecSet.Fields(t).Value = 0, "0", Format(RecSet.Fields(t).Value, "#,###"))
+                    Else
+                        DataGridView1.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+
+                    End If
+                Next
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+            Button1.Enabled = False
+            Label2.Visible = True
+
+            Dim RecSet As New ADODB.Recordset
+            Dim Income As Double = 0.0
+            Dim Expense As Double = 0.0
+            Dim NetProfit As Double = 0.0
+            Dim Qter As Int16 = 1
+            Dim Yr As Integer = Year(DateTimePicker1.Value)
+            Dim DateS As String
+            Dim DateE As String
+
+
+            ' Dim RecID As Integer
+            Dim MonthE As Int16 = Month(DateTimePicker1.Value)
+            Dim eVAT As Double = 0.0
+            Dim iVAT As Double = 0.0
+            Dim VAT As Double = 0.0
+            Dim TAX As Double = 0.0
+
+            If MonthE = 1 Then
+                Qter = 1
+                DateE = "31/01/" & Yr
+            ElseIf MonthE = 2 Then
+                Qter = 1
+                If Yr Mod 4 = 0 Then
+                    DateE = "29/02/" & Yr
+                Else
+                    DateE = "28/02/" & Yr
+                End If
+
+            ElseIf MonthE = 3 Then
+                Qter = 1
+                DateE = "31/03/" & Yr
+            ElseIf MonthE = 4 Then
+                Qter = 2
+                DateE = "30/04/" & Yr
+            ElseIf MonthE = 5 Then
+                Qter = 2
+                DateE = "31/05/" & Yr
+            ElseIf MonthE = 6 Then
+                Qter = 2
+                DateE = "30/06/" & Yr
+            ElseIf MonthE = 7 Then
+                Qter = 3
+                DateE = "31/07/" & Yr
+            ElseIf MonthE = 8 Then
+                Qter = 3
+                DateE = "31/08/" & Yr
+            ElseIf MonthE = 9 Then
+                Qter = 3
+                DateE = "30/09/" & Yr
+            ElseIf MonthE = 10 Then
+                Qter = 4
+                DateE = "31/10/" & Yr
+            ElseIf MonthE = 11 Then
+                Qter = 4
+                DateE = "30/11/" & Yr
+            ElseIf MonthE = 12 Then
+                Qter = 4
+                DateE = "31/12/" & Yr
+            End If
+
+            'DateE = DateTimePicker1.Value
+
+            Dim Str = "select * from etransactionX where yeare = " & Yr & " and monthe = " & MonthE & " and owner = '" & Form1.OWNER & "'"
+            RecSet.Open(Str, UniversalHostConnection)
+            Do While RecSet.EOF = False
+                Expense = Expense + RecSet.Fields(5).Value
+                eVAT = eVAT + RecSet.Fields(6).Value
+                RecSet.MoveNext()
+            Loop
+            RecSet.Close()
+
+            Str = "select * from itransaction where yearE = " & Yr & " and monthe = " & MonthE & " and owner = '" & Form1.OWNER & "'"
+            RecSet.Open(Str, UniversalHostConnection)
+            Do While RecSet.EOF = False
+                Income = Income + RecSet.Fields(5).Value
+                iVAT = iVAT + RecSet.Fields(6).Value
+                RecSet.MoveNext()
+            Loop
+            RecSet.Close()
+
+            VAT = iVAT - eVAT
+            NetProfit = (Income - Expense) - VAT
+
+            'TAX calculation
+
+            TAX = NetProfit * 30 / 100
+
+            NetProfit = NetProfit - TAX
+
+
+            'RecSet.Open("select max(rec_id) from pnl", UniversalHostConnection)
+            'If IsNumeric(RecSet.Fields(0).Value) Then
+            '    RecID = RecSet.Fields(0).Value + 1
+
+            'Else
+            '    RecID = 1
+            'End If
+            'RecSet.Close()
+
+            UniversalHostConnection.Execute("delete from pnl where YearE = " & Yr & " and monthe = " & MonthE & " and owner = '" & Form1.OWNER & "'")
+            Str = "insert into pnl values(" & MonthE & "," & Yr & "," & Qter & ",'" & DateE & "'," & Income & "," & Expense & "," & NetProfit & "," & VAT & "," & TAX & "," & MonthE & ",'" & Form1.OWNER & "')"
+            UniversalHostConnection.Execute(Str)
+            DataRefresh()
+
+            Button1.Enabled = True
+            Label2.Visible = False
+            MsgBox("CURRENT PROFIT AND LOSS UPDATED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+
+        Catch ex As Exception
+            Button1.Enabled = True
+            Label2.Visible = True
+            MsgBox(ex.Message, MsgBoxStyle.Critical, APPNAME)
+            
+        End Try
+    End Sub
+
+    Private Sub pnl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        If UniversalHostConnection.State = 0 Then
+            UniversalHostConnection = New ADODB.Connection
+            UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            UniversalHostConnection.Open()
+        End If
+        DataRefresh()
+    End Sub
+
+    Private Sub pnl_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox4.Width = Me.Width - 20
+        GroupBox4.Height = Me.Height - 180
+        GroupBox2.Width = Me.Width - 20
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Try
+
+            Dim MonthE As Int16 = Month(DateTimePicker1.Value)
+            Dim RecSet As New ADODB.Recordset
+            Dim n As Integer
+            Dim Str As String = ""
+            Dim MonthString As String = ""
+            If Year(DateTimePicker3.Value) > Year(DateTimePicker2.Value) Then
+
+            End If
+            Str = "select * from pnl where yeare between " & Year(DateTimePicker2.Value) & " and " & Year(DateTimePicker3.Value) & " and owner = '" & Form1.OWNER & "'  order by pDate desc"
+            RecSet.Open(Str, UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For t As Integer = 0 To 8
+                    If t > 3 Then
+                        DataGridView1.Rows.Item(n).Cells(t).Value = IIf(RecSet.Fields(t).Value = 0, "0", Format(RecSet.Fields(t).Value, "#,###"))
+                    Else
+                        DataGridView1.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+
+                    End If
+                Next
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+
+    End Sub
+End Class

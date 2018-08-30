@@ -1,0 +1,47 @@
+<?php 
+require_once('src/facebook.php');
+
+            
+    $app_id = "140784829316432";
+     $app_secret = "5a6e718cb5f833452602eccca1542139";
+     $canvas_page = "http://apps.facebook.com/impalapay/";
+
+    $auth_url = "http://www.facebook.com/dialog/oauth?scope=email&client_id=" 
+            . $app_id . "&redirect_uri=" . urlencode($canvas_page);
+
+     $signed_request = $_REQUEST["signed_request"];
+     
+
+     list($encoded_sig, $payload) = explode('.', $signed_request, 2); 
+
+     $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), true);
+
+     if (empty($data["user_id"])) {
+            //echo ("<script> top.location.href='" . $auth_url . "'</script>");
+           echo "<fb:redirect url='{$auth_url}'>";
+            
+     } else {   
+          $facebook = new Facebook(array(
+            'appId'  => '140784829316432',
+            'secret' => '5a6e718cb5f833452602eccca1542139',
+            'cookie' => true,
+            ));
+             $session = $facebook->getSession();
+
+            $me = null;
+            // Session based API call.
+            if ($session) {
+                try {
+                    $uid = $data["user_id"];
+                    $me = $facebook->api('/'.$uid);
+                } catch (FacebookApiException $e) {
+                    error_log($e);
+                }                
+            }  
+     }  
+     echo "<img src='http://www.custompckenya.com/impalapay_facebook/edit.png'>";
+
+    //echo "<h1 style='font-size:16px; margin-bottom:10px'>Impalapay Credits</h1>";
+    
+
+?>

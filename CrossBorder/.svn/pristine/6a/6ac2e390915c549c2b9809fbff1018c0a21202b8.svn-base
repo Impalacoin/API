@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+//there are four steps to destroying a session
+//step 1 get the session by starting a session
+session_start();
+//step 2 unset session by setting it to an empty array.i.e it empties the session
+$_SESSION[]=array();
+//step 3 is to retires the cookie by setting time backwards
+if(isset($_COOKIE[session_name()])){
+	setcookie(session_name(),"",time()-50000, '/');
+}
+//step 4 is to destroy the session
+session_destroy();
+header("location:index.php");
+
+?>

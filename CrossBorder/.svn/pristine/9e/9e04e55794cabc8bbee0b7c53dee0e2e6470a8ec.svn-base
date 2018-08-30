@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * 
+ * 
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "engine.php";
+$output=NickDisplay::accountInfo();
+NickDisplay::header();
+NickDisplay::topNavigation();
+NickDisplay::topSection();
+NickDisplay::content($output);
+NickDisplay::footer();
+
+?>

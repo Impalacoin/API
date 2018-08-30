@@ -1,0 +1,323 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form SwtFrm 
+   Caption         =   "Interfaces Uptime"
+   ClientHeight    =   8370
+   ClientLeft      =   60
+   ClientTop       =   375
+   ClientWidth     =   10965
+   Icon            =   "SwtFrm.frx":0000
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   ScaleHeight     =   8370
+   ScaleWidth      =   10965
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      Caption         =   "Connection Status"
+      Height          =   5295
+      Left            =   120
+      TabIndex        =   6
+      Top             =   3000
+      Width           =   10695
+      Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+         Height          =   4815
+         Left            =   120
+         TabIndex        =   11
+         Top             =   360
+         Width           =   10455
+         _ExtentX        =   18441
+         _ExtentY        =   8493
+         _Version        =   393216
+         Cols            =   4
+         FixedCols       =   0
+         BackColorBkg    =   16777215
+         FocusRect       =   0
+         SelectionMode   =   1
+         AllowUserResizing=   3
+         FormatString    =   $"SwtFrm.frx":1082
+      End
+   End
+   Begin VB.Frame Frame2 
+      Caption         =   "SAP Connection"
+      Height          =   2535
+      Left            =   120
+      TabIndex        =   0
+      Top             =   360
+      Width           =   10695
+      Begin VB.CommandButton Command3 
+         BackColor       =   &H00000000&
+         Caption         =   "Delete"
+         Height          =   375
+         Left            =   3000
+         Style           =   1  'Graphical
+         TabIndex        =   12
+         Top             =   3600
+         Width           =   855
+      End
+      Begin VB.TextBox Text1 
+         Appearance      =   0  'Flat
+         Enabled         =   0   'False
+         Height          =   350
+         Left            =   1320
+         TabIndex        =   10
+         Top             =   720
+         Width           =   2295
+      End
+      Begin VB.ComboBox Combo1 
+         Enabled         =   0   'False
+         Height          =   315
+         ItemData        =   "SwtFrm.frx":1118
+         Left            =   1320
+         List            =   "SwtFrm.frx":1122
+         TabIndex        =   8
+         Top             =   240
+         Width           =   2295
+      End
+      Begin VB.CheckBox Check2 
+         Caption         =   "TCP Keep Alive"
+         Enabled         =   0   'False
+         Height          =   375
+         Left            =   3840
+         TabIndex        =   7
+         Top             =   1530
+         Width           =   1455
+      End
+      Begin VB.CommandButton Command1 
+         Caption         =   "Display"
+         Enabled         =   0   'False
+         Height          =   375
+         Left            =   1800
+         TabIndex        =   5
+         Top             =   2040
+         Width           =   1455
+      End
+      Begin VB.TextBox txtswitchIP 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFFFF&
+         Enabled         =   0   'False
+         Height          =   350
+         Left            =   1320
+         TabIndex        =   2
+         Top             =   1130
+         Width           =   2295
+      End
+      Begin VB.TextBox txtswitchPort 
+         Appearance      =   0  'Flat
+         BackColor       =   &H00FFFFFF&
+         Enabled         =   0   'False
+         Height          =   350
+         Left            =   1800
+         TabIndex        =   1
+         Top             =   1530
+         Width           =   1815
+      End
+      Begin VB.Label Label4 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Node Name"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   120
+         TabIndex        =   9
+         Top             =   720
+         Width           =   855
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "IP Address"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   120
+         TabIndex        =   4
+         Top             =   1130
+         Width           =   975
+      End
+      Begin VB.Label Label3 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Communication Port"
+         Enabled         =   0   'False
+         Height          =   255
+         Left            =   120
+         TabIndex        =   3
+         Top             =   1560
+         Width           =   1575
+      End
+   End
+End
+Attribute VB_Name = "SwtFrm"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private DbCon As ADODB.Connection
+Private Sub Check1_Click()
+If Check1.value = vbChecked Then
+Frame2.Enabled = True
+txtswitchIP.Enabled = True
+txtswitchPort.Enabled = True
+Label2.Enabled = True
+Label3.Enabled = True
+Command1.Enabled = True
+Combo1.Enabled = True
+Label1.Enabled = True
+Check2.Enabled = True
+Label4.Enabled = True
+txtParameter.Enabled = True
+Check3.Enabled = True
+Label6.Enabled = True
+Label7.Enabled = True
+Command2.Enabled = True
+Text1.Enabled = True
+Text2.Enabled = True
+Else
+Frame2.Enabled = False
+Text1.Enabled = False
+txtswitchIP.Enabled = False
+txtswitchPort.Enabled = False
+Label2.Enabled = False
+Label3.Enabled = False
+Command1.Enabled = False
+Combo1.Enabled = False
+Label1.Enabled = False
+Check2.Enabled = False
+Label4.Enabled = False
+txtParameter.Enabled = False
+Check3.Enabled = False
+Label6.Enabled = False
+Label7.Enabled = False
+Command2.Enabled = False
+Text2.Enabled = False
+End If
+End Sub
+
+Private Sub Command1_Click()
+Dim RecSet As New ADODB.Recordset
+Dim StrQ As String
+Dim Interchange As String
+
+StrQ = "SELECT [interchange] " & _
+      ",[status_type] " & _
+      ",[date_time] " & _
+      " FROM [em_uptime] where interchange = '" & Interchange & "' and  date_time between '2014-02-05 08:00:00.00' and getdate() "
+  
+'Call AddSwitch(Trim(Text2.Text), Trim(Text1.Text), Trim(txtswitchIP.Text), Trim(txtswitchPort.Text), Combo1.ListIndex, txtParameter.Text, Check3.value)
+
+End Sub
+
+Private Sub Command2_Click()
+Frame2.Enabled = False
+txtswitchIP.Enabled = False:  txtswitchIP.Text = ""
+txtswitchPort.Enabled = False: txtswitchPort.Text = ""
+Label2.Enabled = False
+Label3.Enabled = False
+Command1.Enabled = False
+Combo1.Enabled = False
+Label1.Enabled = False
+Check2.Enabled = False
+Label4.Enabled = False
+txtParameter.Enabled = False: txtParameter.Text = ""
+Check3.Enabled = False
+Label6.Enabled = False
+Command2.Enabled = False
+Text1.Enabled = False: Text1.Text = ""
+Text2.Enabled = False: Text2.Text = ""
+Check1.value = vbUnchecked
+End Sub
+
+Private Sub Command3_Click()
+
+DbCon.Execute "delete from   em_issuers where node_name = '" & Trim(Text1.Text) & "'"
+
+End Sub
+
+Private Sub Form_Load()
+
+Dim RecSet As New ADODB.Recordset
+On Error GoTo ErrorTrap
+'Set DbCon = New ADODB.Connection
+'DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+'          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+'          DbCon.Open
+'
+'Dim i As Integer
+'i = 1
+'RecSet.Open "select * from em_issuers order by record_no", DbCon
+'
+'col = 0
+'i = 1
+'
+
+'Do While Not RecSet.EOF
+'col = 0
+'MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+'
+'For col = 0 To 6
+'MSFlexGrid1.TextMatrix(i, col) = RecSet.Fields(col).value
+'Next col
+'i = i + 1
+'
+'RecSet.MoveNext
+'Loop
+'RecSet.Close
+
+Exit Sub
+
+ErrorTrap:
+MsgBox "DataBase login error occurred", vbCritical
+Unload Me
+frmODBCLogon.Show
+End Sub
+
+Private Sub AddSwitch(ByVal Issuer_id As String, ByVal Node_Name As String, ByVal IpAddress As String, ByVal port As Long, ByVal connection_mode As Integer, ByVal Param As String, ByVal Active As Integer)
+ Dim Postmessage As String
+ Dim bCommand As ADODB.Command
+ Dim sql_str As String
+ Dim RecSet As New ADODB.Recordset
+ 
+ On Error GoTo ErroHandler
+ 
+ 
+ If Node_Name <> "" Then
+      RecSet.Open "Select * from  em_issuers Where node_name = '" & Node_Name & "' or issuer_id =  '" & Issuer_id & "'", DbCon
+          If RecSet.EOF = True Then
+             sql_str = "INSERT INTO em_issuers " & _
+                "VALUES ('" & Issuer_id & "'," & _
+                "'" & Node_Name & "'," & _
+                "'" & IpAddress & "'," & _
+                port & "," & _
+                10 & "," & _
+                connection_mode & "," & _
+                "'" & Param & "'," & Active & ")"
+                
+           DbCon.Execute sql_str
+           RecSet.Close
+        Else
+            MsgBox "An Issuer of the same node name exits", vbCritical
+        End If
+ End If
+  
+'Unload Me
+Exit Sub
+ErroHandler:
+     MsgBox err.Description, vbCritical, "DataBase Error Occured"
+     
+    
+End Sub
+
+Private Sub MSFlexGrid1_Click()
+
+Dim mName As String
+Dim RecSet As New ADODB.Recordset
+mName = MSFlexGrid1.Text
+If MSFlexGrid1.Text = "" Then mName = "0"
+RecSet.Open "select * from em_issuers where record_no = " & mName, DbCon
+If RecSet.EOF = False Then
+  Text1.Text = RecSet!Node_Name
+  Text2.Text = RecSet!Issuer_id
+  'Text3.Text = Recset!location
+  txtswitchIP.Text = RecSet!IpAddress
+  txtswitchPort.Text = RecSet!port
+  'Text6.Text = Recset!maximum_connection
+  txtParameter.Text = RecSet!Param
+End If
+
+End Sub

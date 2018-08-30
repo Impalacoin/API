@@ -1,0 +1,295 @@
+<?php
+include("headermenu.php");
+?>
+               
+				
+				<div id="content" class="clearfix">
+					<div class="hero-unit">
+                    <!--breadcrumb--->
+                    <div id="breadcrumb">
+		<div class="container_12 clearfix" >
+			<div class="grid_9">
+				<p><a id="cap" href="dashboard.php" class="dashlink"><?php echo $user_row['first_name'] . "  " . $user_row['last_name'] ?></a> </p>
+						
+				<p> <?php
+
+	
+if(isset($_POST['edit1'])){ 
+$firstname = $_POST['firstname'];
+$lastname = $_POST['lastname'];
+$address = $_POST['address'];
+$contact_no = $_POST['contact_no'];
+$email = $_POST['email'];
+$gender=$_POST['gender'];
+
+
+$hometown = $_POST['country']; {
+
+$query = "UPDATE personal_user SET first_name='$firstname', last_name='$lastname',  address='$address',mobile='$contact_no', email='$email', gender='$gender',  country='$hometown' WHERE username='$user'";
+$result = mysql_query($query);
+}
+
+// if successful redirect to delete_multiple.php 
+if($result){
+echo "<meta http-equiv=\"refresh\" content=\"0;URL=user_edit.php\">";
+}
+
+}
+
+
+
+if(isset($_POST['edit3'])){ 
+if(isset($_POST['old_pass'])){
+$old = $_POST['old_pass'];}
+if(isset($_POST['password'])){
+$new = $_POST['password'];}
+ {
+ $oldpass = $user_row['password'];
+ if($old !=  $oldpass){
+$error = "Password Incorrect...";
+}
+
+if($old ==  $oldpass) {
+if (empty($error)) {
+$sql3 = "UPDATE personal_user SET password='$new' WHERE username='$user'";
+$result3 = mysql_query($sql3);
+}
+
+// if successful redirect to delete_multiple.php 
+if($result3){
+echo "<meta http-equiv=\"refresh\" content=\"0;URL=dashboard.php\">";
+}
+}
+}
+
+if (empty($error)) { $error = "Password updated"; }
+
+}
+
+?></p>
+			</div>
+			<!-- end grid -->
+			
+			
+			<!-- end grid -->
+		</div><!-- end container -->
+	</div>
+                    <!----end---->
+                    <!---container--->
+                    
+	
+		
+			  
+				<legend class="dashboard">Username & Password</legend>
+					<div id="pass">
+                  <table width="90%" background="img/box-tail.gif" class="mailtable">
+                    <tr>
+                    
+					<td class="width"><span class="userdata">Username  </span><td>
+                    <td><span class="userdata"><?php echo $user_row['username'] ?></span><br /></td>
+                    </tr>
+					<script type="text/javascript">
+					var password = <your password here>
+var dispPassword = new String();
+var n = password.length;
+while(dispPassword.length < n){ 
+        dispPassword.push("*"); 
+}
+document.getElementById("password").innerHTML = dispPassword;
+
+</script>
+<tr>
+
+				<td class="width"><span class="userdata">Password  </span></td>
+                <td><span id="password" style=";"> <input type="password" name="password" value="<?php echo $user_row['password'] ?>"  "readonly=readonly"></span><br></td>
+                </tr>
+                </table>
+                    </div>
+					 <div id="change" style="font-size: 10px;"><a>Change Password</a></div>
+				<div id="cancel3" style="display:none; padding-left: ;"><a>Cancel</a></div></pre>
+<div id="account" style="display:none;">
+					<form id="form1" method="post" action="user_edit.php" class="userform">
+						
+						<p><label for="text_field" class="userdata">Current Password:</label>
+						<div id="entry-text">
+						 <input type="password" name="old_pass"/><br />
+					  </div>
+						</p>
+						<p><label for="text_field" class="userdata">New Password:</label>
+						<div id="entry-text">
+						<input id="text" name="password" type="password" onKeyUp="passwordStrength(this.value)" /></label> 
+						<br />
+						<label for="passwordStrength" class="userdata">Password strength</label>
+
+                        <div id="passwordDescription">Password not entered</div>
+
+                        <div id="passwordStrength" class="strength0"></div>
+
+                        </div>
+						</p>
+						<p id="but"><br />
+							<input class="button btn btn-success" value="Submit" type="submit" name="edit3"/>
+							<input class="button btn btn-danger" value="Clear" type="reset" />
+						</p>
+	    </form></div>
+        
+
+				<fieldset>
+					<legend class="dashboard">Basic and Contact information</legend>
+					<div id="edit" style="padding-left: 620px;"><a>Edit</a></div>
+					<div id="cancel1" style="display:none; padding-left: 620px;"><a>Cancel</a></div>
+				  <div id="form01">
+                  <table width="90%" background="img/box-tail.gif" class="mailtable">
+                  <tr>
+					<td class="width"><span class="userdata" >Name  </span></td>
+                    <td><span class="userdata"><?php echo $user_row['first_name'] . " " . $user_row['last_name'] ?></span></td>
+                    </tr>
+                    <tr>
+					<td class="width"><span class="userdata">Address  </span></td>
+                    <td><span class="userdata"><?php echo $user_row['address'] ?></span><br /></td>
+                    </tr>
+                    <tr>
+					<td class="width"><?php $country = $user_row['country'];
+					if($country != ""){
+					echo '<span class="userdata">country  </span></td>
+					<td><span class="userdata">' . $country . '</span><br />'; } ?></td>
+                    </tr>
+                    <tr>
+                    <td class="width">
+					<?php $contact = $user_row['mobile'];
+					if($contact != ""){
+					echo '<span class="userdata">Contact No.  </span></td>
+					<td><span class="userdata">' . $contact .'</span><br />'; } ?></td>
+                    </tr>
+                    <tr>
+					<td class="width"> <span class="userdata"">Email  </span> </td>
+                    <td><span class="userdata"><?php echo $user_row['email'] ?></span><br /></td>
+                    </tr>
+                    <tr>
+					
+					<td class="width"><span class="userdata">Gender </span></td>
+                    <td><span class="userdata"><?php echo $user_row['gender'] ?></span><br /></td>
+                    </tr>
+                    </table>
+				</div>
+                
+                
+					
+<div id="forms" style="display:none;">
+					<form id="form1" method="post" action="user_edit.php" class="userform">
+						
+						<p>
+						
+							<label for="text_field" class="userdata">Firstname:</label>
+					  <div id="entry-text">
+							<input class="userdata" type="text" id="cap" name="firstname" value="<?php echo $user_row['first_name'] ?>"/></div>
+					  </p>
+
+						<p>
+							<label for="text_field" class="userdata">Lastname:</label>
+					  <div id="entry-text">
+							<input  class="userdata" type="text" id="cap" name="lastname"   value="<?php echo $user_row['last_name'] ?>"/></div>
+						</p>
+						<p><label for="text_field" class="userdata">Address:</label>
+					  <div id="entry-text">
+							 <input class="userdata" type="text" id="cap" name="address"   value="<?php echo $user_row['address'] ?>" /></div>
+						</p>
+						<p><label for="text_field" class="userdata">Country:</label>
+						<div id="entry-text">
+						 <input class="userdata" type="text" id="cap" name="country"   value="<?php echo $user_row['country'] ?>" /></p></div>
+						<p>
+						  <label for="text_field" class="userdata">Contact No.:</label>
+					  <div id="entry-text">
+							<input class="userdata" type="text" id="cap" name="contact_no"   value="<?php echo $user_row['mobile'] ?>" /></div>
+						<p><label for="text_field" class="userdata">Email:</label>
+						<div id="entry-text">
+							 <input type="text" name="email" id="username" value="<?php echo $user_row['email'] ?>" /></div>
+						</p>
+						
+                                </div>
+						</p>
+						<p><label for="text_field" class="userdata">Gender:</label>
+					  <div id="entry-text">
+							 <select class="userdata" name="gender" id="drop cap">
+                                <option selected="selected"><?php echo $user_row['gender'] ?></option>
+                                <option value="-1">-Select Gender-</option>
+                                <option>Female</option>
+                                <option>Male</option>
+                          </select></div>
+						
+						
+						</p><p id="but"><br />
+							<input class="btn btn-success" value="Submit" type="submit" name="edit1"/>
+							<input class="btn btn-danger" value="Clear" type="reset" />
+						</p>
+						
+					</form></div>
+                    </p>
+                    
+				</fieldset>
+				<br />
+				
+		  </div>
+          
+          
+			<!-- end grid -->
+<!-- /Cols 1 -->
+    
+<br class="clear" />
+    
+</div>
+             <!---end container--->
+                    
+                    </div>
+</div>
+				<div id="footer" class="radius-bottom">
+					2011-12 ©
+					<a class="afooter-link" href="">admin</a>
+					by
+					<a class="afooter-link" href="">chimita</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<script src="js/jquery.js"></script>
+  <script type="text/javascript">
+$(function() {
+
+
+$(".delbutton").click(function(){
+
+//Save the link in a variable called element
+var element = $(this);
+
+//Find the id of the link that was clicked
+var del_id = element.attr("id");
+
+//Built a url to send
+var info = 'id=' + del_id;
+ if(confirm("Sure you want to delete this update? There is NO undo!"))
+		  {
+
+ $.ajax({
+   type: "GET",
+   url: "deleteres.php",
+   data: info,
+   success: function(){
+   
+   }
+ });
+         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
+		.animate({ opacity: "hide" }, "slow");
+
+ }
+
+return false;
+
+});
+
+});
+</script>
+</body>
+</html>

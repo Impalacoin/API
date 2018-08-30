@@ -1,0 +1,1294 @@
+VERSION 5.00
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Begin VB.Form MenuForm 
+   Appearance      =   0  'Flat
+   BackColor       =   &H0080FF80&
+   Caption         =   "Emsys"
+   ClientHeight    =   7035
+   ClientLeft      =   180
+   ClientTop       =   465
+   ClientWidth     =   11400
+   ForeColor       =   &H8000000A&
+   KeyPreview      =   -1  'True
+   NegotiateMenus  =   0   'False
+   ScaleHeight     =   7035
+   ScaleWidth      =   11400
+   Begin VB.Timer TimerAtmCheck 
+      Interval        =   20000
+      Left            =   1725
+      Top             =   1965
+   End
+   Begin VB.Timer TimerAtmMachine 
+      Interval        =   45000
+      Left            =   8250
+      Top             =   2775
+   End
+   Begin VB.Timer TxnHOBR 
+      Interval        =   60000
+      Left            =   0
+      Top             =   0
+   End
+   Begin VB.Timer TimerTxnBr 
+      Interval        =   20000
+      Left            =   8400
+      Top             =   1500
+   End
+   Begin VB.Timer TimerATMExport 
+      Interval        =   30000
+      Left            =   7875
+      Top             =   1500
+   End
+   Begin VB.Timer TimerATMImport 
+      Interval        =   25000
+      Left            =   7275
+      Top             =   1500
+   End
+   Begin VB.Timer Timer_Date 
+      Interval        =   5000
+      Left            =   10200
+      Top             =   2100
+   End
+   Begin VB.Timer Timer_Import 
+      Enabled         =   0   'False
+      Interval        =   50000
+      Left            =   10770
+      Top             =   2580
+   End
+   Begin VB.Timer Timer_Export 
+      Enabled         =   0   'False
+      Interval        =   6000
+      Left            =   10770
+      Top             =   2040
+   End
+   Begin VB.Timer TimerAuth 
+      Interval        =   10000
+      Left            =   630
+      Top             =   6480
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "8"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   8
+      Left            =   10418
+      Style           =   1  'Graphical
+      TabIndex        =   19
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "7"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   7
+      Left            =   9128
+      Style           =   1  'Graphical
+      TabIndex        =   18
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.Frame FrameExit 
+      BackColor       =   &H00000000&
+      BorderStyle     =   0  'None
+      ClipControls    =   0   'False
+      Height          =   1170
+      Left            =   3300
+      TabIndex        =   11
+      Top             =   3000
+      Width           =   4230
+      Begin VB.CommandButton cmdContinue 
+         BackColor       =   &H00C0FFC0&
+         Caption         =   "Continue"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   12
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   495
+         Left            =   2265
+         Style           =   1  'Graphical
+         TabIndex        =   14
+         Top             =   195
+         Width           =   1560
+      End
+      Begin VB.CommandButton cmdExit 
+         BackColor       =   &H00C0C0FF&
+         Caption         =   "EXIT"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   12
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   495
+         Left            =   465
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         Top             =   195
+         Width           =   1440
+      End
+      Begin VB.Label Label4 
+         Alignment       =   2  'Center
+         AutoSize        =   -1  'True
+         BackColor       =   &H00FF8080&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Sure you want to Exit ?"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   11.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H8000000E&
+         Height          =   270
+         Left            =   975
+         TabIndex        =   12
+         Top             =   750
+         Width           =   2445
+      End
+   End
+   Begin VB.Frame SubMenuFrame 
+      Height          =   4575
+      Left            =   3600
+      TabIndex        =   16
+      Top             =   2385
+      Width           =   4000
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   480
+         Index           =   1
+         Left            =   0
+         ScaleHeight     =   420
+         ScaleWidth      =   3945
+         TabIndex        =   35
+         Top             =   0
+         Width           =   4000
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   2
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   36
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   3
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   37
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   4
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   38
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   5
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   39
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   6
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   40
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   7
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   41
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   8
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   42
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   9
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   43
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   10
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   44
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   11
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   45
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   12
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   46
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   13
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   47
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   14
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   48
+         Top             =   0
+         Width           =   3915
+      End
+      Begin VB.PictureBox SButton1 
+         BackColor       =   &H00FFFF80&
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H80000008&
+         Height          =   390
+         Index           =   15
+         Left            =   0
+         ScaleHeight     =   330
+         ScaleWidth      =   3855
+         TabIndex        =   49
+         Top             =   0
+         Width           =   3915
+      End
+   End
+   Begin VB.Frame MenuFrame 
+      BackColor       =   &H00C0C0C0&
+      Height          =   5460
+      Left            =   0
+      TabIndex        =   15
+      Top             =   840
+      Width           =   4500
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   495
+         Index           =   1
+         Left            =   0
+         ScaleHeight     =   435
+         ScaleWidth      =   4440
+         TabIndex        =   20
+         Top             =   0
+         Width           =   4500
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   2
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   21
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   3
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   22
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   4
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   23
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   5
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   24
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   6
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   25
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   7
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   26
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   8
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   27
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   9
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   28
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   10
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   29
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   11
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   30
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   12
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   31
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   13
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   32
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Index           =   14
+         Left            =   0
+         ScaleHeight     =   255
+         ScaleWidth      =   4455
+         TabIndex        =   33
+         Top             =   0
+         Width           =   4515
+      End
+      Begin VB.PictureBox MainBtn1 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   480
+         Index           =   15
+         Left            =   0
+         ScaleHeight     =   420
+         ScaleWidth      =   4440
+         TabIndex        =   34
+         Top             =   0
+         Width           =   4500
+      End
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "6"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   6
+      Left            =   7875
+      Style           =   1  'Graphical
+      TabIndex        =   6
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "5"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   5
+      Left            =   6600
+      Style           =   1  'Graphical
+      TabIndex        =   5
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "4"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   4
+      Left            =   5273
+      Style           =   1  'Graphical
+      TabIndex        =   4
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "3"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   3
+      Left            =   3998
+      Style           =   1  'Graphical
+      TabIndex        =   3
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "2"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   2
+      Left            =   2700
+      Style           =   1  'Graphical
+      TabIndex        =   2
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "1"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   1
+      Left            =   1433
+      Style           =   1  'Graphical
+      TabIndex        =   1
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.CommandButton cmdMenu 
+      BackColor       =   &H008080FF&
+      Caption         =   "9"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   735
+      Index           =   9
+      Left            =   143
+      Style           =   1  'Graphical
+      TabIndex        =   0
+      TabStop         =   0   'False
+      Top             =   375
+      Width           =   1230
+   End
+   Begin VB.HScrollBar DummyScroll 
+      Height          =   255
+      Left            =   615
+      TabIndex        =   17
+      Top             =   615
+      Width           =   465
+   End
+   Begin InetCtlsObjects.Inet INetBalServer 
+      Left            =   10800
+      Top             =   4320
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      _Version        =   393216
+   End
+   Begin VB.Label lblIcon 
+      Alignment       =   2  'Center
+      Appearance      =   0  'Flat
+      AutoSize        =   -1  'True
+      BackColor       =   &H00800000&
+      BackStyle       =   0  'Transparent
+      Caption         =   "Lost Card Reporting"
+      BeginProperty Font 
+         Name            =   "Times New Roman"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   420
+      Index           =   0
+      Left            =   5220
+      TabIndex        =   50
+      Top             =   1725
+      UseMnemonic     =   0   'False
+      Width           =   975
+      WordWrap        =   -1  'True
+   End
+   Begin VB.Image ImageIcon 
+      Appearance      =   0  'Flat
+      Height          =   540
+      Index           =   0
+      Left            =   5325
+      Stretch         =   -1  'True
+      Top             =   1200
+      Width           =   615
+   End
+   Begin VB.Label Label3 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Working Date"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Left            =   8790
+      TabIndex        =   10
+      Top             =   60
+      Width           =   1305
+   End
+   Begin VB.Label lblDate 
+      BackStyle       =   0  'Transparent
+      Caption         =   "22-MMM-2002"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   12
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Left            =   10200
+      TabIndex        =   9
+      Top             =   60
+      Width           =   1545
+   End
+   Begin VB.Label Label2 
+      Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
+      Caption         =   "Payserv Products"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   15.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Left            =   2100
+      TabIndex        =   8
+      Top             =   0
+      Width           =   6855
+   End
+   Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
+      Caption         =   "EMSERV"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   17.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   375
+      Left            =   105
+      TabIndex        =   7
+      Top             =   0
+      Width           =   2220
+   End
+End
+Attribute VB_Name = "MenuForm"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Sub Form_Load()
+'Me.Top = MainForm.Top + 1070
+'Me.Left = MainForm.Left + 4300
+Call Resize_Form(MenuForm, 600, 800)
+End Sub
+
+Public Sub Resize_Form(ByRef Form_Name As Form, Optional ByVal x_reso As Integer, Optional ByVal y_reso As Integer)
+Dim No_of_Controls As Integer, I As Integer, J As Integer, xratio As Currency, yratio As Currency, AvgRatio As Currency
+Dim org_width As Long, org_height As Long, New_Width As Long, New_Height As Long
+Dim Org_Top As Long, Org_Left As Long, New_Top As Long, New_Left As Long
+Dim Org_X1 As Long, Org_X2 As Long, Org_Y1 As Long, Org_Y2 As Long
+Dim K As Integer, Temp_Width As Long, FontRatio As Currency
+Dim GridColWidth(100) As Long
+
+'Dim no_of_sub_controls As Integer
+If Old_Reso_X <= 0 Then Old_Reso_X = 9600
+If Old_Reso_Y <= 0 Then Old_Reso_Y = 7200
+
+If x_reso > 0 Then Old_Reso_X = x_reso * 15
+If y_reso > 0 Then Old_Reso_Y = y_reso * 15
+
+If Screen.Width = Old_Reso_X And Screen.Height = Old_Reso_Y Then Exit Sub
+
+xratio = Screen.Width / Old_Reso_X
+yratio = Screen.Height / Old_Reso_Y
+
+AvgRatio = (xratio + yratio) / 2
+FontRatio = xratio
+If yratio < FontRatio Then FontRatio = yratio
+'FontRatio = FontRatio * 0.9
+On Error Resume Next
+With Form_Name
+
+    org_width = .Width
+    org_height = .Height
+    Org_Top = .Top
+    Org_Left = .Left
+
+    New_Left = Org_Left * xratio
+    New_Top = Org_Top * yratio
+    New_Width = org_width * xratio
+    New_Height = org_height * yratio
+
+    .Width = New_Width
+    .Height = New_Height
+    .Top = New_Top
+    .Left = New_Left
+
+'Form Resized
+
+No_of_Controls = .Count
+If No_of_Controls <= 0 Then Exit Sub
+For I = 0 To No_of_Controls - 1
+    
+    If TypeOf .Controls(I) Is Label Or TypeOf .Controls(I) Is CommandButton Or _
+        TypeOf .Controls(I) Is TextBox Or TypeOf .Controls(I) Is RichTextBox Or _
+        TypeOf .Controls(I) Is SButton Or _
+        TypeOf .Controls(I) Is MainBtn Or _
+        TypeOf .Controls(I) Is StatusBar Or _
+        TypeOf .Controls(I) Is HScrollBar Or TypeOf .Controls(I) Is VScrollBar Or _
+        TypeOf .Controls(I) Is PictureBox Or TypeOf .Controls(I) Is OptionButton Or _
+        TypeOf .Controls(I) Is CheckBox Or TypeOf .Controls(I) Is Frame Or _
+        TypeOf .Controls(I) Is Shape Or TypeOf .Controls(I) Is Picture Or _
+        TypeOf .Controls(I) Is SSTab Or TypeOf .Controls(I) Is Image Or _
+        TypeOf .Controls(I) Is MainBtn Or TypeOf .Controls(I) Is SButton Then
+            GoSub Revise_Figures
+            GoTo Skip_This
+    End If
+    
+    If TypeOf .Controls(I) Is Line Then
+        Org_X1 = .Controls(I).X1
+        Org_X2 = .Controls(I).X2
+        Org_Y1 = .Controls(I).Y1
+        Org_Y2 = .Controls(I).Y2
+        .Controls(I).X1 = Org_X1 * xratio
+        .Controls(I).X2 = Org_X2 * xratio
+        .Controls(I).Y1 = Org_Y1 * yratio
+        .Controls(I).Y2 = Org_Y2 * yratio
+        GoTo Skip_This
+    End If
+    
+    If TypeOf .Controls(I) Is ComboBox Then
+        org_width = .Controls(I).Width
+        Org_Top = .Controls(I).Top
+        Org_Left = .Controls(I).Left
+        New_Height = org_height * yratio
+        New_Width = org_width * xratio
+        New_Left = Org_Left * xratio
+        If (Org_Left < 0) Then New_Left = ((Org_Left + 75000) * xratio - 75000)
+        New_Top = Org_Top * yratio
+        .Controls(I).Top = New_Top
+        .Controls(I).Width = New_Width
+        .Controls(I).Left = New_Left
+        .Controls(I).FontSize = .Controls(I).FontSize * FontRatio - 0.5
+        GoTo Skip_This
+    End If
+    
+'    If TypeOf .Controls(I) Is DTPicker Then
+'        org_width = .Controls(I).Width
+'        Org_Top = .Controls(I).Top
+'        Org_Left = .Controls(I).Left
+'        New_Height = org_height * yratio
+'        New_Width = org_width * xratio
+'        New_Left = Org_Left * xratio
+'        If (Org_Left < 0) Then New_Left = ((Org_Left + 75000) * xratio - 75000)
+'        New_Top = Org_Top * yratio
+'        .Controls(I).Top = New_Top
+'        .Controls(I).Width = New_Width
+'        .Controls(I).Left = New_Left
+'        .Controls(I).Font.Size = .Controls(I).Font.Size * FontRatio - 0.5
+'        GoTo Skip_This
+'    End If
+    
+ '======
+     If TypeOf .Controls(I) Is MSFlexGrid Then
+        .Controls(I).RowHeightMin = 260 * yratio
+        org_width = .Controls(I).Width - 480
+        org_height = .Controls(I).Height
+        Org_Top = .Controls(I).Top
+        Org_Left = .Controls(I).Left
+        
+        New_Width = org_width * xratio
+        New_Height = org_height * yratio
+        New_Top = Org_Top * yratio
+        New_Left = Org_Left * xratio
+        If (Org_Left < 0) Then New_Left = ((Org_Left + 75000) * xratio - 75000)
+        
+        K = .Controls(I).Cols
+        For J = 0 To K - 1
+            GridColWidth(J) = .Controls(I).ColWidth(J)
+        Next J
+        
+        .Controls(I).Width = New_Width + 480 * xratio
+        .Controls(I).Height = New_Height
+        .Controls(I).Top = New_Top
+        .Controls(I).Left = New_Left
+        .Controls(I).FontSize = .Controls(I).FontSize * FontRatio - 0.5
+        
+step_1:
+
+        If GridColWidth(K - 1) > 0 Then GoTo Continue_1
+        K = K - 1
+        GoTo step_1
+        
+Continue_1:
+       
+        Temp_Width = 0
+        For J = 0 To K - 2
+             .Controls(I).ColWidth(J) = (GridColWidth(J) * xratio) + 0
+             Temp_Width = Temp_Width + .Controls(I).ColWidth(J)
+        Next J
+        If New_Width - Temp_Width > 0 Then .Controls(I).ColWidth(K - 1) = New_Width - Temp_Width
+        GoTo Skip_This
+    End If
+
+ '=====
+    If TypeOf .Controls(I) Is UcDataField Then
+        org_width = .Controls(I).Width
+        org_height = .Controls(I).Height
+        Org_Top = .Controls(I).Top
+        Org_Left = .Controls(I).Left
+     
+        New_Width = org_width * xratio
+        New_Height = org_height * yratio
+        New_Top = Org_Top * yratio
+        New_Left = Org_Left * xratio
+        If (Org_Left < 0) Then New_Left = ((Org_Left + 75000) * xratio - 75000)
+    
+        .Controls(I).Width = New_Width
+        .Controls(I).Height = New_Height
+        .Controls(I).Top = New_Top
+        .Controls(I).Left = New_Left
+        .Controls(I).Set_Font_Size = .Controls(I).Set_Font_Size * FontRatio - 0.5
+        GoTo Skip_This
+    End If
+    GoTo Skip_This
+    
+Revise_Figures:
+
+    org_width = .Controls(I).Width
+    org_height = .Controls(I).Height
+    Org_Top = .Controls(I).Top
+    Org_Left = .Controls(I).Left
+ 
+    New_Width = org_width * xratio
+    New_Height = org_height * yratio
+    New_Top = Org_Top * yratio
+    New_Left = Org_Left * xratio
+    If (Org_Left < 0) Then New_Left = ((Org_Left + 75000) * xratio - 75000)
+
+    'If Not (TypeOf .Controls(I) Is Picture Or TypeOf .Controls(I) Is StatusBar) Then .Controls(I).Width = New_Width
+    If Not TypeOf .Controls(I) Is StatusBar Then .Controls(I).Width = New_Width
+    .Controls(I).Height = New_Height
+    .Controls(I).Top = New_Top
+    'If Not (TypeOf .Controls(I) Is Picture Or TypeOf .Controls(I) Is StatusBar) Then .Controls(I).Left = New_Left
+    If Not TypeOf .Controls(I) Is StatusBar Then .Controls(I).Left = New_Left
+    If Not (TypeOf .Controls(I) Is Shape Or TypeOf .Controls(I) Is Image Or TypeOf .Controls(I) Is HScrollBar Or TypeOf .Controls(I) Is VScrollBar) Then .Controls(I).Font.Size = .Controls(I).Font.Size * FontRatio - 0.5
+    
+        If TypeOf .Controls(I) Is SButton Or TypeOf .Controls(I) Is MainBtn Then
+    ''        .Controls(I).FontSize = .Controls(I).FontSize * FontRatio - 0.5
+    '        .Controls(I).Picture1.Width = .Controls(I).Picture1.Width * XRatio
+    '        .Controls(I).Picture1.Height = New_Height
+    '        .Controls(I).Picture1.Top = New_Top
+    '        .Controls(I).Picture1.Left = New_Left
+    '        .Controls(I).Label1.Width = New_Width - .Controls(I).Picture1.Width
+    '        .Controls(I).Label1.Height = New_Height
+    '        .Controls(I).Label1.Top = New_Top
+    '        .Controls(I).Label1.Left = .Controls(I).Picture1.Left
+    '        .Controls(I).Label1.Refresh
+    '        .Controls(I).Label1.Font.Size = .Controls(I).Label1.Font.Size * FontRatio - 0.5
+        End If
+    Return
+    
+Skip_This:
+
+Next I
+End With
+Exit Sub
+
+End Sub
+

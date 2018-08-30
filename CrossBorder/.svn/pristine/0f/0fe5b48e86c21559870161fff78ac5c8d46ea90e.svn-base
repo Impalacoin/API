@@ -1,0 +1,71 @@
+package com.impalapay.airtel.persistence.transaction;
+
+
+
+import java.util.List;
+
+
+import com.impalapay.airtel.beans.transaction.TransactionStatus;
+
+import static org.junit.Assert.*;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+public class TestTransactionStatusDAO {
+	final String DB_NAME = "airteldb";
+	final String DB_HOST = "localhost";
+	final String DB_USERNAME = "airtel";
+	final String DB_PASSWD = "LignuAv7";
+	final int DB_PORT = 5432;
+	
+
+	final String STATUS = "ACCEPTED_FOR_DELIVERY";
+	final String TRANSACTION_STATUS_UUID = "3b6edb35-654d-4049-b7ea-0f1db29c6e77";
+	final String TRANSACTION_STATUS_DESCRIPTION = "Accepted for delivery";
+    
+     final int TRANSACTION_STATUS_ID2 = 10;
+	final String STATUS2 = "TRANSFER_FAILURE";
+	final String TRANSACTION_STATUS_UUID2 = "e5998ec1-57b3-43ba-ad19-f875e3efbeac";
+	final String TRANSACTION_STATUS_DESCRIPTION2 = "Submitted to server";
+    
+	final int TRANSACTION_STATUS_COUNT = 10;
+
+	private TransactionStatusDAO storage = new TransactionStatusDAO(DB_NAME, DB_HOST,
+			DB_USERNAME, DB_PASSWD, DB_PORT);
+	
+	@Test
+	@Ignore
+	public void testGetTransactionStatus() {
+		TransactionStatus transactionStatus = storage.getTransactionStatus(TRANSACTION_STATUS_UUID);
+
+		assertEquals(transactionStatus.getStatus(), STATUS);
+		assertEquals(transactionStatus.getDescription(), TRANSACTION_STATUS_DESCRIPTION);
+
+	}
+	@Test
+	@Ignore
+	public void testGetAllTopupStatus() {
+		List<TransactionStatus> list = storage.getAllTransactionStatus();
+
+		assertEquals(list.size(), TRANSACTION_STATUS_COUNT);
+
+	}
+
+	@Test
+	public void testAddTransactionStatus() {
+        TransactionStatus transactionStatus=new TransactionStatus();
+        
+        
+        transactionStatus.setStatus(STATUS2);
+        transactionStatus.setDescription(TRANSACTION_STATUS_DESCRIPTION2);
+        transactionStatus.setUuid(TRANSACTION_STATUS_UUID2);
+        
+        
+        assertTrue(storage.addTransactionStatus(transactionStatus));
+
+	}
+	
+
+
+}

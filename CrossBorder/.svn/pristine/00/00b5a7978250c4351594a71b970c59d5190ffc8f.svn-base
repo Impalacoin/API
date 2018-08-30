@@ -1,0 +1,44 @@
+package com.impalapay.airtel.util;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+/**
+ * Tests our {@link SecurityUtil}
+ * <p>
+ * Copyright (c) ImpalaPay Ltd., Sep 13, 2014  
+ * 
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ * 
+ */
+public class TestSecurityUtil {
+
+	final String ORIGINAL_STRING = "secret";
+	final String HASHED_STRING = "5ebe2294ecd0e0f08eab7690d2a6ee69";
+	
+	
+	/**
+	 * Test method for {@link com.impalapay.airtel.util.SecurityUtil#getMD5Hash(java.lang.String)}.
+	 */
+	@Test
+	public void testGetMD5Hash() {
+		//assertEquals(SecurityUtil.getMD5Hash(ORIGINAL_STRING), HASHED_STRING);
+		
+		System.out.println(SecurityUtil.getMD5Hash("ac05293c53cf4a7bba41eed84b4abb80"));
+	}
+
+}
+
+/*
+** Local Variables:
+**   mode: java
+**   c-basic-offset: 2
+**   tab-width: 2
+**   indent-tabs-mode: nil
+** End:
+**
+** ex: set softtabstop=2 tabstop=2 expandtab:
+**
+*/

@@ -1,0 +1,337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Chase bank Money Transfer service</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../js/default.js"></script>
+<style type="text/css">
+<!--
+body {
+	background-color: #F7F7F7;
+}
+.style1 {
+	font-family: Verdana;
+	font-size: 13.5pt;
+}
+-->
+</style>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+<link rel="stylesheet" type="text/css" href="ajaxtabs/ajaxtabs.css" />
+
+<script type="text/javascript" src="ajaxtabs/ajaxtabs.js">
+
+/***********************************************
+* Ajax Tabs Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+</script>
+<style type="text/css">
+<!--
+.style2 {color: #FFFFFF}
+.style3 {font-size: 12pt}
+.style4 {
+	color: #DBF4F7;
+	font-weight: bold;
+}
+.style6 {color: #C6EFF2}
+-->
+</style>
+</head>
+<link rel="shortcut icon" href="favicon.ico" >
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" marginwidth="0" marginheight="0">
+<body> 
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="20" align="left" valign="middle" background="button_1.jpg"><table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+      <tr>
+        <td><a href="index.php" class="style2">Home</a></td>
+        <td><a href="about-us.php" class="style2">About us</a></td>
+        <td><a href="faqs.php" class="style2">FAQs</a></td>
+        <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+<table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF"><table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr align="left">
+        <td valign="middle" background="banner_.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF"><table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                        <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                        <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td>
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>EXCHANGE RATE: KSH 85 </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+                <tr align="left" valign="top">
+                  <td>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td align="left" valign="top">
+                          <table width="100%" border="0" cellspacing="0" cellpadding="1">
+                            <tr>
+                              <td align="left" valign="top">
+							  
+<div style="width:944px;min-height:300px;-webkit-border-radius: 12px;-moz-border-radius: 12px;border-radius: 12px;border:10px solid #27A7B0;background-color:#27A7B0;">
+							  
+							  
+							  
+							  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                                  <tr>
+                                    <td align="left" valign="top">
+									
+									
+									
+									
+									
+									<div style="width:100%;min-height:427px;-webkit-border-radius: 12px;-moz-border-radius: 12px;border-radius: 12px;border:5px solid #2BB3BD;background-color:#ffffff;">
+                                        <table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                                          <tr>
+                                            <td align="left" valign="top"><br />
+<ul id="countrytabs" class="shadetabs">
+<li><a href="#" rel="#default" class="selected">Money Transfer</a></li>
+<li><a href="external2.htm" rel="countrycontainer">Track Transactions</a></li>
+</ul>
+<div id="countrydivcontainer" style="border:1px solid gray; width:360px; margin-bottom: 1em; padding: 10px">
+<p>
+
+
+
+
+
+
+
+
+
+
+<h3>Sign in to your Account</h3>
+<form  id="login-form" action="#" method="POST">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody><tr>
+                          <td class="GWFE_txtfieldcaption" width="40%"> Email Address 
+                            <span class="GW_txtred">*</span></td>
+                          <td width="50%"><input name="email" id="login" maxlength="50" class="GW_textbox" type="text"></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td class="GWFE_txtfieldcaption"> Password 
+                            <span class="GW_txtred">*</span></td>
+                          <td><input name="password" maxlength="50" id="password" class="GW_textbox" type="password"></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                          <td height="30">
+						  <input name="dest2" value="input_transfer_details" type="hidden">
+                            <input name="signin" id="signin" value="true" type="hidden"></td>
+                          <td><button type="submit" class="GW_button_green_small"><span>
+                            Sign In
+                            </span></button>
+                            <a href="index.cfm?fuseaction=forgot_password_form" class="GW_link_blue">
+                            Forgot Password
+                            ?</a></td>
+                          <td>&nbsp;</td>
+                        </tr>
+                      </tbody></table>
+                      </form>
+
+                      <script language="Javascript" type="text/javascript"> 
+							var txtBox=document.getElementById("login" );
+							if (txtBox!=null ) txtBox.focus();
+					 </script>
+<form name="frmcalculator" id="frmcalculator" action="index.cfm?fuseaction=home_page_calculator&amp;mode=show_result&amp;no_header&amp;no_footer" method="post" onload="focusamount()" onsubmit="return ColdFusion.Ajax.checkForm(this, _CF_checkfrmcalculator,'showsendam')">
+	 <table border="0" cellpadding="0" cellspacing="0" width="100%">
+	 
+	    
+   
+	 
+
+			 <tbody><tr>
+          	   
+			   <td class="GW_txtfieldcaption" height="25" width="40%">Amount to Send ($) </td>
+                <td width="60%">
+				 <input name="service_type" value="1" type="hidden">
+				 
+             <input name="amount" maxlength="9" id="amount" onkeyup="deleteSpecialChar(this)" onblur="deleteSpecialChar(this)" type="text">	 
+				</td>
+			  </tr>
+			   
+			  <tr>
+                <td class="GW_txtfieldcaption" height="25">Exchange Rate</td>
+                <td><b> KES 85.00 </b></td>
+              </tr>
+			  <tr>
+                <td class="GW_txtfieldcaption" height="25">Delivery Currency</td>
+                <td>
+				<select name="delivery_currency" id="delivery_currency">
+
+                              <option value="local" selected="">KES</option>
+                </select>			    </td>
+		      </tr>
+			  <tr> 
+                <td class="GW_txtfieldcaption" height="25">Billing Method</td>
+                <td> <select name="payment_method" id="payment_method">
+
+                              <option value="i_Check">Bank Account</option>
+							  <option value="Credit_card">Credit Card</option>
+		                       </select></td>
+              </tr>
+		  	  <tr>
+                <td align="right">&nbsp;</td>
+			    <td>
+                <button type="submit" class="GW_button_grey"><span>Calculate</span></button></td>
+		      </tr>
+			  <tr>
+			    <td colspan="2" height="8"></td>
+              </tr>
+			  <tr>
+                <td colspan="2" valign="bottom">
+                
+                </td>
+              </tr>
+      <tr>
+        <td class="GW_txtfieldcaption" style="color:#aaa" height="25">Trusted Partner :</td>
+        <td>&nbsp;</td>
+        </tr>
+      <tr>
+        <td><a href="http://www.chasebank.co.ke/section/diaspora-banking" target="_blank"><img src="images/logo-chase-bank.png" alt="Trusted Partner : Chase Bank" border="0"></a></td>
+        <td><img src="images/card-lists.jpg"></td>
+      </tr>
+     </tbody></table>
+     <script type="text/javascript">
+
+var countries=new ddajaxtabs("countrytabs", "countrydivcontainer")
+countries.setpersist(true)
+countries.setselectedClassTarget("link") //"link" or "linkparent"
+countries.init()
+
+     </script>
+</form>
+</div>
+
+</td>
+                                          </tr>
+                                        </table>
+                                    </div></td>
+                                    <td width="20" align="left" valign="top">
+									<div style="margin-right:12px;"></div></td>
+                                    <td align="left" valign="top">
+									<div style="width:520px;min-height:427px;-webkit-border-radius: 12px;-moz-border-radius: 12px;border-radius: 12px;border:5px solid #2BB3BD;background-color:#27A7B0;">
+                                        <table width="100%"  border="0" cellspacing="0" cellpadding="5">
+                                          <tr>
+                                            <td align="left" valign="top"><p><span class="style1 style6">Send Money to Kenya</span></p>
+                                                <table width="100%"  border="0" cellspacing="0" cellpadding="2">
+                                                  <tr>
+                                                    <td align="left" valign="top">
+
+<div style="width:507px;min-height:97px;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;border:1px solid #9F1B43;background-color:#9F1B43;">												
+													
+													<table width="507"  border="0" cellspacing="0" cellpadding="0">
+                                                      <tr align="left" valign="top">
+                                                        <td width="3" bgcolor="#9F1B43"><p class="style1 style2">&nbsp;</p>                                                          </td>
+                                                        <td bgcolor="#9F1B43"><p class="style1 style2"><span style="">Four <br>
+                                                                <span class="style3">Easy Steps to Send</span></span></p>
+                                                          <ul>
+                                                            <li class="style2"> Enter send amount and calculate </li>
+                                                            <li class="style2">Select recipient</li>
+                                                            <li class="style2">Choose payment method</li>
+                                                            <li class="style2">Review and confirm</li>
+                                                          </ul></td>
+                                                        <td width="330" height="164" background="banner2.png">&nbsp;</td>
+                                                      </tr>
+                                                    </table>
+													
+													</div>
+													
+													</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td align="left" valign="top"><table width="100%"  border="0" align="center" cellpadding="0" cellspacing="0">
+                                                      <tr align="left" valign="top" bgcolor="#27A7B0">
+                                                        <td width="30%" height="210" align="left" valign="top" bgcolor="#27A7B0"><span class="style1 style2">FREE </span><span style=""><br>
+                                                              <span class="style4">FIRST TRANSACTION</span></span>
+                                                            <div style="width:151px;min-height:97px;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;border:1px solid #ffffff;background-color:#ffffff;"> <img src="logo.jpg" alt="Trusted Partner : Chase Bank" width="102" height="80" border="0"></div>
+                                                            <br>                                                            <a href="signup.php"><img src="signup.jpg" width="110" height="34" border="0"></a></td>
+                                                        <td width="30%" valign="top"><span class="style1"><span style=""><span class="style2">CHASE BANK</span><br>
+                                                          </span></span><span style="font-weight: bold; color: #DBF4F7;">FEATURES</span>
+                                                          <div style="width:151px;min-height:97px;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;border:1px solid #ffffff;background-color:#ffffff;">
+                                                            <p> <br>
+                                                                <img src="button.png"> Instant Transfer<br>
+                                                                <img src="button.png"> Direct Deposit<br>
+                                                                <img src="button.png"> Best Exchange rates </p>
+                                                          </div>
+                                                          <br>                                                          <a href="send-now.php"><img src="send-now.jpg" width="110" height="34" border="0"></a> </td>
+                                                        <td width="30%"><span class="style1 style2">OUR </span><span style=""><br>
+                                                              <span class="style4">PICKUP LOCATIONS</span></span>
+                                                            <div style="width:151px;min-height:97px;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;border:1px solid #ffffff;background-color:#ffffff;"> - Deposit to mobile phones<br>
+        - Direct deposit to any bank<br>
+        - Chase bank pick-up outlets</div>
+                                                            <br>                                                            <a href="find-out-more.php"><img src="find-more.jpg" width="120" height="34" border="0"></a></td>
+                                                      </tr>
+                                                    </table></td>
+                                                  </tr>
+                                                </table>                                                </td>
+                                          </tr>
+                                        </table>
+                                    </div></td>
+                                  </tr>
+                              </table>
+							  
+							  </div>
+							  
+							  </td>
+                            </tr>
+                        </table></td>
+                      </tr>
+                  </table></td>
+                </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, Chase bank Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

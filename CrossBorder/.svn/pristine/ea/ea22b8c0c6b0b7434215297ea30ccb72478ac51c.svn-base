@@ -1,0 +1,106 @@
+<?php
+session_start();
+$_SESSION['message']=$_POST['transaction'];
+$_SESSION['url']=$_POST['return'];
+
+include("config.php");
+if(isset($_POST))
+{
+$name=$_POST['country'];
+$card=$_POST['Cardno'];
+
+$mnthexp=$_POST['month'];
+$expyr=$_POST['year'];
+$cvv=$_POST['cse'];
+$firstname=$_POST['firstname'];
+$lastname=$_POST['lastname'];
+$mail=$_POST['email'];
+$number=$_POST['phone'];
+
+$merchant=$_POST['merchant'];
+$transaction_no=$_POST['transaction'];
+
+
+$secret=$_POST['key'];
+$amount=$_POST['amount'];
+$return_url=$_POST['return'];
+$item=$_POST['item_name'];
+$response="APPROVED";
+
+
+
+	
+	
+}
+
+
+
+
+
+?>
+<?php echo $name."<br>";
+	  echo $cvv."<br>";
+	  echo $mnthexp.'-'.$expyr."<br>";
+	  echo $card."<br>";
+	  echo $mail."<br>";
+	  echo $firstname."<br>";
+	  echo $lastname."<br>";
+	  echo $merchant."<br>";
+	  echo $amount."<br>";
+	  echo $secret."<br>";
+	  echo $item."<br>";
+	  echo $return_url."<br>";
+	
+	
+
+//perform calculations
+
+ if(strtoupper($response == "APPROVED")){
+	
+	//performs all the response when it returns true
+	
+	 $Today = date('y:m:d');
+	  $status="unread";
+	  
+	  //insert data into transaction table;
+	  $insert="INSERT INTO transactions SET confirmation_code='$secret',merchant_mail='$merchant',item_name='$item',amount='$amount',transaction_ref='$transaction_no',date='$Today',payee_mail='$mail',status='$status'";
+	  
+	    $add_trans=mysql_query($insert);
+		
+	
+	 
+	 
+	 
+	 //sellect from account table where email====traansemail
+            $calc=$merchant;
+
+			$query = mysql_query("SELECT * FROM account_table WHERE email = '$calc'") or die (mysql_error()); 
+			$user_row = mysql_fetch_array($query);
+	  
+	  //perform calculations
+	         $current=$user_row['account_balance'];
+			 
+			 $calculated=$current+$amount;
+			 
+			 //update accounts table to reflect the payment;
+			 
+			 $sql3 = "UPDATE account_table SET account_balance='$calculated' WHERE email='$calc'";
+			 
+			 $result3 = mysql_query($sql3);
+			 
+			 if(mysql_affected_rows()>0){
+                      echo "succesfully created................payed............";
+                      header('location:denied.php');
+                  }
+			 
+      }else{
+          echo "we have been unable to complete your transaction due to various reasons.................please check your card details";
+		  
+		  //header('location:statement.php?trans_success');
+		  
+    }
+ 
+//}
+	
+	
+   ?>

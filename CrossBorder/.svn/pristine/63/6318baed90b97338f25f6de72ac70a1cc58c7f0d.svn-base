@@ -1,0 +1,56 @@
+﻿Public Class frmAudit
+    Public Table_Name As String
+    Private HouseString As String
+    
+
+    Private Sub frmAudit_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        'Call DataGridRefresh()
+    End Sub
+
+    Private Sub frmAudit_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        'GroupBox1.Width = Me.Width - 30
+        GroupBox2.Width = Me.Width - 30
+
+        'GroupBox1.Height = Me.Height - 350
+    End Sub
+
+
+
+    Private Sub ChkAction_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChkAction.CheckedChanged
+        If ChkAction.Checked = True Then
+            TextBox3.Text = ""
+            TextBox3.Enabled = False
+        Else
+            TextBox3.Text = ""
+            TextBox3.Enabled = True
+        End If
+    End Sub
+
+    Private Sub ChkUser_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChkUser.CheckedChanged
+        If ChkUser.Checked = True Then
+            TextBox1.Text = ""
+            TextBox1.Enabled = False
+        Else
+            TextBox1.Text = ""
+            TextBox1.Enabled = True
+        End If
+    End Sub
+
+    Private Sub ChkColumn_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'If ChkColumn.Checked = True Then
+        '    TextBox2.Text = ""
+        '    TextBox2.Enabled = False
+        'Else
+        '    TextBox2.Text = ""
+        '    TextBox2.Enabled = True
+        'End If
+    End Sub
+
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+    End Sub
+End Class

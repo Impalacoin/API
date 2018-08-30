@@ -1,0 +1,106 @@
+/* 
+  Author: Manoj Thomas <manoj@threeatetwo.com>
+*/
+
+$(document).ready( function() {
+  
+  
+  // PDF Targets
+  $("a[href$='pdf']").attr('target','_blank');
+  
+  
+  // CSS fix for IE
+  $("#nav_main ul li .dropdown .col:last-child").css("border-right","none");
+  
+  
+  // Modal window initialization
+  if ($('.modal')) {
+   $(".modal").colorbox({rel:'modal'}); 
+  }
+    
+  
+  // Homepage image slider
+  if ($('.home #main .slider')) {
+  
+    $('.home #main .slider').cycle({ 
+        fx:     'scrollHorz', 
+        speed:  '700', 
+        next:   '.home #main .next', 
+        prev:   '.home #main .prev',
+        easing:  'easeInQuad',
+        timeout: '10000'
+    });
+    
+  }
+  
+  // Navbar promo slider
+  if ($('#featured_promo_slider .slider')) {
+  
+    $('#featured_promo_slider .slider').cycle({ 
+        fx:     'scrollHorz', 
+        speed:  '700', 
+        next:   '#featured_promo_slider .next', 
+        prev:   '#featured_promo_slider .prev',
+        easing:  'easeInQuad',
+        timeout: '15000'
+    });
+    
+  }
+  
+  
+  // Event excerpt slider
+  if ($('#event_slider .slider_vert')) {
+  
+    $('#event_slider .slider_vert').cycle({ 
+        fx:     'scrollVert', 
+        speed:  '1000', 
+        next:   '#event_slider .next', 
+        prev:   '#event_slider .prev',
+        easing:  'easeInQuad',
+        timeout: 0
+    });
+    
+  }  
+  
+  
+  // Subpage image slider
+  if ($('.sub #main .col .slider')) {
+  
+    $('.sub #main .col .slider').cycle({ 
+        fx:     'scrollHorz', 
+        speed:  '700', 
+        next:   '.sub #main .col .next', 
+        prev:   '.sub #main .col .prev',
+        easing:  'easeInQuad',
+        pager:  '.sub #main .col .slider_nav'
+    });
+    
+  }
+
+  if ($('.sub #main .col .slider_nav')) {
+    if ($('.sub #main .col .slider_nav').children().size() <= 1)
+      $('.sub #main .col .slider_nav').children().hide();
+  }
+  
+  
+  // Contact form
+  if ($('#freeform')) {
+    
+    $('#contact_magazine').attr("checked", false);
+    $('#contact_newsletter').attr("checked", false);
+
+    $('#contact_magazine').click(function() {
+        if( $('#contact_magazine:checked').length > 0 ) {
+            $("#address_info").show();
+        } else {
+            $("#address_info").hide();
+        }
+    });   
+     
+  }
+  
+
+  
+  
+		
+});

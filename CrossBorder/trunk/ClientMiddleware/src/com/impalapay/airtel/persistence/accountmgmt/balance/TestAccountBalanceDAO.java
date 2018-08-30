@@ -1,0 +1,227 @@
+package com.impalapay.airtel.persistence.accountmgmt.balance;
+
+import com.impalapay.airtel.beans.accountmgmt.Account;
+import com.impalapay.airtel.beans.accountmgmt.balance.ClientAccountBalanceByCountry;
+import com.impalapay.airtel.beans.accountmgmt.balance.MasterAccountBalance;
+import com.impalapay.airtel.beans.geolocation.Country;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+/**
+ * Tests the {@link AccountBalanceDAO}
+ * <p>
+ * Copyright (c) ImpalaPay LTD., Sep 14, 2014
+ *
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ * 
+ */
+public class TestAccountBalanceDAO {
+
+	final String DB_NAME = "airteldb";
+	final String DB_HOST = "localhost";
+	final String DB_USERNAME = "airtel";
+	final String DB_PASSWD = "LignuAv7";
+	final int DB_PORT = 5432;
+
+	// Account holders' Uuids
+	public static final String DEMO = "9756f889-811a-4a94-b13d-1c66c7655a7f";
+	public static final String KAKUZI = "48e249c2-856a-4269-820f-7b72c76b4957";
+	public static final String BLUE_TRIANGLE = "81bf3078-4495-4bec-a50d-c91a7c512d78";
+	public static final String SOFT_TOUCH = "7967107d-d61c-43dd-bc5b-aa12fd08497b";
+	public static final String MOBISOKO = "91fc8aae-cb76-4c64-ac45-48448fb5673f";
+
+	final String CLIENTBALANCE_UUID = "61a86ead-98a4-4bc6-b00f-3028e61abc69";
+	final String CLIENTBALANCE_ACCOUNT_UUID = "9756f889-811a-4a94-b13d-1c66c7655a7f";
+	final int CLIENTBALANCE_AMOUNT = 48_079_021;
+
+	final int ALL_CLIENTS_BALANCE_COUNT = 150;
+	final double AMOUNT = 10000;
+	final int AMOUNT2 = 46271257;
+
+	private AccountBalanceDAO storage = new AccountBalanceDAO(DB_NAME, DB_HOST,
+			DB_USERNAME, DB_PASSWD, DB_PORT);
+
+	// test for master accounts balances
+	@Ignore
+	@Test
+	public void testGetAllMasterBalance() {
+
+		int clientCount = 5;
+		List<MasterAccountBalance> allmasterBalances = storage
+				.getMasterAccountBalances();
+		for (MasterAccountBalance data : allmasterBalances) {
+			System.out.println(data);
+		}
+		assertEquals(allmasterBalances.size(), clientCount);
+
+	}
+
+	@Ignore
+	@Test
+	public void testGetMasterAccountBalanc() {
+
+		Account account = new Account();
+
+		account.setUuid(DEMO);
+		int clientCount = 1;
+
+		MasterAccountBalance masterbalance = storage
+				.getMasterAccountBalance(account);
+
+		System.out.println(masterbalance.getBalance());
+
+		// assertEquals(clientBalances.size(), clientCount);
+
+	}
+
+	@Ignore
+	@Test
+	public void testGetMasterAccountBalance() {
+
+		Account account = new Account();
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+		int clientCount = 1;
+
+		MasterAccountBalance clientBalancesbyuuid = storage
+				.getMasterAccountBalance(account);
+
+		System.out.println(clientBalancesbyuuid.getBalance());
+
+		// assertEquals(clientBalances.size(), clientCount);
+
+	}
+
+	@Ignore
+	@Test
+	public void testGetClientBalanceBycountry() {
+		Account account = new Account();
+		Country country = new Country();
+		country.setUuid("d4a676822f4546a0bee789e83070f788");
+		;
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+
+		double output = storage.getBalanceByCountry1(account, country);
+
+		System.out.println(output);
+
+		// assertTrue(storage.addBalanceByCountry(account,country, AMOUNT));
+	}
+
+	//@Ignore
+	@Test
+	public void testDeductBalanceByCountry() {
+
+		Account account = new Account();
+		Country country = new Country();
+		country.setUuid("d4a676822f4546a0bee789e83070f788");
+		;
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+
+		assertTrue(storage.deductBalanceByCountry(account, country, AMOUNT));
+	}
+	@Ignore
+	@Test
+	public void testDeductBalance() {
+
+		Account account = new Account();
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+
+		assertTrue(storage.deductBalance(account, AMOUNT));
+	}
+	@Ignore
+	@Test
+	public void testAddBalanceByCountry() {
+		Account account = new Account();
+		Country country = new Country();
+		country.setUuid("d4a676822f4546a0bee789e83070f788");
+		;
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+
+		assertTrue(storage.addBalanceByCountry(account, country, AMOUNT));
+	}
+
+	@Ignore
+	@Test
+	public void testGetClientBalanceByCountry() {
+		Account account = new Account();
+		Country country = new Country();
+		country.setUuid("d4a676822f4546a0bee789e83070f788");
+		;
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+		int clientCount = 1;
+
+		List<ClientAccountBalanceByCountry> clientBalances = storage
+				.getClientBalanceByCountry(account, country);
+		for (ClientAccountBalanceByCountry data : clientBalances) {
+			System.out.println(data);
+		}
+		assertEquals(clientBalances.size(), clientCount);
+
+	}
+
+	@Ignore
+	@Test
+	public void testGetClientBalanceByCountryList() {
+		Account account = new Account();
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+		int clientCount = 17;
+
+		List<ClientAccountBalanceByCountry> clientBalances = storage
+				.getClientBalanceByCountry(account);
+		for (ClientAccountBalanceByCountry data : clientBalances) {
+			// System.out.println(data);
+		}
+		Map<String, String> map = new HashMap<>();
+		for (ClientAccountBalanceByCountry i : clientBalances)
+			map.put(i.getUuid().toString(), i.getUuid());
+		// assertEquals(clientBalances.size(), clientCount);
+		System.out.println(map);
+
+	}
+
+	/*
+	 * @Ignore
+	 * 
+	 * @Test public void testGetClientBalance() { Account account = new
+	 * Account();
+	 * 
+	 * account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f"); int clientCount
+	 * = 1;
+	 * 
+	 * List<ClientAccountBalance> clientBalances =
+	 * storage.getClientBalance(account); for(ClientAccountBalance data :
+	 * clientBalances){ System.out.println(data); }
+	 * assertEquals(clientBalances.size(), clientCount);
+	 * 
+	 * }
+	 */
+	@Ignore
+	@Test
+	public void testHasBalance() {
+		Account account = new Account();
+		Country country = new Country();
+		country.setUuid("d4a676822f4546a0bee789e83070f788");
+		;
+
+		account.setUuid(DEMO);
+
+		assertTrue(storage.hasBalance(account, country, AMOUNT));
+		// assertFalse(storage.hasBalance(account,country, 56_271_259));
+	}
+
+}

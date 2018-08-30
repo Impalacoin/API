@@ -1,0 +1,421 @@
+USE emconnect
+------------------------------------------------------------------------------------------------------------------------------
+DROP TABLE AUDIT_CONFIGURE 
+GO 
+DROP PROC sp_gen_trigger
+GO
+------------------------------------------------------------------------------------------------------------------------------
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+
+GO
+
+CREATE TABLE audit_configure
+(
+TBL_NAME VARCHAR(128) PRIMARY KEY,ACTION VARCHAR(24) ,UPDATED_COLLIST VARCHAR(7500)
+,IS_ENABLE INT NOT NULL CHECK (IS_ENABLE = 1 OR IS_ENABLE = 0)
+,AUD_USER_NAME VARCHAR(120) ,AUD_DATE_COL_NAME VARCHAR(30),
+AUD_CREATED_BY_COL_NAME VARCHAR(30) 
+)
+------------------------------------------------------------------------------------------------------------------------------
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id('at_log') and 
+OBJECTPROPERTY(id, N'Istable') = 1)
+BEGIN
+PRINT 'at_log exists'
+--DROP TABLE at_log
+END
+
+ELSE
+BEGIN
+CREATE TABLE [dbo].[at_log](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_login] [sysname] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[date_time] [datetime] NOT NULL,
+	[action_type] varchar(20) NOT NULL,
+	[db_table] [sysname] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[deleted] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[inserted] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+ CONSTRAINT [pk_at_log] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+
+GO
+
+CREATE proc sp_gen_trigger
+(
+@in_vcTbl_name varchar(128) , @in_vcAction varchar(24) ,@in_vUpdated_ColList varchar(7500)
+,@in_btDisable numeric(1,0) ,@in_btCreateView bit = 0
+,@aud_user_name varchar(120),@aud_date_col_name varchar(30)='aud_date',
+@aud_created_by_col_name varchar(30) = 'aud_created_by'
+)
+as
+
+BEGIN
+
+SET NOCOUNT ON 
+
+declare @err int 
+declare @errmsg varchar(258)
+
+
+set @err = - 1
+
+-- trim the spaces as it will give the problem if it contains any spaces during execution
+
+set @in_vcTbl_name = ltrim(rtrim(@in_vcTbl_name))
+
+set @in_vcAction = ltrim(rtrim(@in_vcAction))
+
+set @in_vUpdated_ColList = ltrim(rtrim(@in_vUpdated_ColList))
+
+set @aud_user_name = ltrim(rtrim(@aud_user_name))
+
+select upper(isnull(@aud_user_name,'All'))
+
+   --------------------------for image tables-----------------------
+------------------------------------------------------------------------
+declare @flg_Img_table bit 
+
+--------------------------------------------------
+declare @trg_name varchar(128),@CREATE_SYNTAX varchar(8000),@BODY_SYNTAX varchar(8000)
+
+----disabling trigger if BIT DISABLE set to NULL 
+IF (@in_btDisable = 0)
+
+BEGIN 
+
+if exists (select * from dbo.sysobjects where id = object_id(+ 'at_' + @in_vcTbl_name) and 
+OBJECTPROPERTY(id, N'Istrigger') = 1)
+
+	Begin 
+
+			exec(' drop trigger ' + 'at_' + @in_vcTbl_name)
+
+			print 'Droped the  trigger ' + 'at_'+ @in_vcTbl_name
+
+			return
+
+	End 
+
+Else
+
+	Begin
+
+			print(' trigger '+ 'at_'+ @in_vcTbl_name + ' is not found in database')
+
+			return 103
+
+	End
+  RETURN
+ END
+
+ELSE
+
+BEGIN
+
+---step 2 : 
+
+--This Block Will Set The New Trigger Name & Set the @CreateSyntax 
+
+set @trg_name =   'at_' + @in_vcTbl_name
+
+if exists (select * from dbo.sysobjects where id = object_id(@trg_name) and 
+
+OBJECTPROPERTY(id, N'Istrigger') = 1)
+
+
+Begin
+
+  print 'Found trigger ' + @trg_name
+  exec(' drop trigger ' + 'at_' + @in_vcTbl_name)
+  --RETURN
+End 
+
+
+
+--BEGIN
+
+print ('Creating trigger : ' + @trg_name )
+
+----21/12/2012 --Ezekiel Kimanthi
+----determines Image,text,ntext field types Tables ----
+--declare @pkey_name varchar(500)
+--
+--declare @tblPkeys table(table_qulifier varchar(265),table_owner varchar(265),table_name varchar(265),column_name varchar(265),
+--key_seq varchar(265),pk_name varchar(265))
+--
+--declare @vtable_name varchar(256)
+--set @vtable_name =  substring(@in_vcTbl_name,charindex('.',@in_vcTbl_name,0)+1,len(@in_vcTbl_name)) 
+--declare @vtable_owner varchar(256)
+--set @vtable_owner = substring(@in_vcTbl_name,0,charindex('.',@in_vcTbl_name,1))
+--
+------split the table with owner and table name eg: table.customer to 'table , customer'
+--
+--Insert into @tblPkeys EXEC sp_pkeys @table_name = @vtable_name ,@table_owner = @vtable_owner
+--
+------for the composite primary keys append the multiple columns to generate the string as : checksum(column1,column2)'
+--
+--SELECT @pkey_name = coalesce(@pkey_name+ ',', '')+ column_name  FROM @tblPkeys
+--
+------------------------------------------------------------------------------------------------------------------------------
+--
+--SET @pkey_name = ' checksum(' + @pkey_name + ') '
+
+
+--/* This Block Will Check Whether The Table Having Any Image,Text,Ntext
+-- And Sets The Flag As These DataTypes are not supported by Magic Tables(Inserted & Deleted)
+
+IF OBJECTPROPERTY ( object_id(@in_vcTbl_name),'TableHasTextImage') = 1
+
+Begin 
+
+	--IF (@pkey_name) IS NULL 
+
+	--	BEGIN 
+    
+	--		PRINT ('Table Should have a Primary Key to support Archiving for Image/Text/Ntext column')
+
+	--		RETURN 101
+
+	--	END 
+
+    --Else
+
+	--     BEGIN 
+
+				print ('Image/Text/nText with PK Found On Table ' + @in_vcTbl_name + ' Will Create Instead Of Trigger for auditing')
+
+				set @flg_Img_table = 1
+
+				--!(1 These 2 below settings for append these strings at the time of 
+				--inserting rows into tables with identity key columns, especially for Instead of Triggers
+
+--				if objectproperty(object_id(@in_vcTbl_name),'TableHasIdentity') = 1
+--
+--				Begin
+--						set @identity_insert_ON = ' set identity_insert ' + @in_vcTbl_name + ' on '
+--						set @identity_insert_OFF = ' set identity_insert ' + @in_vcTbl_name + ' off '
+--				End
+
+			
+	     --END
+
+ set @err = @@error 
+
+ If (@err <> 0 )
+	return 1
+ End  ----21/02/2012 Ezekiel Kimanthi
+
+------------------------------------------------------------------------
+---------------EZEKIEL KIMANTHI 06/02/2012 -----------------------------
+------------------------------------------------------------------------
+
+DECLARE @Names VARCHAR(8000)
+SELECT @Names = COALESCE(@Names, '') + 'ISNULL(cast([' +[name]+ '] as VARCHAR(100)),@x)+@y+' FROM syscolumns 
+WHERE id = (SELECT id FROM sysobjects WHERE [NAME] = @in_vcTbl_name)
+
+select @names = left(@names,len(@names)-1)
+
+--- Test Image table ----
+
+if @flg_Img_table = 1
+
+begin 
+
+SET @CREATE_SYNTAX = 'CREATE TRIGGER ' + @trg_name + ' ON ' + @in_vcTbl_name + ' INSTEAD OF '
+
++ @in_vcAction + ' AS '
+
+
+end 
+
+else 
+
+begin 
+
+SET @CREATE_SYNTAX = 'CREATE TRIGGER ' + @trg_name  + ' ON ' + @in_vcTbl_name + ' FOR '
+
++ @in_vcAction + ' AS '
+
+
+end 
+
+SET @CREATE_SYNTAX = @CREATE_SYNTAX  +
+
+' BEGIN ' + 
+' DECLARE @user_name sysname ' +
+' DECLARE @cur_user varchar(120) ' +
+' SET @cur_user = ' +'''' + @aud_user_name +'''' +
+' SET @user_name = lower(user_name()) ' +
+' IF @cur_user  != ''ALL''' +
+' BEGIN ' +
+'    IF (charindex(' +''''+@aud_user_name+'''' + ',@user_name) = 0)' + 
+'	 RETURN	' +
+'   END ' +
+' ELSE BEGIN ' +
+'   SET NOCOUNT ON ' +
+'  	DECLARE @table_name sysname, @action_type varchar(20), @inserted_string varchar(8000), @deleted_string varchar(8000) ' +
+'	DECLARE @x CHAR(1), @y CHAR(1) ' +
+'	SET @x = char(182) ' +
+'	SET @y = char(149) ' +
+ 
+'	SET @table_name =  ' + '''' + @in_vcTbl_name + '''' +
+ 
+'  DECLARE inserted_cursor CURSOR FOR
+	SELECT  ' +  @names + ' FROM inserted	
+    
+   	DECLARE deleted_cursor CURSOR FOR ' +
+	
+'	SELECT ' +   @names + ' FROM deleted ' +
+
+'	OPEN inserted_cursor ' +
+'	OPEN deleted_cursor ' +
+
+'	DECLARE @inserted_fetch_status INT ' +
+'	DECLARE @deleted_fetch_status INT ' +
+
+'	SET @inserted_string = NULL ' +
+'	SET @deleted_string = NULL ' +
+
+'	FETCH NEXT FROM inserted_cursor INTO @inserted_string ' +
+'	SET @inserted_fetch_status = @@fetch_status ' +
+ 
+'	FETCH NEXT FROM deleted_cursor INTO @deleted_string ' +
+'	SET @deleted_fetch_status = @@fetch_status ' +
+
+ 	
+' 	if (@inserted_fetch_status=0) ' +
+' 	BEGIN ' +
+' 		if (@deleted_fetch_status=0) ' +
+' 			SET @action_type = ' +'''update'''  +
+' 		ELSE ' +
+' 			SET @action_type = ' + '''insert'''  +
+' 	END ' +
+' 	ELSE IF (@deleted_fetch_status=0) ' +
+' 		SET @action_type = ' + '''detele'''  +
+  
+
+' 	WHILE ((@inserted_fetch_status=0) OR (@deleted_fetch_status=0)) ' +
+' 	BEGIN ' +
+' 		INSERT INTO at_log ' +
+' 			(user_login,date_time,action_type,db_table,deleted,inserted) ' +
+'		VALUES ' +
+' 			(@user_name, getdate(), @action_type, @table_name, @deleted_string, @inserted_string) ' +
+  
+	
+	' 	IF (@inserted_fetch_status=0)' +
+	' 	BEGIN ' +
+	' 		FETCH NEXT FROM inserted_cursor INTO @inserted_string' +
+	' 		SET @inserted_fetch_status = @@fetch_status' +
+	' 	END' +
+	' 	IF (@deleted_fetch_status=0)' +
+	' 	BEGIN' +
+	' 		FETCH NEXT FROM deleted_cursor INTO @deleted_string' +
+	' 		SET @deleted_fetch_status = @@fetch_status' +
+	' 	END' +
+ 
+	' END ' +   
+ 
+	' CLOSE inserted_cursor' +
+	' DEALLOCATE inserted_cursor' +
+	' CLOSE deleted_cursor' +
+	' DEALLOCATE deleted_cursor ' +
+    ' END ' +
+'END'
+
+
+
+
+--END
+EXEC (@CREATE_SYNTAX)
+
+  set @err = @@error
+
+
+IF @err <> 0
+
+begin
+
+ RAISERROR ('error while initializing audit automation for table',16,1,1) WITH LOG
+
+return 1
+
+end
+
+else
+
+begin
+
+  return 0
+
+end
+
+SET NOCOUNT OFF
+END
+END 
+
+GO
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TRIGGER at_audit_configure
+
+ON audit_configure 
+
+FOR INSERT,UPDATE,DELETE
+
+AS
+
+DECLARE @in_vcTbl_name varchar(256) , @in_vcAction varchar(24) ,@in_vUpdated_ColList varchar(8000)
+
+,@in_btDisable numeric(1,0) , @in_btCreateView bit
+
+,@aud_user_name varchar(120) 
+
+,@aud_date_col_name varchar(30)
+
+,@aud_created_by_col_name varchar(30) 
+
+
+BEGIN 
+
+SELECT @in_vcTbl_name = lower(TBL_NAME), @in_vcAction = upper(isnull([ACTION],'UPDATE,DELETE,INSERT')) ,@in_vUpdated_ColList = UPDATED_COLLIST 
+
+,@in_btDisable = IS_ENABLE , @in_btCreateView = null
+
+,@aud_user_name = upper(isnull(AUD_USER_NAME,'ALL')) ,@aud_date_col_name = isnull(AUD_DATE_COL_NAME ,'aud_date'),@aud_created_by_col_name = ISNULL(AUD_CREATED_BY_COL_NAME ,'aud_created_by')
+
+FROM INSERTED
+
+DECLARE @RET INT
+EXEC @RET = sp_gen_trigger
+
+@in_vcTbl_name , @in_vcAction ,@in_vUpdated_ColList 
+
+,@in_btDisable ,@in_btCreateView 
+
+,@aud_user_name 
+
+,@aud_date_col_name 
+
+,@aud_created_by_col_name 
+
+PRINT @RET 
+
+IF @RET <>  0 
+BEGIN 
+ROLLBACK TRAN
+END
+
+END
+
+
+GO 
+SET QUOTED_IDENTIFIER OFF 
+SET ANSI_NULLS ON 

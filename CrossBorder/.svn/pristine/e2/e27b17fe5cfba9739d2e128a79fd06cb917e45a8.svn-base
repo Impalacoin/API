@@ -1,0 +1,251 @@
+﻿
+
+
+Public Class income
+    Private SelectedName As String
+    Private SelectedID As Integer
+    Private VatPercent As Double
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub Label4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    End Sub
+
+    Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+            Dim recset As New ADODB.Recordset
+            Dim Str As String = ""
+            Dim RecID As Integer = 1
+            Dim VAT As Double = 0.0
+            Dim Qter As Int16 = 1
+            Dim Yr As Integer = Year(Today)
+            Dim Vatable As Double = 0.0
+
+            If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                Qter = 1
+            ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                Qter = 2
+            ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                Qter = 3
+            ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                Qter = 4
+            End If
+
+
+
+            recset.Open("select max(rec_id) from itransaction ", UniversalHostConnection)
+            If IsNumeric(recset.Fields(0).Value) Then
+                RecID = recset.Fields(0).Value + 1
+            Else
+                RecID = 1
+            End If
+
+            recset.Close()
+
+            recset.Open("select VATable from income where income_description = '" & ComboBox1.SelectedItem & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            If recset.EOF = False Then
+                Vatable = recset.Fields(0).Value
+            Else
+                Vatable = 0.0
+            End If
+            recset.Close()
+
+            If ComboBox1.SelectedItem <> "" And ComboBox4.SelectedItem <> "" And IsNumeric(TextBox8.Text) Then
+
+                If Vatable = 1 Then
+                    VAT = TextBox8.Text * (VatPercent / 100)
+                Else
+                    VAT = 0
+                End If
+
+                Str = "insert into itransaction values(" & RecID & ",'" & DateTimePicker1.Value & "','" & ComboBox1.SelectedItem & "','" & DateTimePicker2.Value & "','" & DateTimePicker3.Value & "'," & Trim(TextBox8.Text) & "," & VAT & ",'" & TextBox4.Text & "','" & TextBox10.Text & "','" & ComboBox4.SelectedItem & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+                UniversalHostConnection.Execute(UCase(Str))
+                MsgBox("INCOME RECORD UPDATED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+                DataRefresh()
+            Else
+                MsgBox("IMPORTANT DATA IS MISSING !!!", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+    Private Sub DataRefresh()
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim n As Integer
+            RecSet.Open("select top 20 * from itransaction where owner = '" & Form1.OWNER & "' order by rec_id desc", UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For t As Integer = 0 To 10
+                    DataGridView1.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+                Next
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub income_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Try
+            Me.Text = Form1.OWNER & ":  INCOME"
+            Dim RecSet As New ADODB.Recordset
+            Dim Str As String = ""
+            Dim RecID As Integer = 1
+
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+
+            RecSet.Open("select * from income where owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            ComboBox1.Items.Clear()
+            Do While RecSet.EOF = False
+                ComboBox1.Items.Add(RecSet.Fields(0).Value)
+                RecSet.MoveNext()
+            Loop
+            RecSet.Close()
+
+            RecSet.Open("select emp_id from employee where  date_exit = '0' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            ComboBox4.Items.Clear()
+            Do While RecSet.EOF = False
+                ComboBox4.Items.Add(RecSet.Fields(0).Value)
+                RecSet.MoveNext()
+            Loop
+            RecSet.Close()
+
+            'RecSet.Open("select emp_id from employee where date_exit = '0' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            'ComboBox3.Items.Clear()
+            'Do While RecSet.EOF = False
+            '    ComboBox3.Items.Add(RecSet.Fields(0).Value)
+            '    RecSet.MoveNext()
+            'Loop
+            'RecSet.Close()
+
+            RecSet.Open("select distinct house_name from house_details where owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            ComboBox6.Items.Clear()
+            Do While RecSet.EOF = False
+                ComboBox6.Items.Add(RecSet.Fields(0).Value)
+                RecSet.MoveNext()
+            Loop
+            RecSet.Close()
+
+            DataRefresh()
+
+            RecSet.Open("select tax_percent from tax where tax_type = 'VAT' ", UniversalHostConnection)
+            If IsNumeric(RecSet.Fields(0).Value) Then
+                VatPercent = RecSet.Fields(0).Value
+            Else
+                VatPercent = 0.0
+            End If
+            RecSet.Close()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Try
+            UniversalHostConnection.Execute("delete from income where income_description = '" & ComboBox6.SelectedItem & "' and owner = '" & Form1.OWNER & "'")
+            Dim VAT As Int16 = 0
+            If CheckBox1.Checked = True Then
+                VAT = 1
+            Else
+                VAT = 0
+            End If
+
+            UniversalHostConnection.Execute(UCase("insert into INCOME values('" & ComboBox6.SelectedItem & "'," & VAT & ",'" & Form1.OWNER & "')"))
+            MsgBox("RECORD UPDATED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub income_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox4.Width = Me.Width - 20
+        GroupBox4.Height = Me.Height / 2 + 50
+        GroupBox2.Width = Me.Width - 20
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
+        If CheckBox1.Checked = True Then
+            TextBox1.Text = VatPercent
+        Else
+            TextBox1.Text = "0"
+        End If
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        If ComboBox5.SelectedItem <> "" And ComboBox2.SelectedItem <> "" Then
+            Call DatarefreshX(ComboBox5.SelectedItem, ComboBox2.SelectedItem)
+        Else
+            MsgBox("NO MONTH OR YEAR SELECTED", vbExclamation, "")
+        End If
+    End Sub
+
+    Private Sub DatarefreshX(ByVal MonthE As Int16, ByVal YearE As Int32)
+
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim n As Integer
+            RecSet.Open("select * from itransaction where monthe = " & MonthE & " and yeare = " & YearE & " and owner = '" & Form1.OWNER & "'  order by rec_id desc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For t As Integer = 0 To 10
+                    DataGridView1.Rows.Item(n).Cells(t).Value = RecSet.Fields(t).Value
+                Next
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseClick
+        Try
+            Dim recset As New ADODB.Recordset
+            Dim rowClicked As Integer
+            rowClicked = DataGridView1.HitTest(e.Location.X, e.Location.Y).RowIndex
+            'ContextMenuStrip1.Show(DataGridView1, e.Location)
+            SelectedID = DataGridView1.Rows.Item(rowClicked).Cells(0).Value
+            SelectedName = DataGridView1.Rows.Item(rowClicked).Cells(2).Value
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub DeleteRecordToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteRecordToolStripMenuItem.Click
+        If MsgBox("Do you want to deleted the income record?", vbOKCancel, APPNAME) = vbYes Then
+            'UniversalHostConnection.Execute("delete from itransaction where rec_id = " & SelectedID & " and income_type = '" & SelectedName & "' and owner = '" & Form1.OWNER & "'")
+
+            DataRefresh()
+        End If
+    End Sub
+
+    Private Sub GroupBox4_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox4.Enter
+
+    End Sub
+End Class

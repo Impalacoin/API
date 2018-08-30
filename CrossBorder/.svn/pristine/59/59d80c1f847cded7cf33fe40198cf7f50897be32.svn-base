@@ -1,0 +1,71 @@
+BODY {
+	FONT-SIZE: 13px; COLOR: #333333; FONT-FAMILY: "arial"
+}
+TH {
+	FONT-SIZE: 13px; COLOR: #333333; FONT-FAMILY: "arial"
+}
+TD {
+	FONT-SIZE: 13px; COLOR: #333333; FONT-FAMILY: "arial"
+}
+A {
+	COLOR: #075AA8;  TEXT-DECORATION: underline; FONT-FAMILY: "Arial"; FONT-SIZE: 13px; 
+}
+A:hover {
+	COLOR: #333333;  TEXT-DECORATION: underline; FONT-FAMILY: "Arial"; FONT-SIZE: 13px; 
+}
+
+#textbox {
+	BORDER-RIGHT: #FFFFFF thin solid; BORDER-COLOR: #ffffff; BORDER-TOP: #FFFFFF thin solid; FONT-SIZE: 13px; BORDER-LEFT: #FFFFFF thin solid; COLOR: white; BORDER-BOTTOM: #FFFFFF thin solid; FONT-FAMILY: "georgia"; BACKGROUND-COLOR: #ffffff
+}
+SELECT {
+	FONT-SIZE: 13px; BORDER-LEFT-COLOR: #FFFFFF; BORDER-BOTTOM-COLOR: #FFFFFF; COLOR: black; BORDER-TOP-STYLE: solid; BORDER-TOP-COLOR: #FFFFFF; FONT-FAMILY: "georgia"; BORDER-RIGHT-STYLE: solid; BORDER-LEFT-STYLE: solid; BACKGROUND-COLOR: #ffffff; BORDER-RIGHT-COLOR: #FFFFFF; BORDER-BOTTOM-STYLE: solid
+}
+.header_link {
+	FONT-SIZE: 10px; COLOR: #4d3c1e; TEXT-DECORATION: none
+}
+.header_link:hover {
+	FONT-SIZE: 10px; COLOR: #4d3c1e; TEXT-DECORATION: underline
+}
+.ticker {
+	FONT-SIZE: 10px; COLOR: #000000; TEXT-DECORATION: none
+}
+.ticker:hover {
+	FONT-SIZE: 10px; COLOR: #000000; TEXT-DECORATION: none
+}
+.btm_newsletter {
+	FONT-SIZE: 10px; COLOR: #483719; TEXT-DECORATION: none
+}
+.footer_link {
+	FONT-SIZE: 9px; COLOR: #ffffff; LETTER-SPACING: -1px; TEXT-DECORATION: none
+}
+.footer_link:hover {
+	FONT-SIZE: 9px; COLOR: #ffffff; LETTER-SPACING: -1px; TEXT-DECORATION: underline
+}
+ {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
+}
+P {
+	MARGIN: 0px 0px 1em
+}
+A {
+	CURSOR: pointer! important; TEXT-DECORATION: none
+}
+#container {
+	Z-INDEX: 1000; LEFT: 0px; WIDTH: 514px; POSITION: absolute; TOP: 238px; HEIGHT: 100%
+}
+#flash {
+	LEFT: 24px; WIDTH: 514px; POSITION: absolute; TOP: 238px; HEIGHT: 100%
+}
+h1{ FONT-SIZE: 15px; COLOR: #cc3300; FONT-FAMILY: "georgia"; text-decoration:inherit;
+margin: 2px 2px;
+}
+li
+{
+margin: 1px 1px;
+}ul
+{
+margin: 1px 1px;
+}
+h1 {
+	COLOR: #ED720A;  FONT-FAMILY: "verdana"; FONT-SIZE: 17px; 
+}

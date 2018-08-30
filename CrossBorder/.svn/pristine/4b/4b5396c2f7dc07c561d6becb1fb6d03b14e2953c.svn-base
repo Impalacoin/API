@@ -1,0 +1,341 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Public Class frmDeposit
+    Private HouseString As String
+    Private Sub frmDeposit_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Label22.Text = "PROPERTY: " & Form1.OWNER
+
+        On Error GoTo ErrTrap
+        Dim RecSet As New ADODB.Recordset
+
+        If UniversalHostConnection.State = 0 Then
+            UniversalHostConnection = New ADODB.Connection
+            UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            UniversalHostConnection.Open()
+        End If
+
+        Button1.Enabled = False
+        RecSet.Open("select house_name from house_details where owner = '" & Form1.OWNER & "' order by house_name asc", UniversalHostConnection)
+        ComboBox1.Items.Clear()
+        Do While RecSet.EOF = False
+            ComboBox1.Items.Add(UCase(RecSet.Fields(0).Value))
+            HouseString = HouseString & "'" & UCase(RecSet.Fields(0).Value) & "'"
+            RecSet.MoveNext()
+
+            'ComboBox1.Items.Add("ALL")
+            If RecSet.EOF = False Then
+                HouseString = HouseString & ","
+            Else
+                HouseString = "(" & HouseString & ")"
+            End If
+            Button1.Enabled = True
+        Loop
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+    End Sub
+
+    Private Sub frmDeposit_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 20
+        GroupBox2.Width = Me.Width - 20
+        GroupBox1.Height = Me.Height - 200
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim Recset As New ADODB.Recordset
+        Dim RecSetX As New ADODB.Recordset
+        Dim RecSetC As New ADODB.Recordset
+        Dim SqlStr As String = ""
+        Dim filter As String = ""
+        Dim Amount As Double = 0
+        Dim sAmount As Double = 0
+        Dim IsRental As Integer = 0
+        If ComboBox1.SelectedItem = "" Then
+            MsgBox("Select House Name", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        Recset.Open("Select rental_type from house_details where house_name = '" & ComboBox1.SelectedItem & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+        If Recset.EOF = False Then
+            If Recset.Fields(0).Value = 0 Then
+                IsRental = 1
+                SqlStr = "Select house_name,house_nr,cust_id,customer,'RENT',amount + rent_due,amount,rent_due,'0',date_of_payment,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from rTransaction "
+            Else
+                SqlStr = "Select house_name,house_nr,cust_id,customer,board_type,amount + rent_due,amount,rent_due,'0',date_of_payment,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from bTransaction "
+                IsRental = 0
+            End If
+        End If
+        Recset.Close()
+
+
+        If Trim(TextBox1.Text) = "" And ComboBox1.SelectedItem <> "" And TextBox4.Text = "" Then
+            If ComboBox2.SelectedItem <> "" And ComboBox3.SelectedItem <> "" Then
+            Else
+                MsgBox("Select Month and Year", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+            filter = " where house_name = '" & ComboBox1.SelectedItem & "' and for_month = '" & ComboBox2.SelectedItem & "-" & ComboBox3.SelectedItem & "' "
+        ElseIf Trim(TextBox1.Text) = "" And ComboBox1.SelectedItem <> "" And Trim(TextBox4.Text) <> "" Then
+
+            filter = " where house_name = '" & ComboBox1.SelectedItem & "' and house_nr = '" & Trim(TextBox4.Text) & "' order by date_of_payment"
+
+        ElseIf Trim(TextBox1.Text) <> "" Then
+            filter = " where cust_id = '" & Trim(TextBox1.Text) & "' order by date_of_payment"
+
+        Else
+            MsgBox("Select [Criteria] to query payments", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        Dim i As Integer
+        Try
+
+            TextBox2.Text = ""
+            Button2.Visible = False
+            Dim n As Integer '= DataGridView1.Rows.Add()
+            
+
+            If IsRental = 0 Or (IsRental = 1 And TextBox1.Text <> "") Then
+                'SqlStr = "Select house_name,house_nr,cust_id,customer,tran_type,amount,amount,'0','0',date_of_payment,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from rTransaction "
+                Recset.Open(SqlStr & filter, UniversalHostConnection)
+                DataGridView1.Rows.Clear()
+                Amount = 0
+
+                If Recset.EOF = False Then
+                    Do While Recset.EOF = False
+                        DataGridView1.Rows.Add()
+                        For i = 0 To 14
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        Amount = Amount + Recset.Fields(6).Value
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+                    TextBox2.Text = Format(Amount, "#,###")
+                    Button2.Visible = True
+                Else
+                    MsgBox("No Record Found", vbExclamation)
+                    Exit Sub
+                End If
+            Else
+
+                RecSetX.Open("select * from houserooms where house_name = '" & ComboBox1.SelectedItem & "' order by unit_number asc", UniversalHostConnection)
+                If RecSetX.EOF = False Then
+                    DataGridView1.Rows.Clear()
+                    Do While RecSetX.EOF = False
+                        Recset.Open(SqlStr & filter & "  and house_nr = '" & RecSetX.Fields(2).Value & "' and tran_type = 'RENT' order by date_of_payment desc", UniversalHostConnection)
+                        If Recset.EOF = False Then
+                            DataGridView1.Rows.Add()
+                            For i = 0 To 15
+                                DataGridView1.Rows.Item(n).Cells(i).Value = UCase(Recset.Fields(i).Value)
+                            Next
+
+                            RecSetC.Open("select amount from rtransaction where cust_id = '" & RecSetX.Fields(10).Value & "' and house_nr = '" & RecSetX.Fields(2).Value & "' and  for_month = '" & ComboBox2.SelectedItem & "-" & ComboBox3.SelectedItem & "' and tran_type = 'RENT'", UniversalHostConnection)
+                            sAmount = 0
+                            Do While RecSetC.EOF = False
+                                sAmount = sAmount + RecSetC.Fields(0).Value
+                                RecSetC.MoveNext()
+                            Loop
+                            RecSetC.Close()
+                            DataGridView1.Rows.Item(n).Cells(6).Value = sAmount
+                            Amount = Amount + sAmount
+
+                            RecSetC.Open("select amount from rtransaction where cust_id = '" & RecSetX.Fields(10).Value & "' and house_nr = '" & RecSetX.Fields(2).Value & "' and  for_month = '" & ComboBox2.SelectedItem & "-" & ComboBox3.SelectedItem & "' and tran_type = 'FINE PAYMENTS'", UniversalHostConnection)
+                            sAmount = 0
+                            If RecSetC.EOF = False Then
+                                DataGridView1.Rows.Item(n).Cells(8).Value = RecSetC.Fields(0).Value
+                                Amount = Amount + RecSetC.Fields(0).Value
+                            Else
+                                DataGridView1.Rows.Item(n).Cells(8).Value = "0"
+                            End If
+                            RecSetC.Close()
+
+                            RecSetC.Open("select rent from tenant where cust_id = '" & RecSetX.Fields(10).Value & "'", UniversalHostConnection)
+                            If RecSetC.EOF = False Then
+                                DataGridView1.Rows.Item(n).Cells(5).Value = RecSetC.Fields(0).Value
+                                DataGridView1.Rows.Item(n).Cells(7).Value = RecSetC.Fields(0).Value - DataGridView1.Rows.Item(n).Cells(6).Value
+                            End If
+                            RecSetC.Close()
+                        Else
+                            DataGridView1.Rows.Add()
+                            DataGridView1.Rows.Item(n).Cells(0).Value = RecSetX.Fields(0).Value
+                            DataGridView1.Rows.Item(n).Cells(1).Value = RecSetX.Fields(2).Value
+                            DataGridView1.Rows.Item(n).Cells(2).Value = RecSetX.Fields(10).Value
+                            DataGridView1.Rows.Item(n).Cells(3).Value = RecSetX.Fields(11).Value
+                            DataGridView1.Rows.Item(n).Cells(7).Value = ""
+
+                            If IsDBNull(RecSetX.Fields(10).Value) = False And RecSetX.Fields(10).Value <> "" Then
+                                RecSetC.Open("select rent from tenant where cust_id = '" & RecSetX.Fields(10).Value & "'", UniversalHostConnection)
+                                If RecSetC.EOF = False Then
+                                    DataGridView1.Rows.Item(n).Cells(4).Value = "RENT"
+                                    DataGridView1.Rows.Item(n).Cells(5).Value = RecSetC.Fields(0).Value
+                                    DataGridView1.Rows.Item(n).Cells(6).Value = "0"
+                                    DataGridView1.Rows.Item(n).Cells(7).Value = RecSetC.Fields(0).Value
+                                End If
+                                RecSetC.Close()
+                            End If
+
+                        End If
+                        n = n + 1
+                        Recset.Close()
+
+                        RecSetX.MoveNext()
+                    Loop
+                    TextBox2.Text = Format(Amount, "#,###")
+                    Button2.Visible = True
+
+                    If Today.Day > 5 Then
+
+                        For i = 0 To DataGridView1.RowCount - 1
+                            If IsNothing(DataGridView1.Rows(i).Cells(7).Value) = False Then
+                                If DataGridView1.Rows(i).Cells(7).Value <> "0" And CStr(DataGridView1.Rows(i).Cells(7).Value) <> "" Then
+                                    DataGridView1.Rows(i).DefaultCellStyle.BackColor = Color.LightSalmon
+                                End If
+                            End If
+                        Next
+
+                    End If
+
+
+
+                Else
+                    MsgBox("Transaction Not Found", vbInformation)
+                    Exit Sub
+                End If
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+
+    Private Sub DataGridRefresh()
+        Dim i As Integer
+        Try
+
+            Dim RecSet As New ADODB.Recordset
+            'create a new dataset
+            Dim n As Integer '= DataGridView1.Rows.Add()
+            RecSet.Open("Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from dTransaction where house_name in " & HouseString & " order by id asc", UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For i = 0 To 11
+                    DataGridView1.Rows.Item(n).Cells(i).Value = UCase(RecSet.Fields(i).Value)
+
+                Next
+
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        If ComboBox1.SelectedItem <> "" And ComboBox2.SelectedItem <> "" And ComboBox3.SelectedItem <> "" Then
+            Label8.Visible = True
+            ExcelDataPull()
+            Label8.Visible = False
+        Else
+            MsgBox("Pull data in the grid first", vbExclamation, APPNAME)
+        End If
+    End Sub
+    Private Sub ExcelDataPull()
+        Try
+
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+
+
+
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Houses"
+            End With
+
+            row = 1
+            col = 1
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "RENT PAYMENT REPORT FOR MONTH " & ComboBox2.SelectedItem & " YEAR " & ComboBox3.SelectedItem
+            ws.Rows.Cells(3, 1) = Form1.OWNER
+
+
+
+
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+
+            ws.Range("A1:O5").Font.Bold = True
+
+
+            For M As Integer = 0 To DataGridView1.ColumnCount - 1
+                ws.Rows.Cells(row, M + 1) = UCase(DataGridView1.Columns.Item(M).HeaderText) 'DataGridView1.Rows.Item(N).Cells(M).Value
+            Next
+
+            row = row + 1
+
+            'ws.Range("A6:N" & row + DataGridView1.RowCount).NumberFormat = "@"
+
+            For L As Integer = 0 To DataGridView1.RowCount - 1
+                For M As Integer = 0 To DataGridView1.ColumnCount - 1
+                    ws.Rows.Cells(row, M + 1) = DataGridView1.Rows.Item(L).Cells(M).Value
+                Next
+                row = row + 1
+            Next
+
+Finish:
+            Dim Destination As String = "D:\SMART PROPERTY report"
+            FileName = ComboBox1.SelectedItem & "_RENT PAYMENT_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Label8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label8.Click
+
+    End Sub
+End Class

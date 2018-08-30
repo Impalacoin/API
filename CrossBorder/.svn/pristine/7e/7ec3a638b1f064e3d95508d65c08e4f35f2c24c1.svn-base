@@ -1,0 +1,1332 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Public Class CashPayment
+    Private Count As Integer
+    Private rowClicked As Long
+    Private EntitySelected As Long
+    Public Amount As Double
+    Private Record_Nr As Long
+
+    Private Sub CashPayment_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        Me.Dispose()
+    End Sub
+
+    Private Sub CashPayment_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Leave
+
+    End Sub
+    Private Sub CashPayment_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Button7.BackColor = Color.Beige
+        Button8.BackColor = Color.Beige
+        Button9.BackColor = Color.Beige
+        Button4.BackColor = Color.Beige
+        Button6.BackColor = Color.Beige
+        Button2.BackColor = Color.Beige
+
+        Label20.Text = Form1.OWNER & ":  ACCOUNTS MANAGEMENT"
+
+        If UniversalHostConnection.State = 0 Then
+            UniversalHostConnection = New ADODB.Connection
+            UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            UniversalHostConnection.Open()
+        End If
+
+    End Sub
+
+    Private Sub CashPayment_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        
+        'TextBox4.Height = 300
+        'Button2.Top = TextBox4.Top + TextBox4.Height + 10
+        'Button3.Top = TextBox4.Top + TextBox4.Height + 10
+        'TextBox5.Top = TextBox4.Top + TextBox4.Height + 10 ' TextBox5.Height
+
+        'GroupBox2.Top = TextBox1.Top
+        GroupBox2.Width = Me.Width - 350
+        Panel1.Width = Me.Width - 350
+        GroupBox2.Height = Me.Height - 220
+        'RadioButton1.Top = Button1.Top
+
+        'ComboBox2.Top = Button1.Top
+        'ComboBox3.Top = Button1.Top
+        'Button5.Top = Button1.Top
+
+        'Label6.Top = Button1.Top
+        'Label10.Top = Button1.Top
+
+
+
+        'PictureBox1.Top = TextBox6.Top
+        'PictureBox1.Left = TextBox6.Left + TextBox6.Width + 10
+    End Sub
+
+    Private Sub Label6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+
+    Private Sub DataGridView1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+
+            Try
+
+                'Dim recset As New ADODB.Recordset
+
+
+                'Dim rowClicked As Long
+                'Dim EntitySelected As Long
+                'rowClicked = DataGridView1.HitTest(e.Location.X, e.Location.Y).RowIndex
+                'ContextMenuStrip1.Items.Add(rowClicked.ToString)
+                'ContextMenuStrip1.Show(DataGridView1, e.Location)
+                'EntitySelected = DataGridView1.Rows.Item(rowClicked).Cells(0).Value
+
+
+
+                'recset.Open("Select * from tbl_pettyapplication where vouchID  = " & EntitySelected & " and appstatus = 'PENDING'", UniversalHostConnection)
+                'If recset.EOF = False Then
+                '    TextBox2.Text = recset.Fields(2).Value
+                '    TextBox4.Text = ""
+                '    TextBox4.BackColor = Color.LightGreen
+                '    TextBox4.Text = "APPLICATION DATE: " & Format(recset.Fields(1).Value, "dd-MMM-yyyy")
+                '    TextBox4.Text = TextBox4.Text & vbNewLine & "VOUCHER ID:       " & recset.Fields(2).Value
+                '    TextBox4.Text = TextBox4.Text & vbNewLine & "PAYROLL NUMBER:   " & recset.Fields(3).Value
+                '    TextBox4.Text = TextBox4.Text & vbNewLine & "AMOUNT APROVED:   " & recset.Fields(7).Value
+
+                '    TextBox4.Text = TextBox4.Text & vbNewLine & "REQUEST STATUS:   " & recset.Fields(17).Value
+                '    Button2.Enabled = True
+                'Else
+                '    Timer1.Enabled = True
+                '    TextBox4.Text = "VOUCHER DOES NOT EXIT!"
+                '    TextBox4.BackColor = Color.Salmon
+                '    End If
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End If
+
+
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        If TextBox1.Text <> "" Then
+
+            Try
+                Dim L As Int32
+                'Dim fname As String
+                'Dim mname As String
+                'Dim lname As String
+                'Dim name As String
+
+                TextBox4.Text = ""
+                TextBox5.Text = ""
+                TextBox6.Text = ""
+                TextBox7.Text = ""
+                TextBox8.Text = ""
+                TextBox9.Text = ""
+                TextBox10.Text = ""
+                TextBox11.Text = ""
+                TextBox12.Text = ""
+                TextBox13.Text = ""
+
+                Dim reCset As New ADODB.Recordset
+                reCset.Open("Select * from employee where emp_id  = '" & Trim(TextBox1.Text) & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                If reCset.EOF = False Then
+                    'TextBox1.Enabled = True
+                    'TextBox2.Text = reCset.Fields(9).Value + reCset.Fields(10).Value - reCset.Fields(11).Value
+                    TextBox3.Text = IIf(IsDBNull(reCset.Fields(2).Value), "", UCase(reCset.Fields(2).Value) & " ") & IIf(IsDBNull(reCset.Fields(3).Value), "", UCase(reCset.Fields(3).Value) & " ") & IIf(IsDBNull(reCset.Fields(4).Value), "", UCase(reCset.Fields(4).Value))
+                    TextBox4.Text = ""
+                    'TextBox4.BackColor = Color.LightGreen
+                    Call DataRefresh(Trim(TextBox1.Text))
+                Else
+                    'Timer1.Enabled = True
+                    TextBox3.Text = "EMPLOYEE DOES NOT EXIT"
+                    'TextBox4.BackColor = Color.Salmon
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, APPNAME)
+            End Try
+        End If
+    End Sub
+
+
+    Private Sub DataRefresh(Optional ByVal Emp_id As String = "")
+        Dim ClassN, Yea As String
+        Dim AmountPaid As Double = 0.0
+        Dim MonthSalary As Double = 0.0
+        Dim PAYE As Double = 0
+        Dim NSSF As Double = 0
+        Dim NHIF As Double = 0
+        Dim NETSALARY As Double = 0
+        Dim NETTOBANK As Double = 0
+        Dim SACCO As Double = 0
+        Dim WELFARE As Double = 0
+        Dim SALARYADV As Double = 0
+        Dim FINE As Double = 0
+
+
+        ClassN = ComboBox2.SelectedItem
+        Yea = IIf(ComboBox3.SelectedItem = "", "", " and yearE = " & ComboBox3.SelectedItem)
+
+        If Emp_id = "" Then
+            If ClassN = "" Or Yea = "" Then
+                MsgBox("PLEASE SELECT MONTH AND YEAR", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+        End If
+
+        'Try
+        Dim n As Integer '= DataGridView1.Rows.Add()
+        Dim RecSet As New ADODB.Recordset
+        If Emp_id <> "" Then
+            RecSet.Open("Select * from esalary where employee_id = '" & Emp_id & "' and owner = '" & Form1.OWNER & "'  order by report_date desc", UniversalHostConnection)
+        Else
+            RecSet.Open("Select * from esalary where expense_type = 'SALARY PAYMENT' " & Yea & " and monthe = " & ClassN & " and owner = '" & Form1.OWNER & "' order by employee_id asc", UniversalHostConnection)
+        End If
+
+
+PullData:
+        DataGridView1.Rows.Clear()
+        Dim RecX As New ADODB.Recordset
+        Do While RecSet.EOF = False
+            If ClassN = ClassN Then 'Month(RecSet.Fields(1).Value) = ClassN Then
+                DataGridView1.Rows.Add()
+                DataGridView1.Rows.Item(n).Cells(0).Value = RecSet.Fields(10).Value
+                RecX.Open("select * from employee where emp_id = '" & RecSet.Fields(10).Value & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                If RecX.EOF = False Then
+                    DataGridView1.Rows.Item(n).Cells(1).Value = RecX.Fields(2).Value & " " & RecX.Fields(3).Value & " " & RecX.Fields(4).Value
+                End If
+
+                DataGridView1.Rows.Item(n).Cells(2).Value = Format(RecSet.Fields(1).Value, "dd/MM/yyyy")
+
+                DataGridView1.Rows.Item(n).Cells(3).Value = Format(RecSet.Fields(5).Value, "#,###")
+
+                AmountPaid = AmountPaid + RecSet.Fields(5).Value
+
+                DataGridView1.Rows.Item(n).Cells(4).Value = Format(RecSet.Fields(6).Value, "#,###")
+                DataGridView1.Rows.Item(n).Cells(5).Value = RecSet.Fields(7).Value
+                DataGridView1.Rows.Item(n).Cells(6).Value = RecSet.Fields(8).Value
+                DataGridView1.Rows.Item(n).Cells(7).Value = RecSet.Fields(9).Value
+                DataGridView1.Rows.Item(n).Cells(8).Value = RecSet.Fields(16).Value
+                DataGridView1.Rows.Item(n).Cells(9).Value = RecSet.Fields(15).Value
+                DataGridView1.Rows.Item(n).Cells(10).Value = RecSet.Fields(17).Value
+                DataGridView1.Rows.Item(n).Cells(11).Value = RecSet.Fields(18).Value
+                DataGridView1.Rows.Item(n).Cells(12).Value = Format(RecSet.Fields(19).Value, "#,###")
+
+                If RecX.EOF = False Then
+                    DataGridView1.Rows.Item(n).Cells(13).Value = RecX.Fields(23).Value
+                    DataGridView1.Rows.Item(n).Cells(14).Value = RecX.Fields(24).Value
+                    'DataGridView1.Rows.Item(n).Cells(15).Value = RecSet.Fields(19).Value
+                End If
+                MonthSalary = MonthSalary + RecSet.Fields(5).Value
+                NETSALARY = NETSALARY + RecSet.Fields(6).Value
+                PAYE = PAYE + RecSet.Fields(7).Value
+                FINE = FINE + RecSet.Fields(18).Value
+                SACCO = SACCO + RecSet.Fields(17).Value
+                SALARYADV = SALARYADV + RecSet.Fields(16).Value
+                NETTOBANK = NETTOBANK + RecSet.Fields(19).Value
+                NSSF = NSSF + RecSet.Fields(8).Value
+                NHIF = NHIF + RecSet.Fields(9).Value
+                WELFARE = WELFARE + RecSet.Fields(15).Value
+
+                n = n + 1
+                RecX.Close()
+            End If
+            RecSet.MoveNext()
+        Loop
+
+
+
+        TextBox4.Text = ""
+        If n > 0 Then
+            RecX.Open("select sum(monthly_gross) from employee where date_exit = '0' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+
+            TextBox4.Text = IIf(MonthSalary = 0, "0", Format(MonthSalary, "#,###"))
+            TextBox5.Text = IIf(NETSALARY = 0, "0", Format(NETSALARY, "#,###"))
+            TextBox6.Text = IIf(PAYE = 0, "0", Format(PAYE, "#,###"))
+            TextBox7.Text = IIf(FINE = 0, "0", Format(FINE, "#,###"))
+            TextBox8.Text = IIf(NSSF = 0, "0", Format(NSSF, "#,###"))
+            TextBox9.Text = IIf(NHIF = 0, "0", Format(NHIF, "#,###"))
+            TextBox10.Text = IIf(SALARYADV = 0, "0", Format(SALARYADV, "#,###"))
+            TextBox11.Text = IIf(WELFARE = 0, "0", Format(WELFARE, "#,###"))
+            TextBox12.Text = IIf(SACCO = 0, "0", Format(SACCO, "#,###"))
+            TextBox13.Text = IIf(NETTOBANK = 0, "0", Format(NETTOBANK, "#,###"))
+
+        End If
+        'Catch ex As Exception
+        '    MsgBox(ex.Message, MsgBoxStyle.Critical, APPNAME)
+        'End Try
+
+    End Sub
+
+    Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        If Count < 8 Then
+            If Count Mod 2 = 1 Then
+                TextBox4.BackColor = Color.Salmon
+            Else
+                TextBox4.BackColor = Color.White
+            End If
+            Count = Count + 1
+        Else
+
+            Timer1.Enabled = False
+            Count = 0
+        End If
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        TextBox1.Text = ""
+
+        TextBox3.Text = ""
+        TextBox4.Text = ""
+        TextBox4.BackColor = Color.White
+        'TextBox5.Text = ""
+        'TextBox6.Text = ""
+        'TextBox7.Text = ""
+
+    End Sub
+
+
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        ' Call DataRefresh()
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'Call DataRefresh()
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Gpayments.Show()
+        Gpayments.WindowState = FormWindowState.Maximized
+
+    End Sub
+
+
+    Private Sub Button4_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button4.MouseLeave
+        Button4.BackColor = Color.Beige
+    End Sub
+
+    Private Sub Button4_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button4.MouseMove
+        Button4.BackColor = Color.PaleGreen
+    End Sub
+
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Call DataRefresh()
+    End Sub
+
+    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
+        expense.Show()
+        expense.WindowState = FormWindowState.Maximized
+    End Sub
+
+    Private Sub Button8_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button8.MouseLeave
+        Button8.BackColor = Color.Beige
+    End Sub
+
+    Private Sub Button8_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button8.MouseMove
+        Button8.BackColor = Color.PaleGreen
+    End Sub
+
+    Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
+        income.Show()
+        income.WindowState = FormWindowState.Maximized
+    End Sub
+
+    Private Sub Button7_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button7.MouseLeave
+        Button7.BackColor = Color.Beige
+    End Sub
+
+    Private Sub Button7_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button7.MouseMove
+        Button7.BackColor = Color.PaleGreen
+    End Sub
+
+    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
+        fee.ShowDialog()
+    End Sub
+
+    Private Sub Button6_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button6.MouseLeave
+        Button6.BackColor = Color.Beige
+    End Sub
+
+    Private Sub Button6_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button6.MouseMove
+        Button6.BackColor = Color.PaleGreen
+    End Sub
+
+    Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
+        pnl.Show()
+        pnl.Text = Form1.OWNER & ":  PROFIT AND LOSS ACCOUNT"
+        pnl.WindowState = FormWindowState.Maximized
+    End Sub
+
+    Private Sub Button9_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button9.MouseLeave
+        Button9.BackColor = Color.Beige
+    End Sub
+
+    Private Sub Button9_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button9.MouseMove
+        Button9.BackColor = Color.PaleGreen
+    End Sub
+
+    Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
+    Private Sub Label14_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label14.Click
+
+    End Sub
+
+    Private Sub Label13_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label13.Click
+
+    End Sub
+
+    Private Sub TextBox9_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox9.TextChanged
+
+    End Sub
+
+    Private Sub TextBox8_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox8.TextChanged
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        If ComboBox5.SelectedItem <> "" And ComboBox4.SelectedItem <> "" Then
+            If ComboBox1.SelectedItem = "Expenditures Report" Then
+                Call ExpenseReport(ComboBox5.SelectedItem, ComboBox4.SelectedItem)
+            ElseIf ComboBox1.SelectedItem = "Income Report" Then
+                Call IncomeReport(ComboBox5.SelectedItem, ComboBox4.SelectedItem)
+            ElseIf ComboBox1.SelectedItem = "NSSF Payment List" Then
+                Call NSSF(ComboBox5.SelectedItem, ComboBox4.SelectedItem)
+            ElseIf ComboBox1.SelectedItem = "NHIF Payment List" Then
+                Call NHIF(ComboBox5.SelectedItem, ComboBox4.SelectedItem)
+            ElseIf ComboBox1.SelectedItem = "Salary Payment Record" Then
+                Call SALARY(ComboBox5.SelectedItem, ComboBox4.SelectedItem)
+            Else
+                MsgBox("REPORT NOT GENERATED", vbExclamation, "")
+            End If
+        Else
+            MsgBox("SELECT MONTH OR YEAR TO GENERATE REPORT", vbExclamation, "")
+        End If
+
+    End Sub
+
+    Private Sub Button2_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button2.MouseLeave
+        Button2.BackColor = Color.Beige
+    End Sub
+
+    Private Sub Button2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button2.MouseMove
+        Button2.BackColor = Color.PaleGreen
+    End Sub
+
+    Private Sub ExpenseReport(ByVal MonthE As String, ByVal YearE As String)
+        Try
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            ' wb = mvarExcel.Application.Application.ActiveWorkbook
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Expenditures"
+            End With
+
+            xRange = ws.Range("A3:M3")
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Interior.Color = Color.White
+
+            row = 1
+            col = 1
+            xRange = ws.Range("A1:M1")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 16
+            xRange.Font.Color = Color.Black
+            xRange.Range("A1:M1").Interior.Color = RGB(40, 203, 236)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            xRange.Cells.NumberFormat = "@"
+            ws.Range("A1:M1").Merge()
+            ws.Range("A1:M1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            xRange = ws.Range("A2:M2")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 14
+            ws.Range("A2:M2").Merge()
+            ws.Range("A2:M2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(2, 1) = "" 'UCase("ADMISSION NO: " & Stud_id)
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "EXPENDITURES REPORT"
+
+            ws.Range("A3:M3").Merge()
+            ws.Range("A3:M3").Font.Bold = True
+            ws.Range("A3:M3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(3, 1) = "MONTH:  " & MonthE & " YEAR:  " & YearE
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+            XreCset.Open("select  * from expense where owner = '" & Form1.OWNER & "' order by exp_description asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            Do While Not XreCset.EOF
+
+                ws.Rows.Cells(row, 4) = XreCset.Fields(0).Value
+                ws.Range("D" & row & ":L" & row).Merge()
+                ws.Range("D" & row & ":L" & row).Font.Bold = True
+                ws.Range("D" & row & ":L" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+                'ws.Range("D" & row & ":L" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+                row = row + 1
+                ws.Range("D" & row & ":E" & row).Merge()
+                ws.Range("D" & row & ":E" & row).Font.Bold = True
+                ws.Range("D" & row & ":E" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+                ws.Rows.Cells(row, 4) = "Date"
+                ws.Range("D" & row & ":E" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+                ws.Range("F" & row & ":H" & row).Merge()
+                ws.Range("F" & row & ":H" & row).Font.Bold = True
+                ws.Range("F" & row & ":H" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+                ws.Rows.Cells(row, 6) = "Details"
+                ws.Range("F" & row & ":H" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+                ws.Range("I" & row & ":J" & row).Merge()
+                ws.Range("I" & row & ":J" & row).Font.Bold = True
+                ws.Range("I" & row & ":J" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+                ws.Rows.Cells(row, 9) = "Amount"
+                ws.Range("I" & row & ":J" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+                ws.Range("K" & row & ":L" & row).Merge()
+                ws.Range("K" & row & ":L" & row).Font.Bold = True
+                ws.Range("K" & row & ":L" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+                ws.Rows.Cells(row, 11) = "VAT"
+                ws.Range("K" & row & ":L" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+                ws.Range("D" & row & ":L" & row).Interior.Color = RGB(219, 238, 243)
+
+
+                reCset.Open("select  * from etransactionX where expense_type = '" & XreCset.Fields(0).Value & "' and Monthe =" & MonthE & " and yearE =" & YearE & " and owner = '" & Form1.OWNER & "' order by report_date asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+                TopRow = row + 1
+                TOTALAMOUNT = 0
+                VAT = 0
+                Do While reCset.EOF = False
+                    ws.Rows.Cells(row + N, 4) = N
+                    ws.Rows.Cells(row + N, 5) = reCset.Fields(1).Value
+                    ws.Rows.Cells(row + N, 6) = reCset.Fields(7).Value
+                    ws.Rows.Cells(row + N, 10) = reCset.Fields(5).Value
+                    ws.Rows.Cells(row + N, 12) = reCset.Fields(6).Value
+                    TOTALAMOUNT = TOTALAMOUNT + reCset.Fields(5).Value
+                    VAT = VAT + reCset.Fields(6).Value
+                    N = N + 1
+                    reCset.MoveNext()
+                Loop
+                reCset.Close()
+                BottomRow = row + N
+
+                ws.Range("D" & TopRow & ":D" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+                ws.Range("E" & TopRow & ":E" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+                ws.Range("F" & TopRow & ":H" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+                ws.Range("I" & TopRow & ":J" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+                ws.Range("K" & TopRow & ":L" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+                ws.Rows.Cells(row + N + 1, 9) = "TOTAL"
+                ws.Rows.Cells(row + N + 1, 10) = TOTALAMOUNT
+                ws.Rows.Cells(row + N + 1, 12) = VAT
+
+
+                ws.Range("I" & BottomRow + 1 & ":J" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+                ws.Range("K" & BottomRow + 1 & ":L" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+                ws.Range("I" & BottomRow + 1 & ":L" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+                row = row + N + 1
+                row = row + 3
+                N = 1
+                XreCset.MoveNext()
+            Loop
+
+Finish:
+            Dim Destination As String = "D:\Smart Property Report"
+            FileName = "Expense" & "_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+    End Sub
+
+    Private Sub IncomeReport(ByVal MonthE As String, ByVal YearE As String)
+        Try
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            ' wb = mvarExcel.Application.Application.ActiveWorkbook
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Income"
+            End With
+
+            xRange = ws.Range("A3:M3")
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Interior.Color = Color.White
+
+            row = 1
+            col = 1
+            xRange = ws.Range("A1:M1")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 16
+            xRange.Font.Color = Color.Black
+            xRange.Range("A1:M1").Interior.Color = RGB(40, 203, 236)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            xRange.Cells.NumberFormat = "@"
+            ws.Range("A1:M1").Merge()
+            ws.Range("A1:M1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            xRange = ws.Range("A2:M2")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 14
+            ws.Range("A2:M2").Merge()
+            ws.Range("A2:M2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(2, 1) = "" 'UCase("ADMISSION NO: " & Stud_id)
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "RENT INCOME REPORT"
+
+            ws.Range("A3:M3").Merge()
+            ws.Range("A3:M3").Font.Bold = True
+            ws.Range("A3:M3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(3, 1) = "MONTH:  " & MonthE & " YEAR:  " & YearE
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+            'XreCset.Open("select  * from income order by exp_description asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            'Do While Not XreCset.EOF
+
+            ws.Rows.Cells(row, 4) = "ALL RENT INCOME"
+
+            ws.Range("D" & row & ":L" & row).Merge()
+            ws.Range("D" & row & ":L" & row).Font.Bold = True
+            ws.Range("D" & row & ":L" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            row = row + 1
+
+            ws.Range("D" & row & ":E" & row).Merge()
+            ws.Range("D" & row & ":E" & row).Font.Bold = True
+            ws.Range("D" & row & ":E" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 4) = "Date"
+            ws.Range("D" & row & ":E" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("F" & row & ":G" & row).Merge()
+            ws.Range("F" & row & ":G" & row).Font.Bold = True
+            ws.Range("F" & row & ":G" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 6) = "House Name"
+            ws.Range("F" & row & ":G" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            'ws.Range("H" & row & ":H" & row).Merge()
+            ws.Range("H" & row & ":H" & row).Font.Bold = True
+            ws.Range("H" & row & ":H" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 8) = "House Nr"
+            ws.Range("H" & row & ":H" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("I" & row & ":J" & row).Merge()
+            ws.Range("I" & row & ":J" & row).Font.Bold = True
+            ws.Range("I" & row & ":J" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 9) = "Amount"
+            ws.Range("I" & row & ":J" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("K" & row & ":L" & row).Merge()
+            ws.Range("K" & row & ":L" & row).Font.Bold = True
+            ws.Range("K" & row & ":L" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 11) = "VAT"
+            ws.Range("K" & row & ":L" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("D" & row & ":L" & row).Interior.Color = RGB(219, 238, 243)
+
+            reCset.Open("select  * from itransaction where MONTHE = " & MonthE & " and  YEARE = " & YearE & " and owner = '" & Form1.OWNER & "' order by report_date asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            TopRow = row + 1
+            Do While reCset.EOF = False
+                ws.Rows.Cells(row + N, 4) = N
+                ws.Rows.Cells(row + N, 5) = reCset.Fields(1).Value
+                ws.Rows.Cells(row + N, 6) = reCset.Fields(2).Value
+                ws.Rows.Cells(row + N, 8) = reCset.Fields(9).Value
+                ws.Rows.Cells(row + N, 10) = reCset.Fields(5).Value
+                ws.Rows.Cells(row + N, 12) = reCset.Fields(6).Value
+                TOTALAMOUNT = TOTALAMOUNT + reCset.Fields(5).Value
+                VAT = VAT + reCset.Fields(6).Value
+                N = N + 1
+                reCset.MoveNext()
+            Loop
+            reCset.Close()
+            BottomRow = row + N
+
+            ws.Range("D" & TopRow & ":D" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("E" & TopRow & ":E" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("F" & TopRow & ":H" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("I" & TopRow & ":J" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("K" & TopRow & ":L" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Rows.Cells(row + N + 1, 9) = "TOTAL"
+            ws.Rows.Cells(row + N + 1, 10) = TOTALAMOUNT
+            ws.Rows.Cells(row + N + 1, 12) = VAT
+
+
+            ws.Range("I" & BottomRow + 1 & ":J" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("K" & BottomRow + 1 & ":L" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("I" & BottomRow + 1 & ":L" & BottomRow + 1).Cells.BorderAround2(1, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            row = row + N + 1
+            row = row + 3
+
+
+Finish:
+            Dim Destination As String = "D:\Smart Property Report"
+            FileName = "Income" & "_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+    End Sub
+
+
+    Private Sub NSSF(ByVal MonthE As String, ByVal YearE As String)
+        Try
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            ' wb = mvarExcel.Application.Application.ActiveWorkbook
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "NSSF"
+            End With
+
+            xRange = ws.Range("A3:M3")
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Interior.Color = Color.White
+
+            row = 1
+            col = 1
+            xRange = ws.Range("A1:M1")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 16
+            xRange.Font.Color = Color.Black
+            xRange.Range("A1:M1").Interior.Color = RGB(40, 203, 236)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            xRange.Cells.NumberFormat = "@"
+            ws.Range("A1:M1").Merge()
+            ws.Range("A1:M1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            xRange = ws.Range("A2:M2")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 14
+            ws.Range("A2:M2").Merge()
+            ws.Range("A2:M2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(2, 1) = "" 'UCase("ADMISSION NO: " & Stud_id)
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "NSSF PAYMENT"
+
+            ws.Range("A3:M3").Merge()
+            ws.Range("A3:M3").Font.Bold = True
+            ws.Range("A3:M3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(3, 1) = "MONTH:  " & MonthE & " YEAR:  " & YearE
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+            'XreCset.Open("select  * from income order by exp_description asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            'Do While Not XreCset.EOF
+
+            ws.Rows.Cells(row, 4) = "NSSF PAYMENTS"
+
+            ws.Range("D" & row & ":K" & row).Merge()
+            ws.Range("D" & row & ":K" & row).Font.Bold = True
+            ws.Range("D" & row & ":K" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            row = row + 1
+
+            ws.Range("D" & row & ":E" & row).Merge()
+            ws.Range("D" & row & ":E" & row).Font.Bold = True
+            ws.Range("D" & row & ":E" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 4) = "ID NUMBER"
+            ws.Range("D" & row & ":E" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("F" & row & ":H" & row).Merge()
+            ws.Range("F" & row & ":H" & row).Font.Bold = True
+            ws.Range("F" & row & ":H" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 6) = "NAME"
+            ws.Range("F" & row & ":H" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("I" & row & ":I" & row).Font.Bold = True
+            ws.Range("I" & row & ":I" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 9) = "NSSF NUMBER"
+            ws.Range("I" & row & ":I" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("J" & row & ":J" & row).Font.Bold = True
+            ws.Range("J" & row & ":J" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 10) = "EMPLOYER"
+            ws.Range("J" & row & ":J" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("K" & row & ":K" & row).Font.Bold = True
+            ws.Range("K" & row & ":K" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 11) = "EMPLOYEE"
+            ws.Range("K" & row & ":K" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("D" & row & ":K" & row).Interior.Color = RGB(219, 238, 243)
+
+            reCset.Open("select  nssf,employee_id from esalary where MONTHE = " & MonthE & " and  YEARE = " & YearE & " and owner = '" & Form1.OWNER & "' order by report_date asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            TopRow = row + 1
+            Do While reCset.EOF = False
+
+                XreCset.Open("select * from employee where emp_id = '" & reCset.Fields(1).Value & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                ws.Rows.Cells(row + N, 4) = N
+                If XreCset.EOF = False Then
+                    ws.Rows.Cells(row + N, 5) = XreCset.Fields(1).Value
+                    ws.Rows.Cells(row + N, 6) = XreCset.Fields(2).Value & " " & XreCset.Fields(3).Value & " " & XreCset.Fields(4).Value
+                    ws.Rows.Cells(row + N, 9) = XreCset.Fields(14).Value
+                End If
+
+                ws.Rows.Cells(row + N, 10) = reCset.Fields(0).Value
+                ws.Rows.Cells(row + N, 11) = reCset.Fields(0).Value
+                TOTALAMOUNT = TOTALAMOUNT + reCset.Fields(0).Value
+
+                N = N + 1
+                XreCset.Close()
+                reCset.MoveNext()
+            Loop
+            reCset.Close()
+            BottomRow = row + N
+
+            ws.Range("D" & TopRow & ":D" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("E" & TopRow & ":E" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("F" & TopRow & ":H" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("I" & TopRow & ":I" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("J" & TopRow & ":J" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("K" & TopRow & ":K" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Rows.Cells(row + N + 1, 9) = "TOTAL"
+            ws.Rows.Cells(row + N + 1, 10) = TOTALAMOUNT
+            ws.Rows.Cells(row + N + 1, 11) = TOTALAMOUNT
+
+
+            ws.Range("I" & BottomRow + 1 & ":J" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("I" & BottomRow + 1 & ":K" & BottomRow + 1).Cells.BorderAround2(1, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            row = row + N + 1
+            row = row + 3
+
+
+Finish:
+            Dim Destination As String = "D:\SMART PROPERTY Report"
+            FileName = "NSSF" & "_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+    End Sub
+
+    Private Sub NHIF(ByVal MonthE As String, ByVal YearE As String)
+        Try
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            ' wb = mvarExcel.Application.Application.ActiveWorkbook
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Income"
+            End With
+
+            xRange = ws.Range("A3:M3")
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Interior.Color = Color.White
+
+            row = 1
+            col = 1
+            xRange = ws.Range("A1:M1")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 16
+            xRange.Font.Color = Color.Black
+            xRange.Range("A1:M1").Interior.Color = RGB(40, 203, 236)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            xRange.Cells.NumberFormat = "@"
+            ws.Range("A1:M1").Merge()
+            ws.Range("A1:M1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            xRange = ws.Range("A2:M2")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 14
+            ws.Range("A2:M2").Merge()
+            ws.Range("A2:M2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(2, 1) = "" 'UCase("ADMISSION NO: " & Stud_id)
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "NHIF REPORT"
+
+            ws.Range("A3:M3").Merge()
+            ws.Range("A3:M3").Font.Bold = True
+            ws.Range("A3:M3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(3, 1) = "MONTH:  " & MonthE & " YEAR:  " & YearE
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+            'XreCset.Open("select  * from income order by exp_description asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            'Do While Not XreCset.EOF
+
+            ws.Rows.Cells(row, 4) = "NHIF PAYMENTS"
+
+            ws.Range("D" & row & ":K" & row).Merge()
+            ws.Range("D" & row & ":K" & row).Font.Bold = True
+            ws.Range("D" & row & ":K" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            row = row + 1
+
+            ws.Range("D" & row & ":E" & row).Merge()
+            ws.Range("D" & row & ":E" & row).Font.Bold = True
+            ws.Range("D" & row & ":E" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 4) = "ID NUMBER"
+            ws.Range("D" & row & ":E" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("F" & row & ":H" & row).Merge()
+            ws.Range("F" & row & ":H" & row).Font.Bold = True
+            ws.Range("F" & row & ":H" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 6) = "NAME"
+            ws.Range("F" & row & ":H" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("I" & row & ":I" & row).Font.Bold = True
+            ws.Range("I" & row & ":I" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 9) = "NHIF NUMBER"
+            ws.Range("I" & row & ":I" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("J" & row & ":J" & row).Font.Bold = True
+            ws.Range("J" & row & ":J" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 10) = "EMPLOYEE CONTRIBUTION"
+            ws.Range("J" & row & ":J" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("D" & row & ":J" & row).Interior.Color = RGB(219, 238, 243)
+
+            reCset.Open("select  nhif,employee_id from esalary where MONTHE = " & MonthE & " and  YEARE = " & YearE & " and owner = '" & Form1.OWNER & "' order by report_date asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            TopRow = row + 1
+            Do While reCset.EOF = False
+
+                XreCset.Open("select * from employee where emp_id = '" & reCset.Fields(1).Value & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                ws.Rows.Cells(row + N, 4) = N
+                If XreCset.EOF = False Then
+                    ws.Rows.Cells(row + N, 5) = XreCset.Fields(1).Value
+                    ws.Rows.Cells(row + N, 6) = XreCset.Fields(2).Value & " " & XreCset.Fields(3).Value & " " & XreCset.Fields(4).Value
+                    ws.Rows.Cells(row + N, 9) = XreCset.Fields(13).Value
+                End If
+
+                ws.Rows.Cells(row + N, 10) = reCset.Fields(0).Value
+                TOTALAMOUNT = TOTALAMOUNT + reCset.Fields(0).Value
+
+                N = N + 1
+                XreCset.Close()
+                reCset.MoveNext()
+            Loop
+            reCset.Close()
+            BottomRow = row + N
+
+            ws.Range("D" & TopRow & ":D" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("E" & TopRow & ":E" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("F" & TopRow & ":H" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("I" & TopRow & ":I" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("J" & TopRow & ":J" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            
+
+            ws.Rows.Cells(row + N + 1, 9) = "TOTAL"
+            ws.Rows.Cells(row + N + 1, 10) = TOTALAMOUNT
+
+
+
+            ws.Range("I" & BottomRow + 1 & ":J" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            'ws.Range("I" & BottomRow + 1 & ":K" & BottomRow + 1).Cells.BorderAround2(1, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+Finish:
+            Dim Destination As String = "D:\SMART PROPERTY report"
+            FileName = "NHIF" & "_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+    End Sub
+
+
+    Private Sub SALARY(ByVal MonthE As String, ByVal YearE As String)
+        Try
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            ' wb = mvarExcel.Application.Application.ActiveWorkbook
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Salary"
+            End With
+
+            xRange = ws.Range("A3:Q3")
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Interior.Color = Color.White
+
+            row = 1
+            col = 1
+            xRange = ws.Range("A1:Q1")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 16
+            xRange.Font.Color = Color.Black
+            xRange.Range("A1:Q1").Interior.Color = RGB(40, 203, 236)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            xRange.Cells.NumberFormat = "@"
+            ws.Range("A1:Q1").Merge()
+            ws.Range("A1:Q1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            xRange = ws.Range("A2:Q2")
+            xRange.Font.Bold = True
+            xRange.Font.Size = 14
+            ws.Range("A2:Q2").Merge()
+            ws.Range("A2:Q2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(2, 1) = "" 'UCase("ADMISSION NO: " & Stud_id)
+            xRange.Interior.Color = RGB(219, 238, 243)
+            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "SALARY PAYMENT REPORT"
+
+            ws.Range("A3:Q3").Merge()
+            ws.Range("A3:Q3").Font.Bold = True
+            ws.Range("A3:Q3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(3, 1) = "MONTH:  " & MonthE & " YEAR:  " & YearE
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+            'XreCset.Open("select  * from income order by exp_description asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            'Do While Not XreCset.EOF
+
+            ws.Rows.Cells(row, 4) = "SALARY PAYMENTS"
+
+            ws.Range("A" & row & ":Q" & row).Merge()
+            ws.Range("A" & row & ":Q" & row).Font.Bold = True
+            ws.Range("A" & row & ":Q" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            row = row + 1
+
+            ws.Range("A" & row & ":B" & row).Merge()
+            ws.Range("A" & row & ":B" & row).Font.Bold = True
+            ws.Range("A" & row & ":B" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 1) = "ID NUMBER"
+            ws.Range("A" & row & ":B" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("C" & row & ":E" & row).Merge()
+            ws.Range("C" & row & ":E" & row).Font.Bold = True
+            ws.Range("C" & row & ":E" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 3) = "NAME"
+            ws.Range("C" & row & ":E" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("F" & row & ":F" & row).Font.Bold = True
+            ws.Range("F" & row & ":F" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 6) = "BANK/BRANCH"
+            ws.Range("F" & row & ":F" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("G" & row & ":G" & row).Font.Bold = True
+            ws.Range("G" & row & ":G" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 7) = "ACCOUNT NO."
+            ws.Range("G" & row & ":G" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("H" & row & ":H" & row).Font.Bold = True
+            ws.Range("H" & row & ":H" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 8) = "GROSS SALARY"
+            ws.Range("H" & row & ":H" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("I" & row & ":I" & row).Font.Bold = True
+            ws.Range("I" & row & ":I" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 9) = "PAYE"
+            ws.Range("I" & row & ":I" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("J" & row & ":J" & row).Font.Bold = True
+            ws.Range("J" & row & ":J" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 10) = "NSSF"
+            ws.Range("J" & row & ":J" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("K" & row & ":K" & row).Font.Bold = True
+            ws.Range("K" & row & ":K" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 11) = "NHIF"
+            ws.Range("K" & row & ":K" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("L" & row & ":L" & row).Font.Bold = True
+            ws.Range("L" & row & ":L" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 12) = "NET SALARY"
+            ws.Range("L" & row & ":L" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("M" & row & ":M" & row).Font.Bold = True
+            ws.Range("M" & row & ":M" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 13) = "WELFARE"
+            ws.Range("M" & row & ":M" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("N" & row & ":N" & row).Font.Bold = True
+            ws.Range("N" & row & ":N" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 14) = "SALARY ADVANCE"
+            ws.Range("N" & row & ":N" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("O" & row & ":O" & row).Font.Bold = True
+            ws.Range("O" & row & ":O" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 15) = "SACCO"
+            ws.Range("O" & row & ":O" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("P" & row & ":P" & row).Font.Bold = True
+            ws.Range("P" & row & ":P" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 16) = "FINES"
+            ws.Range("P" & row & ":P" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            ws.Range("Q" & row & ":Q" & row).Font.Bold = True
+            ws.Range("Q" & row & ":Q" & row).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+            ws.Rows.Cells(row, 17) = "NET CASH/BANK"
+            ws.Range("Q" & row & ":Q" & row).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+            ws.Range("A" & row & ":Q" & row).Interior.Color = RGB(219, 238, 243)
+
+            reCset.Open("select  nettobank,employee_id,gross_amount,net_income,paye,nssf,nhif,welfare,salary_advance,sacco,fines from esalary where MONTHE = " & MonthE & " and  YEARE = " & YearE & " and  owner = '" & Form1.OWNER & "' order by report_date asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            TopRow = row + 1
+            Do While reCset.EOF = False
+
+                XreCset.Open("select * from employee where emp_id = '" & reCset.Fields(1).Value & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                ws.Rows.Cells(row + N, 1) = N
+                If XreCset.EOF = False Then
+                    ws.Rows.Cells(row + N, 2) = XreCset.Fields(1).Value
+                    ws.Rows.Cells(row + N, 3) = XreCset.Fields(2).Value & " " & XreCset.Fields(3).Value & " " & XreCset.Fields(4).Value
+                    ws.Rows.Cells(row + N, 6) = XreCset.Fields(23).Value
+                    ws.Rows.Cells(row + N, 7) = XreCset.Fields(24).Value
+                End If
+
+                ws.Rows.Cells(row + N, 8) = reCset.Fields(2).Value
+                ws.Rows.Cells(row + N, 9) = reCset.Fields(4).Value
+                ws.Rows.Cells(row + N, 10) = reCset.Fields(5).Value
+                ws.Rows.Cells(row + N, 11) = reCset.Fields(6).Value
+                ws.Rows.Cells(row + N, 12) = reCset.Fields(3).Value
+                ws.Rows.Cells(row + N, 13) = reCset.Fields(7).Value
+                ws.Rows.Cells(row + N, 14) = reCset.Fields(8).Value
+                ws.Rows.Cells(row + N, 15) = reCset.Fields(9).Value
+                ws.Rows.Cells(row + N, 16) = reCset.Fields(10).Value
+                ws.Rows.Cells(row + N, 17) = reCset.Fields(0).Value
+
+                TOTALAMOUNT = TOTALAMOUNT + reCset.Fields(0).Value
+
+                N = N + 1
+                XreCset.Close()
+                reCset.MoveNext()
+            Loop
+            reCset.Close()
+            BottomRow = row + N
+            ws.Range("A" & TopRow & ":A" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("B" & TopRow & ":B" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("C" & TopRow & ":E" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+            'ws.Range("D" & TopRow & ":D" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            'ws.Range("E" & TopRow & ":E" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("F" & TopRow & ":H" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("I" & TopRow & ":I" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("J" & TopRow & ":J" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("K" & TopRow & ":K" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("L" & TopRow & ":L" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("M" & TopRow & ":M" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("N" & TopRow & ":N" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("O" & TopRow & ":O" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("P" & TopRow & ":P" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            ws.Range("Q" & TopRow & ":Q" & BottomRow).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+           
+
+            'ws.Rows.Cells(row + N + 1, 7) = "TOTAL"
+            'ws.Rows.Cells(row + N + 1, 8) = TOTALAMOUNT
+
+
+
+            'ws.Range("J" & BottomRow + 1 & ":K" & BottomRow + 1).Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+            'ws.Range("I" & BottomRow + 1 & ":K" & BottomRow + 1).Cells.BorderAround2(1, Excel.XlBorderWeight.xlMedium, Excel.XlColorIndex.xlColorIndexAutomatic)
+
+
+Finish:
+            Dim Destination As String = "D:\SMART PROPERTY report"
+            FileName = "SALARY" & "_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub PickVoucherNumberToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PickVoucherNumberToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+
+    
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
+
+    End Sub
+End Class

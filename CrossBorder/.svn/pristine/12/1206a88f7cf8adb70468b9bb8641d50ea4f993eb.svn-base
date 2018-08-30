@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+
+require_once("engine.php");
+
+$registered=has_registered($uid);
+if($registered==false){
+     header('location:register.php?notregistered');
+}
+display_navigation();
+if(isset($_GET["trans_success"])){
+    echo "<b><p style='margin-top:10px'>Your Deposit was successfull. Thank you for choosing Impalapay.</p></b>";
+}
+if($me){
+//$user=$facebook->api("/{$uid}");
+display_account_info($uid,$me);
+
+
+}
+include("includes/footer.php")
+?>

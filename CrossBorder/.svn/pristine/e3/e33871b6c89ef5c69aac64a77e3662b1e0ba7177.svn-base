@@ -1,0 +1,77 @@
+package com.impalapay.airtel.servlet.api;
+
+/**
+ * A list of constants that are used by the Airtel API.
+ * <p>
+ * Copyright (c) ImpalaPay Ltd., Sep 14, 2014
+ * 
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * 
+ */
+public class APIConstants {
+
+	public final static int DEFAULT_MESSAGE_ID = 0;
+
+	// Delimiter for destination phone numbers for a message destined to go to a
+	// mobile subscriber
+	public final static String MSISDN_DELIMITER = ";",
+			RESPONSE_DELIMITER = ";";
+
+	// Valid values for the parameter "network"
+	public final static String[] PARAM_VALID_NETWORKS = { "safaricom",
+			"airtel", "orange" };
+
+	// These must match what is in the database table 'SMSC'.
+	// They are put in the order of the networks listed above
+	public final static String[] PARAM_NETWORK_UUIDS = {
+			"bf0b6cd7-9552-4429-a0e3-8a6cd9eb5a31",
+			"bf0b6cd7-9552-4429-a0e3-8a6cd9eb5a31",
+			"7965cb28-7b54-43b8-97f9-21abac2a06f6" };
+
+	// Command Status Codes
+	public final static String COMMANDSTATUS_FAIL ="FAILED_TRANSACTION";
+	public final static String COMMANDSTATUS_OK = "OK";
+	public final static String COMMANDSTATUS_INVALID_PARAMETERS = "INVALID_PARAMETERS";
+	public final static String COMMANDSTATUS_UNKNOWN_USERNAME = "UNKNOWN_USERNAME";
+	public final static String COMMANDSTATUS_INVALID_PASSWORD = "INVALID_PASSWORD";
+	public final static String STATUS_CODE_ACCOUNT_NOT_ACTIVE = "INACTIVE_ACCOUNT";
+	public final static String STATUS_CODE_INVALID_SOURCE = "INVALID_SOURCE";
+	public final static String STATUS_CODE_INSUFFICIENT_BALANCE = "INSUFFICIENT_CREDIT";
+	public final static String STATUS_CODE_UNKNOWN_MESSAGEID = "UNKNOWN_MESSAGEID";
+	public final static String STATUS_CODE_ACCEPTED = "ACCEPTED";
+	
+	// added status code
+	public final static String COMMANDSTATUS_INVALID_SESSIONID = "INVALID_SESSION_ID";
+	public final static String COMMANDSTATUS_INVALID_REFERENCENUMBER = "INVALID_REFERENCE_NUMBER";
+	public final static String COMMANDSTATUS_INVALID_CURRENCYCODE = "CURRENCY_UNAVAILABLE";
+	public final static String COMMANDSTATUS_INVALID_COUNTRYCODE = "COUNTRYCODE_UNAVAILABLE";
+	public final static String COMMANDSTATUS_CURRENCY_COUNTRYMISMATCH = "PROVIDED_RECIPIENT_CURRENCY_AND_RECIPIENTCOUNTRY_MISMATCH";
+    public final static String COMMANDSTATUS_REMIT_SUCCESS ="SUCCESS";
+    public final static String COMMANDSTATUS_DUPLICATE_REFERENCE = "DUPLICATE_REFERENCE_NUMBER";
+    public final static String COMMANDSTATUS_INVALID_DATE ="INVALID_CLIENT_DATE";
+	// Topup Status Code UUIDs
+	public final static String UUID_INVALID_PARAMETERS = "857d1e0b-df0d-487c-b7bb-6e9d8c3eb212";
+	public final static String UUID_UNKNOWN_USERNAME = "4f3d09eb-10e0-428a-b8c1-38f476a4ab31";
+	public final static String UUID_WRONG_PASSWORD = "9454a86a-c1ac-410c-882e-d9a6e9048c81";
+	public final static String UUID_ACCEPTED_FOR_DELIVERY = "3b6edb35-654d-4049-b7ea-0f1db29c6e77";
+	public final static String UUID_ACCOUNT_SUSPENDED = "397554ce-6935-4699-8b99-727574b6a49f";
+	public final static String UUID_INSUFFICIENT_FUNDS = "ea430328-ef8b-4459-95c6-7102ba16ddc5";
+	public final static String UUID_TOPUP_SUCESS = "4a991e99-ffa2-4fcd-91ed-27e6ce078832";
+	public final static String UUID_TOPUP_FAILURE = "796e797d-6721-4f5e-938f-241b4b4c5f6c";
+	// added status code UUIDs
+	public final static String UUID_INVALID_SESSIONID = "20015d61-0c54-4c52-8f8a-0eeae04889b5";
+	public final static String UUID_INVALID_REFERENCENUMBER = "2340c8e1-8e45-4465-953d-cb70aa7724aa";
+	public final static String UUID_INVALID_CURRENCYCODE = "42057feb-09dd-430f-954a-9df0c4d2555a";
+	public final static String UUID_INVALID_COUNTRYCODE = "3bc49c18-70f9-42b6-8d5c-f0948c7bca24";
+	public final static String UUID_CURRENCY_COUNTRYMISMATCH = "0273bcf7-bafb-4026-84f2-fc8b5f1a9527";
+	public final static String UUID_COMMANDSTATUS_REMIT_SUCCESS ="7fadf886ef044a14bacdbdf38ffff4c8";
+	public final static String UUID_DUPLICATE_REFERENCE ="a8a2bd716d4f4f1ca9f733c94cc88053";
+	public final static String UUID_INVALID_DATE ="692846bdb8c64fc0beb39ad95f4539f4";
+	
+	// worldremit status code
+	public final static String COMMANDSTATUS_INVALID_IPADDRESS = "IP_ADDRESS_NOT_ALLOWED";
+	
+	// worldremit status code UUIDs
+	public final static String UUID_INVALID_IPADDRESS = "fe9dfbe0b7894fcda9a06dcabc8089eb";
+
+}

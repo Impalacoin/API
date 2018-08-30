@@ -1,0 +1,637 @@
+﻿Public Class frmRooms
+    Public Xaxi, Yaxi, Floor, ItemCount, ItemPos, FLOORNUMBER As Integer
+    Private GROUPBX As System.Windows.Forms.GroupBox
+    Public HOUSENUMBER As String
+    Private OCCUPIED As Integer
+    Public SourceFrm, UNITEDIT, MODE As Integer
+    Private Sub Panel1_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Dim aRichtextbox As System.Windows.Forms.Button
+        Dim FlrLabel As System.Windows.Forms.Label
+        Dim i, j As Int16
+        Dim TapIndex As Integer = 1
+
+        If Trim(TextBox3.Text) = "" Or ComboBox1.SelectedItem.ToString = "" Then
+            MsgBox("Provide both Floor Number and Room/Unit Label", vbExclamation, APPNAME)
+            Exit Sub
+        End If
+
+        Dim Flr = CInt(ComboBox1.SelectedItem)
+        Dim FlrNumberUnit = Trim(TextBox3.Text)
+
+        Dim BWidth, BHeight As Integer
+
+        ItemCount = ItemCount + 1
+
+
+
+        If ItemCount < 13 Then
+            ItemPos = ItemPos + 1
+            Xaxi = 90 * ItemPos
+            Yaxi = 0
+
+            If ItemPos = 12 Then
+                ItemPos = 1
+            End If
+        ElseIf ItemCount < 25 Then
+            Xaxi = 90 * ItemPos
+            Yaxi = 75
+
+            If ItemPos = 12 Then
+                ItemPos = 1
+            Else
+                ItemPos = ItemPos + 1
+            End If
+
+        ElseIf ItemCount < 37 Then
+            Xaxi = 90 * ItemPos
+            Yaxi = 150
+
+            If ItemPos = 12 Then
+                ItemPos = 1
+                Exit Sub
+            Else
+                ItemPos = ItemPos + 1
+            End If
+        Else
+            Exit Sub
+        End If
+
+        BWidth = 90
+        BHeight = 75
+
+        aRichtextbox = New System.Windows.Forms.Button
+        aRichtextbox.Height = BHeight
+        aRichtextbox.Width = BWidth
+        aRichtextbox.Location = New System.Drawing.Point(Xaxi, Yaxi)
+        aRichtextbox.Margin = New System.Windows.Forms.Padding(1)
+
+        aRichtextbox.Name = "Btn" & Floor & "209"
+        aRichtextbox.Text = Trim(TextBox3.Text)
+        AddHandler aRichtextbox.Click, AddressOf Cell_MouseHover
+        AddHandler aRichtextbox.KeyDown, AddressOf Cell_MouseHover
+        AddHandler aRichtextbox.KeyPress, AddressOf Cell_MouseHover
+        AddHandler aRichtextbox.MouseMove, AddressOf Cell_MouseHover
+
+        aRichtextbox.BackColor = Drawing.Color.LemonChiffon
+        aRichtextbox.ForeColor = Drawing.Color.Black
+        'aRichtextbox.Size = New System.Drawing.Size(20, 30)
+        aRichtextbox.TabIndex = TapIndex
+        TapIndex = TapIndex + 1
+        Panel1.Controls.Add(aRichtextbox)
+    End Sub
+
+    Protected Sub Cell_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        'This will be executed when clicking on the newly created buttons.
+
+        Try
+            Dim aRichtextbox As System.Windows.Forms.Button
+            Dim TapIndex As Integer = 1
+            Dim RecSet As New ADODB.Recordset
+
+            Dim BtnAdd As Windows.Forms.Button = sender 'DirectCast(sender, PictureBox)
+            Dim FlrNr As Integer
+            Dim Pnt As New Point(10, 88)
+            Dim BWidth, BHeight As Integer
+            Dim UnitName As String = ""
+            FlrNr = Mid(BtnAdd.Parent.Name, 7, Len(BtnAdd.Parent.Name) - 6)
+            If BtnAdd.Parent.HasChildren Then
+                If BtnAdd.Parent.GetChildAtPoint(Pnt).Text = "" Then
+                    MsgBox("Provide both Floor Number and Room/Unit Label", vbExclamation, APPNAME)
+                    Exit Sub
+                Else
+                    UnitName = UCase(BtnAdd.Parent.GetChildAtPoint(Pnt).Text)
+                End If
+            End If
+
+            RecSet.Open("select count(*) from houserooms where house_name = '" & TextBox1.Text & "' and floor = " & FlrNr, UniversalHostConnection)
+            If RecSet.EOF = False Then
+                ItemCount = RecSet.Fields(0).Value + 1
+                ItemPos = RecSet.Fields(0).Value + 1
+            Else
+                ItemCount = ItemCount + 1
+                ItemPos = ItemPos + 1
+            End If
+            RecSet.Close()
+
+            RecSet.Open("select * from houserooms where house_name = '" & TextBox1.Text & "' and unit_number = '" & UnitName & "'", UniversalHostConnection)
+            If RecSet.EOF = True Then
+                UniversalHostConnection.Execute("insert into houserooms values ('" & TextBox1.Text & "'," & FlrNr & ",'" & UnitName & "',0,'','','',31,12,2030,'','')")
+                MsgBox("Unit added successfully", vbInformation, APPNAME)
+
+            Else
+                MsgBox("This Unit Already Exits", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+
+
+            If ItemCount < 13 Then
+                ItemPos = ItemPos + 1
+                Xaxi = 90 * ItemPos
+                Yaxi = 10
+
+                If ItemPos = 12 Then
+                    ItemPos = 1
+                End If
+            ElseIf ItemCount < 25 Then
+                Xaxi = 90 * ItemPos
+                Yaxi = 75
+
+                If ItemPos = 12 Then
+                    ItemPos = 1
+                Else
+                    ItemPos = ItemPos + 1
+                End If
+
+            ElseIf ItemCount < 37 Then
+                Xaxi = 90 * ItemPos
+                Yaxi = 150
+
+                If ItemPos = 12 Then
+                    ItemPos = 1
+                    Exit Sub
+                Else
+                    ItemPos = ItemPos + 1
+                End If
+            Else
+                Exit Sub
+            End If
+
+            BWidth = 90
+            BHeight = 75
+
+            aRichtextbox = New System.Windows.Forms.Button
+            aRichtextbox.Height = BHeight
+            aRichtextbox.Width = BWidth
+            aRichtextbox.Location = New System.Drawing.Point(Xaxi, Yaxi)
+            aRichtextbox.Margin = New System.Windows.Forms.Padding(1)
+
+            aRichtextbox.Name = "Btn" & UnitName
+            aRichtextbox.Text = UnitName
+            AddHandler aRichtextbox.Click, AddressOf Cell_MouseHover
+            'AddHandler aRichtextbox.KeyDown, AddressOf Cell_MouseHover
+            'AddHandler aRichtextbox.KeyPress, AddressOf Cell_MouseHover
+            'AddHandler aRichtextbox.MouseMove, AddressOf Cell_MouseHover
+
+            aRichtextbox.BackColor = Drawing.Color.LemonChiffon
+            aRichtextbox.ForeColor = Drawing.Color.Black
+            'aRichtextbox.Size = New System.Drawing.Size(20, 30)
+            aRichtextbox.TabIndex = TapIndex
+            TapIndex = TapIndex + 1
+            BtnAdd.Parent.Controls.Add(aRichtextbox)
+
+
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Protected Sub Cell_KeyPress(ByVal sender As Object, ByVal e As System.EventArgs)
+        'This will be executed when clicking on the newly created buttons.
+        Try
+
+
+            Dim TabInd As Integer
+            Dim Yaxis As Integer
+            Dim Xaxis As Integer
+            Dim pb As Windows.Forms.RichTextBox = sender 'DirectCast(sender, PictureBox)
+            Dim keyCode As Windows.Forms.KeyEventArgs = e
+            If keyCode.KeyValue = 40 Then 'Down Arrow Key
+
+                If pb.TabIndex < 480 Then
+                    TabInd = pb.TabIndex + 32
+                Else
+                    TabInd = pb.TabIndex
+                End If
+
+
+            ElseIf keyCode.KeyValue = 38 Then 'Up Arrow key
+                If pb.TabIndex > 32 Then
+                    TabInd = pb.TabIndex - 32
+                Else
+                    TabInd = pb.TabIndex
+                End If
+
+            ElseIf keyCode.KeyValue = 37 Then 'Left Arrow Key
+                If pb.TabIndex < 1 Then
+                    TabInd = pb.TabIndex
+                Else
+                    TabInd = pb.TabIndex - 1
+                End If
+
+            ElseIf keyCode.KeyValue = 39 Then 'Right Arrow Key
+                If pb.TabIndex < 511 Then
+                    TabInd = pb.TabIndex + 1
+
+                Else
+                    TabInd = pb.TabIndex
+                End If
+
+
+
+
+            End If
+            Dim pbIdentity As String = pb.Name
+            Yaxis = CInt(Mid(pbIdentity, 5, 2))
+            Xaxis = CInt(Mid(pbIdentity, 7, 2))
+
+            Xaxis = Xaxis + 2
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Protected Sub Cell_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs)
+        'This will be executed when clicking on the newly created buttons.
+        Try
+
+
+            Dim Yaxis As Integer
+            Dim Xaxis As Integer
+            Dim pb As Windows.Forms.Button = sender 'DirectCast(sender, PictureBox)
+            Dim pbIdentity As String = pb.Name
+            'Yaxis = CInt(Mid(pbIdentity, 5, 2))
+            'Xaxis = CInt(Mid(pbIdentity, 7, 2))
+            If pb.BackColor = Color.LightGreen Then
+                OCCUPIED = 1
+            Else
+                OCCUPIED = 0
+            End If
+            HOUSENUMBER = pb.Text
+            FLOORNUMBER = Mid(pb.Parent.Name, 7, Len(pb.Parent.Name) - 6)
+            ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+
+            'Dim RecSet As New ADODB.Recordset
+            'RecSet.Open("select * from houserooms where house_name = '" & TextBox1.Text & "' and floor = 0", UniversalHostConnection)
+            'ItemCount = 0
+            'ItemPos = 1
+
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub frmRooms_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        Me.Dispose()
+    End Sub
+
+    Private Sub frmRooms_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Panel1.Controls.Clear()
+        ControlRefresh()
+    End Sub
+
+    Private Sub frmRooms_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox2.Width = Me.Width - 30
+        GroupBox2.Height = Me.Height - 210
+
+        For t As Int16 = 0 To Floor - 1
+
+            'GROUPBX = New System.Windows.Forms.GroupBox
+            'GROUPBX.Height = RowSizeP
+            'GROUPBX.Width = Panel1.Width - 20
+            'GROUPBX.Location = New System.Drawing.Point(RowSizeP * t + 10, 0)
+            'GROUPBX.Margin = New System.Windows.Forms.Padding(1)
+
+            'GROUPBX.Name = t
+            'GROUPBX.Text = "Floor Number: " & t
+
+
+            'GROUPBX.BackColor = Drawing.Color.MintCream
+            'GROUPBX.ForeColor = Drawing.Color.Black
+
+            'Panel1.Controls.Add(GROUPBX)
+
+
+        Next
+
+    End Sub
+
+    Private Sub frmRooms_ResizeBegin(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.ResizeBegin
+
+    End Sub
+
+    Private Sub ToolStripMenuItem2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem2.Click
+        If OCCUPIED = 0 Then
+            If SourceFrm = 1 Then
+                frmRent.TextBox18.Text = HOUSENUMBER
+                frmRent.TextBox3.Text = HOUSENUMBER
+                frmRent.FLOORNUMBER = FLOORNUMBER
+            ElseIf SourceFrm = 2 Then
+                frmNewTenant.TextBox15.Text = HOUSENUMBER
+                'frmRent.FLOORNUMBER = FLOORNUMBER
+            End If
+            Me.Dispose()
+        Else
+            MsgBox("This UNIT is occupied", vbExclamation, APPNAME)
+        End If
+
+    End Sub
+
+    Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
+        Try
+            Dim RecSet As New ADODB.Recordset
+            RecSet.Open(" select * from houserooms where floor = " & FLOORNUMBER & " and house_name = '" & TextBox1.Text & "' and unit_number = '" & HOUSENUMBER & "' and occupied in (1,2)", UniversalHostConnection)
+            If Not RecSet.EOF Then
+                frmPreview.Label1.Text = "Tenant Name:  " & RecSet.Fields(10).Value
+                frmPreview.Label2.Text = "ID/Pass No:   " & RecSet.Fields(11).Value
+                frmPreview.Label3.Text = "Date Entered: " & RecSet.Fields(6).Value
+                frmPreview.Label4.Text = "House Use:    " & RecSet.Fields(4).Value
+                frmPreview.Label5.Text = "Date Vacation: "
+                frmPreview.DateTimePicker1.Value = CDate(RecSet.Fields(8).Value & "/" & RecSet.Fields(7).Value & "/" & RecSet.Fields(9).Value)
+
+                frmPreview.DateTimePicker1.Enabled = True
+                frmPreview.HOUSENAME = TextBox1.Text
+                frmPreview.UNITNUMBER = HOUSENUMBER
+                frmPreview.Button1.Visible = True
+                frmPreview.Text = "Notice of Evacuation"
+                frmPreview.ShowDialog()
+            Else
+                MsgBox("Action declined", vbExclamation, APPNAME)
+            End If
+            
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ViewTenantDetailToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewTenantDetailToolStripMenuItem.Click
+        Try
+            Dim RecSet As New ADODB.Recordset
+            RecSet.Open(" select * from houserooms where floor = " & FLOORNUMBER & " and house_name = '" & TextBox1.Text & "' and unit_number = '" & HOUSENUMBER & "'  and occupied in (1,2)", UniversalHostConnection)
+            If Not RecSet.EOF Then
+                frmPreview.Label1.Text = "Tenant Name:  " & RecSet.Fields(10).Value
+                frmPreview.Label2.Text = "ID/Pass No:   " & RecSet.Fields(11).Value
+                frmPreview.Label3.Text = "Date Entered: " & RecSet.Fields(6).Value
+                frmPreview.Label4.Text = "House Use:    " & RecSet.Fields(4).Value
+                frmPreview.Label5.Text = "Date Vacation: "
+                frmPreview.DateTimePicker1.Value = CDate(RecSet.Fields(8).Value & "/" & RecSet.Fields(7).Value & "/" & RecSet.Fields(9).Value)
+
+            End If
+            frmPreview.DateTimePicker1.Enabled = False
+            frmPreview.Button1.Visible = False
+            frmPreview.Text = "Tenant Details"
+            frmPreview.ShowDialog()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ContextMenuStrip1_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
+
+    End Sub
+
+    Private Sub ToolStripMenuItem4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem4.Click
+        Try
+            If MsgBox(" Do you want to Delete this House Unit?", vbYesNo, APPNAME) = vbYes Then
+                Dim T As Integer
+                UniversalHostConnection.Execute("delete from houserooms where house_name = '" & TextBox1.Text & "' and floor = " & FLOORNUMBER & " and unit_number = '" & HOUSENUMBER & "' and occupied = 0", T)
+                If T > 0 Then
+                    MsgBox("Unit has been Removed!", vbInformation, APPNAME)
+                Else
+                    MsgBox("This Unit is OCCUPIED, and cannot be Removed!", vbExclamation, APPNAME)
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Label5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label5.Click
+
+    End Sub
+
+   
+
+    Private Sub ControlRefresh()
+        Try
+            Dim XPAND, NewGTop As Integer
+            Dim RowSizeP As Double = Panel1.Height / Floor
+            Dim ButnAdd As System.Windows.Forms.Button
+            Dim TextboxNr As System.Windows.Forms.TextBox
+            Dim LabelUnit As System.Windows.Forms.Label
+            Dim RecSet As New ADODB.Recordset
+            Dim RecSetX As New ADODB.Recordset
+
+            Dim BWidth, BHeight As Integer
+            Dim aRichtextbox As System.Windows.Forms.Button
+            Dim i, j As Int16
+            Dim TapIndex As Integer = 1
+
+
+            For t As Int16 = 0 To Floor - 1
+
+                GROUPBX = New System.Windows.Forms.GroupBox
+
+                GROUPBX.Height = RowSizeP
+                GROUPBX.Width = Panel1.Width - 20
+                If XPAND = 1 Then
+                    GROUPBX.Location = New System.Drawing.Point(0, (RowSizeP + NewGTop) * t + 10)
+                Else
+                    GROUPBX.Location = New System.Drawing.Point(0, RowSizeP * t + 10)
+                End If
+
+                GROUPBX.Margin = New System.Windows.Forms.Padding(1)
+
+                GROUPBX.Name = "GrpBox" & t
+                GROUPBX.Text = "Floor Number: " & t
+
+
+                GROUPBX.BackColor = Drawing.Color.White
+                GROUPBX.ForeColor = Drawing.Color.Black
+
+                Panel1.Controls.Add(GROUPBX)
+
+                ButnAdd = New System.Windows.Forms.Button
+                ButnAdd.Height = 30
+                ButnAdd.Width = 80
+                ButnAdd.Location = New System.Drawing.Point(10, 30)
+                ButnAdd.Margin = New System.Windows.Forms.Padding(1)
+
+                ButnAdd.Name = "B" & t
+                ButnAdd.Text = "Add Unit"
+
+                If UNITEDIT = 0 Then
+                    ButnAdd.Enabled = False
+                End If
+
+                AddHandler ButnAdd.Click, AddressOf Cell_Click
+                'AddHandler ButnAdd.KeyDown, AddressOf Cell_MouseHover
+                'AddHandler ButnAdd.KeyPress, AddressOf Cell_MouseHover
+                'AddHandler ButnAdd.MouseHover, AddressOf Cell_MouseHover
+
+
+                ButnAdd.BackColor = Drawing.Color.AliceBlue
+                ButnAdd.ForeColor = Drawing.Color.Black
+                GROUPBX.Controls.Add(ButnAdd)
+
+
+                LabelUnit = New System.Windows.Forms.Label
+                LabelUnit.Width = 80
+                LabelUnit.Location = New System.Drawing.Point(10, 30 + 35)
+                LabelUnit.Margin = New System.Windows.Forms.Padding(1)
+
+                LabelUnit.Name = "Lbl" & t
+                LabelUnit.Text = "Unit Name"
+                LabelUnit.BackColor = Drawing.Color.White
+                LabelUnit.ForeColor = Drawing.Color.Black
+                GROUPBX.Controls.Add(LabelUnit)
+
+
+
+                TextboxNr = New System.Windows.Forms.TextBox
+                TextboxNr.Height = 30
+                TextboxNr.Width = 80
+                TextboxNr.Location = New System.Drawing.Point(10, 30 + 30 + 28)
+                TextboxNr.Margin = New System.Windows.Forms.Padding(1)
+
+                TextboxNr.Name = "TXT" & t
+                TextboxNr.Text = ""
+
+                If UNITEDIT = 0 Then
+                    TextboxNr.Enabled = False
+                End If
+
+                TextboxNr.BackColor = Drawing.Color.White
+                TextboxNr.ForeColor = Drawing.Color.Black
+                GROUPBX.Controls.Add(TextboxNr)
+
+
+                RecSet.Open("select * from houserooms where house_name = '" & TextBox1.Text & "' and floor = " & t, UniversalHostConnection)
+                ItemCount = 0
+                ItemPos = 1
+
+                'If RecSet.EOF = False Then
+                '    Dim BtnTop As Integer = 0
+
+                Do While Not RecSet.EOF
+
+                    ItemCount = ItemCount + 1
+                    If ItemCount < 13 Then
+                        ItemPos = ItemPos + 1
+                        Xaxi = 90 * ItemPos
+                        Yaxi = 10
+
+                        If ItemPos = 12 Then
+                            ItemPos = 1
+                        End If
+                    ElseIf ItemCount < 25 Then
+                        Xaxi = 90 * ItemPos
+                        Yaxi = 75
+
+                        If ItemPos = 12 Then
+                            ItemPos = 1
+                        Else
+                            ItemPos = ItemPos + 1
+                        End If
+
+                    ElseIf ItemCount < 37 Then
+                        Xaxi = 120 * ItemPos
+                        Yaxi = 150
+
+                        If ItemPos = 12 Then
+                            ItemPos = 1
+                            Exit Sub
+                        Else
+                            ItemPos = ItemPos + 1
+                        End If
+                    Else
+                        Exit Sub
+                    End If
+
+                    BWidth = 90
+                    BHeight = 75
+
+                    aRichtextbox = New System.Windows.Forms.Button
+                    aRichtextbox.Height = BHeight
+                    aRichtextbox.Width = BWidth
+                    aRichtextbox.Location = New System.Drawing.Point(Xaxi, Yaxi)
+                    aRichtextbox.Margin = New System.Windows.Forms.Padding(1)
+
+                    aRichtextbox.Name = "Btn" & RecSet.Fields(2).Value
+                    aRichtextbox.Text = RecSet.Fields(2).Value
+                    AddHandler aRichtextbox.Click, AddressOf Cell_MouseHover
+                    'AddHandler aRichtextbox.KeyDown, AddressOf Cell_MouseHover
+                    'AddHandler aRichtextbox.KeyPress, AddressOf Cell_MouseHover
+                    'AddHandler aRichtextbox.MouseMove, AddressOf Cell_MouseHover
+
+                    If MODE = 0 Then
+
+                        If RecSet.Fields(3).Value = 0 Then
+                            aRichtextbox.BackColor = Drawing.Color.LemonChiffon
+                        ElseIf RecSet.Fields(3).Value = 1 Then
+                            aRichtextbox.BackColor = Drawing.Color.LightGreen
+                        ElseIf RecSet.Fields(3).Value = 2 Then
+                            aRichtextbox.BackColor = Drawing.Color.LightSalmon
+                        End If
+                    Else
+                        RecSetX.Open("select * from btransaction where house_name = '" & TextBox1.Text & "' and house_nr = '" & RecSet.Fields(2).Value & "' and check_in_date = '" & Format(DateTimePicker1.Value, "dd/MM/yyyy") & "'", UniversalHostConnection)
+                        If RecSetX.EOF = False Then
+                            aRichtextbox.BackColor = Drawing.Color.LightGreen
+                        Else
+                            aRichtextbox.BackColor = Drawing.Color.LemonChiffon
+                        End If
+                        RecSetX.Close()
+                    End If
+                    aRichtextbox.ForeColor = Drawing.Color.Black
+
+                    aRichtextbox.TabIndex = TapIndex
+                    TapIndex = TapIndex + 1
+                    GROUPBX.Controls.Add(aRichtextbox)
+                    RecSet.MoveNext()
+                Loop
+                RecSet.Close()
+
+
+                If (BHeight + Yaxi) < (ButnAdd.Top + ButnAdd.Height + TextboxNr.Height + LabelUnit.Height) Then
+
+
+                    If (ButnAdd.Top + ButnAdd.Height + TextboxNr.Height + LabelUnit.Height) > RowSizeP Then
+                        GROUPBX.Height = ButnAdd.Top + ButnAdd.Height + LabelUnit.Height + TextboxNr.Height + 20
+                        XPAND = 1
+                        NewGTop = (ButnAdd.Top + ButnAdd.Height + LabelUnit.Height + TextboxNr.Height + 25) - RowSizeP
+                    Else
+                        XPAND = 0
+                        NewGTop = 0
+                    End If
+                Else
+                    If (BHeight + Yaxi) > RowSizeP Then
+                        GROUPBX.Height = BHeight + Yaxi + 20
+                        XPAND = 1
+                        NewGTop = (BHeight + Yaxi + 25) - RowSizeP
+                    Else
+                        XPAND = 0
+                        NewGTop = 0
+                    End If
+                End If
+
+                'Else
+
+                '    If (ButnAdd.Top + ButnAdd.Height + TextboxNr.Height + LabelUnit.Height) > RowSizeP Then
+                '        GROUPBX.Height = ButnAdd.Top + ButnAdd.Height + LabelUnit.Height + TextboxNr.Height + 20
+                '        XPAND = 1
+                '        NewGTop = (ButnAdd.Top + ButnAdd.Height + LabelUnit.Height + TextboxNr.Height + 25) - RowSizeP
+                '    Else
+                '        XPAND = 0
+                '        NewGTop = 0
+                '    End If
+
+                'End If
+
+            Next
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub DateTimePicker1_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker1.ValueChanged
+        Panel1.Controls.Clear()
+        ControlRefresh()
+    End Sub
+End Class

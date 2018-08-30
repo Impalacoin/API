@@ -1,0 +1,165 @@
+html,body{
+    margin:0;
+    padding: 0;
+}
+.topNavs{
+    background:url(../button_1.jpg);
+    width:100%;
+    color:white;
+    padding:0;
+    
+}
+.topNavs a{
+    text-decoration: none;
+    color:white;
+    margin-right: 10px;
+}
+.container{
+    /*:0 5px;*/
+    width:995px;
+    margin:auto;
+    min-height:200px;
+    height:auto;
+    overflow:hidden;
+    border:2px solid #EFEFEF;
+}
+.top-section{
+    display:inline;
+    height:80px;
+    width:995px;
+    background:white;
+    overflow:hidden;
+    padding-bottom: 55px;
+}
+.top-section .logo{
+    float:left;
+    width:auto;
+    
+}
+.top-section .right{        
+    float:right;
+    padding: 10px 20px 0px 0px;
+    
+}
+.container .content{
+    clear:both;
+    width: 960px;
+    border:1px solid #EFEFEF;
+    min-height: 200px;
+    height:auto;
+    overflow:hidden;
+    padding:10px 10px;
+    margin:5px auto;
+    
+}
+.foot{
+    border:1px solid #EFEFEF;
+    width:100%;
+}
+table.calc-res{
+    width:50%;
+    background:white;
+}
+table.calc-res tr.bottom{
+    padding: 5px 0;
+}
+.my-account{
+    display: inline;
+    width:inherit;
+}
+.right{
+    float:right;
+    padding-right:20px;
+}
+.left{
+    float: left;
+}
+.my-info{
+    width:70%;
+    min-height: 200px;
+    float:left;
+    border-right:1px solid #EFEFEF;
+}
+.right-nav{
+    vertical-align: middle;
+    width:25%;
+    float:left;    
+    height:200px;
+    margin: auto;
+    padding-left: 15px;
+}
+
+.recent-trans{
+    clear: both;
+    width:inherit;
+    min-height:100px;
+    background:;
+    padding-top: 10px;
+}
+
+
+ul.nav{
+    list-style-type: none;
+}
+ul.nav li{
+    display:block;
+    width:150px ;
+    height: 25px;
+    padding: 5px 25px;
+    background:#800040;    
+}
+ul.nav a{
+    text-decoration: none;
+    color:white;
+    
+}
+ul.nav li:hover{
+    padding: 5px 25px;
+    display:block;
+    width:150px ;
+    height: 25px;
+    background:#e5efff;
+    
+        
+}
+ul.nav li:hover a{
+    color: #467;
+}
+table.account-details{
+    min-width:95%;
+    width:auto;
+    border-width: 3px;
+    border-color: #EFEFEF;
+    border-style: solid;
+    border-collapse: collapse;
+    margin:0px 10px 10px 10px;
+}
+table.account-details tr ,table.account-details th,table.account-details td{    
+     
+    padding:0px;
+    margin:0px; 
+}
+table.account-details tr.db-record:hover{
+    background:yellow;
+    cursor: ;
+}
+table.account-details th{
+    color:#5973a8;
+    font-size:14px ;
+    text-align:left;
+    width:auto;
+    border-width: 3px;
+    border-style: solid;
+    padding:2px;
+}
+table.account-details td{
+    color: #555555; 
+    font-size: 12px; 
+    font-weight: bold;
+    text-align:left;
+    width:auto;
+    border-width: 1px;
+    border-style: solid;
+    padding:5px;
+}
+

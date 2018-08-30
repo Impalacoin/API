@@ -1,0 +1,49 @@
+.OPTION EXPLICIT
+.Set Cabinet=off
+.Set Compress=off
+.Set MaxDiskSize=CDROM
+.Set ReservePerCabinetSize=6144
+.Set DiskDirectoryTemplate=".."
+.Set CompressionType=MSZIP
+.Set CompressionLevel=7
+.Set CompressionMemory=21
+.Set CabinetNameTemplate="ZapBridge.CAB"
+"Setup.Lst"
+"setup.exe"
+.Set Cabinet=on
+.Set Compress=on
+"ZapBridge.exe"
+"msvbvm60.dll"
+"oleaut32.dll"
+"olepro32.dll"
+"asycfilt.dll"
+"stdole2.tlb"
+"COMCAT.DLL"
+"msado28.tlb"
+"EBL_Encryption.dll"
+"MpesaSoapProject.dll"
+"EXCEL.EXE"
+"scrrun.dll"
+"msvcrt.dll"
+"S1BridgeISO8583.dll"
+"comdlg32.ocx"
+"MSCOMCTL.OCX"
+"MSINET.OCX"
+"MSWINSCK.OCX"
+"MSMAPI32.OCX"
+"MCI32.OCX"
+"PICCLP32.OCX"
+"SYSINFO.OCX"
+"MSCOMM32.OCX"
+"MSDATLST.OCX"
+"COMCT332.OCX"
+"MSADODC.OCX"
+"MSSTDFMT.DLL"
+"MSHFLXGD.OCX"
+"MSCAL.OCX"
+"FLEXWIZ.OCX"
+"MSFLXGRD.OCX"
+"MDAC_TYP.EXE"
+"SETUP1.EXE"
+"VB6STKIT.DLL"
+"ST6UNST.EXE"

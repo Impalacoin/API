@@ -1,0 +1,1365 @@
+﻿Public Class frmRent
+    'Private UniversalHostConnection As ADODB.Connection
+    Private DayOfMonth As String
+    Dim PayMode As String
+    Private VatPercent As Double
+    Private MOBILENR As String
+    Public FLOORNUMBER As Integer
+
+    
+
+
+    Private Sub frmRent_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Dim Recset As New ADODB.Recordset
+        'Dim DayOfMonth As String
+        On Error GoTo ErrTrap
+
+        If UniversalHostConnection.State = 0 Then
+            UniversalHostConnection = New ADODB.Connection
+            UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            UniversalHostConnection.Open()
+        End If
+        Me.Text = "PAYMENTS FOR PROPERTY OWNER:  " & Form1.OWNER & "  HOUSE: " & frmHouse.Audit_ID
+        'Label22.Text = "PROPERTY: " & Form1.OWNER
+        Label27.Text = "PROPERTY: " & Form1.OWNER
+        
+        TextBox1.Text = Today()
+        TextBox20.Text = Today()
+
+        'TextBox2.Enabled = False
+
+        RadioButton1.Checked = True
+        'Recset.Close()
+        Recset.Open("select rec_id from receipting", UniversalHostConnection)
+        If Recset.EOF = False Then
+            TextBox4.Text = Format((Recset.Fields(0).Value + 1), "000000")
+        Else
+            TextBox4.Text = "000001"
+        End If
+
+        PrintDocument1.DefaultPageSettings.Landscape = True
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+    End Sub
+    Private Sub DataGridRefresh()
+        Dim i As Integer
+        Try
+
+
+
+            Dim RecSet As New ADODB.Recordset
+            'create a new dataset
+            Dim n As Integer '= DataGridView1.Rows.Add()
+            RecSet.Open("Select * from house_details order by reg_no asc", UniversalHostConnection)
+            'DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                'DataGridView1.Rows.Add()
+                For i = 0 To 13
+                    'DataGridView1.Rows.Item(n).Cells(i).Value = UCase(RecSet.Fields(i).Value)
+
+                Next
+
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+    End Sub
+    Private Sub frmRent_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        'Access
+        GroupBox1.Width = Me.Width - 30
+        GroupBox5.Width = Me.Width - 30
+        GroupBox5.Left = GroupBox1.Left
+        GroupBox5.Top = GroupBox1.Top
+
+        'Me.DataGridView1.Width = GroupBox1.Width - 15
+        'Me.DataGridView1.Height = Me.Height - 238
+        'Me.GroupBox1.Height = Me.Height - 95
+
+        GroupBox2.Width = Me.Width - 30
+        GroupBox2.Height = Me.Height - 290
+        DataGridView1.Width = Me.Width - 40
+        DataGridView1.Height = Me.Height - 340
+
+
+        GroupBox3.Left = GroupBox2.Left
+        GroupBox3.Top = GroupBox2.Top
+        GroupBox3.Width = Me.Width - 30
+        GroupBox3.Height = Me.Height - 290
+
+    End Sub
+
+
+
+    Private Sub TextBox2_Validated(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox2.Validated
+        Dim Recset As New ADODB.Recordset
+        If Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) = "" And ComboBox1.SelectedItem = "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent,house_name,mobile from tenant where cust_id = '" & TextBox2.Text & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+                ComboBox1.Text = Recset.Fields(6).Value
+                MOBILENR = Recset.Fields(7).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(3).Value
+                TextBox8.Text = ""
+                Exit Sub
+            End If
+
+        ElseIf Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) <> "" And ComboBox1.SelectedItem = "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent,house_name from tenant where cust_id = '" & TextBox2.Text & "' and house_no = '" & TextBox3.Text & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+                ComboBox1.Text = Recset.Fields(6).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        ElseIf Trim(TextBox2.Text) = "" And Trim(TextBox3.Text) <> "" And ComboBox1.SelectedItem <> "" Then
+            Recset.Open("Select cust_id,cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent from tenant where house_name = '" & ComboBox1.SelectedItem & "' and house_no = '" & TextBox3.Text & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(1).Value & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, "") & IIf(Len(Recset.Fields(3).Value) <> 0, " " & Recset.Fields(3).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(6).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(5).Value
+                TextBox3.Text = Recset.Fields(4).Value
+                TextBox2.Text = Recset.Fields(0).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        ElseIf Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) <> "" And ComboBox1.SelectedItem <> "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent from tenant where house_name = '" & ComboBox1.SelectedItem & "' and house_no = '" & TextBox3.Text & "' and cust_id = '" & Trim(TextBox2.Text) & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        ElseIf Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) = "" And ComboBox1.SelectedItem <> "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent,house_name from tenant where cust_id = '" & TextBox2.Text & "' and house_name = '" & ComboBox1.SelectedItem & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+                ComboBox1.Text = Recset.Fields(6).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+
+        Else
+            'MsgBox("Important Data Missing. Fill Missing Fields", vbExclamation)
+        End If
+    End Sub
+
+    Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
+        Dim Recset As New ADODB.Recordset
+        If Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) = "" And ComboBox1.SelectedItem = "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent,house_name from tenant where cust_id = '" & TextBox2.Text & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+                ComboBox1.Text = Recset.Fields(6).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+
+        ElseIf Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) <> "" And ComboBox1.SelectedItem = "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent,house_name from tenant where cust_id = '" & TextBox2.Text & "' and house_no = '" & TextBox3.Text & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+                ComboBox1.Text = Recset.Fields(6).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        ElseIf Trim(TextBox2.Text) = "" And Trim(TextBox3.Text) <> "" And ComboBox1.SelectedItem <> "" Then
+            Recset.Open("Select cust_id,cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent from tenant where house_name = '" & ComboBox1.SelectedItem & "' and house_no = '" & TextBox3.Text & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(1).Value & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, "") & IIf(Len(Recset.Fields(3).Value) <> 0, " " & Recset.Fields(3).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(6).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(5).Value
+                TextBox3.Text = Recset.Fields(4).Value
+                TextBox2.Text = Recset.Fields(0).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        ElseIf Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) <> "" And ComboBox1.SelectedItem <> "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent from tenant where house_name = '" & ComboBox1.SelectedItem & "' and house_no = '" & TextBox3.Text & "' and cust_id = '" & Trim(TextBox2.Text) & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        ElseIf Trim(TextBox2.Text) <> "" And Trim(TextBox3.Text) = "" And ComboBox1.SelectedItem <> "" Then
+            Recset.Open("Select cust_fname,cust_mname,cust_lname,house_no,day_of_month_due,rent,house_name from tenant where cust_id = '" & TextBox2.Text & "' and house_name = '" & ComboBox1.SelectedItem & "'", UniversalHostConnection)
+            If Recset.EOF = False Then
+                TextBox8.Text = UCase(Recset.Fields(0).Value & IIf(Len(Recset.Fields(1).Value) <> 0, " " & Recset.Fields(1).Value, "") & IIf(Len(Recset.Fields(2).Value) <> 0, " " & Recset.Fields(2).Value, ""))
+                TextBox9.Text = Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = Recset.Fields(4).Value
+                TextBox3.Text = Recset.Fields(3).Value
+                ComboBox1.Text = Recset.Fields(6).Value
+            Else
+                MsgBox("Tenant Name Not Found", vbExclamation)
+                TextBox9.Text = "" 'Format(Recset.Fields(5).Value, "#,###.##")
+                TextBox10.Text = "" 'Recset.Fields(4).Value
+                TextBox8.Text = "" 'Recset.Fields(3).Value
+                Exit Sub
+            End If
+        Else
+            MsgBox("Important Data Missing. Fill Missing Fields", vbExclamation)
+        End If
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked = True Then
+            GroupBox2.Text = "Cash Payment"
+            PayMode = "CASH"
+            TextBox5.Enabled = False : TextBox5.Text = ""
+            DateTimePicker3.Enabled = False
+            TextBox12.Enabled = False : TextBox12.Text = ""
+            TextBox14.Enabled = False : TextBox14.Text = ""
+            TextBox16.Enabled = False : TextBox16.Text = ""
+            TextBox17.Enabled = False : TextBox17.Text = ""
+
+
+        End If
+    End Sub
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+        If RadioButton2.Checked = True Then
+            GroupBox2.Text = "Bank Receipt Presentment"
+            PayMode = "BANK RECEIPT"
+            TextBox5.Enabled = True
+            DateTimePicker3.Enabled = False
+            TextBox12.Enabled = False : TextBox12.Text = ""
+            TextBox14.Enabled = True
+            TextBox16.Enabled = False : TextBox16.Text = ""
+            TextBox17.Enabled = False : TextBox17.Text = ""
+
+
+        End If
+
+    End Sub
+    Private Sub RadioButton3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton3.CheckedChanged
+        If RadioButton3.Checked = True Then
+            GroupBox2.Text = "Bank Cheque Presentment"
+            PayMode = "BANK CHEQUE"
+            TextBox5.Enabled = False : TextBox5.Text = ""
+            DateTimePicker3.Enabled = True
+            TextBox12.Enabled = True
+            TextBox14.Enabled = True
+            TextBox16.Enabled = False : TextBox16.Text = ""
+            TextBox17.Enabled = False : TextBox17.Text = ""
+
+
+        End If
+
+    End Sub
+    Private Sub RadioButton4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.CheckedChanged
+        If RadioButton4.Checked = True Then
+            GroupBox2.Text = "Mobile Money Presentment"
+            PayMode = "MOBILE MONEY"
+            TextBox5.Enabled = False
+            DateTimePicker3.Enabled = False
+            TextBox14.Enabled = False
+            TextBox16.Enabled = True
+            TextBox17.Enabled = True
+
+        End If
+
+    End Sub
+
+    Private Sub TextBox12_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox12.TextChanged
+
+    End Sub
+
+    Private Sub Label19_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label19.Click
+
+    End Sub
+
+    'Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+    '    MonthCalendar1.Visible = True
+    'End Sub
+    'Private Sub LinkLabel2_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+    '    MonthCalendar2.Visible = True
+    'End Sub
+
+    'Private Sub MonthCalendar2_DateChanged(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DateRangeEventArgs)
+    '    TextBox11.Text = MonthCalendar2.SelectionRange.Start
+    '    MonthCalendar2.Visible = False
+    'End Sub
+    'Private Sub MonthCalendar1_DateChanged(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DateRangeEventArgs) Handles MonthCalendar1.DateChanged
+    '    TextBox6.Text = MonthCalendar2.SelectionRange.Start
+    '    MonthCalendar1.Visible = False
+    'End Sub
+
+    Private Sub DateTimePicker1_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker1.ValueChanged
+        DayOfMonth = Format(Month((DateTimePicker1.Value)), "00") & "-" & Year(DateTimePicker1.Value)
+    End Sub
+
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        'A must field\
+        Dim SqlStr As String
+        Dim TableName As String
+        Dim RecSet As New ADODB.Recordset
+        Dim Receipt As String = ""
+        Dim sAmount As Double = 0
+        Dim Month_Count As Integer = 0
+        Replace(Trim(TextBox13.Text), ",", "")
+
+        Receipt = TextBox4.Text
+
+        If RadioButton9.Checked = True Then
+
+
+
+            If TextBox8.Text <> "" And TextBox2.Text <> "" And TextBox3.Text <> "" And ComboBox1.SelectedItem <> "" And _
+               TextBox13.Text <> "" And TextBox4.Text <> "" And ComboBox2.SelectedItem <> "" Then
+
+
+                If ComboBox2.SelectedItem = "RENT" Then
+                    TableName = "rTransaction"
+                    'Dim RecSetC As New ADODB.Recordset
+                    'RecSetC.Open("select amount from rtransaction where cust_id = '" & TextBox2.Text & "' and house_nr = '" & TextBox3.Text & "' and  for_month = '" & DateTimePicker1.Value.Month & "-" & DateTimePicker1.Value.Year & "'", UniversalHostConnection)
+                    'sAmount = 0
+                    'Do While RecSetC.EOF = False
+                    '    sAmount = sAmount + RecSetC.Fields(0).Value
+                    '    RecSetC.MoveNext()
+                    'Loop
+                    'RecSetC.Close()
+
+                    If (sAmount + CDbl(TextBox13.Text)) > CDbl(TextBox9.Text) Then
+                        Month_Count = 1
+                    Else
+                        Month_Count = 0
+                    End If
+
+                ElseIf ComboBox2.SelectedItem = "RENT DEPOSIT" Then
+                    TableName = "dTransaction"
+                ElseIf ComboBox2.SelectedItem = "WATER DEPOSIT" Then
+                    TableName = "wdTransaction"
+                ElseIf ComboBox2.SelectedItem = "WATER" Then
+                    TableName = "wTransaction"
+                ElseIf ComboBox2.SelectedItem = "ELECTRICITY DEPOSIT" Then
+                    TableName = "edTransaction"
+                ElseIf ComboBox2.SelectedItem = "ELECTRICITY" Then
+                    TableName = "eTransaction"
+                ElseIf ComboBox2.SelectedItem = "FINE PAYMENTS" Then
+                    TableName = "rTransaction"
+                Else
+
+                    TableName = "rTransaction"
+
+                End If
+
+
+
+                If RadioButton2.Checked = True Then
+                    If TextBox5.Text = "" Or TextBox14.Text = "" Then
+                        MsgBox("Some Bank Receipt Details Missing.", vbExclamation)
+                        Exit Sub
+                    End If
+                End If
+                If RadioButton3.Checked = True Then
+                    If TextBox12.Text = "" Or TextBox14.Text = "" Then
+                        MsgBox("Some Bank Cheque Details Missing.", vbExclamation)
+                        Exit Sub
+                    End If
+                End If
+                If RadioButton4.Checked = True Then
+                    If TextBox16.Text = "" Or TextBox17.Text = "" Then
+                        MsgBox("Some Mobile Money Details Missing.", vbExclamation)
+                        Exit Sub
+                    End If
+                End If
+
+                DayOfMonth = Format(Month((DateTimePicker1.Value)), "00") & "-" & Year(DateTimePicker1.Value)
+
+                Try
+
+                    Dim Tran_nr As Long
+
+                    RecSet.Open("select max(id) from " & TableName, UniversalHostConnection)
+                    If IsNumeric(RecSet.Fields(0).Value) = False Then
+                        Tran_nr = 0
+                    Else
+                        Tran_nr = RecSet.Fields(0).Value + 1
+                    End If
+
+
+                    SqlStr = "Insert into " & TableName & " Values(" & Tran_nr & ",'" & _
+                        Trim(TextBox8.Text) & "','" & Trim(TextBox2.Text) & "','" & ComboBox1.SelectedItem & "','" & Trim(TextBox3.Text) & "'," & Replace(Trim(TextBox13.Text), ",", "") & _
+                         ",'" & Format(DateTimePicker2.Value, "dd-MM-yyyy") & "','" & Trim(TextBox5.Text) & "','" & Trim(TextBox12.Text) & "','" & Format(DateTimePicker2.Value, "dd-MM-yyyy") & "','" & Format(DateTimePicker3.Value, "dd-MM-yyyy") & "','" & Trim(TextBox14.Text) & _
+                         "','" & DayOfMonth & "','" & ComboBox2.SelectedItem & "','" & Trim(TextBox15.Text) & "','','" & Trim(TextBox8.Text) & "','" & PayMode & "',0,'" & Trim(TextBox4.Text) & "')"
+
+                    UniversalHostConnection.Execute(UCase(SqlStr))
+
+
+                    'If Month_Count = 1 Then
+                    '    Tran_nr = Tran_nr + 1
+
+                    '    SqlStr = "Insert into " & TableName & " Values(" & Tran_nr & ",'" & _
+                    '    Trim(TextBox8.Text) & "','" & Trim(TextBox2.Text) & "','" & ComboBox1.SelectedItem & "','" & Trim(TextBox3.Text) & "'," & Replace(Trim(TextBox13.Text), ",", "") & _
+                    '     ",'" & Format(DateTimePicker2.Value, "dd-MM-yyyy") & "','" & Trim(TextBox5.Text) & "','" & Trim(TextBox12.Text) & "','" & Format(DateTimePicker2.Value, "dd-MM-yyyy") & "','" & Format(DateTimePicker3.Value, "dd-MM-yyyy") & "','" & Trim(TextBox14.Text) & _
+                    '     "','" & DayOfMonth & "','" & ComboBox2.SelectedItem & "','" & Trim(TextBox15.Text) & "','','" & Trim(TextBox8.Text) & "','" & PayMode & "'," & CDbl(Trim(TextBox13.Text)) & ",'" & Trim(TextBox4.Text) & "')"
+
+
+                    'End If
+                    RecSet.Close()
+
+                    'Dim recset As New ADODB.Recordset
+                    Dim Str As String = ""
+                    Dim RecID As Integer = 1
+                    Dim VAT As Double = 0.0
+                    Dim Qter As Int16 = 1
+                    Dim Yr As Integer = Year(Today)
+                    Dim Vatable As Integer = 0
+
+                    If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                        Qter = 1
+                    ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                        Qter = 2
+                    ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                        Qter = 3
+                    ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                        Qter = 4
+                    End If
+
+
+                    If ComboBox2.SelectedItem <> "RENT" And ComboBox2.SelectedItem <> "FINE PAYMENTS" Then
+                        UniversalHostConnection.Execute("delete from receipting")
+                        UniversalHostConnection.Execute("insert into receipting values(" & CLng(TextBox4.Text) + 1 & ")")
+
+                        TextBox4.Text = Format((CLng(TextBox4.Text) + 1), "000000")
+
+
+                        If MsgBox("RECORD SUBMITTED SUCCESSFULLY. PRINT RECEIPT?", MsgBoxStyle.YesNo, APPNAME) = vbYes Then
+                            frmPrint.TextBox1.Text = TextBox8.Text
+                            frmPrint.TextBox2.Text = TextBox3.Text
+                            frmPrint.TextBox3.Text = MOBILENR
+                            frmPrint.TextBox4.Text = ComboBox2.SelectedItem & " | " & ComboBox1.SelectedItem & " | " & TextBox3.Text
+                            frmPrint.TextBox5.Text = Format(CDbl(TextBox13.Text), "#,###.##")
+
+
+                            If RadioButton1.Checked Then
+                                frmPrint.TextBox6.Text = UCase(RadioButton1.Text)
+                            ElseIf RadioButton3.Checked Then
+                                frmPrint.TextBox6.Text = TextBox14.Text & "   | CHEQ NO: " & TextBox12.Text
+                            ElseIf RadioButton2.Checked = False Then
+                                frmPrint.TextBox6.Text = TextBox14.Text & "   | RCPT NO: " & TextBox5.Text
+                            ElseIf RadioButton4.Checked = False Then
+                                frmPrint.TextBox6.Text = TextBox17.Text & "   | TRAN NO: " & TextBox16.Text
+                            End If
+                            frmPrint.TextBox7.Text = TextBox1.Text
+                            frmPrint.TextBox8.Text = Receipt
+
+                            frmPrint.Show()
+                            frmPrint.Hide()
+
+
+
+                            PrintPreviewDialog1.WindowState = FormWindowState.Normal
+                            PrintPreviewDialog1.StartPosition = FormStartPosition.CenterScreen
+                            PrintPreviewDialog1.ClientSize = New Size(1000, 600)
+
+                            PrintPreviewDialog1.Document = PrintDocument1
+                            PrintPreviewDialog1.ShowDialog()
+                        End If
+                        Exit Sub
+                    End If
+
+                    RecSet.Open("select max(rec_id) from itransaction ", UniversalHostConnection)
+                    If IsNumeric(RecSet.Fields(0).Value) Then
+                        RecID = RecSet.Fields(0).Value + 1
+                    Else
+                        RecID = 1
+                    End If
+                    RecSet.Close()
+
+
+                    RecSet.Open("select tax_percent from tax where tax_type = 'VAT' ", UniversalHostConnection)
+                    If IsNumeric(RecSet.Fields(0).Value) Then
+                        VatPercent = RecSet.Fields(0).Value
+                    Else
+                        VatPercent = 0
+                    End If
+                    RecSet.Close()
+
+                    RecSet.Open("select VATable from income where income_description = '" & ComboBox1.SelectedItem & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                    If RecSet.EOF = False Then
+                        Vatable = RecSet.Fields(0).Value
+                    Else
+                        Vatable = 0.0
+                    End If
+                    RecSet.Close()
+
+                    If Vatable = 1 Then
+                        VAT = Trim(TextBox13.Text) * (VatPercent / 100)
+                    Else
+                        VAT = 0
+                    End If
+
+                    Str = "insert into itransaction values(" & RecID & ",'" & DateTimePicker1.Value & "','" & ComboBox1.SelectedItem & "','" & DateTimePicker1.Value & "','" & Trim(TextBox4.Text) & "'," & Replace(Trim(TextBox13.Text), ",", "") & "," & VAT & ",'RENT PAYMENT','" & TextBox2.Text & " " & TextBox8.Text & "','" & TextBox3.Text & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+                    UniversalHostConnection.Execute(UCase(Str))
+
+
+
+                    UniversalHostConnection.Execute("delete from receipting")
+                    UniversalHostConnection.Execute("insert into receipting values(" & CLng(TextBox4.Text) + 1 & ")")
+
+                    TextBox4.Text = Format((CLng(TextBox4.Text) + 1), "000000")
+
+
+                    If MsgBox("RECORD SUBMITTED SUCCESSFULLY. PRINT RECEIPT?", MsgBoxStyle.YesNo, APPNAME) = vbYes Then
+                        frmPrint.TextBox1.Text = TextBox8.Text
+                        frmPrint.TextBox2.Text = TextBox3.Text
+                        frmPrint.TextBox3.Text = MOBILENR
+                        frmPrint.TextBox4.Text = ComboBox2.SelectedItem & " | " & ComboBox1.SelectedItem & " | " & TextBox3.Text
+                        frmPrint.TextBox5.Text = Format(CDbl(TextBox13.Text), "#,###.##")
+
+
+                        If RadioButton1.Checked Then
+                            frmPrint.TextBox6.Text = UCase(RadioButton1.Text)
+                        ElseIf RadioButton3.Checked Then
+                            frmPrint.TextBox6.Text = TextBox14.Text & "   | CHEQ NO: " & TextBox12.Text
+                        ElseIf RadioButton2.Checked = False Then
+                            frmPrint.TextBox6.Text = TextBox14.Text & "   | RCPT NO: " & TextBox5.Text
+                        ElseIf RadioButton4.Checked = False Then
+                            frmPrint.TextBox6.Text = TextBox17.Text & "   | TRAN NO: " & TextBox16.Text
+                        End If
+                        frmPrint.TextBox7.Text = TextBox1.Text
+                        frmPrint.TextBox8.Text = Receipt
+
+                        frmPrint.Show()
+                        frmPrint.Hide()
+
+
+
+                        PrintPreviewDialog1.WindowState = FormWindowState.Normal
+                        PrintPreviewDialog1.StartPosition = FormStartPosition.CenterScreen
+                        PrintPreviewDialog1.ClientSize = New Size(1000, 600)
+
+                        PrintPreviewDialog1.Document = PrintDocument1
+                        PrintPreviewDialog1.ShowDialog()
+                    End If
+
+
+
+                Catch ex As Exception
+                    MsgBox(ex.Message, vbCritical)
+                End Try
+                '"Insert into rTransaction Values('EZEKIEL K KIMANTHI','22882770','GROOVE HOUSE BLOCK B','1',15000','31-03-2013 7:05:37 PM','','','31-03-2013 7:05:37 PM','31-03-2013 7:05:37 PM','','03-2013','RENT','','',EZEKIEL K KIMANTHI','CASH',0,'2234567')"
+            Else
+                MsgBox("Some Important Payment Details Missing.", vbExclamation)
+                Exit Sub
+            End If
+        ElseIf RadioButton10.Checked = True Then
+
+            If Trim(TextBox19.Text) = "" Then
+                MsgBox("Enter Customer ID/Pass", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf Trim(TextBox11.Text) = "" Then
+                MsgBox("Enter Customer Name", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf Trim(TextBox21.Text) = "" Then
+                MsgBox("Enter Customer Telephone", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf Trim(TextBox18.Text) = "" Then
+                MsgBox("Enter House Number", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf Trim(TextBox7.Text) = "" Then
+                MsgBox("Enter Amount", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf Trim(TextBox6.Text) = "" Then
+                MsgBox("Enter Number of Board Days", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf ComboBox4.SelectedItem = "" Then
+                MsgBox("Select Boarding Type", vbExclamation, APPNAME)
+                Exit Sub
+            ElseIf Trim(TextBox13.Text) = "" Then
+                MsgBox("Enter Amount", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+
+
+            If RadioButton2.Checked = True Then
+                If TextBox5.Text = "" Or TextBox14.Text = "" Then
+                    MsgBox("Some Bank Receipt Details Missing.", vbExclamation)
+                    Exit Sub
+                End If
+            End If
+            If RadioButton3.Checked = True Then
+                If TextBox12.Text = "" Or TextBox14.Text = "" Then
+                    MsgBox("Some Bank Cheque Details Missing.", vbExclamation)
+                    Exit Sub
+                End If
+            End If
+            If RadioButton4.Checked = True Then
+                If TextBox16.Text = "" Or TextBox17.Text = "" Then
+                    MsgBox("Some Mobile Money Details Missing.", vbExclamation)
+                    Exit Sub
+                End If
+            End If
+
+            DayOfMonth = Format(Month((DateTimePicker1.Value)), "00") & "-" & Year(DateTimePicker1.Value)
+
+            Try
+
+                Dim Tran_nr As Long
+
+                RecSet.Open("select max(id) from btransaction", UniversalHostConnection)
+                If IsNumeric(RecSet.Fields(0).Value) = False Then
+                    Tran_nr = 0
+                Else
+                    Tran_nr = RecSet.Fields(0).Value + 1
+                End If
+                RecSet.Close()
+                Dim CheckInDate As String = ""
+
+                CheckInDate = Format(DateTimePicker6.Value, "dd-MM-yyyy")
+
+                RecSet.Open("select * from houserooms where house_name = '" & ComboBox3.SelectedItem & "' and unit_number = '" & Trim(TextBox18.Text) & "'", UniversalHostConnection)
+                If RecSet.EOF = True Then
+                    MsgBox("This House Unit does not exits", vbInformation, APPNAME)
+                    Exit Sub
+                ElseIf RecSet.Fields(3).Value = 1 Then
+
+                    MsgBox("This House Unit is occupied", vbInformation, APPNAME)
+                    Exit Sub
+
+                Else
+                    UniversalHostConnection.Execute("update houserooms set occupied = 1,board_type = '" & ComboBox4.SelectedItem & "', number_days = " & Trim(TextBox6.Text) & ", check_in_date = '" & CheckInDate & "',check_out_day = " & DateTimePicker7.Value.Day & ",check_out_month = " & DateTimePicker7.Value.Month & ", check_out_year = " & DateTimePicker7.Value.Year & ",customer_id = '" & Trim(TextBox19.Text) & "',customer_name = '" & Trim(TextBox11.Text) & "' where house_name = '" & ComboBox3.SelectedItem & "' and unit_number = '" & Trim(TextBox18.Text) & "'")
+                End If
+                RecSet.Close()
+
+
+
+                SqlStr = "Insert into btransaction Values(" & Tran_nr & ",'" & _
+                        Trim(TextBox11.Text) & "','" & Trim(TextBox19.Text) & "','" & ComboBox3.SelectedItem & "','" & Trim(TextBox18.Text) & "'," & Replace(Trim(TextBox7.Text), ",", "") & _
+                         ",'" & Format(DateTimePicker2.Value, "dd/MM/yyyy") & "','" & ComboBox4.SelectedItem & "'," & Trim(TextBox6.Text) & ",'" & Format(DateTimePicker6.Value, "dd/MM/yyyy") & "','" & Format(DateTimePicker7.Value, "dd/MM/yyyy") & "','" & Trim(TextBox5.Text) & "','" & Trim(TextBox12.Text) & "','" & Format(DateTimePicker2.Value, "dd-MM-yyyy") & "','" & Format(DateTimePicker3.Value, "dd-MM-yyyy") & "','" & Trim(TextBox14.Text) & _
+                         "','" & DayOfMonth & "','" & ComboBox2.SelectedItem & "','" & Trim(TextBox15.Text) & "','','" & Trim(TextBox8.Text) & "','" & PayMode & "',0,'" & Trim(TextBox4.Text) & "')"
+
+                UniversalHostConnection.Execute(UCase(SqlStr))
+
+
+
+                'Dim recset As New ADODB.Recordset
+                Dim Str As String = ""
+                Dim RecID As Integer = 1
+                Dim VAT As Double = 0.0
+                Dim Qter As Int16 = 1
+                Dim Yr As Integer = Year(Today)
+                Dim Vatable As Integer = 0
+
+                If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                    Qter = 1
+                ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                    Qter = 2
+                ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                    Qter = 3
+                ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                    Qter = 4
+                End If
+
+                'If ComboBox2.SelectedItem <> "BOARDING PAYMENTS" Then
+                '    MsgBox("RECORD UPDATED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+                '    Exit Sub
+                'End If
+
+                RecSet.Open("select max(rec_id) from itransaction ", UniversalHostConnection)
+                If IsNumeric(RecSet.Fields(0).Value) Then
+                    RecID = RecSet.Fields(0).Value + 1
+                Else
+                    RecID = 1
+                End If
+                RecSet.Close()
+
+
+                RecSet.Open("select tax_percent from tax where tax_type = 'VAT' ", UniversalHostConnection)
+                If IsNumeric(RecSet.Fields(0).Value) Then
+                    VatPercent = RecSet.Fields(0).Value
+                Else
+                    VatPercent = 0
+                End If
+                RecSet.Close()
+
+                RecSet.Open("select VATable from income where income_description = '" & ComboBox1.SelectedItem & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                If RecSet.EOF = False Then
+                    Vatable = RecSet.Fields(0).Value
+                Else
+                    Vatable = 0.0
+                End If
+                RecSet.Close()
+
+                If Vatable = 1 Then
+                    VAT = Trim(TextBox7.Text) * (VatPercent / 100)
+                Else
+                    VAT = 0
+                End If
+
+                Str = "insert into itransaction values(" & RecID & ",'" & DateTimePicker1.Value & "','" & ComboBox3.SelectedItem & "','" & DateTimePicker1.Value & "','" & Trim(TextBox4.Text) & "'," & Replace(Trim(TextBox7.Text), ",", "") & "," & VAT & ",'BOARDING PAYMENTS','" & TextBox11.Text & " " & TextBox19.Text & "','" & TextBox18.Text & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+                UniversalHostConnection.Execute(UCase(Str))
+
+
+                UniversalHostConnection.Execute("delete from receipting")
+                UniversalHostConnection.Execute("insert into receipting values(" & CLng(TextBox4.Text) + 1 & ")")
+
+                TextBox4.Text = Format((CLng(TextBox4.Text) + 1), "000000")
+
+
+
+
+                If MsgBox("RECORD SUBMITTED SUCCESSFULLY. PRINT RECEIPT?", MsgBoxStyle.YesNo, APPNAME) = vbYes Then
+                    frmPrint.TextBox1.Text = TextBox11.Text
+                    frmPrint.TextBox2.Text = TextBox19.Text
+                    frmPrint.TextBox3.Text = TextBox21.Text
+                    frmPrint.TextBox4.Text = ComboBox4.SelectedItem & " | " & ComboBox3.SelectedItem & " | " & TextBox18.Text
+                    frmPrint.TextBox5.Text = Format(CDbl(TextBox7.Text), "#,###.##")
+
+
+                    If RadioButton1.Checked Then
+                        frmPrint.TextBox6.Text = UCase(RadioButton1.Text)
+                    ElseIf RadioButton3.Checked Then
+                        frmPrint.TextBox6.Text = TextBox14.Text & "   | CHEQ NO: " & TextBox12.Text
+                    ElseIf RadioButton2.Checked = False Then
+                        frmPrint.TextBox6.Text = TextBox14.Text & "   | RCPT NO: " & TextBox5.Text
+                    ElseIf RadioButton4.Checked = False Then
+                        frmPrint.TextBox6.Text = TextBox17.Text & "   | TRAN NO: " & TextBox16.Text
+                    End If
+                    frmPrint.TextBox7.Text = TextBox1.Text
+                    frmPrint.TextBox8.Text = Receipt
+
+                    frmPrint.Show()
+                    frmPrint.Hide()
+
+
+
+                    PrintPreviewDialog1.WindowState = FormWindowState.Normal
+                    PrintPreviewDialog1.StartPosition = FormStartPosition.CenterScreen
+                    PrintPreviewDialog1.ClientSize = New Size(1000, 600)
+
+                    PrintPreviewDialog1.Document = PrintDocument1
+                    PrintPreviewDialog1.ShowDialog()
+                End If
+
+
+
+            Catch ex As Exception
+                MsgBox(ex.Message, vbCritical)
+            End Try
+            '"Insert into rTransaction Values('EZEKIEL K KIMANTHI','22882770','GROOVE HOUSE BLOCK B','1',15000','31-03-2013 7:05:37 PM','','','31-03-2013 7:05:37 PM','31-03-2013 7:05:37 PM','','03-2013','RENT','','',EZEKIEL K KIMANTHI','CASH',0,'2234567')"
+
+        End If
+
+
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+            If ComboBox1.SelectedItem = "" Then
+                MsgBox("Select House Name", vbExclamation)
+                Exit Sub
+            End If
+
+            'Me.WindowState = FormWindowState.Maximized
+            Dim RecSet As New ADODB.Recordset
+            RecSet.Open("select house_name,floors from house_details where owner = '" & Form1.OWNER & "' and house_name = '" & ComboBox1.SelectedItem & "'", UniversalHostConnection)
+
+            If RecSet.EOF = False Then
+                frmRooms.SourceFrm = 1
+                frmRooms.Floor = RecSet.Fields(1).Value + 1
+            End If
+
+            'frmRooms.Text = ""
+            frmRooms.Panel3.Enabled = False
+            frmRooms.MODE = 0
+            frmRooms.UNITEDIT = 0
+
+            frmRooms.TextBox1.Text = ComboBox1.SelectedItem
+            frmRooms.ShowDialog()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub RadioButton10_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton10.CheckedChanged
+        If RadioButton10.Checked = True Then
+            GroupBox5.Visible = True
+            GroupBox1.Visible = False
+            ComboBox2.Text = "BOARDING PAYMENTS"
+            Dim recset As New ADODB.Recordset
+            recset.Open("select house_name from house_details where owner = '" & Form1.OWNER & "' and rental_type = 1 order by house_name asc", UniversalHostConnection)
+            ComboBox3.Items.Clear()
+            Do While recset.EOF = False
+                ComboBox3.Items.Add(UCase(recset.Fields(0).Value))
+                recset.MoveNext()
+                'TextBox2.Enabled = True
+            Loop
+        End If
+    End Sub
+
+    Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
+    Private Sub RadioButton9_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton9.CheckedChanged
+        If RadioButton9.Checked = True Then
+            GroupBox5.Visible = False
+            GroupBox1.Visible = True
+            ComboBox2.Text = "RENT"
+            Dim recset As New ADODB.Recordset
+            recset.Open("select house_name from house_details where owner = '" & Form1.OWNER & "' and rental_type = 0 order by house_name asc", UniversalHostConnection)
+            ComboBox1.Items.Clear()
+            Do While Recset.EOF = False
+                ComboBox1.Items.Add(UCase(recset.Fields(0).Value))
+                Recset.MoveNext()
+            Loop
+        End If
+    End Sub
+
+    Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Datarefresh()
+
+        'Dim Recset As New ADODB.Recordset
+        'Dim SqlStr As String
+        'Dim filter As String = ""
+        'Dim Amount As Double = 0
+
+        'If Trim(TextBox2.Text) = "" Then
+        '    MsgBox("Select customer ID", vbExclamation, APPNAME)
+        '    Exit Sub
+        'End If
+
+        'GroupBox3.Visible = True
+        'GroupBox2.Visible = False
+
+        'SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'RENT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from rTransaction "
+        'filter = " where cust_id = '" & Trim(TextBox2.Text) & "' order by date_of_payment"
+
+
+        'Dim i As Integer
+        'Try
+
+
+        '    Dim n As Integer '= DataGridView1.Rows.Add()
+        '    Recset.Open(SqlStr & filter, UniversalHostConnection)
+        '    DataGridView1.Rows.Clear()
+        '    Amount = 0
+
+        '    If Recset.EOF = False Then
+        '        Do While Recset.EOF = False
+        '            DataGridView1.Rows.Add()
+        '            For i = 0 To 14
+        '                DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+        '            Next
+        '            Amount = Amount + Recset.Fields(6).Value
+        '            n = n + 1
+        '            Recset.MoveNext()
+        '        Loop
+
+        '        Recset.Close()
+        '        SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'RENT DEPOSIT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from dTransaction "
+        '        Recset.Open(SqlStr & filter, UniversalHostConnection)
+        '        Do While Recset.EOF = False
+        '            DataGridView1.Rows.Add()
+        '            For i = 0 To 14
+        '                DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+        '            Next
+        '            Amount = Amount + Recset.Fields(6).Value
+        '            n = n + 1
+        '            Recset.MoveNext()
+        '        Loop
+
+        '        Recset.Close()
+        '        SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'ELECTRICITY DEPOSIT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from edTransaction "
+        '        Recset.Open(SqlStr & filter, UniversalHostConnection)
+        '        Do While Recset.EOF = False
+        '            DataGridView1.Rows.Add()
+        '            For i = 0 To 14
+        '                DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+        '            Next
+        '            Amount = Amount + Recset.Fields(6).Value
+        '            n = n + 1
+        '            Recset.MoveNext()
+        '        Loop
+
+        '        Recset.Close()
+        '        SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'WATER DEPOSIT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from wdTransaction "
+        '        Recset.Open(SqlStr & filter, UniversalHostConnection)
+        '        Do While Recset.EOF = False
+        '            DataGridView1.Rows.Add()
+        '            For i = 0 To 14
+        '                DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+        '            Next
+        '            Amount = Amount + Recset.Fields(6).Value
+        '            n = n + 1
+        '            Recset.MoveNext()
+        '        Loop
+
+        '    Else
+        '        MsgBox("No Record Found", vbExclamation)
+        '        Exit Sub
+        '    End If
+        'Catch ex As Exception
+        '    MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        'End Try
+    End Sub
+
+    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
+        GroupBox3.Visible = False
+        GroupBox2.Visible = True
+    End Sub
+
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
+        'PrintDocument1.Document()
+        'PrintPreviewDialog1.ShowDialog()
+        Try
+
+
+
+            frmPrint.TextBox1.Text = TextBox8.Text
+            frmPrint.TextBox2.Text = TextBox3.Text
+            frmPrint.TextBox3.Text = MOBILENR
+            frmPrint.TextBox4.Text = ComboBox2.SelectedItem & " | " & ComboBox1.SelectedItem & " | " & TextBox3.Text
+            frmPrint.TextBox5.Text = Format(CDbl(TextBox13.Text), "#,###.##")
+
+
+            If RadioButton1.Checked Then
+                frmPrint.TextBox6.Text = UCase(RadioButton1.Text)
+            ElseIf RadioButton3.Checked Then
+                frmPrint.TextBox6.Text = TextBox14.Text & "   | CHEQ NO: " & TextBox12.Text
+            ElseIf RadioButton2.Checked = False Then
+                frmPrint.TextBox6.Text = TextBox14.Text & "   | RCPT NO: " & TextBox5.Text
+            ElseIf RadioButton4.Checked = False Then
+                frmPrint.TextBox6.Text = TextBox17.Text & "   | TRAN NO: " & TextBox16.Text
+            End If
+            frmPrint.TextBox7.Text = TextBox1.Text
+            frmPrint.TextBox8.Text = TextBox4.Text
+
+            frmPrint.Show()
+            frmPrint.Hide()
+
+
+
+            PrintPreviewDialog1.WindowState = FormWindowState.Normal
+            PrintPreviewDialog1.StartPosition = FormStartPosition.CenterScreen
+            PrintPreviewDialog1.ClientSize = New Size(1000, 600)
+
+            PrintPreviewDialog1.Document = PrintDocument1
+            PrintPreviewDialog1.ShowDialog()
+
+
+        Catch ex As Exception
+
+        End Try
+
+
+    End Sub
+
+    Private Sub PictureBox1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox1.MouseDown
+        PictureBox1.BackColor = Color.LightSteelBlue
+    End Sub
+
+    Private Sub PictureBox1_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox1.MouseUp
+        PictureBox1.BackColor = Color.WhiteSmoke
+    End Sub
+
+    Private Sub PictureBox2_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox2.MouseDown
+        PictureBox2.BackColor = Color.LightSteelBlue
+    End Sub
+
+    Private Sub PictureBox2_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox2.MouseUp
+        PictureBox2.BackColor = Color.WhiteSmoke
+    End Sub
+
+    Private Sub Button9_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button9.Click
+
+        Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+        Dim RecNr = DataGridView1.Rows.Item(Row).Cells(10).Value
+
+        If MsgBox("WARNING! THIS WILL REVERSE/ABORT THE HIGHLIGHTED TRANSACTION. DO YOU WANT CONTINUE?", vbYesNo, APPNAME) = vbYes Then
+            Try
+
+
+
+                UniversalHostConnection.Execute("delete from edtransaction where official_rpt_nr = '" & RecNr & "'")
+                UniversalHostConnection.Execute("delete from wdtransaction where official_rpt_nr = '" & RecNr & "'")
+                UniversalHostConnection.Execute("delete from dtransaction where official_rpt_nr = '" & RecNr & "'")
+
+
+                UniversalHostConnection.Execute("delete from btransaction where official_rpt_nr = '" & RecNr & "'")
+                UniversalHostConnection.Execute("delete from rtransaction where official_rpt_nr = '" & RecNr & "'")
+                UniversalHostConnection.Execute("delete from itransaction where receipt_nr = '" & RecNr & "'")
+
+                MsgBox("Record updated successfully", vbInformation, APPNAME)
+                Datarefresh()
+            Catch ex As Exception
+
+
+            End Try
+        End If
+    End Sub
+
+    Private Sub Datarefresh()
+        Dim Recset As New ADODB.Recordset
+        Dim SqlStr As String
+        Dim filter As String = ""
+        Dim Amount As Double = 0
+
+
+
+        GroupBox3.Visible = True
+        GroupBox2.Visible = False
+
+
+        If RadioButton9.Checked = True Then
+            If Trim(TextBox2.Text) = "" Then
+                MsgBox("Select customer ID", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+
+
+
+            SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'RENT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from rTransaction "
+            filter = " where cust_id = '" & Trim(TextBox2.Text) & "' order by date_of_payment"
+
+
+            Dim i As Integer
+            Try
+
+
+                Dim n As Integer '= DataGridView1.Rows.Add()
+                Recset.Open(SqlStr & filter, UniversalHostConnection)
+                DataGridView1.Rows.Clear()
+                Amount = 0
+
+                If Recset.EOF = False Then
+                    Do While Recset.EOF = False
+                        DataGridView1.Rows.Add()
+                        For i = 0 To 14
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        Amount = Amount + Recset.Fields(6).Value
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+
+                    Recset.Close()
+                    SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'RENT DEPOSIT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from dTransaction "
+                    Recset.Open(SqlStr & filter, UniversalHostConnection)
+                    Do While Recset.EOF = False
+                        DataGridView1.Rows.Add()
+                        For i = 0 To 14
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        Amount = Amount + Recset.Fields(6).Value
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+
+                    Recset.Close()
+                    SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'ELECTRICITY DEPOSIT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from edTransaction "
+                    Recset.Open(SqlStr & filter, UniversalHostConnection)
+                    Do While Recset.EOF = False
+                        DataGridView1.Rows.Add()
+                        For i = 0 To 14
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        Amount = Amount + Recset.Fields(6).Value
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+
+                    Recset.Close()
+                    SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,'WATER DEPOSIT',amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from wdTransaction "
+                    Recset.Open(SqlStr & filter, UniversalHostConnection)
+                    Do While Recset.EOF = False
+                        DataGridView1.Rows.Add()
+                        For i = 0 To 14
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        Amount = Amount + Recset.Fields(6).Value
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+
+                Else
+                    MsgBox("No Record Found", vbExclamation)
+                    Exit Sub
+                End If
+
+
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        Else
+
+            If TextBox19.Text <> "" Then
+
+                SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,board_type,amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from bTransaction "
+                filter = " where cust_id = '" & Trim(TextBox19.Text) & "' and house_name = '" & Trim(ComboBox3.SelectedItem) & "' order by date_of_payment"
+            Else
+                SqlStr = "Select cust_id,customer,'NULL',house_nr,house_name,board_type,amount,date_of_payment,for_month,paymode,official_rpt_nr,bank_rpt_nr,cheq_nr,bank_name,payer from bTransaction "
+                filter = " where house_name = '" & Trim(ComboBox3.SelectedItem) & "' order by date_of_payment"
+
+
+            End If
+
+            Dim i As Integer
+            Try
+
+
+                Dim n As Integer '= DataGridView1.Rows.Add()
+                Recset.Open(SqlStr & filter, UniversalHostConnection)
+                DataGridView1.Rows.Clear()
+                Amount = 0
+
+                If Recset.EOF = False Then
+                    Do While Recset.EOF = False
+                        DataGridView1.Rows.Add()
+                        For i = 0 To 14
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        Amount = Amount + Recset.Fields(6).Value
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+
+
+                Else
+                    MsgBox("No Record Found", vbExclamation)
+                    Exit Sub
+                End If
+
+
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+
+        End If
+    End Sub
+
+    Private Sub PrintDocument1_PrintPage(ByVal sender As System.Object, ByVal e As System.Drawing.Printing.PrintPageEventArgs) Handles PrintDocument1.PrintPage
+        Dim bm As New Bitmap(frmPrint.GroupBox1.Width, frmPrint.GroupBox1.Height)
+        frmPrint.GroupBox1.DrawToBitmap(bm, New Rectangle(0, 0, frmPrint.GroupBox1.Width, frmPrint.GroupBox1.Height))
+        e.Graphics.DrawImage(bm, 0, 0)
+
+    End Sub
+
+    Private Sub Button10_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button10.Click
+        Try
+            If ComboBox3.SelectedItem = "" Then
+                MsgBox("Select House Name", vbExclamation)
+                Exit Sub
+            End If
+
+            'Me.WindowState = FormWindowState.Maximized
+            Dim RecSet As New ADODB.Recordset
+            RecSet.Open("select house_name,floors from house_details where owner = '" & Form1.OWNER & "' and house_name = '" & ComboBox3.SelectedItem & "'", UniversalHostConnection)
+
+            If RecSet.EOF = False Then
+                frmRooms.SourceFrm = 1
+                frmRooms.Floor = RecSet.Fields(1).Value + 1
+            End If
+
+            'frmRooms.Text = ""
+            frmRooms.Panel3.Enabled = True
+            frmRooms.DateTimePicker1.Value = DateTimePicker6.Value
+            frmRooms.MODE = 1
+            frmRooms.TextBox1.Text = ComboBox3.SelectedItem
+            frmRooms.ShowDialog()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Button11_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button11.Click
+        Try
+            Dim Str As String = ""
+            Dim RecSet As New ADODB.Recordset
+            If ComboBox4.SelectedIndex <> -1 Then
+                If TextBox6.Text <> "" Then
+                    If ComboBox4.SelectedIndex = 0 Then
+                        Str = "select single_bed from boardprice where House_name = '" & ComboBox3.SelectedItem & "' and owner = '" & Form1.OWNER & "'"
+                    ElseIf ComboBox4.SelectedIndex = 1 Then
+                        Str = "select d_bed from boardprice where house_name = '" & ComboBox3.SelectedItem & "' and owner = '" & Form1.OWNER & "'"
+                    ElseIf ComboBox4.SelectedIndex = 2 Then
+                        Str = "select single_bb from boardprice where house_name = '" & ComboBox3.SelectedItem & "' and owner = '" & Form1.OWNER & "'"
+                    ElseIf ComboBox4.SelectedIndex = 3 Then
+                        Str = "select d_bb from boardprice where house_name = '" & ComboBox3.SelectedItem & "' and owner = '" & Form1.OWNER & "'"
+                    ElseIf ComboBox4.SelectedIndex = 4 Then
+                        Str = "select single_fb from boardprice where house_name = '" & ComboBox3.SelectedItem & "' and owner = '" & Form1.OWNER & "'"
+                    ElseIf ComboBox4.SelectedIndex = 5 Then
+                        Str = "select d_fb from boardprice where house_name = '" & ComboBox3.SelectedItem & "' and owner = '" & Form1.OWNER & "'"
+                    End If
+
+
+                    RecSet.Open(Str, UniversalHostConnection)
+                    If RecSet.EOF = False Then
+                        TextBox7.Text = CInt(TextBox6.Text) * RecSet.Fields(0).Value
+                        TextBox13.Text = CInt(TextBox6.Text) * RecSet.Fields(0).Value
+                    Else
+                        TextBox7.Text = "0"
+                        TextBox13.Text = "0"
+                    End If
+
+
+                Else
+                    MsgBox("Enter number of days", vbExclamation, APPNAME)
+                    Exit Sub
+                End If
+            Else
+                MsgBox("Select Boarding Type", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TextBox6_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox6.TextChanged
+
+    End Sub
+
+    Private Sub TextBox6_Validated(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBox6.Validated
+        If IsNumeric(TextBox6.Text) Then
+            DateTimePicker7.Value = DateTimePicker6.Value.AddDays(CInt(TextBox6.Text))
+        End If
+    End Sub
+
+    Private Sub Button12_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button12.Click
+        Datarefresh()
+    End Sub
+
+    Private Sub PrintPreviewDialog1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PrintPreviewDialog1.Load
+
+    End Sub
+
+    Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
+
+    End Sub
+
+    Private Sub PrintPreviewDialog1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PrintPreviewDialog1.MouseClick
+
+    End Sub
+
+    Private Sub PictureBox2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox2.Click
+        Try
+
+
+
+            frmPrint.TextBox1.Text = TextBox11.Text
+            frmPrint.TextBox2.Text = TextBox19.Text
+            frmPrint.TextBox3.Text = TextBox21.Text
+            frmPrint.TextBox4.Text = ComboBox4.SelectedItem & " | " & ComboBox3.SelectedItem & " | " & TextBox18.Text
+            frmPrint.TextBox5.Text = Format(CDbl(TextBox7.Text), "#,###.##")
+
+
+            If RadioButton1.Checked Then
+                frmPrint.TextBox6.Text = UCase(RadioButton1.Text)
+            ElseIf RadioButton3.Checked Then
+                frmPrint.TextBox6.Text = TextBox14.Text & "   | CHEQ NO: " & TextBox12.Text
+            ElseIf RadioButton2.Checked = False Then
+                frmPrint.TextBox6.Text = TextBox14.Text & "   | RCPT NO: " & TextBox5.Text
+            ElseIf RadioButton4.Checked = False Then
+                frmPrint.TextBox6.Text = TextBox17.Text & "   | TRAN NO: " & TextBox16.Text
+            End If
+            frmPrint.TextBox7.Text = TextBox1.Text
+            frmPrint.TextBox8.Text = TextBox4.Text
+
+            frmPrint.Show()
+            frmPrint.Hide()
+
+
+
+            PrintPreviewDialog1.WindowState = FormWindowState.Normal
+            PrintPreviewDialog1.StartPosition = FormStartPosition.CenterScreen
+            PrintPreviewDialog1.ClientSize = New Size(1000, 600)
+
+            PrintPreviewDialog1.Document = PrintDocument1
+            PrintPreviewDialog1.ShowDialog()
+
+
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+
+    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
+
+    End Sub
+
+    Private Sub DateTimePicker6_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DateTimePicker6.ValueChanged
+        If IsNumeric(TextBox6.Text) Then
+            DateTimePicker7.Value = DateTimePicker6.Value.AddDays(CInt(TextBox6.Text))
+        End If
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
+        
+
+    End Sub
+
+    
+
+
+End Class

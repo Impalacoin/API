@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+	<meta name="author" content="Nicholas N. Chege" />
+    <link rel="stylesheet" href="css/default.css" media="screen" />
+	<title>Welcome to chase bank's instant money transfer platform</title>
+</head>
+
+<body >
+<div id="container">
+
+<div class="navigation-inner">
+    <div class="home-icon"><a href="index.php"><img src="images/home_icon.png"/></a></div>
+    <ul>
+        <li><a href="#">My Account</a></li>
+        <li><a href="#">About us</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="register.php">Register</a></li>
+    </ul>
+</div>
+<div id="content">
+ <div class="content-top"></div>
+ <div class="content-inner">
+    <div class="full-width-content">
+    <ul id="blog-entries">
+        <li class="blog-entry single">
+        <h3 class="blog-page-title">Contacts</h3>
+        <div class="sh-one-half float-left">
+        <h5>Send us a message</h5>
+        <div class="comment-form-container" id="contact-wrapper">
+            <form method="post" action="" id="contactform">
+                <div class="form-name float-left">
+                    <label for="contact_name">Your name</label>
+                    <input  type="text" size="50" name="contact_name" id="contact_name" class="required form-name input-text" />
+                    <div class="clear"></div>
+                    <span id="name_error" class="contact_error">* Please enter your name</span>
+                </div>
+                <div class="form-name float-right">
+                    <label for="contact_email">Your email</label>
+                    <input  type="text" size="50" name="contact_email" id="contact_email" class="required email form-name input-text" />
+                    <div class="clear"></div>
+                    <span id="contact_error" class="contact_error">* Please enter a valid email id</span>
+                </div>
+                <br class="clear"/>
+                <div class="form-comment">
+                    <label for="contact_message">Message</label>
+                    <textarea rows="4" cols="20" name="contact_message" id="contact_message" class="required txtarea-comment"></textarea>
+                    <div class="clear"></div>
+                    <span id="message_error" class="contact_error">* What do you want to tell us</span>
+                </div>
+                <div class="clear"></div>
+                <div id="mail_success" class="contact_error alert_success">Email sent! We will get back to you as soon as we can.</div>
+                <div id="mail_fail" class="contact_error alert_error">Sorry, we don't know what happened. Please try again later.</div>
+                <p id="cf_submit_p">
+                    <input type="submit" id="send_message" class="button" value="Send Message" name="send_message" />
+                </p>
+            </form>
+        </div>
+        </div>
+        <div class="sh-one-half float-left column-last">
+            <h5>Contact details</h5>
+            <p class="icon-list-map">
+                Nairobi, Kenya <br />
+                Kirinyaga Road off Moi avenue, Twiga Towers, 2nd floor
+            </p>
+            <div class="divider"></div>
+            <p class="icon-list-phone">
+            +254723254254<br />
+            +254723254256
+            </p>
+            <div class="divider"></div>
+            <p class="icon-list-mail">
+                info@impalapay.com
+            </p>
+        </div>
+        </li>
+    </ul>
+     
+    </div>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+
+
+?>

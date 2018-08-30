@@ -1,0 +1,145 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+ require_once("engine.php");
+     
+// mysql_close($db_conn);  
+   display_navigation();
+   check_if_logged_in($me); 
+   if($me){
+    if(isset($_GET["value"])){
+        //checks wheather 100 dollars has been sent
+        if($_GET["value"]=="100"){
+            $amount_usd=(int)$_GET["value"];
+            $conversion_rate=(int)80;
+            $amount_ksh=$amount_usd*$conversion_rate;
+            echo "<p style='margin:0px 0px 0px 20px;color:red;'>You want to purchase $100 credit equevalent to Ksh ".number_format($amount_ksh,2)." using Mpesa. Follow the instructios below:-<br />";
+            echo "<ul style='margin:0px 0px 0px 30px;color:green;'>";
+            echo "<li>1. On your mobile phone, go to menu and navigate to safaricom</li>";
+            echo "<li>2. Click on safaricom link and then select Mpesa on the menu</li>";
+            echo "<li>3. Select withdraw and when prompted for agent number put *****</li>";
+            echo "<li>4. When Prompted for amount put Ksh ".number_format($amount_ksh,2)."</li>";
+            echo "<li>5. After withdrawing you receive a message from safaricom containing verification code</li>";
+            echo "<li>6. Click <a href=buy_mpesa.php?validate=validate100><b>Here</b></a> and Input your verification code and amount";
+            echo "<li>7. Your account is loaded with the money you sent.</li>";
+            echo "</ul>";
+            echo "<p>";
+        }elseif($_GET["value"]=="500"){
+            echo "Your purchase is 500$ dollars";
+        }elseif($_GET["value"]=="500"){
+            echo "Your purchase is 1000$ dollars";
+        }else{
+            echo "You are not supposed to be on this page";
+        }
+            
+            
+    }
+    if(isset($_GET["validate"])){
+          if($_GET["validate"]=="validate100"){
+            ?>
+            <form action="buy_mpesa.php" method="post">
+            <table>
+            <tr><td><label>Mpesa Code</label> </td><td><input type="text" name="code"/></td></tr>
+            <tr><td><label>Mpesa Amount</label> </td><td><input type="text" name="amount" /></td></tr>
+            <tr><td colspan="2" align="left"> <input type="submit" value="Verify" name="verify" /></td></tr>
+            </table>
+                      
+                      
+                       
+                        
+            <?php
+            }
+    }
+                    
+                //code to verify that the client has sent money
+                if(isset($_POST["verify"])){
+                                       
+                    $mpesa_conn=mysql_connect("192.168.220.6","nicholas","123jump") or die(mysql_error());
+                    mysql_select_db("paymentonline",$mpesa_conn);
+                    $required_fields=array("amount","code");
+                    $errors=check_required_fields($required_fields);
+                    if(empty($errors)){
+                        $post_code=trim($_POST["code"]);
+                        $post_amount=(int)trim($_POST["amount"]);
+                        //query the db to check the code and amount
+                        
+                        
+                        $query="SELECT * FROM mpesa_confimed_deposites WHERE status='new'";
+                        $result_set=mysql_query($query) or die(mysql_error());
+                        
+                        //Fetch the record to verify against and put them in an array
+                        $code_array=array(); 
+                        while($mpesa=mysql_fetch_array($result_set)){
+                            $code_array[]=$mpesa["transCode"];
+                        }
+                        //print_r($code_array);
+                        
+                        
+                        //check wheather the code exists and if it does, query for amount
+                        if(in_array($post_code,$code_array)){
+                            $query="SELECT TransAmount FROM mpesa_confimed_deposites WHERE transCode='{$post_code}' limit 1";
+                            $result_set=mysql_query($query) or die(mysql_error());
+                            $db_amount=(int)mysql_result($result_set,0) or die(mysql_error());
+                            //verify the amount is the same
+                            if($db_amount==$post_amount){
+                                $query="UPDATE mpesa_confimed_deposites SET status='verified' WHERE transCode='{$post_code}'";
+                                $result_set=mysql_query($query) or die(mysql_error());
+                                //check if the status is changed so you cant enter the same code twice
+                                if(mysql_affected_rows()==1){
+                                    echo "Your Deposit was successfull";
+                                    
+                                    //close the connection to paymentonline database                                
+                                    mysql_close($mpesa_conn);
+                                    $local_conn=mysql_connect("localhost","root","");
+                                    mysql_select_db("impalapay");
+                                    
+                                    //get the current account details
+                                    $account=getAccount($uid);
+                                    $row_account=mysql_fetch_array($account);
+                                    $old_amount=$row_account["amount"];
+                                    //do culculations to determine the new balance
+                                    (float)$mpesa_to_usd=(float)$post_amount/80;
+                                    (float)$new_amount=$mpesa_to_usd+$old_amount;
+                                    //update the database that stores account information
+                                    $query="UPDATE account SET amount={$new_amount} WHERE fb_id='{$uid}' ";
+                                    $result_set=mysql_query($query) or die(mysql_error());
+                                    if($result_set){        
+                                        $id=$row_account["id"];                
+                                        $query_trans="INSERT INTO transaction SET account_id='{$id}', transaction='d',balance={$new_amount},amount={$mpesa_to_usd} ";
+                                        $result_trans=mysql_query($query_trans) or die(mysql_error());
+                                        if(mysql_affected_rows()==1){
+                                                                                        
+                                           echo "<fb:redirect url='statement.php?trans_success'>";
+                                        }
+                                    }
+                                    mysql_close($local_conn);
+                                }//ends if update affected_rows is 1 and gives an else
+                                else{
+                                    echo "The amount you entered does not match the money you sent";
+                                }
+                                
+                            }//ends if $db_amount==$post_amount
+                        }//ends if in_array and gives an else
+                        else{
+                            echo "The code given is not valid, please try again with the correct code";
+                        }
+                    }//ends if empty errors and gives an else
+                    else{
+                       print_r($errors); 
+                    }
+                    
+                }//ends if post(verify)
+            
+            
+        
+   
+?>
+
+<?php
+     }
+     
+//require_once "includes/footer.php"
+?>

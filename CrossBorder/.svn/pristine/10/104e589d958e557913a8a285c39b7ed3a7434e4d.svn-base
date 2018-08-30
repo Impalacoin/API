@@ -1,0 +1,367 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "clsdatabase"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+'enumeration type for database status
+Enum dbState
+    Passed
+    FailedNetworkFailure
+    FailedLogonFailure
+End Enum
+
+'variables
+Public dbConnection As ADODB.Connection
+Private rstRecordset As ADODB.Recordset
+Public dbConnectionStatus As dbState
+Public dbServerName As String
+Public connString As String
+Private prvMessageType As String
+Private prvStatus As Integer
+Private prvPan As String
+Private prvMsisdn As String
+Private prvExpiryDate As String
+Private prvRetrievalReferenceNo As String
+Private prvTransactionType As String
+Private prvAmount As String
+Private prvTerminalId As String
+Private prvCardAcceptorNameLoc As String
+Private prvCardAcceptorIdCode As String
+Private prvState As Integer
+Private prvResponseCodePost As String
+Private prvResponseCodeMp As String
+Private prvAdditionalInfo As String
+Private prvAdditionalRespData  As String
+Private prvMerchantType As String
+Private prvPosCondCode As String
+Private prvPosEntryMode As String
+Private prvAcquiringInst As String
+Private prvCurrencyCode As String
+Private prvPosDataCode As String
+Private prvTransDateTime As String
+Private prvSysTraceAudit As String
+Private prvDateLocal As String
+Private prvTimeLocal As String
+Private prvResult As String
+
+'class instantiation
+Private Sub Class_Initialize()
+    Set dbConnection = New ADODB.Connection
+    dbConnection.CommandTimeout = 3600
+    dbConnection.ConnectionTimeout = 30
+    
+    connString = "Provider=SQLOLEDB;data source = 172.17.0.165;initial catalog =emconnect;User ID=emcon;Password=emcon"
+    dbConnection.Open (connString)
+    'dbConnection.Open "emcon", "econ", "econ"
+    
+    'Set cn = New ADODB.Connection
+    'cn.Open "Provider=SQLOLEDB;data Source=<name of your SQL Server>;"
+    'Initial Catalog=pubs;User Id=<Your Userid>;Password=<Your Password>"
+    
+    
+    If dbConnection.state = adStateOpen Then
+        'dbConnectionStatus = Passed
+        Set rstRecordset = New Recordset
+    Else
+        'dbConnectionStatus = FailedLogonFailure
+        Set dbConnection = Nothing
+    End If
+    dbServerName = dbConnection.Properties("Server Name").Value
+End Sub
+
+
+
+Public Sub EnqueueTransaction(ByVal message_type As String, ByVal tran_type As String, ByVal Msisdn As String, tran_amount As String, ByVal date_time As Date, _
+ByVal mobile_pin As String, ret_ref_nr As String, ByVal stan As String, ByVal transmissionadate As String, _
+ByVal datelocal As String, ByVal timelocal As String)
+  
+    Dim rstCommand As ADODB.Command
+    
+    Set rstCommand = New ADODB.Command
+    
+    With rstCommand
+        .ActiveConnection = dbConnection
+        .CommandType = adCmdStoredProc
+        .CommandText = "em_enque_trans"
+        
+        .Parameters("@message_type") = message_type
+        .Parameters("@tran_type") = tran_type
+        .Parameters("@msisdn") = Msisdn
+        .Parameters("@tran_amount_req") = tran_amount
+        .Parameters("@date_time") = date_time
+        .Parameters("@pin_data") = mobile_pin
+        .Parameters("@ret_ref_nr") = ret_ref_nr
+        .Parameters("@stan") = stan
+        .Parameters("@transmissiondate") = transmissionadate
+        .Parameters("@date_local") = datelocal
+        .Parameters("@time_local") = timelocal
+        .Execute
+    End With
+    
+    Set rstCommand = Nothing
+End Sub
+
+Public Sub GetTransactionDetails()
+    Dim rstCommand As ADODB.Command
+
+On Error GoTo Error_Handle
+    Set rstCommand = New ADODB.Command
+    
+    With rstCommand
+        .ActiveConnection = dbConnection
+        .CommandType = adCmdStoredProc
+        .CommandText = "em_sp_get_trans"
+        .Execute
+        
+        
+        'prvMessageType = .Parameters("@message_type").Value
+        'prvTransactionType = .Parameters("@tran_type").Value
+        'prvAmount = .Parameters("@tran_amount_req").Value
+        'prvPan = .Parameters("@pan").Value
+        'prvRetrievalReferenceNo = .Parameters("@ret_ref_nr").Value
+        'prvSysTraceAudit = .Parameters("@stan").Value
+        'prvTransDateTime = .Parameters("@transmissiondate").Value
+        'prvDateLocal = .Parameters("@date_local").Value
+        'prvTimeLocal = .Parameters("@time_local").Value
+        'prvExpiryDate = .Parameters("@expiry").Value
+        'prvResult = .Parameters("@result").Value
+                
+        'return success
+        'GetTransactionDetails = True
+    End With
+    
+    Set rstCommand = Nothing
+    Exit Sub
+Error_Handle:
+    Set rstCommand = Nothing
+    'GetTransactionDetails = False
+End Sub
+
+Private Sub Class_Terminate()
+    Set rstRecordset = Nothing
+    Set dbConnection = Nothing
+End Sub
+Public Property Get MessageType() As Variant
+    MessageType = prvMessageType
+End Property
+
+Public Property Let MessageType(ByVal vNewValue As Variant)
+    prvMessageType = vNewValue
+End Property
+
+Public Property Get Pan() As Variant
+    Pan = prvPan
+End Property
+
+Public Property Let Pan(ByVal vNewValue As Variant)
+    prvPan = vNewValue
+End Property
+
+Public Property Get Msisdn() As Variant
+    Msisdn = prvMsisdn
+End Property
+
+Public Property Let Msisdn(ByVal vNewValue As Variant)
+    prvMsisdn = vNewValue
+End Property
+
+Public Property Get ExpiryDate() As Variant
+    ExpiryDate = prvExpiryDate
+End Property
+
+Public Property Let ExpiryDate(ByVal vNewValue As Variant)
+    prvExpiryDate = vNewValue
+End Property
+
+Public Property Get RetrievalReferenceNo() As Variant
+    RetrievalReferenceNo = prvRetrievalReferenceNo
+End Property
+
+Public Property Let RetrievalReferenceNo(ByVal vNewValue As Variant)
+    prvRetrievalReferenceNo = vNewValue
+End Property
+
+Public Property Get TransactionType() As Variant
+    TransactionType = prvTransactionType
+End Property
+
+Public Property Let newTransactionType(ByVal vNewValue As Variant)
+    prvTransactionType = vNewValue
+End Property
+
+Public Property Get Amount() As Variant
+    Amount = prvAmount
+End Property
+
+Public Property Let newAmount(ByVal vNewValue As Variant)
+    prvAmount = vNewValue
+End Property
+
+Public Property Get TerminalId() As Variant
+    TerminalId = prvTerminalId
+End Property
+
+Public Property Let newTerminalId(ByVal vNewValue As Variant)
+    prvTerminalId = vNewValue
+End Property
+
+Public Property Get CardAcceptorNameLoc() As Variant
+    CardAcceptorNameLoc = prvCardAcceptorNameLoc
+End Property
+
+Public Property Let newCardAcceptorNameLoc(ByVal vNewValue As Variant)
+    prvCardAcceptorNameLoc = vNewValue
+End Property
+
+Public Property Get CardAcceptorIdCode() As Variant
+    CardAcceptorIdCode = prvCardAcceptorIdCode
+End Property
+
+Public Property Let newCardAcceptorIdCode(ByVal vNewValue As Variant)
+    prvCardAcceptorIdCode = vNewValue
+End Property
+
+Public Property Get state() As Variant
+    state = prvState
+End Property
+
+Public Property Let newState(ByVal vNewValue As Variant)
+    prvState = vNewValue
+End Property
+
+Public Property Get ResponseCodePost() As Variant
+    ResponseCodePost = prvResponseCodePost
+End Property
+
+Public Property Let newResponseCodePost(ByVal vNewValue As Variant)
+    prvResponseCodePost = vNewValue
+End Property
+
+Public Property Get ResponseCodeMp() As Variant
+    ResponseCodeMp = prvResponseCodeMp
+End Property
+
+Public Property Let newResponseCodeMp(ByVal vNewValue As Variant)
+    prvResponseCodeMp = vNewValue
+End Property
+
+Public Property Get AdditionalInfo() As Variant
+    AdditionalInfo = prvAdditionalInfo
+End Property
+
+Public Property Let newAdditionalInfo(ByVal vNewValue As Variant)
+    prvAdditionalInfo = vNewValue
+End Property
+
+Public Property Get AdditionalRespData() As Variant
+    AdditionalRespData = prvAdditionalRespData
+End Property
+
+Public Property Let newAdditionalRespData(ByVal vNewValue As Variant)
+    prvAdditionalRespData = vNewValue
+End Property
+
+Public Property Get MerchantType() As Variant
+    MerchantType = prvMerchantType
+End Property
+
+Public Property Let newMerchantType(ByVal vNewValue As Variant)
+    prvMerchantType = vNewValue
+End Property
+
+Public Property Get PosCondCode() As Variant
+    PosCondCode = prvPosCondCode
+End Property
+
+Public Property Let newPosCondCode(ByVal vNewValue As Variant)
+    prvPosCondCode = vNewValue
+End Property
+
+Public Property Get PosEntryMode() As Variant
+    PosEntryMode = prvPosEntryMode
+End Property
+
+Public Property Let newPosEntryMode(ByVal vNewValue As Variant)
+    prvPosEntryMode = vNewValue
+End Property
+
+Public Property Get AcquiringInst() As Variant
+    AcquiringInst = prvAcquiringInst
+End Property
+
+Public Property Let newAcquiringInst(ByVal vNewValue As Variant)
+    prvAcquiringInst = vNewValue
+End Property
+
+Public Property Get CurrencyCode() As Variant
+    CurrencyCode = prvCurrencyCode
+End Property
+
+Public Property Let newCurrencyCode(ByVal vNewValue As Variant)
+    prvCurrencyCode = vNewValue
+End Property
+
+Public Property Get PosDataCode() As Variant
+    PosDataCode = prvPosDataCode
+End Property
+
+Public Property Let newPosDataCode(ByVal vNewValue As Variant)
+    prvPosDataCode = vNewValue
+End Property
+
+Public Property Get transdatetime() As Variant
+    transdatetime = prvTransDateTime
+End Property
+
+Public Property Let newTransDateTime(ByVal vNewValue As Variant)
+    prvTransDateTime = vNewValue
+End Property
+
+Public Property Get SysTraceAudit() As Variant
+    SysTraceAudit = prvSysTraceAudit
+End Property
+
+Public Property Let newSysTraceAudit(ByVal vNewValue As Variant)
+    prvSysTraceAudit = vNewValue
+End Property
+
+Public Property Get Result() As Variant
+    Result = prvResult
+End Property
+
+Public Property Let newResult(ByVal vNewValue As Variant)
+    prvResult = vNewValue
+End Property
+
+Public Property Get datelocal() As Variant
+    datelocal = prvDateLocal
+End Property
+
+Public Property Let newDateLocal(ByVal vNewValue As Variant)
+    prvDateLocal = vNewValue
+End Property
+Public Property Get timelocal() As Variant
+    timelocal = prvTimeLocal
+End Property
+
+Public Property Let newTimeLocal(ByVal vNewValue As Variant)
+    prvTimeLocal = vNewValue
+End Property
+
+
+
+
+
+
+
+

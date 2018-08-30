@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+require_once "constants.php";
+require_once "Database.php";
+require_once "functions.php";
+
+?>

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @author 
+ * @copyright 2010
+ */
+ //These are the sites directory structure variables that makes navigation of folders easier
+define("DS",DIRECTORY_SEPARATOR);
+define("ROOT","");
+define("LIB_PATH",ROOT.DS."includes".DS);
+define("PUBLIC_PATH",ROOT.DS."public".DS);
+
+//this is the database information
+define("DB_SERVER","localhost");
+define("DB_USER","root");
+define("DB_PASS","");
+define("DB_NAME","impalapay");
+
+//this is for php mailer to work
+define("EMAILADD",'nicholas@custompckenya.com');
+define("EMAILPASS",'kol28ni.');
+define("SMTPSERVER",'smtp.custompckenya.com');
+
+//PayPal credentials
+
+define("APIUSERNAME","johnm_api1.comet.co.ke");
+define("APIPASSWORD","7LPNDQQ2L9LS62N3");
+define("APISIGNATURE","AFcWxV21C7fd0v3bYYYRCpSSRl31A92bbVKthCU45ooIZiU5wm32-.bk");
+define("ENDPOINT","https://api-3t.paypal.com/nvp");
+define("VERSION","65.1");
+define("REDIRECTURL","https://www.paypal.com/webscr?cmd=_express-checkout&token=");
+
+//PayPal sandbox credentials
+define("SAPIUSERNAME","nickje_1298362650_biz_api1.yahoo.com");
+define("SAPIPASSWORD","1298362658");
+define("SAPISIGNATURE","AymdwE-ji6Jqb9yxr0TZBJsvkHJmALBRLawZMz0aNIpdJ2KgV2DlOqMO");
+define("SENDPOINT","https://api-3t.sandbox.paypal.com/nvp");
+define("SVERSION","65.1");
+define("SREDIRECTURL","https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=");
+
+
+?>

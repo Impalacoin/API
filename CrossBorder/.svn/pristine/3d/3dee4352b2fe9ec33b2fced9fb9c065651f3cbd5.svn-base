@@ -1,0 +1,593 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "NetworkMessageOperator"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
+Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
+'local variable(s) to hold property value(s)
+Private mvarVISOMessageIn As Variant 'local copy
+Private mvarVDBConnectionString As Variant 'local copy
+Private mvarSource_Key As Variant 'local copy
+'To fire this event, use RaiseEvent with the following syntax:
+'RaiseEvent ErrorTrap[(arg1, arg2, ... , argn)]
+Public Event ErrorTrap(ByVal EventName As Variant)
+'local variable(s) to hold property value(s)
+
+Public Property Let Source_Key(ByVal vData As Variant)
+'used when assigning a value to the property, on the left side of an assignment.
+'Syntax: X.Source_Key = 5
+    mvarSource_Key = vData
+End Property
+
+Public Property Get Source_Key() As Variant
+'used when retrieving value of a property, on the right side of an assignment.
+'Syntax: Debug.Print X.Source_Key
+    
+        Source_Key = mvarSource_Key
+   
+End Property
+
+
+'Private Sub ProcessMerchantMessage(ByVal StrPostMessage As String, ByVal Source_Key As Variant)
+'    Dim strMessage As String
+'    On Error GoTo ErrorTrap
+'    Dim Trace As String
+'    Dim Msisdn As String
+'    Dim Account As Variant
+'    Dim Tran_nr As Long
+'    Dim Amount As String
+'    Dim Terminal As String
+'    Dim Card_Accept_Loc As String
+'    Dim Card_Accept_ID As String
+'    Dim dbConnection As New ADODB.Connection
+'    Dim RstCommand As ADODB.Command
+'    Dim RecSet As New ADODB.Recordset
+'    Dim Date_time As String
+'    Dim State As Variant
+'    Dim Randbase As Variant
+'    Dim Modbase As Variant
+'    Dim amount_ceil As Variant
+'    Dim Approval_code As String
+'    Dim Issuer As Variant
+'    Dim Sink_Key As String
+'    Dim PostMsg As New PostBridgeISO8583
+'    Dim DState As Integer
+'    Dim RSP_Code As Variant
+'    Dim PIN_Val As Variant
+'    Dim Rsp As Variant
+'    Dim surcharge As Double
+'
+'    'create connection
+'    With dbConnection
+'    .ConnectionString = mvarVDBConnectionString
+'    .Open
+'
+'    End With
+'
+'    With PostMsg
+'
+'        .ISO8583MsgBD StrPostMessage
+'        .ResetBitMaps
+'
+'
+'        Trace = "Message type: " & .MessageTypeID & vbNewLine
+'
+'         If .Pan <> "" Then .CreatePBBitMap (2): Trace = Trace & "Field 002: " & .Pan & vbNewLine
+'         If .ProcessingCODE <> "" Then .CreatePBBitMap (3): Trace = Trace & "Field 003: " & .ProcessingCODE & vbNewLine
+'         If .AmtTransaction <> "" Then: .CreatePBBitMap (4): Trace = Trace & "Field 004: " & .AmtTransaction & vbNewLine
+'         If .DatetimeTransmission <> "" Then .CreatePBBitMap (7): Trace = Trace & "Field 007: " & .DatetimeTransmission & vbNewLine
+'         If .SysTraceAuditNum <> "" Then .CreatePBBitMap (11): Trace = Trace & "Field 011: " & .SysTraceAuditNum & vbNewLine
+'         If .TimeLocTxn <> "" Then .CreatePBBitMap (12): Trace = Trace & "Field 012: " & .DateLocTxn & vbNewLine
+'         If .DateLocTxn <> "" Then .CreatePBBitMap (13): Trace = Trace & "Field 013: " & .TimeLocTxn & vbNewLine
+'         If .DateExpiry <> "" Then .CreatePBBitMap (14): Trace = Trace & "Field 014: " & .DateExpiry & vbNewLine
+'         If .DateSettle <> "" Then .CreatePBBitMap (15): Trace = Trace & "Field 015: " & .DateSettle & vbNewLine
+'         If .MerchantType <> "" Then .CreatePBBitMap (18): Trace = Trace & "Field 018: " & .MerchantType & vbNewLine
+'         If .POSEntryMode <> "" Then .CreatePBBitMap (22): Trace = Trace & "Field 022: " & .POSEntryMode & vbNewLine
+'         If .CardSeqNum <> "" Then .CreatePBBitMap (23): Trace = Trace & "Field 023: " & .CardSeqNum & vbNewLine
+'         If .POSConditionCode <> "" Then .CreatePBBitMap (25): Trace = Trace & "Field 025: " & .POSConditionCode & vbNewLine
+'         If .POSPinCaptureCode <> "" Then .CreatePBBitMap (26): Trace = Trace & "Field 026: " & .POSPinCaptureCode & vbNewLine
+'         If .AmtTxnFee <> "" Then .CreatePBBitMap (28): Trace = Trace & "Field 028: " & .AmtTxnFee & vbNewLine
+'         If .AmtTxnProcessingFee <> "" Then .CreatePBBitMap (30): Trace = Trace & "Field 030: " & .AmtTxnProcessingFee & vbNewLine
+'         If .AcquiringInstIdCode <> "" Then .CreatePBBitMap (32): Trace = Trace & "Field 032: " & .AcquiringInstIdCode & vbNewLine
+'         If .ForwardingInstIdCode <> "" Then .CreatePBBitMap (33): Trace = Trace & "Field 033: " & .ForwardingInstIdCode & vbNewLine
+'         If .Track2Data <> "" Then .CreatePBBitMap (35): Trace = Trace & "Field 035: " & .Track2Data & vbNewLine
+'         If .RetrievalRefNum <> "" Then .CreatePBBitMap (37): Trace = Trace & "Field 037: " & .RetrievalRefNum & vbNewLine
+'         If .AuthIdResp <> "" Then .CreatePBBitMap (38): Trace = Trace & "Field 038: " & .AuthIdResp & vbNewLine
+'         If .RespCode <> "" Then .CreatePBBitMap (39): Trace = Trace & "Field 039: " & .RespCode & vbNewLine
+'         If .ServiceRestrictionCode <> "" Then .CreatePBBitMap (40): Trace = Trace & "Field 040: " & .ServiceRestrictionCode & vbNewLine
+'         If .CardAcceptorTermId <> "" Then .CreatePBBitMap (41): Trace = Trace & "Field 041: " & .CardAcceptorTermId & vbNewLine
+'         If .CardAcceptorIdCode <> "" Then .CreatePBBitMap (42): Trace = Trace & "Field 042: " & .CardAcceptorIdCode & vbNewLine
+'         If .CardAcceptorNameLoc <> "" Then .CreatePBBitMap (43): Trace = Trace & "Field 043: " & .CardAcceptorNameLoc & vbNewLine
+'         If .AdditionalRespData <> "" Then .CreatePBBitMap (44):: Trace = Trace & "Field 044: " & .AdditionalRespData & vbNewLine
+'         If .AdditionalData <> "" Then .CreatePBBitMap (48): Trace = Trace & "Field 048: " & .AdditionalData & vbNewLine
+'         If .CurrencyCodeTxn <> "" Then .CreatePBBitMap (49): Trace = Trace & "Field 049: " & .CurrencyCodeTxn & vbNewLine
+'         .PinData = "12345678": .CreatePBBitMap (52): Trace = Trace & "Field 052: " & "****************" & vbNewLine
+'         If .AdditionalAmts <> "" Then .CreatePBBitMap (54): Trace = Trace & "Field 054: " & .AdditionalAmts & vbNewLine
+'         If .MsgReasonCode <> "" Then .CreatePBBitMap (56): Trace = Trace & "Field 056: " & .MsgReasonCode & vbNewLine
+'         If .EchoData <> "" Then .CreatePBBitMap (59): Trace = Trace & "Field 059: " & .EchoData & vbNewLine
+'         If .NetMangtInfoCode <> "" Then .CreatePBBitMap (70): Trace = Trace & "Field 070: " & .NetMangtInfoCode & vbNewLine
+'         If .OriginalDataElements <> "" Then .CreatePBBitMap (90): Trace = Trace & "Field 090: " & .OriginalDataElements & vbNewLine
+'         If .ReplacementAmts <> "" Then .CreatePBBitMap (95): Trace = Trace & "Field 095: " & .ReplacementAmts & vbNewLine
+'         If .ReceivingInstIdCode <> "" Then .CreatePBBitMap (100): Trace = Trace & "Field 100: " & .ReceivingInstIdCode & vbNewLine
+'         If .AccIdOne <> "" Then .CreatePBBitMap (102): Trace = Trace & "Field 102: " & .AccIdOne & vbNewLine
+'         If .AccIdTwo <> "" Then .CreatePBBitMap (103): Trace = Trace & "Field 103: " & .AccIdTwo & vbNewLine
+'         .POSDataCode = "000000000000090": .CreatePBBitMap (123): Trace = Trace & "Field 123: " & .POSDataCode & vbNewLine
+'
+'
+'
+'         'Start procesign request
+'         If .MessageTypeID = "0200" Then
+'
+'            'Verify merchant --txn source
+'             RecSet.Open "select * from em_merchants" & _
+'                                   " where left(merchant_id,6) = '" & Left(.CardAcceptorIdCode, 6) & "' ", dbConnection
+'                        If RecSet.EOF = True Then
+'                             Approval_code = "03"
+'                             Rsp = "03"
+'                             .MessageTypeID = "0210"
+'                             .RespCode = "03": .CreatePBBitMap (39)
+'                             strMessage = .CREATEMsgISO8538
+'                             DState = 99
+'                             Issuer = "NONE"
+'                             RecSet.Close
+'                             GoTo MERCHANTTXN
+'
+'                        End If
+'                             RecSet.Close
+'
+'
+'                          'Eval registration call
+'                        If Left(.ProcessingCODE, 2) = "91" Then
+'
+''                                    Call AddNewTransaction_MerchantEval_Reg(.Pan, _
+''                                    .DatetimeTransmission, .SysTraceAuditNum, .AdditionalData, .CardAcceptorNameLoc, .RetrievalRefNum, _
+''                                    Left(.ProcessingCODE, 2), .CardAcceptorIdCode, RSP_Code, PIN_Val, .CardAcceptorNameLoc)
+''
+'                                If RSP_Code = "" Then
+'                                    .MessageTypeID = "0210"
+'                                    .CreatePBBitMap (39): .RespCode = "00"
+'                                    .CreatePBBitMap (38): .AuthIdResp = "0" 'GetID(PIN_Val)
+'                                     strMessage = .CREATEMsgISO8538
+'                                    ' Call SendMessageToMerchant(strMessage, Val(Mid(Source_Key, 1, Len(Source_Key) - InStr(1, Source_Key, "_"))))
+'                                     GoTo EXITLEVEL1
+'                                Else
+'                                    .MessageTypeID = "0210"
+'                                    .CreatePBBitMap (39): .RespCode = RSP_Code
+'                                    strMessage = .CREATEMsgISO8538
+'                                    'Call SendMessageToMerchant(strMessage, Val(Mid(Source_Key, 1, Len(Source_Key) - InStr(1, Source_Key, "_"))))
+'                                    GoTo EXITLEVEL1
+'                               End If
+'                        End If
+'
+'                        If Left(.ProcessingCODE, 2) = "21" Then
+'                             If .AdditionalData <> "" Then
+'                                Dim AuthData As Variant
+'                                AuthData = .AdditionalData
+'
+'                                RecSet.Open ("Select Top 1 record_nr,state,msisdn_prime,auth_offset,auth_offset_2 From dbo.em_mobile_auth_record " & _
+'                                         "Where msisdn_prime = '0" & Right(.Pan, 9) & "' And State in (0,1,2) Order by record_nr desc"), dbConnection
+'                                If RecSet.EOF = False Then
+'                                  ' If Verify_Code("0" & Right(.Pan, 9), AuthData, CInt(RecSet!auth_offset), CInt(RecSet!auth_offset_2), "0") = True Then
+'                                        Approval_code = "00"
+'                                        dbConnection.Execute "Update em_mobile_auth_record  SET  state = 99" & _
+'                                                             " WHERE record_nr =" & RecSet!record_nr
+'
+'                                        DState = 99
+'                                        Dim RecSet2 As New Recordset
+'                                        Dim DateTime As String
+'                                        DateTime = Year(Date) & "-" & Format(Month(Date), "00") & "-" & Format(Day(Date), "00") & " " & Format(Hour(Time), "00") & ":" & Format(Minute(Time), "00") & ":" & Format(Second(Time), "00")
+'                                        RecSet2.Open "select top 1 record_nr, eval_amount_bal from em_merchant_reg_evalue where msisdn = '" & .Pan & "' order by record_nr desc", dbConnection
+'                                        dbConnection.Execute "Update em_merchant_reg_evalue Set eval_amount_bal = " & Val(RecSet2!eval_amount_bal) + Val(.AmtTransaction) & ",last_date_time_top_up = '" & DateTime & "' Where record_nr = " & RecSet2!record_nr
+'                                     RecSet.Close
+'                                     RecSet2.Close
+'                                    .MessageTypeID = "0210"
+'                                    .RespCode = "00": .CreatePBBitMap (39)
+'                                     strMessage = .CREATEMsgISO8538
+'                                     Issuer = "NONE"
+'                                     GoTo MERCHANTTXN
+'                                     Else
+'
+'                                     Approval_code = "25"
+'                                    .MessageTypeID = "0210"
+'                                    .RespCode = "25": .CreatePBBitMap (39)
+'                                     strMessage = .CREATEMsgISO8538
+'                                     DState = 99
+'                                     dbConnection.Execute "Update em_mobile_auth_record  SET  state = " & RecSet!State + 1 & _
+'                                                              " WHERE record_nr = " & RecSet!record_nr
+'                                     RecSet.Close
+'                                     Issuer = "NONE"
+'                                     GoTo MERCHANTTXN
+'                                     End If
+'                                Else
+'                                Approval_code = "25"
+'                               .MessageTypeID = "0210"
+'                               .RespCode = "25": .CreatePBBitMap (39)
+'                                strMessage = .CREATEMsgISO8538
+'                                DState = 99
+'                                Issuer = "NONE"
+'                                GoTo MERCHANTTXN
+'                              End If
+'
+'                             End If
+'                        End If
+'
+'
+''    RecSet.Open ("Select  msisdn,Source_TransDateTime,eval_amount_bal from dbo.em_merchant_reg_evalue where msisdn = '" & Msisdn2 & "' and status = 1 order by record_nr desc"), dbConnection
+''    If RecSet.EOF = False Then
+''      Xdata = RecSet!Msisdn & "D" & RecSet!Source_TransDateTime & "D" & CStr(RecSet!eval_amount_bal)
+''      Xdata = Encrypt.EncryptString("DES", Xdata, XKEY, True)
+''      dbConnection.Execute "UPDATE em_merchant_reg_evalue set dataxreference = '" & Xdata & "' where msisdn = '" & Msisdn2 & "'"
+''      RecSet.Close
+'                        '0720677928D1112125423D34500
+'
+'                        If Left(.ProcessingCODE, 2) = "39" Or Left(.ProcessingCODE, 2) = "31" Then
+'                             If .AdditionalRespData <> "" Then
+'                                Msisdn = .AccIdOne
+'                                RecSet.Open ("Select Top 1 record_nr,status,msisdn,Source_TransDateTime,auth_offset,auth_offset_2,eval_amount_bal,dataxreference From dbo.em_merchant_reg_evalue " & _
+'                                         "Where msisdn = '" & .AccIdOne & "'  Order by record_nr desc"), dbConnection
+'                                If RecSet.EOF = False Then
+'                               ' If Verify_Code(.AccIdOne, .AdditionalData, CInt(RecSet!auth_offset), CInt(RecSet!auth_offset_2), 0) = True Then
+'                                       Approval_code = "01"
+'
+'
+'                                            If RecSet!eval_amount_bal > 0 Then
+'                                               Dim Xdata As String
+'                                               Dim Encryptor As New EBL_Encryption.clsEncryption
+'                                               Xdata = Encryptor.DecryptString("DES", RecSet!dataxreference, "39433505405454", True)
+'                                                    If RecSet!Msisdn <> Left(Xdata, 10) Or RecSet!Source_TransDateTime <> Mid(Xdata, 12, 10) Or CStr(RecSet!eval_amount_bal) <> Mid(Xdata, 23, Len(Xdata) - 22) Then
+'                                                        .MessageTypeID = "0210"
+'                                                         Rsp = "63"
+'                                                        .RespCode = "63": .CreatePBBitMap (39)
+'                                                         strMessage = .CREATEMsgISO8538
+'                                                         Issuer = "NONE"
+'                                                         RecSet.Close
+'                                                         GoTo MERCHANTTXN
+'
+'                                                    End If
+'                                                    Dim Serial_number As String
+'                                                    Dim Authcode As String
+'                                                    Dim RBse As String
+'                                                    Dim MBse As String
+'
+'
+'                                                  'Serial_number = Generate_Code(.AccIdOne)
+'                                                  Authcode = Mid$(Serial_number, 1, 9)
+'                                                  Serial_number = Mid$(Serial_number, 11, Len(Serial_number) - 10)
+'                                                  RBse = Val(Mid$(Serial_number, 1, InStr(1, Serial_number, ":") - 1))
+'
+'                                                  MBse = Val(Mid$(Serial_number, InStr(1, Serial_number, ":") + 1, Len(Serial_number) - InStr(1, Serial_number, ":")))
+'                                                  DateTime = Year(Date) & "-" & Format(Month(Date), "00") & "-" & Format(Day(Date), "00") & " " & Format(Hour(Time), "00") & ":" & Format(Minute(Time), "00") & ":" & Format(Second(Time), "00")
+'                                                  If Len(RBse) < 4 Then
+'                                                    RBse = Format(RBse, "0000")
+'                                                  End If
+'                                                  If Len(MBse) < 4 Then
+'                                                  MBse = Format(MBse, "0000")
+'                                                  End If
+'                                                  If Left(.ProcessingCODE, 2) = "39" Then
+'                                                  DState = 99
+'                                                  Rsp = "00"
+'                                                  surcharge = 20
+'                                                  'Call AddNewTransaction_Authocode(0, .AccIdOne, "0000000000", RBse, MBse, RecSet!eval_amount_bal, DateTime, "01", "Postilion", "000")
+'                                                  Else
+'                                                  Rsp = "00"
+'                                                  surcharge = 5
+'                                                  DState = 98
+'                                                  'Balance charge
+'                                                  End If
+'                                              .MessageTypeID = "0210"
+'                                              .AmtTransaction = Format(CStr(RecSet!eval_amount_bal), "0000000000") & "00"
+'                                              .RespCode = "00": .CreatePBBitMap (39)
+'                                              '.AdditionalRespData = GetID(Authcode): .CreatePBBitMap (44)
+'                                               strMessage = .CREATEMsgISO8538
+'                                               Issuer = "NONE"
+'                                               RecSet.Close
+'                                               GoTo MERCHANTTXN
+'                                            Else
+'                                             Rsp = "51"
+'                                            .MessageTypeID = "0210"
+'                                            .RespCode = "51": .CreatePBBitMap (39)
+'                                             strMessage = .CREATEMsgISO8538
+'                                             Issuer = "NONE"
+'                                             GoTo MERCHANTTXN
+'                                        End If
+'
+''
+''                                      Dim MOBssage As String
+''                                      Dim mlng As Integer
+''
+''                                      MOBssage = "SARP|39|000000000000|0" & Right(.Pan, 9) & "||000000000000|" & Authcode & "|PESAPAP"
+''                                      '"SARQ|00|000000000023|0720677928||000000200000|035000017280|CBK"
+''                                      mlng = Len(MOBssage)
+''                                      MOBssage = Format(mlng, "0000") + "|" & MOBssage
+'
+''                                      dbConnection.Execute "Insert into em_pindata Values('" & .Pan & "','" & Authcode & "','" & DateTime & "')"
+''                                      Call SendMessageToMobileApp(MOBssage)
+''
+''
+'
+'                                     'GoTo MERCHANTTXN
+'                              Else
+'
+'                                     Approval_code = "55"
+'                                     Rsp = "55"
+'                                    .MessageTypeID = "0210"
+'                                    .RespCode = "55": .CreatePBBitMap (39)
+'                                     strMessage = .CREATEMsgISO8538
+'                                     DState = 99
+'                                     RecSet.Close
+'                                     Issuer = "NONE"
+'                                     GoTo MERCHANTTXN
+'                             End If
+'                        Else
+'                                Approval_code = "56"
+'                                Rsp = "56"
+'                               .MessageTypeID = "0210"
+'                               .RespCode = "56": .CreatePBBitMap (39)
+'                                strMessage = .CREATEMsgISO8538
+'                                DState = 99
+'                                Issuer = "NONE"
+'                                GoTo MERCHANTTXN
+'                        End If
+'
+'                       End If
+'                    'End If
+'
+'                      'New transaction auth code verify
+'                  If Left(.ProcessingCODE, 2) = "01" Or Left(.ProcessingCODE, 2) = "00" Or Left(.ProcessingCODE, 2) = "22" Then
+'                            Msisdn = .ForwardingInstIdCode
+'                            Terminal = .CardAcceptorTermId
+'                            Card_Accept_ID = .CardAcceptorIdCode
+'                            Card_Accept_Loc = .CardAcceptorNameLoc
+'                            Amount = Val(.AmtTransaction) / 100
+'                            If Card_Accept_ID = "" Then Card_Accept_ID = "639485000000001"
+'                            Date_time = Year(Date) & "-" & Format(Month(Date), "00") & "-" & Format(Day(Date), "00") & " " & Format(Hour(Time), "00") & ":" & Format(Minute(Time), "00") & ":" & Format(Second(Time), "00")
+'
+'                            Set RstCommand = New ADODB.Command
+'                            With RstCommand
+'                                .ActiveConnection = dbConnection
+'                                .CommandType = adCmdStoredProc
+'                                .CommandText = "em_mobile_authcode_update"
+'                                .Parameters("@msisdn") = Msisdn
+'                                .Parameters("@amount_consumer") = Val(Amount)
+'                                .Parameters("@date_time_consumer") = Date_time
+'                                .Parameters("@terminal_id") = Terminal
+'                                .Parameters("@merchant_id") = Card_Accept_ID
+'                                .Parameters("@merchant_location") = Card_Accept_Loc
+'
+'                                .Execute
+'
+'                                State = .Parameters("@state").Value
+'                                Randbase = .Parameters("@Rbase").Value
+'                                Modbase = .Parameters("@Mbase").Value
+'                                amount_ceil = .Parameters("@amount_ceiling").Value
+'                                Issuer = .Parameters("@issuer").Value
+'                                Account = .Parameters("@account_id").Value
+'
+'                            End With
+'
+'                                    If State = "0" Or State = "1" Or State = "2" Then
+'                                       If Verify_Code(Msisdn, .AccIdTwo, Randbase, Modbase, "000") = True Then
+'                                            If Val(.AmtTransaction) / 100 > Val(amount_ceil) Then
+'                                                 Approval_code = "13"
+'                                                 Rsp = "13"
+'                                                 .MessageTypeID = "0210"
+'                                                 .RespCode = "13": .CreatePBBitMap (39)
+'                                                 strMessage = .CREATEMsgISO8538
+'                                                 DState = 99
+'                                                 GoTo MERCHANTTXN
+'                                                End If
+'
+'                                                Dim RecSe2 As New ADODB.Recordset
+'                                                Dim Xadata As String
+'                                                Dim Encrypti As New EBL_Encryption.clsEncryption
+'
+'                                                 RecSe2.Open ("Select Top 1 record_nr,status,msisdn,Source_TransDateTime,auth_offset,auth_offset_2,eval_amount_bal,dataxreference From dbo.em_merchant_reg_evalue " & _
+'                                                 "Where msisdn = '" & Msisdn & "'  Order by record_nr desc"), dbConnection
+'
+'
+'                                                Xadata = Encrypti.DecryptString("DES", RecSe2!dataxreference, XKEY, True)
+'                                                    If RecSe2!Msisdn <> Left(Xadata, 10) Or RecSe2!Source_TransDateTime <> Mid(Xadata, 12, 10) Or CStr(amount_ceil) <> Mid(Xadata, 23, Len(Xadata) - 22) Then
+'                                                        .MessageTypeID = "0210"
+'                                                         Rsp = "63"
+'                                                        .RespCode = "63": .CreatePBBitMap (39)
+'                                                         strMessage = .CREATEMsgISO8538
+'                                                         Issuer = "NONE"
+'                                                         RecSe2.Close
+'                                                         GoTo MERCHANTTXN
+'
+'                                                    End If
+'
+'
+'                                                Approval_code = "00"
+'                                                Rsp = "00"
+'
+'
+'                                                dbConnection.Execute "Update em_mobile_auth_record  SET  state = 99, amount_used = " & Amount & _
+'                                                       " WHERE (msisdn_prime = '" & Msisdn & "'or msisdn_secondary ='" & Msisdn & "' ) and auth_offset = '" & Randbase & "' and auth_offset_2 = '" & Modbase & "'"
+'
+'                                                dbConnection.Execute "Update em_merchant_reg_evalue  SET  eval_amount_bal = (select eval_amount_bal where msisdn ='" & Msisdn & "') - " & Amount & _
+'                                                       " WHERE msisdn = '" & Msisdn & "'"
+'
+'                                                DState = "98"
+'                                                surcharge = 20
+'                                       Else
+'                                           Approval_code = "25"
+'                                           Rsp = "25"
+'                                           .MessageTypeID = "0210"
+'                                           .RespCode = "25": .CreatePBBitMap (39)
+'                                           strMessage = .CREATEMsgISO8538
+'                                           DState = 99
+'                                       End If
+'                                    Else
+'                                        Approval_code = "25"
+'                                        Rsp = "25"
+'                                       .MessageTypeID = "0210"
+'                                       .RespCode = "25": .CreatePBBitMap (39)
+'                                        strMessage = .CREATEMsgISO8538
+'                                        DState = 99
+'                                    End If
+'                            ElseIf Left(.ProcessingCODE, 2) = "52" Then
+'                            'Tran type = 42
+'                            Rsp = "01"
+'                            surcharge = 15
+'                            Issuer = "Postilion"
+'                            strMessage = .CREATEMsgISO8538
+'
+'                            End If
+'
+'MERCHANTTXN:                  Call AddNewTransaction_Merchant( _
+'                              DState, _
+'                              .Pan, _
+'                              "0200", _
+'                              .ProcessingCODE, _
+'                               Val(.AmtTransaction) / 100, surcharge, _
+'                              .DatetimeTransmission, _
+'                              .SysTraceAuditNum, _
+'                              .TimeLocTxn, _
+'                              .DateLocTxn, _
+'                              .AcquiringInstIdCode, _
+'                              .RetrievalRefNum, _
+'                               Rsp, _
+'                              .CardAcceptorTermId, _
+'                              .CardAcceptorIdCode, _
+'                              .CardAcceptorNameLoc, _
+'                              .CurrencyCodeTxn, _
+'                               Tran_nr, _
+'                              "00000000", _
+'                              .EchoData, _
+'                               Msisdn, _
+'                              .AccIdTwo, _
+'                               Approval_code, _
+'                               Issuer, _
+'                               Source_Key)
+'
+'                           If Approval_code = "00" Then
+'
+'                            .MessageTypeID = "0210"
+'                            .RespCode = "00": .CreatePBBitMap (39)
+'                            strMessage = .CREATEMsgISO8538
+'
+'                               'Call SendMessageToSwitch(strMessage, Issuer, Tran_nr)
+'                           Call SendMessageToMerchant(strMessage, Val(Mid(Source_Key, 1, Len(Source_Key) - InStr(1, Source_Key, "_"))))
+'
+'
+'                           ElseIf Approval_code = "25" Or Approval_code = "13" Or Approval_code = "56" Or Approval_code = "55" Or Approval_code = "01" Then
+'
+'                                Call SendMessageToMerchant(strMessage, Val(Mid(Source_Key, 1, Len(Source_Key) - InStr(1, Source_Key, "_"))))
+'                           End If
+'
+'                           If Left(.ProcessingCODE, 2) = "52" Then Call SendMessageToSwitch(strMessage, Issuer, Tran_nr)
+'
+'                        If Trace_Flag = 1 Then
+'                        txt_log.Text = txt_log.Text & "Message From Merchant: " & vbNewLine & Trace
+'                        MainForm.TXTMonitor.Text = MainForm.TXTMonitor.Text & "Message From Merchant: " & vbNewLine & Trace
+'                        End If
+'
+'
+'             ElseIf .MessageTypeID = "0420" Or .MessageTypeID = "0421" Then
+'                    Dim SOURCE As String
+'                    Call UpdateRespTransaaction(.MessageTypeID, .ProcessingCODE, .SysTraceAuditNum, .AccIdOne, .RetrievalRefNum, .RespCode, .EchoData, "00000", SOURCE)
+'                    .MessageTypeID = "0430"
+'                    .RespCode = "00": .CreatePBBitMap (39)
+'                     strMessage = .CREATEMsgISO8538
+'
+'                    Set PostMsg = Nothing
+'                    Call SendMessageToMerchant(strMessage, Val(Mid(Source_Key, 1, Len(Source_Key) - InStr(1, Source_Key, "_"))))
+'
+'
+'
+'             ElseIf .MessageTypeID = "0800" Then
+'
+'                        .MessageTypeID = "0810"
+'                        .CreatePBBitMap (39): .RespCode = "00"
+'
+'
+'                        strMessage = .CREATEMsgISO8538
+'                        Set PostMsg = Nothing
+'                        Call SendMessageToMerchant(strMessage, Val(Mid(Source_Key, 1, Len(Source_Key) - InStr(1, Source_Key, "_"))))
+'             End If
+'        End With
+'
+'
+'EXITLEVEL1:
+'            Exit Sub
+'
+'ErrorTrap:
+'
+''txt_log.Text = txt_log.Text & vbNewLine & "Procedure ProcessMerchantMessage " & err.Description
+''EventsTrap = err.Description
+'
+'
+'End Sub
+
+
+
+Public Property Let VDBConnectionString(ByVal vData As Variant)
+'used when assigning a value to the property, on the left side of an assignment.
+'Syntax: X.VDBConnectionString = 5
+    mvarVDBConnectionString = vData
+    
+End Property
+
+
+Public Property Set VDBConnectionString(ByVal vData As Variant)
+'used when assigning an Object to the property, on the left side of a Set statement.
+'Syntax: Set x.VDBConnectionString = Form1
+    Set mvarVDBConnectionString = vData
+    
+End Property
+
+
+Public Property Get VDBConnectionString() As Variant
+'used when retrieving value of a property, on the right side of an assignment.
+'Syntax: Debug.Print X.VDBConnectionString
+    If IsObject(mvarVDBConnectionString) Then
+        Set VDBConnectionString = mvarVDBConnectionString
+    Else
+        VDBConnectionString = mvarVDBConnectionString
+    End If
+End Property
+
+
+
+Public Property Let VISOMessageIn(ByVal vData As Variant)
+'used when assigning a value to the property, on the left side of an assignment.
+'Syntax: X.VISOMessageIn = 5
+    mvarVISOMessageIn = vData
+    'Call ProcessMerchantMessage(mvarVISOMessageIn, mvarSource_Key)
+End Property
+
+
+Public Property Set VISOMessageIn(ByVal vData As Variant)
+'used when assigning an Object to the property, on the left side of a Set statement.
+'Syntax: Set x.VISOMessageIn = Form1
+    Set mvarVISOMessageIn = vData
+End Property
+
+
+Public Property Get VISOMessageIn() As Variant
+'used when retrieving value of a property, on the right side of an assignment.
+'Syntax: Debug.Print X.VISOMessageIn
+    If IsObject(mvarVISOMessageIn) Then
+        Set VISOMessageIn = mvarVISOMessageIn
+    Else
+        VISOMessageIn = mvarVISOMessageIn
+    End If
+End Property
+
+
+
+Private Sub Class_Initialize()
+ mvarVISOMessageIn = MessageMerc '"" 'local copy
+ mvarVDBConnectionString = "" 'local copy
+ mvarSource_Key = ""
+End Sub

@@ -1,0 +1,87 @@
+package com.impalapay.airtel.beans.transaction;
+
+import com.impalapay.airtel.beans.StorableBean;
+
+/**
+ * The status of a transaction request.
+ * <p>
+ * Copyright (c) ImpalaPay LTD., June 14, 2014
+ *
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ */
+public class TransactionStatus extends StorableBean {
+    /**
+	 * The following are values of various delivery receipt statuses.
+	 */
+	public final static String ACCEPTED_FOR_DELIVERY = "3b6edb35-654d-4049-b7ea-0f1db29c6e77";
+	public final static String TRANSACTION_SUCCESS = "4a991e99-ffa2-4fcd-91ed-27e6ce078832";
+	public final static String TRANSACTION_FAILURE = "796e797d-6721-4f5e-938f-241b4b4c5f6c";
+	public final static String UNKNOWN_USERNAME = "4f3d09eb-10e0-428a-b8c1-38f476a4ab31";
+	public final static String WRONG_PASSWORD = "9454a86a-c1ac-410c-882e-d9a6e9048c81";
+     public final static String ACCOUNT_SUSPENDED = "397554ce-6935-4699-8b99-727574b6a49f";
+     public final static String INVALID_PARAMETERS = "857d1e0b-df0d-487c-b7bb-6e9d8c3eb212";
+     public final static String INSUFFICIENT_FUNDS = "ea430328-ef8b-4459-95c6-7102ba16ddc5";
+
+	private String status;
+
+	private String description;
+
+    public TransactionStatus() {
+        super();
+        status = "";
+        description = "";
+    }
+
+     
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param status
+	 *            the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+     
+	/*
+	 * @see java.lang.Object#toString()
+	 */
+	
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("TransactionStatus [status=");
+		builder.append(status);
+		builder.append(", description=");
+		builder.append(description);
+		builder.append(", getUuid()=");
+		builder.append(getUuid());
+		builder.append("]");
+		return builder.toString();
+	}
+
+	
+	
+}

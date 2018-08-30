@@ -1,0 +1,244 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form frmMobile 
+   BackColor       =   &H00C0C0C0&
+   BorderStyle     =   4  'Fixed ToolWindow
+   Caption         =   "Mobile Bank"
+   ClientHeight    =   5895
+   ClientLeft      =   45
+   ClientTop       =   315
+   ClientWidth     =   7455
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   5895
+   ScaleWidth      =   7455
+   ShowInTaskbar   =   0   'False
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      Caption         =   "Mobile Banking Interface"
+      Height          =   3135
+      Left            =   120
+      TabIndex        =   0
+      Top             =   360
+      Width           =   7095
+      Begin VB.TextBox Text3 
+         Height          =   350
+         Left            =   1680
+         TabIndex        =   11
+         Top             =   1250
+         Width           =   2295
+      End
+      Begin VB.CommandButton Command2 
+         Caption         =   "Cancel"
+         Height          =   375
+         Left            =   2880
+         TabIndex        =   9
+         Top             =   2520
+         Width           =   975
+      End
+      Begin VB.CommandButton Command1 
+         Caption         =   "Save"
+         Height          =   375
+         Left            =   1680
+         TabIndex        =   8
+         Top             =   2520
+         Width           =   975
+      End
+      Begin VB.ComboBox Combo1 
+         Height          =   315
+         ItemData        =   "FrmMobile.frx":0000
+         Left            =   1680
+         List            =   "FrmMobile.frx":0002
+         TabIndex        =   6
+         Top             =   2040
+         Width           =   2295
+      End
+      Begin VB.CheckBox Check1 
+         Caption         =   "TCP Keep Alive"
+         Height          =   255
+         Left            =   1680
+         TabIndex        =   5
+         Top             =   1680
+         Width           =   1935
+      End
+      Begin VB.TextBox Text2 
+         Height          =   350
+         Left            =   1680
+         TabIndex        =   4
+         Top             =   800
+         Width           =   975
+      End
+      Begin VB.TextBox Text1 
+         Height          =   350
+         Left            =   1680
+         TabIndex        =   2
+         Top             =   360
+         Width           =   2295
+      End
+      Begin VB.Label Label4 
+         Caption         =   "Institution Name"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   10
+         Top             =   1320
+         Width           =   1335
+      End
+      Begin VB.Label Label3 
+         Caption         =   "SAP Type"
+         Height          =   300
+         Left            =   120
+         TabIndex        =   7
+         Top             =   2040
+         Width           =   1575
+      End
+      Begin VB.Label Label2 
+         Caption         =   "Comunication Port "
+         Height          =   375
+         Left            =   120
+         TabIndex        =   3
+         Top             =   840
+         Width           =   1455
+      End
+      Begin VB.Label Label1 
+         Caption         =   "IP Address"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   1
+         Top             =   360
+         Width           =   1575
+      End
+   End
+   Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+      Height          =   2055
+      Left            =   120
+      TabIndex        =   12
+      Top             =   3600
+      Width           =   7095
+      _ExtentX        =   12515
+      _ExtentY        =   3625
+      _Version        =   393216
+      Cols            =   4
+      FixedCols       =   0
+      FocusRect       =   0
+      SelectionMode   =   1
+      AllowUserResizing=   3
+      FormatString    =   "Record Nr  |     IP Address       |    Port     |       Institution Name   "
+   End
+End
+Attribute VB_Name = "frmMobile"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private DbCon As ADODB.Connection
+Private Sub Command1_Click()
+ 
+ Dim sql_str As String
+ Dim RecSet As New ADODB.Recordset
+ 
+ On Error GoTo ErroHandler
+ Dim ip As String
+ Dim port As Variant
+ Dim tcp_alive As Integer
+ Dim sap_type As Integer
+ Dim inst_name As String
+ ip = Trim(Text1.Text)
+ port = Trim(Text2.Text)
+ tcp_alive = Check1.value
+ sap_type = Combo1.ListIndex
+ inst_name = Trim(Text3.Text)
+ 
+ If ip <> "" And port <> "" Then
+      RecSet.Open "Select * from  em_mob_param Where port = '" & port & "' or ipaddress =  '" & ip & "'", DbCon
+          If RecSet.EOF = True Then
+             sql_str = "INSERT INTO em_mob_param " & _
+                "VALUES ('" & ip & "'," & _
+                "'" & port & "'," & _
+                "'" & inst_name & "'," & _
+                tcp_alive & "," & _
+                sap_type & ")"
+                
+           DbCon.Execute sql_str
+           RecSet.Close
+        Else
+            MsgBox "A mobile bank of the same node name exits", vbCritical
+        End If
+ End If
+  
+'Unload Me
+Exit Sub
+ErroHandler:
+     MsgBox err.Description, vbCritical, "Database login error occured"
+     
+End Sub
+
+Private Sub Command2_Click()
+Me.Hide
+End Sub
+
+Private Sub Form_Load()
+Me.Top = MainForm.Top + 1070
+Me.Left = MainForm.Left + 4300
+
+Combo1.AddItem "Server", 0
+Combo1.AddItem "Client", 1
+On Error GoTo ErrorTrap
+
+Dim RecSet As New ADODB.Recordset
+Dim i As Long
+Dim col As Long
+Dim J As Integer
+Me.Top = MainForm.Top + 1070
+Me.Left = MainForm.Left + 4300
+Set DbCon = New ADODB.Connection
+On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+RecSet.Open ("Select * from em_mob_param order by rec_no asc"), DbCon
+
+
+
+col = 0
+i = 1
+
+Do While Not RecSet.EOF
+col = 0
+MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+
+For col = 0 To 3
+MSFlexGrid1.TextMatrix(i, col) = RecSet.Fields(col).value
+Next col
+i = i + 1
+
+RecSet.MoveNext
+Loop
+RecSet.Close
+Exit Sub
+
+
+
+Exit Sub
+
+ErrorTrap:
+MsgBox "DataBase Login Error occurred", vbCritical
+Unload Me
+frmODBCLogon.Show
+End Sub
+
+
+Private Sub MSFlexGrid1_Click()
+Dim mName As String
+Dim RecSet As New ADODB.Recordset
+mName = MSFlexGrid1.Text
+If MSFlexGrid1.Text = "" Then mName = "0"
+RecSet.Open "select * from em_mob_param where rec_no = " & mName, DbCon
+  If RecSet.EOF = False Then
+  Text1.Text = RecSet!IpAddress
+  Text2.Text = RecSet!port
+  Text3.Text = RecSet!inst_name
+  Check1.value = RecSet!tcp_keep_alive
+  End If
+End Sub

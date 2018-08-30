@@ -1,0 +1,183 @@
+VERSION 5.00
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Begin VB.Form Form1 
+   Caption         =   "Form1"
+   ClientHeight    =   3525
+   ClientLeft      =   60
+   ClientTop       =   450
+   ClientWidth     =   6885
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   3525
+   ScaleWidth      =   6885
+   StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton Command1 
+      Caption         =   "SEND TRANSACTION"
+      Height          =   375
+      Left            =   1800
+      TabIndex        =   2
+      Top             =   360
+      Width           =   3015
+   End
+   Begin VB.Timer ConnectionTimer 
+      Interval        =   10000
+      Left            =   480
+      Top             =   1920
+   End
+   Begin MSWinsockLib.Winsock Winsock1 
+      Left            =   480
+      Top             =   1200
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
+   Begin VB.TextBox Text2 
+      BackColor       =   &H00C0C000&
+      ForeColor       =   &H00FF0000&
+      Height          =   1815
+      Left            =   1080
+      MultiLine       =   -1  'True
+      ScrollBars      =   3  'Both
+      TabIndex        =   1
+      Top             =   1320
+      Width           =   5655
+   End
+   Begin VB.TextBox Text1 
+      Height          =   375
+      Left            =   1080
+      TabIndex        =   0
+      Top             =   840
+      Width           =   5535
+   End
+   Begin VB.Timer Timer1 
+      Enabled         =   0   'False
+      Interval        =   5000
+      Left            =   480
+      Top             =   480
+   End
+   Begin VB.Label Label1 
+      Caption         =   "TELLER 2 TESTING"
+      Height          =   255
+      Left            =   2400
+      TabIndex        =   3
+      Top             =   120
+      Width           =   1815
+   End
+End
+Attribute VB_Name = "Form1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Private HOST As String
+Private PORT As String
+
+Private Sub Command1_Click()
+Dim message As String
+Dim mlen As Integer
+message = "SARQ|00|000000000023|0720677928||000000020000|0|CBK"
+'"SARQ|00|000000000023|0720677928||000000200000|035000017280|CBK"
+mlen = Len(message)
+message = Format(mlen, "0000") + "|" & message
+SendMessageToTest message
+'message = "Main" + Chr(20) + "Message"
+'
+'message = InStr(1, Chr(20), message)
+'
+''014000024217
+'002000019801
+Text1.Text = message
+'Text2.Enabled = False
+'Text2.Text = ""
+
+End Sub
+
+Private Sub Form_Load()
+
+
+HOST = "127.0.0.1"
+PORT = "2305"
+
+If Winsock1.State <> sckConnected Then
+Winsock1.Close
+Winsock1.Connect HOST, PORT
+
+'Winsock1.SendData ("00000000000000000000000000000000000")
+    Else
+ 
+    End If
+      
+    DoEvents
+
+End Sub
+
+Private Sub Timer1_Timer()
+Dim message As String
+Dim mlen As Integer
+'message = "0000|SARQ|00|000000000023|0720677928||000000200000|035000017280|CBK"
+mlen = Len(message)
+message = Format(mlen, "0000") + "|" & message
+SendMessageToTest message
+
+'Timer1.Enabled = False 'Text1.Text = message
+  
+End Sub
+
+
+Private Sub ConnectionTimer_Timer()
+   
+        If Winsock1.State <> sckConnected Then
+            
+            Winsock1.Close
+            Winsock1.Connect HOST, PORT
+         Else
+            
+         'MessageTxt.Text = "Mobile Server connected"
+         
+        End If
+        
+  
+    
+    DoEvents
+
+End Sub
+
+Private Sub Winsock1_Close()
+    Winsock1.Close
+   
+End Sub
+
+Private Sub Winsock1_Connect()
+   If Winsock1.State = sckConnected Then
+   
+   Text1.Text = "Connected"
+        ''
+    End If
+    
+End Sub
+
+Public Sub SendMessageToTest(ByVal PMessage As String)
+    If Winsock1.State = sckConnected Then
+       'Winsock1.Connect HOST, PORT
+        Winsock1.SendData PMessage
+        
+        Text1.Text = PMessage
+    Else
+       
+       Text1.Text = "Message cannot be send. Connect Error"
+      
+    End If
+End Sub
+
+Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
+Dim response As String
+
+If Winsock1.State = sckConnected Then
+        Winsock1.GetData response
+        Text2.Enabled = True
+        Text2.Text = response
+       'Winsock1.Close
+   End If
+
+End Sub
+

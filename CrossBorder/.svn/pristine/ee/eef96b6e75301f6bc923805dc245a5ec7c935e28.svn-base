@@ -1,0 +1,121 @@
+﻿Public Class frmOwners
+    ' Private AccessDBConnection As New ADODB.Connection
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+
+    Private Sub frmOwners_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Left = 20
+        Me.Top = 10
+        Try
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+
+            DataRefresh()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub frmOwners_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox2.Width = Me.Width - 30
+        GroupBox3.Width = Me.Width - 30
+        GroupBox2.Height = Me.Height - 200
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+            Dim RecX As New ADODB.Recordset
+            Dim Client As Int16 = 1
+
+            If RadioButton1.Checked = True Then
+                Client = 0
+            ElseIf RadioButton2.Checked = True Then
+                Client = 1
+            End If
+
+            RecX.Open("SELECT * FROM prop_holdings WHERE HOLDER_NAME = '" & Trim(TextBox2.Text) & "'", UniversalHostConnection)
+            If RecX.EOF = False Then
+                If MsgBox("This holding / business name already exits, Do you want to modify? Company Name will remains the same", vbYesNo, APPNAME) = vbYes Then
+
+                    UniversalHostConnection.Execute("delete from prop_holdings where holder_name = '" & Replace(Trim(TextBox2.Text), "&", " ") & "'")
+                    UniversalHostConnection.Execute(UCase("insert into prop_holdings values('" & Trim(TextBox1.Text) & "','" & Replace(Trim(TextBox2.Text), "&", " ") & "','" & Trim(TextBox3.Text) & "','" & Trim(TextBox4.Text) & "','" & Trim(TextBox5.Text) & "','" & Format(DateTimePicker1.Value, "dd-MM-yyyy") & "'," & Client & ")"))
+                    MsgBox("Property Name Modified successfully", vbExclamation)
+                End If
+            Else
+                UniversalHostConnection.Execute(UCase("insert into prop_holdings values('" & Trim(TextBox1.Text) & "','" & Replace(Trim(TextBox2.Text), "&", " ") & "','" & Trim(TextBox3.Text) & "','" & Trim(TextBox4.Text) & "','" & Trim(TextBox5.Text) & "','" & Format(DateTimePicker1.Value, "dd-MM-yyyy") & "'," & Client & ")"))
+                MsgBox("Property Name Added successfully", vbExclamation)
+            End If
+            DataRefresh()
+        Catch ex As Exception
+            MsgBox(ex.Message, vbExclamation)
+        End Try
+    End Sub
+
+    Private Sub DataRefresh()
+        Dim RecX As New ADODB.Recordset
+        Dim n As Integer = 0
+        RecX.Open("SELECT * FROM prop_holdings ", UniversalHostConnection)
+        DataGridView1.Rows.Clear()
+        Do While RecX.EOF = False
+            DataGridView1.Rows.Add()
+            For i = 0 To 6
+                If i = 6 Then
+                    If RecX.Fields(i).Value = 1 Then
+                        DataGridView1.Rows.Item(n).Cells(i).Value = "CLIENT COMPANY"
+                    Else
+                        DataGridView1.Rows.Item(n).Cells(i).Value = "MANAGING AGENT"
+                    End If
+                Else
+                    DataGridView1.Rows.Item(n).Cells(i).Value = RecX.Fields(i).Value
+                End If
+
+            Next
+            n = n + 1
+            RecX.MoveNext()
+        Loop
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+        Dim RecNr = DataGridView1.Rows.Item(Row).Cells(1).Value
+
+        If MsgBox("WARNING! THIS WILL DELETE THE HIGHLIGHTED PROPERTY. DO YOU WANT CONTINUE?", vbYesNo, APPNAME) = vbYes Then
+            Try
+
+                UniversalHostConnection.Execute("delete from prop_holdings where holder_name = '" & RecNr & "'")
+                
+                MsgBox("Record updated successfully", vbInformation, APPNAME)
+                DataRefresh()
+            Catch ex As Exception
+
+
+            End Try
+        End If
+    End Sub
+
+    Private Sub DataGridView1_CellMouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellMouseEventArgs) Handles DataGridView1.CellMouseClick
+        Try
+            Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+            TextBox1.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(0).Value), "", DataGridView1.Rows.Item(Row).Cells(0).Value)
+            TextBox2.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(1).Value), "", DataGridView1.Rows.Item(Row).Cells(1).Value)
+            TextBox3.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(2).Value), "", DataGridView1.Rows.Item(Row).Cells(2).Value)
+            TextBox4.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(3).Value), "", DataGridView1.Rows.Item(Row).Cells(3).Value)
+            TextBox5.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(4).Value), "", DataGridView1.Rows.Item(Row).Cells(4).Value)
+            TextBox6.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(5).Value), "", DataGridView1.Rows.Item(Row).Cells(5).Value)
+
+            If DataGridView1.Rows.Item(Row).Cells(6).Value = "CLIENT COMPANY" Then
+                RadioButton2.Checked = True
+            ElseIf DataGridView1.Rows.Item(Row).Cells(6).Value = "MANAGING AGENT" Then
+                RadioButton1.Checked = True
+            End If
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+End Class

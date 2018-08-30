@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("engine.php");
+$registered=has_registered($uid);
+if($registered==false){
+    echo "<fb:redirect url='register.php?notregistered'>";
+}
+
+display_navigation();
+check_if_logged_in($me);
+if($me){
+    //Test to check if the widthraw button was pressed
+    if(isset($_POST["withdraw"])){
+        
+        $required_fields=array("amount","pin","phone_number");
+        $errors=check_required_fields($required_fields);
+        $amount=(float)trim($_POST["amount"]);
+        $pin_field=sha1(trim($_POST["pin"]));
+        $phoneNumber=trim($_POST["phone_number"]);
+        if(empty($errors)){
+            $query_pin="SELECT pin From users WHERE fb_id={$uid}";
+            $result_pin=mysql_query($query_pin) or die(mysql_error());
+            $pin=mysql_result($result_pin,0);
+            
+            
+            if($pin==$pin_field){
+                $query="SELECT * FROM account WHERE fb_id={$uid}";
+                $result=mysql_query($query) or die(mysql_error());
+                if($result){}
+                $account_det=mysql_fetch_array($result);
+                if($amount>$account_det["amount"]){
+                    die("You can't withdraw more than you have, please try again with correct amount<br />".display_withdraw()."");
+                                    
+                }
+                $new_amount=(float)($account_det["amount"])-(float)$amount ;
+                $account_id=$account_det["id"];
+                
+                $query_2="UPDATE account SET amount={$new_amount} WHERE fb_id={$uid}";
+                $date=strftime('%Y-%m-%D',time());
+                $result_2=mysql_query($query_2) or die(mysql_error());
+                if($result_2){
+                    $query_3="INSERT INTO transaction SET transaction='w', account_id={$account_id}, amount={$amount},
+                    date='{$date}',balance={$new_amount}";
+                    $result_3=mysql_query($query_3) or die(mysql_error());
+                    $exchangeRate=GetExchangeRate();
+                    $gateway=mysql_connect("192.168.220.6","nicholas","bashnjoy");
+                    mysql_select_db("paymentonline");
+                    
+                    $amountKsh=$amount*$exchangeRate;
+                    $queryG="INSERT INTO mpesa_sendmoney SET amount={$amountKsh},phonenumber='{$phoneNumber}',status='new'";
+                    $resultG=mysql_query($queryG) or die(mysql_error());
+                    if(mysql_affected_rows()==1){
+                        echo "You have successfully withdrawn. Money will be sent to your mobile shortly";
+                    }
+                    mysql_close($gateway);
+                }
+                
+            }else{
+                echo "You entered wrong pin, please try again";
+            }
+        }
+    }
+echo "<div><p>The current echange rate 1$=".GetExchangeRate()."Ksh</p></div>";
+display_withdraw();
+
+}
+include("includes/footer.php")
+?>

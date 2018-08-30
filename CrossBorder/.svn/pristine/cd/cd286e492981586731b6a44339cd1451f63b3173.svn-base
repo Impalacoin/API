@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "engine.php";
+
+$output='<div class="my-account">
+    <div class="my-info"></div>
+    <div class="right-nav">
+        <div>
+            <ul class="nav">
+            <li >Navigation</li>
+            <li><a href="">My Account<a></li>
+            <li><a href="send-now.php">Load Account<a></li>
+            <li><a href="">Send Money<a></li>
+            <li><a href="">Transactions<a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="recent-trans">
+    
+    </div>
+</div>';
+
+NickDisplay::header();
+NickDisplay::topNavigation();
+NickDisplay::topSection();
+if(isset($_GET["bank"])){
+  NickDisplay::content(send_to_bank_form(""));  
+}else{
+    NickDisplay::content(send_to_phone_form(""));
+}
+
+NickDisplay::footer();
+//billing_information("")
+//calculate_form("test.php")
+?>

@@ -1,0 +1,16 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("../engine.php");
+check_admin_logged_in();
+display_admin_navigation();
+
+echo "Welcome {$_SESSION["adminusername"]}";
+
+//require_once "includes/footer.php"
+ob_end_flush();
+?>

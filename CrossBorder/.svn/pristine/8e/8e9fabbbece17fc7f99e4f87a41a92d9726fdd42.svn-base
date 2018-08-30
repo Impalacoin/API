@@ -1,0 +1,114 @@
+<?php
+include("headermenu.php");
+?>
+				<div id="container">
+				<div id="content" class="clearfix">
+                <div class="row">
+                
+                </div>
+					<div class="hero-unit" id="test">
+                    <div class="row">
+                   <div class="pull-right">
+                            <i class="icon-calendar icon-large"></i>
+                            <div><?php
+                            $Today = date('y:m:d');
+                            $new = date('l, F d, Y', strtotime($Today));
+                            echo $new;
+                            ?></div>
+                            <br><br>
+                            
+      <a href="" class="btn btn-primary">Welcome:<i class="icon-user icon-large"></i>&nbsp;<?php echo $user_row['first_name']." ".$user_row['last_name']; ?></a>
+                        </div>
+                      </div>
+                      <?php
+					  $test= $user_row['email'];
+					  
+					  $query2 = mysql_query("SELECT * FROM account_table WHERE email = '$test'") or die (mysql_error()); 
+			$display = mysql_fetch_array($query2);
+					  
+                      	?>
+										
+					 
+                      
+                        <div class="row">
+                        <table width="700" border="0">
+                        <tr>
+                        <th width="303" ><h3><div class="hero-unit-3 text-info"><?php echo $display['account_name'];?></div></h3></th>
+                        <th width="385"><h5 class="dashboard">Current Balance</h5>
+                         <h6 class="dir"> your current Balance available for withdrawal</h6></th>
+                        </tr>
+                        <tr>
+                        <th></th>
+                        <th><h3 class="text-success">&nbsp;ksh.<?php echo $display['account_balance'];?></h3></th>
+                        </tr>
+                        <tr>
+                        <th><h5 class="dashboard">Transactions</h5></th>
+                        <th><a href="mail.php">Messages
+                  <?php
+$mail=$user_row['email'];
+$status = 'unread';
+$result = mysql_query("SELECT * FROM transactions WHERE merchant_mail='" . $mail."' AND status='$status'");
+	
+	$numberOfRows = MYSQL_NUMROWS($result);	
+	if($numberOfRows > 0){
+	echo '<font size="4" color="red"><b>(' . $numberOfRows .')</b></font>';} 
+	?>
+                </a></th>
+                        </tr>
+                        
+                        </table>
+                      </div>
+                  </div>
+</div>
+</div>
+				<div id="footer" class="radius-bottom">
+					2011-12 ©
+					<a class="afooter-link" href="">admin</a>
+					by
+					<a class="afooter-link" href="">chimita</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<script src="js/jquery.js"></script>
+  <script type="text/javascript">
+$(function() {
+
+
+$(".delbutton").click(function(){
+
+//Save the link in a variable called element
+var element = $(this);
+
+//Find the id of the link that was clicked
+var del_id = element.attr("id");
+
+//Built a url to send
+var info = 'id=' + del_id;
+ if(confirm("Sure you want to delete this update? There is NO undo!"))
+		  {
+
+ $.ajax({
+   type: "GET",
+   url: "deleteres.php",
+   data: info,
+   success: function(){
+   
+   }
+ });
+         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
+		.animate({ opacity: "hide" }, "slow");
+
+ }
+
+return false;
+
+});
+
+});
+</script>
+</body>
+</html>

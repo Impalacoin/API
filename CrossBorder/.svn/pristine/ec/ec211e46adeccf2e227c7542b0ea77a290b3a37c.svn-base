@@ -1,0 +1,4 @@
+Line 128: Class MSComctlLib.StatusBar of control StatusBar was not a loaded control class.
+Line 161: Class MSWinsockLib.Winsock of control serverSocket was not a loaded control class.
+Line 247: Class MSWinsockLib.Winsock of control ZapSck was not a loaded control class.
+Line 254: Class MSWinsockLib.Winsock of control PostilionSck was not a loaded control class.

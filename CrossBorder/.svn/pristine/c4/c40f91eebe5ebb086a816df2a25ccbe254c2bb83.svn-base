@@ -1,0 +1,566 @@
+VERSION 5.00
+Begin VB.UserControl UcDataField 
+   ClientHeight    =   345
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   2250
+   LockControls    =   -1  'True
+   ScaleHeight     =   345
+   ScaleWidth      =   2250
+   Begin VB.TextBox dfDataField 
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   315
+      Left            =   0
+      TabIndex        =   0
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   2235
+   End
+End
+Attribute VB_Name = "UcDataField"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+Dim wv_UcUpperBound As Variant
+Dim wv_UcLowerBound As Variant
+Dim wn_UcDataType As Integer    ' 0 - String :: 1 - Integer :: 2 - Date :: 3 - Time :: 4 - Amount :: 5 - Quantity(3 Decimals) :: 6 - Value (4- Decimals) :: 7 - Days (1 Decimal)
+Dim wn_UcMaxLength As Integer   ' 0 - Not to be Considered in this case Lower and Upper Bound are Applicable
+Dim wn_UcHeight As Integer
+Dim wn_UcWidth As Integer
+Dim wn_UcUpperCase As Integer
+Dim wn_UcHelpType As Integer     ' 0 - No Help :: 1 - Master :: 2 - Transaction
+Dim wn_AbsoluteTime As Integer, wn_AbsoluteMinutes As Integer
+Dim ws_BackColor As String
+Dim ws_ForeColor As String
+Dim wn_MustValidateFlag As Integer
+Dim wb_ValidationPassed As Boolean, wb_F1key As Boolean, wb_DateBeingSet As Boolean
+Public wb_SelfFocusSet As Boolean, wb_InitialiseValue As Boolean
+Dim ws_NewFont As String, wn_Font_Size As Integer
+Public Event F1KeyPressed()
+Public Event TxtChange()
+Public Event KeyPress(ByVal KeyAscii As Integer)
+Public Event click()
+Public Event ValidateData(ByRef fb_ValidationSuccess As Boolean)
+Private gb_ValidationIsOn As Boolean, gb_ValidationRequired As Boolean
+Public Property Get Set_Font() As Variant
+    Set_Font = dfDataField.Font
+End Property
+Public Property Let Set_Font(ByVal vNewValue As Variant)
+    ws_NewFont = vNewValue
+    dfDataField.Font = vNewValue
+    PropertyChanged "Set_Font"
+End Property
+Public Property Get Set_Font_Size() As Variant
+    Set_Font_Size = wn_Font_Size
+End Property
+Public Property Let Set_Font_Size(ByVal vNewValue As Variant)
+    wn_Font_Size = vNewValue
+    If wn_Font_Size = 0 Then wn_Font_Size = 8
+    dfDataField.FontSize = wn_Font_Size
+    PropertyChanged "Set_Font_Size"
+End Property
+Public Property Get UpperBound() As Variant
+    UpperBound = wv_UcUpperBound
+End Property
+Public Property Let UpperBound(ByVal vNewValue As Variant)
+    wv_UcUpperBound = vNewValue
+    PropertyChanged "UpperBound"
+End Property
+Public Property Get LowerBound() As Variant
+    LowerBound = wv_UcLowerBound
+End Property
+Public Property Let LowerBound(ByVal vNewValue As Variant)
+    wv_UcLowerBound = vNewValue
+    PropertyChanged "LowerBound"
+End Property
+Public Property Get SetDataType() As Integer
+    SetDataType = wn_UcDataType
+End Property
+
+Public Property Let SetDataType(ByVal vNewValue As Integer)
+    wn_UcDataType = vNewValue
+    PropertyChanged "SetDataType"
+End Property
+
+Public Property Get BoxMaxLength() As Variant
+    BoxMaxLength = wn_UcMaxLength
+End Property
+
+Public Property Let BoxMaxLength(ByVal vNewValue As Variant)
+   wn_UcMaxLength = vNewValue
+   
+   If wn_UcDataType = 2 Then wn_UcMaxLength = 10
+   If wn_UcDataType = 3 Then wn_UcMaxLength = 5
+      
+    dfDataField.MaxLength = 0
+    If wn_UcMaxLength > 0 Then dfDataField.MaxLength = wn_UcMaxLength
+
+   PropertyChanged "BoxMaxLength"
+End Property
+
+Public Property Get BoxHeight() As Variant
+    BoxHeight = wn_UcHeight
+End Property
+
+Public Property Let BoxHeight(ByVal vNewValue As Variant)
+    wn_UcHeight = vNewValue
+    If wn_UcHeight > 0 And Not IsEmpty(wn_UcHeight) Then
+        dfDataField.Height = wn_UcHeight
+    Else
+        dfDataField.Height = 240
+    End If
+    PropertyChanged "BoxHeight"
+End Property
+
+Public Property Get BoxWidth() As Variant
+    BoxWidth = wn_UcWidth
+End Property
+
+Public Property Let BoxWidth(ByVal vNewValue As Variant)
+    wn_UcWidth = vNewValue
+    dfDataField.Width = 900
+    If wn_UcWidth > 0 And Not IsEmpty(wn_UcWidth) Then
+        dfDataField.Width = wn_UcWidth
+        UserControl.Width = wn_UcWidth
+    End If
+    PropertyChanged "BoxWidth"
+End Property
+Private Sub dfDataField_Change()
+Dim I As Integer
+On Error Resume Next
+
+If wn_UcDataType >= 1 Then GoTo Validate_Non_String
+
+For I = 1 To Len(dfDataField.Text)
+    If Mid(dfDataField.Text, I, 1) = "$" Then
+       dfDataField.Text = Mid(dfDataField.Text, 1, I - 1)
+       dfDataField.SelStart = Len(dfDataField.Text)
+       Exit For
+    End If
+Next I
+GoTo Validation_Over
+
+Validate_Non_String:
+
+    For I = 1 To Len(dfDataField.Text)
+    If Asc(Mid(dfDataField.Text, I, 1)) >= 48 And Asc(Mid(dfDataField.Text, I, 1)) <= 57 Then GoTo Accept_Character
+    If Mid(dfDataField.Text, I, 1) = "+" And wn_UcDataType <> 2 And wn_UcDataType <> 3 Then GoTo Accept_Character
+    If Mid(dfDataField.Text, I, 1) = "-" And wn_UcDataType <> 3 Then GoTo Accept_Character
+    If Mid(dfDataField.Text, I, 1) = ":" And wn_UcDataType = 3 Then GoTo Accept_Character
+    If Mid(dfDataField.Text, I, 1) = "/" And wn_UcDataType = 2 Then GoTo Accept_Character
+    If Mid(dfDataField.Text, I, 1) = "." And wn_UcDataType >= 4 Then GoTo Accept_Character
+    'Else Drop This Character and Reset Field Length
+    dfDataField.Text = Mid(dfDataField.Text, 1, I - 1) + Mid(dfDataField.Text, I + 1, Len(dfDataField.Text))
+    dfDataField.SelStart = Len(dfDataField.Text)
+Accept_Character:
+    Next I
+    
+Validation_Over:
+
+If Not wb_InitialiseValue Then
+   gb_ValidationRequired = True
+   wb_ValidationPassed = False
+   gb_ValidationIsOn = True
+      If wn_UcMaxLength > 0 Then
+        For I = 1 To Len(dfDataField.Text)
+            If Mid(dfDataField.Text, I, 1) = "'" Then
+               dfDataField.Text = Mid(dfDataField.Text, 1, I - 1) + Mid(dfDataField.Text, I + 1, Len(dfDataField.Text))
+               dfDataField.SelStart = Len(dfDataField.Text)
+            End If
+            'added here
+            If Mid(dfDataField.Text, I, 1) = "," And (wn_UcDataType = 1 Or wn_UcDataType >= 4) Then
+               dfDataField.Text = Mid(dfDataField.Text, 1, I - 1) + Mid(dfDataField.Text, I + 1, Len(dfDataField.Text))
+               dfDataField.SelStart = Len(dfDataField.Text)
+            End If
+        Next I
+        If Len(dfDataField.Text) >= wn_UcMaxLength Then Beep
+      End If
+End If
+Exit Sub
+
+End Sub
+
+Private Sub dfDataField_Click()
+    RaiseEvent click
+End Sub
+
+Private Sub dfDataField_DblClick()
+   wb_F1key = True
+   wn_MustValidateFlag = 1
+   RaiseEvent F1KeyPressed
+End Sub
+
+Private Sub dfDataField_GotFocus()
+   
+   wb_InitialiseValue = False
+   
+    If wn_UcDataType = 2 Then wn_UcMaxLength = 10
+    If wn_UcDataType = 3 Then wn_UcMaxLength = 5
+    
+    dfDataField.MaxLength = 0
+    If wn_UcMaxLength > 0 Then dfDataField.MaxLength = wn_UcMaxLength
+   
+   wb_F1key = False
+   If wb_ValidationPassed Then gb_ValidationRequired = False
+   If wn_MustValidateFlag = 1 Then gb_ValidationRequired = True
+End Sub
+
+Private Sub dfDataField_KeyDown(KeyCode As Integer, Shift As Integer)
+Dim ls_TestString As String
+    Map_Enter_Key (KeyCode)
+    wb_DateBeingSet = False
+    wb_SelfFocusSet = False
+    If KeyCode = vbKeyF12 Then
+        wb_F1key = True
+        wn_MustValidateFlag = 1
+        RaiseEvent F1KeyPressed
+        Exit Sub
+    End If
+    If wb_F1key Then Exit Sub
+    If IsNull(dfDataField.Text) Or IsEmpty(dfDataField.Text) Or (Len(Trim(dfDataField.Text)) = 0) Then
+        If Not gb_ValidationRequired Then gb_ValidationIsOn = False
+        Exit Sub
+    End If
+    ' Check for the Data Validity 0 - String :: 1 - Integer/Decimal :: 2 - Date :: 3 - Time : 4 -Decimal
+    Select Case wn_UcDataType
+        Case 0
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyLButton Then
+                wb_DateBeingSet = True
+                dfDataField.Text = Trim(dfDataField.Text)
+                If wn_UcUpperCase = 1 And Len(Trim(dfDataField.Text)) > 0 Then dfDataField.Text = UCase(Trim(dfDataField.Text))
+            End If
+            
+        Case 1 ' Type Numeric (Integer)
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyReturn Or KeyCode = vbKeyLButton Then
+                If Not IsNumeric(dfDataField.Text) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                End If
+                If IsNumeric(dfDataField.Text) Then
+                    If Val(dfDataField.Text) > Val(wv_UcUpperBound) Or Val(dfDataField.Text) < Val(wv_UcLowerBound) Then
+                        wb_SelfFocusSet = True
+                        dfDataField.SetFocus
+                        Beep
+                    End If
+                    If Val(dfDataField.Text) <> Int(Val(dfDataField.Text)) Then
+                        wb_SelfFocusSet = True
+                        dfDataField.SetFocus
+                        Beep
+                    End If
+                End If
+            End If
+            
+        Case 2 'Type Date
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyReturn Or KeyCode = vbKeyLButton Or KeyCode = vbKeyMenu Then
+             If wv_UcLowerBound = "" Then wv_UcLowerBound = "01-01-1900"
+             If wv_UcUpperBound = "" Then wv_UcUpperBound = "31-12-2999"
+
+             If Not IsDate(dfDataField.Text) Then
+               ls_TestString = Mid(dfDataField.Text, 1, 2) + "-" + Mid(dfDataField.Text, 3, 2) + "-" + Mid(dfDataField.Text, 5, 4)
+
+              If Not IsDate(Format(ls_TestString, "dd-mm-yyyy")) Then
+                     wb_SelfFocusSet = True
+                     dfDataField.SetFocus
+                Else
+                     wb_DateBeingSet = True
+                     dfDataField.Text = Format(ls_TestString, "dd-mm-yyyy")
+                        
+                    If CDate(Format(dfDataField.Text, "dd-mm-yyyy")) > CDate(Format(wv_UcUpperBound, "dd-mm-yyyy")) Or CDate(Format(dfDataField.Text, "dd-mm-yyyy")) < CDate(Format(wv_UcLowerBound, "dd-mm-yyyy")) Then
+                       wb_SelfFocusSet = True
+                       dfDataField.SetFocus
+                    End If
+               End If
+               ElseIf CDate(Format(dfDataField.Text, "dd-mm-yyyy")) > CDate(Format(wv_UcUpperBound, "dd-mm-yyyy")) Or CDate(Format(dfDataField.Text, "dd-mm-yyyy")) < CDate(Format(wv_UcLowerBound, "dd-mm-yyyy")) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                End If
+             End If
+             
+        Case 3 'Type Time
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyReturn Or KeyCode = vbKeyLButton Then
+                If Len(dfDataField.Text) < 3 Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                If IsNumeric(Mid(dfDataField.Text, 1, 2)) And Mid(dfDataField.Text, 3, 1) = ":" And IsNumeric(Mid(dfDataField.Text, 4, 2)) Then
+                        wn_AbsoluteTime = Val(Mid(dfDataField.Text, 1, 2)) * 100 + Val(Mid(dfDataField.Text, 4, 2))
+                        wn_AbsoluteMinutes = Val(Mid(dfDataField.Text, 4, 2))
+                        If wn_AbsoluteTime > 2400 Or wn_AbsoluteTime < 0 Then
+                            wb_SelfFocusSet = True
+                            dfDataField.SetFocus
+                            Beep
+                            GoTo Validation_Over
+                        End If
+                        If wn_AbsoluteMinutes > 59 Or wn_AbsoluteMinutes < 0 Then
+                            wb_SelfFocusSet = True
+                            dfDataField.SetFocus
+                            Beep
+                        End If
+                    Else
+                        wb_SelfFocusSet = True
+                        dfDataField.SetFocus
+                    End If
+                End If
+                
+        Case 4
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyReturn Or KeyCode = vbKeyLButton Then
+                If Not IsNumeric(dfDataField.Text) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                If Val(dfDataField.Text) > Val(wv_UcUpperBound) Or Val(dfDataField.Text) < Val(wv_UcLowerBound) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                dfDataField.Text = Format(dfDataField.Text, "0.00")
+            End If
+            
+        Case 5
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyLButton Then
+                If Not IsNumeric(dfDataField.Text) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                If Val(dfDataField.Text) > Val(wv_UcUpperBound) Or Val(dfDataField.Text) < Val(wv_UcLowerBound) Then
+                    dfDataField.Text = ""
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                dfDataField.Text = Format(dfDataField.Text, "0.000")
+            End If
+        Case 6
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyReturn Or KeyCode = vbKeyLButton Then
+                If Not IsNumeric(dfDataField.Text) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+
+                If Val(dfDataField.Text) > Val(wv_UcUpperBound) Or Val(dfDataField.Text) < Val(wv_UcLowerBound) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                dfDataField.Text = Format(dfDataField.Text, "0.0000")
+            End If
+                    
+        Case 7
+            If KeyCode = vbKeyTab Or KeyCode = vbKeyReturn Or KeyCode = vbKeyLButton Then
+                If Not IsNumeric(dfDataField.Text) Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                If Val(dfDataField.Text) > Val(wv_UcUpperBound) Or Val(dfDataField.Text) < Val(wv_UcLowerBound) Then
+                    wb_SelfFocusSet = True
+                    If dfDataField.Enabled = True Then dfDataField.SetFocus
+                    Beep
+                    GoTo Validation_Over
+                End If
+                dfDataField.Text = Format(dfDataField.Text, "0.0")
+            End If
+End Select
+
+Validation_Over:
+
+    If Not wb_SelfFocusSet Then
+        If KeyCode = vbKeyTab Or KeyCode = vbKeyLButton Then
+            If gb_ValidationRequired Then
+                wb_ValidationPassed = True
+                RaiseEvent ValidateData(wb_ValidationPassed)
+                If Not wb_ValidationPassed Then
+                    wb_SelfFocusSet = True
+                    dfDataField.SetFocus
+                    Beep
+                Else
+                    If Not wb_SelfFocusSet Then gb_ValidationIsOn = False
+                    End If
+            End If
+        End If
+    End If
+End Sub
+
+Private Sub dfDataField_KeyPress(KeyAscii As Integer)
+    RaiseEvent KeyPress(KeyAscii)
+End Sub
+
+Private Sub dfDataField_LostFocus()
+   wb_F1key = False
+   Call dfDataField_KeyDown(vbKeyLButton, 0)
+End Sub
+Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
+BoxEnable = PropBag.ReadProperty("BoxEnable", True)
+BoxHeight = PropBag.ReadProperty("BoxHeight", wn_UcHeight)
+BoxMaxLength = PropBag.ReadProperty("BoxMaxLength", 255)
+BoxWidth = PropBag.ReadProperty("BoxWidth", wn_UcWidth)
+LowerBound = PropBag.ReadProperty("LowerBound", "")
+MustValidate = PropBag.ReadProperty("MustValidate", 0)
+SetDataType = PropBag.ReadProperty("SetDataType", 0)
+SetBackColor = PropBag.ReadProperty("SetBackColor", vbWindowBackground)
+SetForeColor = PropBag.ReadProperty("SetForeColor", vbWindowText)
+SetHelpType = PropBag.ReadProperty("SetHelpType", 0)
+SetTextValue = PropBag.ReadProperty("SetTextValue", "")
+SetUpperCase = PropBag.ReadProperty("SetUpperCase", 0)
+UpperBound = PropBag.ReadProperty("UpperBound", "")
+SelStart = PropBag.ReadProperty("SelStart", 0)
+Set_Font = PropBag.ReadProperty("Set_Font", "Arial")
+Set_Font_Size = PropBag.ReadProperty("Set_Font_Size", 8)
+BoxLock = PropBag.ReadProperty("BoxLock", False)
+End Sub
+
+Private Sub UserControl_Resize()
+dfDataField.Width = UserControl.Width
+wn_UcWidth = UserControl.Width
+PropertyChanged "BoxWidth"
+dfDataField.Height = UserControl.Height
+wn_UcHeight = UserControl.Height
+PropertyChanged "BoxHeight"
+End Sub
+
+Private Sub UserControl_Show()
+    dfDataField.Height = 240
+    If wn_UcHeight > 0 And Not IsEmpty(wn_UcHeight) Then dfDataField.Height = wn_UcHeight
+    
+    dfDataField.Width = 700
+    If wn_UcWidth > 0 And Not IsEmpty(wn_UcWidth) Then dfDataField.Width = wn_UcWidth
+    
+    If ws_BackColor <> "" Then dfDataField.BackColor = Val(ws_BackColor)
+    If ws_ForeColor <> "" Then dfDataField.ForeColor = Val(ws_ForeColor)
+End Sub
+
+Public Property Get SetTextValue() As Variant
+SetTextValue = dfDataField.Text
+End Property
+
+Public Property Let SetTextValue(ByVal vNewValue As Variant)
+   If Not wb_F1key Then wb_InitialiseValue = True
+   dfDataField.Text = IIf(IsNull(vNewValue), " ", vNewValue)
+   PropertyChanged "SetTextValue"
+End Property
+
+Public Property Get SetUpperCase() As Integer
+   SetUpperCase = wn_UcUpperCase
+End Property
+
+Public Property Let SetUpperCase(ByVal vNewValue As Integer)
+    wn_UcUpperCase = vNewValue
+    PropertyChanged "SetUpperCase"
+End Property
+
+Public Property Get SetHelpType() As Variant
+   SetHelpType = wn_UcHelpType
+End Property
+
+Public Property Let SetHelpType(ByVal vNewValue As Variant)
+    wn_UcHelpType = vNewValue
+    PropertyChanged "SetHelpType"
+End Property
+
+Public Property Get SetBackColor() As Variant
+    SetBackColor = dfDataField.BackColor
+End Property
+
+Public Property Let SetBackColor(ByVal vNewValue As Variant)
+    ws_BackColor = vNewValue
+    dfDataField.BackColor = Val(ws_BackColor)
+    PropertyChanged "SetBackColor"
+End Property
+
+Public Property Get SetForeColor() As Variant
+    SetForeColor = dfDataField.ForeColor
+End Property
+
+Public Property Let SetForeColor(ByVal vNewValue As Variant)
+    ws_ForeColor = vNewValue
+    dfDataField.ForeColor = Val(ws_ForeColor)
+    PropertyChanged "SetForeColor"
+End Property
+
+Public Property Get MustValidate() As Integer
+   MustValidate = wn_MustValidateFlag
+End Property
+
+Public Property Let MustValidate(ByVal vNewValue As Integer)
+    wn_MustValidateFlag = vNewValue
+    PropertyChanged "MustValidate"
+End Property
+
+Public Property Get BoxEnable() As Boolean
+    BoxEnable = dfDataField.Enabled
+End Property
+
+Public Property Let BoxEnable(ByVal vNewValue As Boolean)
+   dfDataField.Enabled = vNewValue
+   UserControl.Enabled = vNewValue
+   PropertyChanged "BoxEnable"
+End Property
+Public Property Get BoxLock() As Boolean
+    BoxLock = dfDataField.Locked
+End Property
+Public Property Let BoxLock(ByVal vNewValue As Boolean)
+    dfDataField.Locked = vNewValue
+    PropertyChanged "BoxLock"
+End Property
+Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
+PropBag.WriteProperty "Set_Font", Set_Font, "Arial"
+PropBag.WriteProperty "Set_Font_Size", Set_Font_Size, 8
+PropBag.WriteProperty "BoxEnable", BoxEnable, True
+PropBag.WriteProperty "BoxHeight", BoxHeight, wn_UcHeight
+PropBag.WriteProperty "BoxMaxLength", BoxMaxLength, 255
+PropBag.WriteProperty "BoxWidth", BoxWidth, wn_UcWidth
+PropBag.WriteProperty "LowerBound", LowerBound, ""
+PropBag.WriteProperty "MustValidate", MustValidate, 0
+PropBag.WriteProperty "SetBackColor", SetBackColor, vbWindowBackground
+PropBag.WriteProperty "SetForeColor", SetForeColor, vbWindowText
+PropBag.WriteProperty "SetDataType", SetDataType, 0
+PropBag.WriteProperty "SetHelpType", SetHelpType, 0
+PropBag.WriteProperty "SetTextValue", SetTextValue, ""
+PropBag.WriteProperty "SetUpperCase", SetUpperCase, 0
+PropBag.WriteProperty "UpperBound", UpperBound, ""
+PropBag.WriteProperty "SelStart", SelStart, 0
+PropBag.WriteProperty "SelLength", SelLength, 0
+PropBag.WriteProperty "BoxLock", BoxLock, False
+End Sub
+Public Property Get SelStart() As Byte
+SelStart = dfDataField.SelStart
+End Property
+Public Property Let SelStart(ByVal bytNewValue As Byte)
+dfDataField.SelStart = bytNewValue
+PropertyChanged "SelStart"
+End Property
+Public Property Get SelLength() As Byte
+SelLength = dfDataField.SelLength
+End Property
+Public Property Let SelLength(ByVal bytNewValue As Byte)
+dfDataField.SelLength = bytNewValue
+PropertyChanged "SelLength"
+End Property
+Public Function Map_Enter_Key(KeyCode As Integer)
+If KeyCode = vbKeyReturn Then SendKeys "{TAB}"
+End Function
+

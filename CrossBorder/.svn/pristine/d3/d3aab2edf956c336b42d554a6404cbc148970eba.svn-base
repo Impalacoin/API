@@ -1,0 +1,266 @@
+VERSION 5.00
+Begin VB.UserControl SButton 
+   Appearance      =   0  'Flat
+   BackColor       =   &H00C0C0FF&
+   ClientHeight    =   480
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   4005
+   ClipControls    =   0   'False
+   DrawStyle       =   6  'Inside Solid
+   BeginProperty Font 
+      Name            =   "Arial"
+      Size            =   12
+      Charset         =   0
+      Weight          =   700
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   ForeColor       =   &H00000000&
+   KeyPreview      =   -1  'True
+   PropertyPages   =   "SButton.ctx":0000
+   ScaleHeight     =   480
+   ScaleMode       =   0  'User
+   ScaleWidth      =   4022.263
+   Begin VB.PictureBox Picture1 
+      Align           =   3  'Align Left
+      AutoRedraw      =   -1  'True
+      AutoSize        =   -1  'True
+      BackColor       =   &H00FFFF00&
+      BorderStyle     =   0  'None
+      ClipControls    =   0   'False
+      DrawStyle       =   6  'Inside Solid
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      HasDC           =   0   'False
+      Height          =   480
+      Left            =   0
+      Picture         =   "SButton.ctx":004A
+      ScaleHeight     =   495.484
+      ScaleMode       =   0  'User
+      ScaleWidth      =   480
+      TabIndex        =   0
+      Top             =   0
+      Width           =   478
+   End
+   Begin VB.Label Label1 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00FFFF80&
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000008&
+      Height          =   480
+      Left            =   480
+      TabIndex        =   1
+      Top             =   0
+      UseMnemonic     =   0   'False
+      Width           =   3503
+   End
+End
+Attribute VB_Name = "SButton"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+
+
+Option Explicit
+Private lBackColor As Long, gnNewHeight As Long, gcYRatio As Currency
+Private EntID As Long, EntLevel As Integer, EntType As String, LocalFontSize As Integer
+Private L_BColor As OLE_COLOR, L_FColor As OLE_COLOR, TmpColor As OLE_COLOR
+Private LocalFont As StdFont, LocalEnabled As Boolean, ToolText As String
+Public Event click()
+Public Event MouseMove()
+Public Event KeyDown(ByVal KeyCode As Integer, ByVal Shift As Integer)
+Private Sub Label1_Click()
+    RaiseEvent click
+End Sub
+Private Sub Label1_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    RaiseEvent MouseMove
+End Sub
+Private Sub Picture1_Click()
+    RaiseEvent click
+End Sub
+Private Sub Picture1_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    RaiseEvent MouseMove
+End Sub
+Private Sub UserControl_Click()
+    RaiseEvent click
+End Sub
+Private Sub UserControl_InitProperties()
+    Caption = Extender.Name
+    L_BColor = Label1.BackColor
+    L_FColor = Label1.ForeColor
+    LocalEnabled = True
+    Set LocalFont = Label1.Font
+    EntID = 9999999
+    EntLevel = 0
+    EntType = "M"
+    ToolText = Label1.ToolTiptext
+    LocalFontSize = Label1.Font.Size
+End Sub
+Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
+    RaiseEvent KeyDown(KeyCode, Shift)
+End Sub
+Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    RaiseEvent MouseMove
+End Sub
+Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
+    Caption = PropBag.ReadProperty("Caption", Extender.Name)
+    Enabled = PropBag.ReadProperty("Enabled", LocalEnabled)
+    BackColor = PropBag.ReadProperty("BackColor", L_BColor)
+    ForeColor = PropBag.ReadProperty("ForeColor", L_FColor)
+    Set Picture = PropBag.ReadProperty("Picture", Nothing)
+    Set Font = PropBag.ReadProperty("Font", LocalFont)
+    EntityId = PropBag.ReadProperty("EntityId", EntID)
+    EntityLevel = PropBag.ReadProperty("EntityLevel", EntLevel)
+    EntityType = PropBag.ReadProperty("EntityType", UCase(EntType))
+    ToolTiptext = PropBag.ReadProperty("ToolTipText", ToolText)
+    FontSize = PropBag.ReadProperty("FontSize", LocalFontSize)
+End Sub
+Private Sub UserControl_Resize()
+    '**B.DUTTA: Following code to be used***
+    '''UserControl.Height = 300 * gcYRatio
+    '''If gcYRatio = 1 Then
+    '''    UserControl.Width = 3060
+    '''End If
+'    UserControl.Height = 480    'Original code
+'    UserControl.Width = 3495     'Original code
+
+'    Label1.Height = UserControl.Height
+'    Label1.Width = (UserControl.Width / 480) * Label1.Width
+End Sub
+Private Sub UserControl_Show()
+'    Picture1.Height = UserControl.Height
+    Label1.Height = UserControl.Height
+    Label1.Width = UserControl.Width - Picture1.Width
+    Label1.Refresh
+    '***Implement the following code after taking care of the sub-menu adjustments****
+    '**Added by B.DUTTA**************************************************
+'    If gbRuntime = True Then 'gbRuntime:TRUE to denote runtime environ
+'        Call Resize_UserCntl
+'    End If
+    '********************************************************************
+End Sub
+Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
+    PropBag.WriteProperty "Caption", Caption, Extender.Name
+    PropBag.WriteProperty "Enabled", LocalEnabled
+    PropBag.WriteProperty "BackColor", L_BColor
+    PropBag.WriteProperty "ForeColor", L_FColor
+    Call PropBag.WriteProperty("Picture", Picture, Nothing)
+    PropBag.WriteProperty "Font", LocalFont
+    PropBag.WriteProperty "EntityId", EntID
+    PropBag.WriteProperty "EntityLevel", EntLevel
+    PropBag.WriteProperty "EntityType", EntType
+    PropBag.WriteProperty "ToolTipText", ToolText
+    PropBag.WriteProperty "FontSize", LocalFontSize
+End Sub
+Public Property Get FontSize() As Integer
+  FontSize = Label1.Font.Size
+End Property
+Public Property Let FontSize(ByVal vNewValue As Integer)
+    If vNewValue = 0 Then vNewValue = 10
+     LocalFontSize = vNewValue
+     Label1.Font.Size = vNewValue
+End Property
+Public Property Get Caption() As String
+    Caption = Label1.Caption
+End Property
+Public Property Get ToolTiptext() As String
+    ToolText = Label1.ToolTiptext
+End Property
+Public Property Let ToolTiptext(ToolText As String)
+    Label1.ToolTiptext = ToolText
+End Property
+Public Property Let Caption(sNewCaption As String)
+    Label1.Caption = sNewCaption
+End Property
+Public Property Get Picture() As Picture
+    Set Picture = Picture1.Picture
+End Property
+Public Property Set Picture(ByVal New_Picture As Picture)
+    Set Picture1.Picture = New_Picture
+End Property
+Public Property Get EntityId() As Long
+    EntityId = EntID
+End Property
+Public Property Let EntityId(ByVal vNewValue As Long)
+    EntID = vNewValue
+End Property
+Public Property Get EntityType() As String
+    EntityType = EntType
+End Property
+Public Property Let EntityType(vNewValue As String)
+    EntType = Trim(UCase(vNewValue))
+End Property
+Public Property Get EntityLevel() As Integer
+    EntityLevel = EntLevel
+End Property
+Public Property Let EntityLevel(ByVal vNewValue As Integer)
+    EntLevel = vNewValue
+End Property
+Public Property Get BackColor() As OLE_COLOR
+    BackColor = Label1.BackColor
+End Property
+Public Property Let BackColor(ByVal vNewValue As OLE_COLOR)
+    L_BColor = vNewValue
+    Label1.BackColor = L_BColor
+    Picture1.BackColor = L_BColor
+'    UserControl.BackColor = L_BColor
+End Property
+Public Property Get ForeColor() As OLE_COLOR
+    ForeColor = Label1.ForeColor
+End Property
+Public Property Let ForeColor(ByVal vNewValue As OLE_COLOR)
+    L_FColor = vNewValue
+    Label1.ForeColor = L_FColor
+    Picture1.ForeColor = L_FColor
+    UserControl.ForeColor = L_FColor
+End Property
+Public Property Get Font() As StdFont
+    Set Font = LocalFont
+End Property
+Public Property Set Font(ByVal vNewValue As StdFont)
+    Set LocalFont = vNewValue
+    Set Label1.Font = LocalFont
+End Property
+Public Property Get Enabled() As Boolean
+    Enabled = LocalEnabled
+End Property
+Public Property Get Count() As Integer
+    Count = 2
+End Property
+Public Property Let Enabled(ByVal vNewValue As Boolean)
+    LocalEnabled = vNewValue
+    If LocalEnabled = False Then
+        UserControl.BackColor = &HE0E0E0
+        Label1.BackColor = &HE0E0E0
+        Picture1.BackColor = &HE0E0E0
+        L_BColor = &HE0E0E0
+        PropertyChanged "BackColor"
+    Else
+        UserControl.BackColor = &HC0FFFF
+        Label1.BackColor = &HC0FFFF
+        Picture1.BackColor = &HC0FFFF
+        L_BColor = &HC0FFFF
+        PropertyChanged "BackColor"
+    End If
+    UserControl.Enabled = LocalEnabled
+    Label1.Enabled = LocalEnabled
+    Picture1.Enabled = LocalEnabled
+End Property

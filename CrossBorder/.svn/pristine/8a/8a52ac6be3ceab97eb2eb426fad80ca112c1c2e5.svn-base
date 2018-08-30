@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+
+ require_once("engine.php");     
+   
+ display_navigation();
+ ?>
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.   Who is impala Credit?</b><br />
+ <span style="color: green;">
+    <b>A.</b> Impala is an East Africa Online based information, payment and transaction web portal which enables secure<br />   
+    &nbsp;&nbsp;&nbsp;&nbsp;online transactions and branchless banking.
+ </span><br />
+ </p>
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.   How do I sign up for an Impalapay account?</b><br />
+ <span style="color: green;">
+    <b>A.</b> Registration is very easy, go to the third tab named register and click on it, fill in the blank fields, and hit register button at the bottom.<br />   
+    
+ </span>
+ </p>
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.What payment methods can I use to send money?</b><br />
+ <span style="color: green;">
+    <b>A.</b> We accept paypal, credit/debit cards and accredited outlets.<br />
+    <span style="margin: 5px 0px 0px 30px;">1.Safaricom (Mpesa) <br /></span>
+        <span style="margin: 5px 0px 0px 30px;">2.Orange (Orent Money) <br /></span>
+        <span style="margin: 5px 0px 0px 30px;">3.Airtel (Zap) <br /></span>
+        <span style="margin: 5px 0px 0px 30px;">4.Yu  (Yu Cash)</span>   
+    
+ </span>
+ </p>
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.   Will my client receive a text message to inform of them of the sender?</b><br />
+ <span style="color: green;">
+    <b>A.</b> Yes your clients will know who the money is from and additionally, they will get their withdraw fee from impalapay.<br />   
+    
+ </span>
+ </p>
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.   How long is an impalapay money transfer?</b><br />
+ <span style="color: green;">
+    <b>A.</b> An Impalapay money transfer is almost instant, it takes 1-2 minutes for the cash to be delivered to the recipient's mobile.<br />   
+    
+ </span>
+ </p>
+ 
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.   Which countries can is Send & receive from?</b><br />
+ <span style="color: green;">
+    <b>A.</b> You can send from any country in the world but can only receive in kenya. <br />   
+    
+ </span>
+ </p>
+ <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.   How do I cancel a transfer?</b><br />
+ <span style="color: green;">
+    <b>A.</b> To cancel a transfer, write a complaint 
+    <a style="font-family: Arial,'Times New Roman',sans-serif;color: blue;" href="send_mail.php">HERE</a> before 24 hours. Our support group will get back to you.<br />   
+    
+ </span>
+ </p>
+  <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q. What is the dominant currency of impalapay?</b><br />
+ <span style="color: green;">
+    <b>A.</b> The dominant impalapay currency is the US dollar.  <br />   
+    
+ </span>
+ </p>
+   <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q.I have lost my pin how do I retrieve?</b><br />
+ <span style="color: green;">
+    <b>A.</b> To retrieve your pin, go to send money and click on the link i forgot my pin next to send button and follow the instructions  <br />   
+    
+ </span>
+ </p>
+  <p style="margin: 5px 0px 0px 20px;">
+ <b style="color: red;">Q. What number can I call incase of a dispute?</b><br />
+ <span style="color: green;">
+    <b>A.</b> +2540202248747.  <br />   
+    
+ </span>
+ </p>
+ <br />
+ <p style="margin: 5px 0px 0px 20px;color:blue;font-family:'Times New Roman',helvetica,Arial,sans-serif;font-size:12px"> 
+ For anymore questions please email to support@impalapay.com
+ </p>
+ 
+
+ <?php
+   
+   
+     
+//require_once "includes/footer.php"
+
+?>

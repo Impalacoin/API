@@ -1,0 +1,118 @@
+VERSION 5.00
+Begin VB.Form Interface 
+   BorderStyle     =   3  'Fixed Dialog
+   Caption         =   "Interface Start"
+   ClientHeight    =   5100
+   ClientLeft      =   45
+   ClientTop       =   390
+   ClientWidth     =   6120
+   Icon            =   "Interface.frx":0000
+   LinkTopic       =   "Form2"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   5100
+   ScaleWidth      =   6120
+   ShowInTaskbar   =   0   'False
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      Height          =   4815
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   5895
+      Begin VB.CheckBox ChckInterface 
+         Caption         =   "ChckInterface"
+         Height          =   195
+         Index           =   0
+         Left            =   240
+         TabIndex        =   1
+         Top             =   360
+         Visible         =   0   'False
+         Width           =   3495
+      End
+   End
+End
+Attribute VB_Name = "Interface"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Private Declare Function GetTickCount Lib "kernel32" () As Long
+Dim DbCon As ADODB.Connection
+Private Sub ChckInterface_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+ Dim RecSet As New ADODB.Recordset
+   
+If ChckInterface(Index).Value = vbChecked Then
+   
+Else
+   ChckInterface(Index).Value = vbChecked
+   RecSet.Open "select * from em_issuer_sap where mode = 0", DbCon
+     Do While RecSet.EOF = False
+
+
+    Shell App.Path & "\iGateway.exe", vbMinimizedFocus
+    RecSet.MoveNext
+     ZapBridge.SlowDown (500)
+    Loop
+    RecSet.Close
+End If
+    
+End Sub
+
+Private Sub Form_Load()
+ Dim rstObj As ADODB.Recordset
+ 
+ Dim strSQL As String
+ Dim str2 As String
+ Set rstObj = New ADODB.Recordset
+ Dim i As Integer
+ Dim col As Long
+ Dim J As Integer
+ i = 1
+ col = 240
+ 
+On Error GoTo ErrorTrap
+
+Set DbCon = New ADODB.Connection
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+ 
+
+ strSQL = "select * from em_issuer_sap"
+ rstObj.Open strSQL, DbCon
+  
+ Do While Not rstObj.EOF
+    
+    Load ChckInterface(i)
+          
+    ChckInterface(i).Caption = rstObj!Node_Name
+    ChckInterface(i).Visible = True
+    
+    If rstObj!Mode = 0 Then
+    ChckInterface(i).Enabled = True
+    ChckInterface(i).Value = vbUnchecked
+    Else
+    ChckInterface(i).Enabled = False
+    ChckInterface(i).Value = vbChecked
+    End If
+    
+    ChckInterface(i).Left = col
+     
+     ChckInterface(i).Top = ChckInterface(i - 1).Top + 350
+        
+    i = i + 1
+    rstObj.MoveNext
+ Loop
+ rstObj.Close
+ 
+ Exit Sub
+
+
+ErrorTrap:
+MsgBox "Please Login to Access the Configuration Console" & vbNewLine & _
+"Go to File Menu and click Database Login, " & vbNewLine & "DataBase Login Error occurred", vbCritical
+Unload Me
+End Sub

@@ -1,0 +1,431 @@
+VERSION 5.00
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Begin VB.Form MainForm 
+   BackColor       =   &H00C0C0C0&
+   Caption         =   "MONEX Managememt Console"
+   ClientHeight    =   10305
+   ClientLeft      =   165
+   ClientTop       =   735
+   ClientWidth     =   12945
+   Icon            =   "MainFrm.frx":0000
+   KeyPreview      =   -1  'True
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   10305
+   ScaleWidth      =   12945
+   StartUpPosition =   3  'Windows Default
+   WindowState     =   2  'Maximized
+   Begin VB.CommandButton Command1 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Stop View"
+      Height          =   375
+      Left            =   4320
+      Style           =   1  'Graphical
+      TabIndex        =   3
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   975
+   End
+   Begin VB.TextBox TXTMonitor 
+      BackColor       =   &H00C0FFFF&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00000000&
+      Height          =   10095
+      Left            =   4320
+      MultiLine       =   -1  'True
+      ScrollBars      =   3  'Both
+      TabIndex        =   2
+      Top             =   360
+      Visible         =   0   'False
+      Width           =   10935
+   End
+   Begin MSComctlLib.ImageList ImageList1 
+      Left            =   4320
+      Top             =   240
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      MaskColor       =   12632256
+      _Version        =   393216
+   End
+   Begin MSComctlLib.TreeView TreeView1 
+      Height          =   10305
+      Left            =   120
+      TabIndex        =   0
+      Top             =   360
+      Width           =   4095
+      _ExtentX        =   7223
+      _ExtentY        =   18177
+      _Version        =   393217
+      LabelEdit       =   1
+      LineStyle       =   1
+      Style           =   7
+      HotTracking     =   -1  'True
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Verdana"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin VB.Image Image2 
+      Height          =   5985
+      Left            =   4320
+      Picture         =   "MainFrm.frx":030A
+      Stretch         =   -1  'True
+      Top             =   360
+      Width           =   7290
+   End
+   Begin VB.Label Label1 
+      BackColor       =   &H00C0C0C0&
+      Caption         =   "Services Started"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   13.5
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000000FF&
+      Height          =   375
+      Left            =   120
+      TabIndex        =   1
+      Top             =   0
+      Width           =   4095
+   End
+   Begin VB.Image Image1 
+      Height          =   615
+      Left            =   480
+      Top             =   1440
+      Width           =   495
+   End
+   Begin VB.Menu fil 
+      Caption         =   "File"
+      Begin VB.Menu lgn 
+         Caption         =   "Database Login"
+         Shortcut        =   ^L
+      End
+      Begin VB.Menu logout 
+         Caption         =   "Database Logout"
+      End
+      Begin VB.Menu exit 
+         Caption         =   "Exit Application"
+         Shortcut        =   ^E
+      End
+   End
+   Begin VB.Menu config 
+      Caption         =   "Configurations"
+   End
+   Begin VB.Menu hlp 
+      Caption         =   "Help"
+   End
+End
+Attribute VB_Name = "MainForm"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Const AddIcon = &H0
+Private Const ModifyIcon = &H1
+Private Const DeleteIcon = &H2
+
+Private Const WM_MOUSEMOVE = &H200
+Private Const WM_LBUTTONDBLCLK = &H203
+Private Const WM_LBUTTONDOWN = &H201
+Private Const WM_LBUTTONUP = &H202
+
+Private Const WM_RBUTTONDBLCLK = &H206
+Private Const WM_RBUTTONDOWN = &H204
+Private Const WM_RBUTTONUP = &H205
+
+Private Const MessageFlag = &H1
+Private Const IconFlag = &H2
+Private Const TipFlag = &H4
+Private Load_Flag As Integer
+
+Private nodx As Node
+
+Private Declare Function Shell_NotifyIcon _
+  Lib "shell32" Alias "Shell_NotifyIconA" ( _
+  ByVal Message As Long, Data As NotifyIconData) As Boolean
+
+Private Data As NotifyIconData
+
+' Type passed to Shell_NotifyIcon
+Private Type NotifyIconData
+  Size As Long
+  HANDLE As Long
+  ID As Long
+  Flags As Long
+  CallBackMessage As Long
+  Icon As Long
+  Tip As String * 64
+End Type
+
+Public meStateIcon As Boolean
+
+Private Sub AddIconToTray()
+
+  Data.Size = Len(Data)
+  Data.HANDLE = hWnd
+  Data.ID = vbNull
+  Data.Flags = IconFlag Or TipFlag Or MessageFlag
+  Data.CallBackMessage = WM_MOUSEMOVE
+  Data.Icon = Icon
+  Data.Tip = Trim("PayServ Money Bridge")
+  Call Shell_NotifyIcon(AddIcon, Data)
+
+End Sub
+
+Private Sub DeleteIconFromTray()
+    With Data
+      .Size = Len(Data)
+      .HANDLE = hWnd
+      .ID = vbNull
+      .Flags = IconFlag Or TipFlag Or MessageFlag
+      .CallBackMessage = WM_MOUSEMOVE
+      .Icon = Icon
+    End With
+  Shell_NotifyIcon DeleteIcon, Data
+End Sub
+
+Private Sub cmdEnd_Click()
+      
+    'remove icon from tray
+    DeleteIconFromTray
+       
+End Sub
+
+Private Sub Command1_Click()
+TXTMonitor.Visible = False
+Command1.Visible = False
+End Sub
+
+Private Sub Command2_Click()
+MenuForm.Show
+End Sub
+
+Private Sub config_Click()
+Encrypt.Show
+End Sub
+
+Private Sub exit_Click()
+'Unload Application
+End
+End Sub
+
+Private Sub Form_Load()
+If App.PrevInstance = True Then
+MsgBox "The application is already running", vbInformation
+End
+End If
+ Image2.Width = Me.Width - (Image1.Left + 1000)
+ Image2.Height = Me.Height + 1000
+ Label1.Caption = "Services Stopped"
+ Label1.ForeColor = &HFF&
+ 
+ ImageList1.ListImages.Add , "leaf", LoadPicture(App.Path & "\config.ico")
+ ImageList1.ListImages.Add , "open", LoadPicture(App.Path & "\opened.ico")
+ ImageList1.ListImages.Add , "closed", LoadPicture(App.Path & "\closed.ico")
+
+Set TreeView1.ImageList = ImageList1
+'Add root Node
+Set nodx = TreeView1.Nodes.Add(, , "Root", "EMserv", "closed")
+'Expand root node so we can see what's under it
+nodx.ExpandedImage = "open"
+nodx.Expanded = True
+'Create a child node under the root node
+Set nodx = TreeView1.Nodes.Add("Root", tvwChild, "Child1", "Configurations", "closed")
+'Expand this node so we can see what's under it
+nodx.ExpandedImage = "open"
+nodx.Expanded = True
+
+'Create several more children
+Set nodx = TreeView1.Nodes.Add("Root", tvwChild, "Child2", "Monitoring", "closed")
+                                                        
+
+nodx.ExpandedImage = "open"
+nodx.Expanded = True
+                                                            
+Set nodx = TreeView1.Nodes.Add("Root", tvwChild, "Child3", "Queries", "closed")
+Set nodx = TreeView1.Nodes.Add("Root", tvwChild, "Child4", "Tools", "closed")
+Set nodx = TreeView1.Nodes.Add("Root", tvwChild, "Child5", "Documentation", "closed")
+'Create two child nodes under the first child node of root
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1A", "Merchant Institutions", "leaf")
+                                                            
+
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1B", "Issuer Institutions", "leaf")
+                                                            
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1C", "Mobile Application", "leaf")
+                                                            
+
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1F", "Terminal Configuration", "leaf")
+                                                            
+
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1G", "Security Module Configuration", "leaf")
+                                                          
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1H", "Credit Score Configuration", "leaf")
+                                                          
+
+
+
+Set nodx = TreeView1.Nodes.Add("Child2", tvwChild, "Child2A", "Payment Core Monitoring", "leaf")
+                                                            
+                                                           
+Set nodx = TreeView1.Nodes.Add("Child2", tvwChild, "Child2B", "EMserv Monitoring", "leaf")
+                                                            
+                                                             
+Set nodx = TreeView1.Nodes.Add("Child2", tvwChild, "Child2C", "Activity Monitoring", "leaf")
+                                                             
+Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1D", "Start Services", "leaf")
+                                                            
+                                                             
+                                                             
+
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+ Select Case UnloadMode
+    Case 0:
+        'return to application without quiting
+        Cancel = 1
+        'make menu visible
+        Me.WindowState = 1
+    Case Else 'for future use
+        'Unload Me
+    End Select
+End Sub
+
+Private Sub Form_Resize()
+Image2.Width = Me.Width - Image1.Left
+Image2.Height = Me.Height + 200
+End Sub
+
+Private Sub lgn_Click()
+frmODBCLogon.Show vbModal
+End Sub
+
+Private Sub TreeView1_DblClick()
+    'Dim nodItem As Node
+    
+On Error GoTo QuitSub
+If Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Merchant Institutions" Then
+    TXTMonitor.Visible = False
+    Command1.Visible = False
+    'Load MchAddFrm
+    MchAddFrm.Show 'vbNormalFocus
+    
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Monitoring\Payment Core Monitoring" Then
+        If Load_Flag = 1 Then
+        TXTMonitor.Visible = False
+        Command1.Visible = False
+        ZapBridge.Show vbNormalFocus
+        
+        Else
+        MsgBox "Operation not allowed when services are closed", vbInformation
+        End If
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Start Services" Then
+
+    Load ZapBridge
+    TreeView1.Nodes.Remove (15)
+    Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1E", _
+                                                            "Stop Services", "leaf")
+
+  MsgBox "Payserv Application has been started", vbInformation, "Paysev Monitor"
+  
+  
+  Label1.Caption = "Services Started"
+  Load_Flag = 1
+
+  Label1.ForeColor = &HFF8080
+
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Issuer Institutions" Then
+    TXTMonitor.Visible = False
+    Command1.Visible = False
+    'Load SwtFrm
+    SwtFrm.Show
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Terminal Configuration" Then
+    
+    TermFrm.Show
+    
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Stop Services" Then
+    
+     Form1.Show vbModal
+     If Form1.Check1.Value = vbChecked Then
+     Unload ZapBridge
+     TreeView1.Nodes.Remove (15)
+     Load_Flag = 0
+     
+     Set nodx = TreeView1.Nodes.Add("Child1", tvwChild, "Child1D", _
+                                                            "Start Services", "leaf")
+ 
+     StartST.Show
+ 
+   MsgBox "Payserv Application has been stopped", vbExclamation, "Paysev Monitor"
+ 
+
+   Label1.Caption = "Services Stopped"
+   Label1.ForeColor = &HFF&
+  End If
+ 
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Mobile Application" Then
+    TXTMonitor.Visible = False
+    Command1.Visible = False
+    Load frmMobile
+    frmMobile.Show vbModal
+    
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Configurations\Credit Score Configuration" Then
+    TXTMonitor.Visible = False
+    Command1.Visible = False
+    frmParam.Show vbModal
+    
+'ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Monitoring\Merchants Monitoring" Then
+'  TXTMonitor.Visible = True
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Monitoring\Activity Monitoring" Then
+  TXTMonitor.Visible = True
+  Command1.Visible = True
+   
+  If Load_Flag = 0 Then
+        TXTMonitor.ForeColor = &HFF
+        TXTMonitor.Text = "The main payment core services are stopped"
+  Else
+      TXTMonitor.ForeColor = &H0&
+  End If
+  
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Monitoring\EMserv Monitoring" Then
+  TXTMonitor.Visible = True
+  Command1.Visible = True
+  If Load_Flag = 0 Then
+        TXTMonitor.ForeColor = &HFF
+        TXTMonitor.Text = "The main payment core services are stopped"
+  Else
+      TXTMonitor.ForeColor = &H0&
+  End If
+  
+ElseIf Me.TreeView1.SelectedItem.FullPath = "EMserv\Queries" Then
+    TXTMonitor.Visible = False
+    Command1.Visible = False
+    Load frmQuery
+    frmQuery.Show
+End If
+
+Exit Sub
+QuitSub:
+'MsgBox err.Description
+   
+End Sub
+

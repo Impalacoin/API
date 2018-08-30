@@ -1,0 +1,229 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("engine.php");
+$registered=has_registered($uid);
+if($registered==false){
+    header('location:register.php?notregistered');
+}
+
+
+
+display_navigation();
+if(isset($_POST["send"])){
+    
+    $required_fields=array("friend","amount","mobile","pin");
+    $errors=check_required_fields($required_fields);
+    $pin_db=get_pin($uid);
+        
+        $receiver_name=trim($_POST["friend"]);
+        $receiver_id="";
+        
+        if($receiver_id==null){
+            $receiver_id=77;
+        }elseif(isset($_POST["friends_id"]) && !empty($_POST["friends_id"])){
+          $receiver_id=trim($_POST["friends_id"]);  
+        }
+        $receiver_mobile=trim($_POST["mobile"]);
+        $amount=trim($_POST["amount"]);
+        $pin=sha1(trim($_POST["pin"]));
+    if(empty($errors)){
+        
+        if($pin==$pin_db){
+            
+            $token=mt_rand(29999999,199999999);
+            $tokenqry="INSERT INTO tokens SET fbid='{$uid}',token='{$token}',status='',date=now()";
+            $tokenrslt=mysql_query($tokenqry) or die(mysql_error());
+            if(mysql_affected_rows()==1){   
+                $tokMsg="Please use this token to complete transaction: {$token}";
+                $user_phone=formatMobile(get_user_phone($uid),"international");
+                $user_email = get_user_email($uid);
+                $msgBody="<p>{$tokMsg}</p>";
+                $subject="ImpalaPay Token";
+                
+                $to=$user_email;                
+                $toName=$user_email;
+                $email=sendEmail($msgBody,$subject,$to,$toName,"info@impalapay.com");
+                
+		$newconn=mysql_connect("196.216.73.149","ozeki","ozeking");
+                $ozekiqry="INSERT INTO paymentonline.ozekimessageout SET receiver='$user_phone',msg='Please use this token to complete transaction: {$token}',status='send'";
+                $ozekirslt=mysql_query($ozekiqry,$newconn) or die(mysql_error());
+                
+                sendInfoBipResponse($tokMsg,$user_phone);
+                
+            }
+        ?>
+        <form action="send_money.php" method="post" class="pushRight">
+        <input type="hidden" name="friend" value="<?php echo $receiver_name  ?>" />
+        <input type="hidden" name="friends_id" value="<?php echo $receiver_id  ?>" />
+        <input type="hidden" name="receiver_id" value="<?php echo $receiver_id  ?>" />
+        <input type="hidden" name="mobile" value="<?php echo $receiver_mobile  ?>" />
+        <input type="hidden" name="amount" value="<?php echo $amount  ?>" />
+        <input type="hidden" name="pin" value="<?php echo $pin  ?>" />
+        
+        
+        
+        <div>
+        <p>Are you sure you want to send money to <?php echo $receiver_name;?> ?</p>
+        <table class="pretty-table">
+        <tbody>
+            
+            <tr><th scope="row">Receiver:</th><td><?php echo $receiver_name ?></td></tr>
+            <tr><th scope="row">Mobile:</th><td><?php echo $receiver_mobile ?></td></tr>
+            <tr><th scope="row">amount:</th><td><?php echo $amount ?>$</td></tr>
+            <tr><td colspan="2">A token has been sent to your mobile phone and email, please enter the token number to 
+            complete the transaction.</td></tr>
+            
+        </tbody>
+        </table>
+        <label>Token</label><input type="text" name="token_num" value="" /><br />
+         <input class="button" type="submit" value="Yes" name="confirm" />
+         <input class="button" type="submit" value="No" name="cancel" />
+        </div>
+        </form>
+        <?php
+        
+        }else{
+            echo "<p class='pushRight'>Your pin is incorrect, please try again</p>";
+            
+            display_send_money($me,$uid);
+        }
+    }else{
+        echo "<p class='pushRight'>All fields are required</p>";
+        display_send_money($me,$uid);        
+    }
+}
+if(isset($_POST["confirm"])){
+    $required_fields=array("friend","amount","mobile","pin");
+    $errors=check_required_fields($required_fields);
+    if(empty($errors)){
+        $pin_db=get_pin($uid);
+        
+        $receiver_name=trim($_POST["friend"]);
+        $receiver_id= "";//trim($_POST["friends_id"]);
+        if($receiver_id==null){
+            $receiver_id=77;
+        }
+        $receiver_mobile=formatMobile(trim($_POST["mobile"]));
+        $amount=trim($_POST["amount"]);
+        $token_verif=trim($_POST["token_num"]);        
+        $pin=trim($_POST["pin"]);
+        
+        $sendingFee=CalculateImpalaCharges($amount);
+        $token_array=get_tokens($uid);         
+        
+        if($pin==$pin_db && in_array($token_verif,$token_array)){
+            $account=getAccount($uid);
+            $current_amount=mysql_result($account,0,"amount");
+            $accId=mysql_result($account,0,"id");
+            
+            $updtoken="UPDATE tokens SET status='verified' WHERE token='{$token_verif}'";
+            $updtokenrslt=mysql_query($updtoken) or die(mysql_error());
+            
+            if($current_amount >= ($amount+$sendingFee)){
+                $balance=$current_amount-($amount+$sendingFee);
+                $queryTran="INSERT INTO transaction SET account_id={$accId},transaction='s',amount={$amount},
+                balance={$balance}";
+               
+                $resultTran=mysql_query($queryTran) or die(mysql_error());
+                if(mysql_affected_rows()==1){                 
+                   $transactionId=mysql_insert_id();
+                   $exchangeRate=GetEchangeRate();
+                    $amountKsh=$amount*$exchangeRate;
+                    $mpesaFeeKsh=CalculateMpesaCharges($amountKsh);
+                    $mpesaFeeUsd=$mpesaFeeKsh/$exchangeRate;
+                    $impalaFee=$sendingFee-$mpesaFeeUsd;
+                    
+                    
+                   $querySnt="INSERT INTO sent_money SET
+                              transactionId={$transactionId},
+                              receiver_id={$receiver_id},
+                              receiver_name='{$receiver_name}',
+                              receiverMobile='{$receiver_mobile}',
+                              sender_id={$uid},
+                              senderName='{$me["name"]}',
+                              amount={$amount},
+                              impalaFee={$impalaFee},
+                              mpesaFee={$mpesaFeeUsd}
+                              "; 
+                   $resultSnt=mysql_query($querySnt) or die(mysql_error());
+                   if(mysql_affected_rows()==1){
+                    
+                    $queryAccnt="UPDATE account SET amount={$balance} WHERE fb_id={$uid}";
+                    $resultAccnt=mysql_query($queryAccnt) or die(mysql_error());
+                    if(mysql_affected_rows()==1){
+                        
+                        $queryImp="UPDATE account SET amount=amount+{$impalaFee} WHERE id=1";
+                        $resultImp=mysql_query($queryImp) or die(mysql_error());
+                        if(mysql_affected_rows()==1){
+                            $amountInKsh=($amount*$exchangeRate);
+                            $amountToSendKsh=$amountInKsh+$mpesaFeeKsh;
+                           $querySend = "INSERT INTO send_money SET 
+                           first_name='facebook' 
+                           , amount='{$amountInKsh}'
+                           , phone_number ='$receiver_mobile'
+                           ,status='send'";
+                           $resultSend = mysql_query($querySend);
+                           if(mysql_affected_rows()==1){
+                            
+                           }
+                            //mysql_close($connection);
+                            $connGtw=mysql_connect("192.168.220.7","nicholas","bashnjoy") or die(mysql_error());
+                            mysql_select_db("paymentonline",$connGtw);
+                            $amountInKsh=($amount*$exchangeRate);
+                            $amountToSendKsh=$amountInKsh+$mpesaFeeKsh;
+                            $queryGtw="INSERT INTO mpesa_sendmoney SET 
+                            phonenumber='{$receiver_mobile}',
+                            amount={$amountToSendKsh},
+                            status='new'";
+                            $resultGtw=mysql_query($queryGtw,$connGtw) or die(mysql_error());
+                            if(mysql_affected_rows($connGtw)==1){
+                                
+                                echo "<p class='pushRight'>Your transactions is being processed, {$receiver_name} will receive cash in a few minutes</p>";
+                                $queryOzk="INSERT INTO paymentonline.ozekimessageout SET receiver='{$receiver_mobile}',
+                                msg='{$me["name"]} has sent you Ksh {$amountInKsh} & Ksh {$mpesaFeeKsh} to withdraw using impalapay. ',
+                                status='send'";
+				                $ozkngup=mysql_connect("192.168.220.6","ozeki","ozeking");
+                                $resultOzk=mysql_query($queryOzk,$ozkngup) or die(mysql_error()); 
+                                $benefMsg="{$me["name"]} has sent you Ksh {$amountInKsh} using impalapay. You will receive your cash shortly.";
+                                $benefPhone = formatMobile($receiver_mobile,"international");
+                                sendInfoBipResponse($benefMsg,$benefPhone);                               
+                                if(mysql_affected_rows()==1){
+                                    echo "<p class='pushRight'>A message has been sent notify your friend who the money is from </p>";
+                                    //mysql_close($connGtw);
+				                    $newestConn=mysql_connect("localhost","root","");
+                                    mysql_select_db("impalapay_facebook_money",$newestConn);
+                                }
+                            }
+                            
+                        }
+                    }
+                   }                      
+                }
+                     
+            }else{
+                echo "<p class='pushRight'>You can't send more than you have, please try again with correct amount</p>".display_send_money($me,$uid);
+            }                    
+        }else{
+            echo "<p class='pushRight'>Your token does not exist, or it has expired. Please try again</p>";
+            
+        }       
+        
+    }else{
+        print_r($errors);
+    }
+}
+check_if_logged_in($me);
+if($me){
+if(!isset($_POST["send"])){
+    //echo sha1("1234")."<br />";
+    display_send_money($me,$uid);
+}
+
+
+}
+//include("includes/footer.php")
+?>

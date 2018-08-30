@@ -1,0 +1,355 @@
+﻿Imports System.Data.OleDb
+Public Class Form1
+
+    Public OWNER As String
+    Public AgencySelected As Integer = 0
+    Private Sub TreeView1_AfterCollapse(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterCollapse
+
+        Try
+
+            If TreeView1.SelectedNode.ImageIndex = 12 Then
+
+                TreeView1.SelectedNode.ImageIndex = 2
+                TreeView1.SelectedNode.SelectedImageIndex = 2
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TreeView1_AfterExpand(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterExpand
+        'TreeView1.SelectedNode.ImageIndex 
+        Try
+
+
+            If TreeView1.SelectedNode.ImageIndex = 2 Then
+
+                TreeView1.SelectedNode.ImageIndex = 12
+                TreeView1.SelectedNode.SelectedImageIndex = 12
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub TreeView1_AfterSelect(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TreeView1.AfterSelect
+        Try
+
+
+            If TreeView1.SelectedNode.ImageIndex = -1 Then
+
+                TreeView1.SelectedNode.ImageIndex = 18
+                TreeView1.SelectedNode.SelectedImageIndex = 18
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+
+    Private Sub TreeView1_BeforeExpand1(ByVal sender As Object, ByVal e As System.Windows.Forms.TreeViewCancelEventArgs) Handles TreeView1.BeforeExpand
+        'TreeView1.SelectedNode.ImageIndex = 12
+    End Sub
+
+    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        LoginForm1.Dispose()
+    End Sub
+
+    Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Left = 10
+        Me.Top = 10
+        On Error GoTo ErrTrap
+        Dim SqlStr, Str2 As String
+        Dim RecSet As OleDbDataReader
+        Dim RecX As New ADODB.Recordset
+        Dim K As Integer
+        On Error GoTo ErrTrap
+
+        'If (UniversalHostConnection.State <> ConnectionState.Open) Then
+        '    MsgBox("Data Connection Error. Operation cannot be performed", vbExclamation, "Database Error")
+        '    Exit Sub
+        'End If
+        'Str2 = "Select * from prop_holdings order by holder_name asc"
+
+        'RecX.Open(Str2, UniversalHostConnection)
+
+
+        With TreeView1
+
+            .BeginUpdate()
+
+            '.Nodes(0).Nodes(0).Text = "CARD OWNER XXX LTD"
+
+            .Nodes.Add("Card Issuing Portal")
+            .Nodes(1).ImageIndex = 2
+            '.Nodes(1).IsVisible = False
+            K = 3
+            Do While K > 0
+                If K = 1 Then
+                    .Nodes(1).Nodes.Add("FBL Card")
+                End If
+                K = K - 1
+                .EndUpdate()
+            Loop
+
+        End With
+
+
+
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical, "Process Error")
+
+    End Sub
+
+    
+
+    Private Sub TreeView1_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles TreeView1.DragDrop
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+
+    End Sub
+    'Private Sub Button1_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button1.BackColor = Color.LightBlue
+    'End Sub
+    'Private Sub Button2_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button2.BackColor = Color.LightBlue
+    'End Sub
+    'Private Sub Button3_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button3.BackColor = Color.LightBlue
+    'End Sub
+    'Private Sub Button4_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button4.BackColor = Color.LightBlue
+    'End Sub
+
+
+    'Private Sub Button5_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button5.BackColor = Color.LightBlue
+    'End Sub
+
+    'Private Sub Button6_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button6.BackColor = Color.LightBlue
+    'End Sub
+
+
+    'Private Sub Button7_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button7.BackColor = Color.LightBlue
+    'End Sub
+
+
+    'Private Sub Button8_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    Button8.BackColor = Color.LightBlue
+    'End Sub
+
+    'Private Sub Button8_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button8.BackColor = Color.SteelBlue
+    '    GroupBox3.Visible = False
+    '    GroupBox11.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = True
+    'End Sub
+
+    'Private Sub Button7_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button7.BackColor = Color.SteelBlue
+    '    GroupBox3.Visible = False
+    '    GroupBox11.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = True
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub Button6_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button6.BackColor = Color.SteelBlue
+    '    GroupBox3.Visible = False
+    '    GroupBox11.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = True
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub Button5_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button5.BackColor = Color.SteelBlue
+    '    GroupBox3.Visible = False
+    '    GroupBox11.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = True
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub Button4_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button4.BackColor = Color.SteelBlue
+    '    GroupBox5.Visible = True
+    '    GroupBox3.Visible = False
+    '    GroupBox11.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub Button3_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button3.BackColor = Color.SteelBlue
+    '    GroupBox4.Visible = True
+    '    GroupBox3.Visible = False
+    '    GroupBox11.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub Button2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button2.BackColor = Color.SteelBlue
+    '    GroupBox3.Visible = True
+    '    GroupBox11.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub Button1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+    '    Button1.BackColor = Color.SteelBlue
+    '    GroupBox11.Visible = True
+    '    GroupBox3.Visible = False
+    '    GroupBox4.Visible = False
+    '    GroupBox5.Visible = False
+    '    GroupBox6.Visible = False
+    '    GroupBox7.Visible = False
+    '    GroupBox8.Visible = False
+    '    GroupBox9.Visible = False
+    'End Sub
+
+    'Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    'End Sub
+
+    'Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    'End Sub
+
+    'Private Sub UserButton20_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+
+    'End Sub
+
+    'Private Sub UserButton20_Load(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    'End Sub
+
+   
+    
+    Private Sub ListView1_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListView1.MouseDoubleClick
+        Try
+
+            If AgencySelected = 0 Then
+
+                If ListView1.FocusedItem.Index = 0 Then
+
+                    frmHouse.MdiParent = MainForm
+                    frmHouse.Text = "Audit Trail Query"
+                    frmHouse.Show()
+                    frmHouse.WindowState = FormWindowState.Normal
+                ElseIf ListView1.FocusedItem.Index = 1 Then
+
+                    frmRent.MdiParent = MainForm
+                    'frmRent.Text = "RENT PAYMENT"
+                    frmRent.Show()
+                    frmRent.WindowState = FormWindowState.Maximized
+                ElseIf ListView1.FocusedItem.Index = 2 Then
+                    frmRepairs.MdiParent = MainForm
+                    frmRepairs.Text = "REPAIRS AND MANAGEMENT"
+                    frmRepairs.Show()
+                    frmRepairs.WindowState = FormWindowState.Maximized
+                ElseIf ListView1.FocusedItem.Index = 3 Then
+                    'CashPayment.MdiParent = MainForm
+                    CashPayment.Text = OWNER & ":  ACCOUNTS MANAGEMENT"
+                    CashPayment.Show()
+                    CashPayment.WindowState = FormWindowState.Maximized
+
+                ElseIf ListView1.FocusedItem.Index = 4 Then
+                    frmAuditConfig.MdiParent = MainForm
+                    frmAuditConfig.Text = "RENT DEPOSIT: " & OWNER
+                    frmAuditConfig.Show()
+                    frmAuditConfig.WindowState = FormWindowState.Maximized
+
+                ElseIf ListView1.FocusedItem.Index = 5 Then
+                    frmElecDeposit.MdiParent = MainForm
+                    frmElecDeposit.Text = "ELECTRICITY DEPOSITS: " & OWNER
+                    frmElecDeposit.Show()
+                    frmElecDeposit.WindowState = FormWindowState.Maximized
+                ElseIf ListView1.FocusedItem.Index = 6 Then
+                    frmWaterDeposit.MdiParent = MainForm
+                    frmWaterDeposit.Text = "WATER DEPOSITS: " & OWNER
+                    frmWaterDeposit.Show()
+                    frmWaterDeposit.WindowState = FormWindowState.Maximized
+
+                ElseIf ListView1.FocusedItem.Index = 7 Then
+                    frmDeposit.MdiParent = MainForm
+                    frmDeposit.Text = "ALL RENT PAYMENTS: " & OWNER
+                    frmDeposit.Show()
+                    frmDeposit.WindowState = FormWindowState.Maximized
+                ElseIf ListView1.FocusedItem.Index = 8 Then
+                    frmTenant.MdiParent = MainForm
+                    frmTenant.Text = "TENANTS: " & OWNER
+                    frmTenant.Show()
+                    frmTenant.WindowState = FormWindowState.Maximized
+                    'ElseIf ListView1.FocusedItem.Index = 9 Then
+                    '    frmCloseAccount.MdiParent = MainForm
+                    '    frmCloseAccount.Text = "CLOSE TENANT ACCOUNT: " & OWNER
+                    '    frmCloseAccount.Show()
+                    '    frmCloseAccount.WindowState = FormWindowState.Maximized
+                ElseIf ListView1.FocusedItem.Index = 9 Then
+                    regisForm.MdiParent = MainForm
+                    regisForm.Text = "STAFF MANAGEMENT: " & OWNER
+                    regisForm.Show()
+                    regisForm.WindowState = FormWindowState.Maximized
+                ElseIf ListView1.FocusedItem.Index = 10 Then
+                    houseBookings.MdiParent = MainForm
+                    houseBookings.Text = "HOTEL ROOM BOOKING RECORDS: " & OWNER
+                    houseBookings.Show()
+                    houseBookings.WindowState = FormWindowState.Maximized
+                End If
+            Else
+
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListView1.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub OpenReportFilesToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    
+
+    
+    
+End Class

@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+ require_once("engine.php");
+     
+   
+   display_navigation();
+   check_if_logged_in($me); 
+   if($me){
+    if(isset($_POST["sambaza"])){
+            $amountKsh=$_POST["amount"];
+            $amountUsd=ConvertKsh2Usd($_POST["amount"]);
+            $mobile=$_POST["mobile"];
+            $provider=$_POST["provider"];
+            $balance=GetUserBal($uid)-$amountUsd;
+            $accountId=GetAccountId($uid);
+            $query="INSERT INTO transaction SET amount={$amountUsd},transaction='a',balance={$balance},account_id={$accountId}";
+            $resultSet=mysql_query($query) or die(mysql_error());
+            if(mysql_affected_rows()>0){
+                $insertId=mysql_insert_id();
+                $queryAir="INSERT INTO airtime_logs SET transId={$insertId}, senderNames='{$me["name"]}',receiver='{$mobile}',
+                provider='{$provider}',amount={$amountKsh}";
+                $resultAir=mysql_query($queryAir) or die(mysql_error());
+                if(mysql_affected_rows()>0){
+                    $newConn=mysql_connect("192.168.220.6","nicholas","bashnjoy") or die(mysql_error());
+                    mysql_select_db("paymentonline");
+                    $queryOzk="INSERT INTO ozekimessageout SET receiver='140',msg='{$amountKsh}#{$mobile}',status='send'";
+                    $resultOzk=mysql_query($queryOzk) or die(mysql_error());
+                    if(mysql_affected_rows()>0){
+                        $queryOzk2="INSERT INTO ozekimessageout SET receiver='{$mobile}',msg='{$me["name"]} has sent you {$amountKsh} airtime using Impalapay',status='send'";
+                        $resultOzk2=mysql_query($queryOzk2) or die(mysql_error());
+                        if(mysql_affected_rows()>0){
+                            echo "<p>Airtime has been successfully sent to {$mobile}</p>";
+                            mysql_close($newConn);
+                            $newConn=mysql_connect("localhost","root","");
+                            mysql_select_db("impalapay");
+                        }
+                    }
+                    
+                }
+            }
+            
+            
+    }
+    if(isset($_POST["topUp"])){
+        
+        $required_fields=array("amount","provider","pin","mobile");
+        $errors=check_required_fields($required_fields);
+        if(empty($errors)){
+            $amount=mysql_prep($_POST["amount"]);
+            $provider=mysql_prep($_POST["provider"]);
+            $pin=sha1(mysql_prep($_POST["pin"]));
+            $mobile=mysql_prep($_POST["mobile"]);
+            $pin_db=get_pin($uid);
+            $userBal=GetUserBal($uid);
+            $credAmt=ConvertKsh2Usd($amount);
+            if($pin==$pin_db){
+               if($userBal>=$credAmt){
+                echo "<div>
+                <p>Are you sure you want to send airtime?</p>
+                <form action='top_up.php' method='post'>
+                    <input type=hidden name=amount value={$amount}>
+                    <input type=hidden name=provider value={$provider}>
+                    <input type=hidden name=mobile value={$mobile}>
+                    <table>
+                    <tr><td>Provider</td><td>{$provider}</td></tr>
+                    <tr><td>Phone Number</td><td>{$mobile}</td></tr>
+                    <tr><td>Amount Ksh</td><td>{$amount}</td></tr>
+                    <tr>
+                        <td><input type=submit name=sambaza value=Yes></td>
+                        <td><input type=submit name=cancel value=No></td>
+                    </tr>
+                    </table>
+                    
+                    
+                </form>
+                </div>";
+               }else{
+                echo "You don't have enough money to buy {$amount} Ksh airtime, please load your account and try again.";
+               } 
+                
+            }else{
+                echo "<p>You have entered incorrect pin, please try again.</p>";
+            }
+        }
+    }
+    
+if(!isset($_POST["topUp"])){   
+?>
+<form action="top_up.php" method="post">
+<table>
+<tbody>
+    <tr><td>Amount Ksh</td><td><input type="text" name="amount" /></td></tr>
+    <tr><td>Provider</td><td>
+        <select name="provider" size="" >
+            <option value="safaricom">Safaricom</option>
+            <option value="safaricom">AirTel</option>
+            <option value="safaricom">YU</option>
+            <option value="safaricom">Zain</option>
+        </select>
+    </td></tr>
+    <tr><td>Phone Number</td><td><input type="text" name="mobile" /></td></tr>
+    <tr><td>Pin</td><td><input type="password" name="pin" /></td></tr>
+    <tr><td><input type="submit" name="topUp" value="Top Up" /></td></tr>
+</tbody>
+</table>
+</form>
+<?php
+}
+}
+     
+//require_once "includes/footer.php"
+?>

@@ -1,0 +1,461 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+$db_conn=mysql_connect("localhost","root","") or die (mysql_error());
+mysql_select_db("impalapay_facebook_money",$db_conn);
+
+function processCard($amount,$cardNumber,$cvv,$expiryDate){  
+     
+    $vpc_AccessCode = "BA63A10F";
+    $vpc_Amount = $amount*100;
+    $vpc_AVS_City = "Nairobi";
+    $vpc_AVS_Country = "KEN";
+    $vpc_AVS_PostCode = "30100";
+    $vpc_AVS_Street01 = "2823";
+    $vpc_card = "VC";
+    $vpc_CardExp = $expiryDate;//"1505";
+    $vpc_CardNum = $cardNumber;//"5254567200001519";
+    $vpc_CardSecurityCode = $cvv;//"219";
+    //$vpc_CashAdvance = "True";
+    $vpc_Currency = "USD";
+    $vpc_Command = "pay";
+    $vpc_gateway = "ssl";
+    $vpc_IPAddress = "196.216.73.150";
+    $vpc_Merchant = "61004002";
+    $vpc_MerchTxnRef = time();
+    $vpc_RiskBypass = "Y";
+    $vpc_OrderInfo=time();
+    $vpc_TxSourceSubType = "SINGLE";
+    $vpc_Version = "1";    
+    $vpc_SecureHashType = "SHA256";
+    $key="BB48A64077A1CBF08FF0D91C5A9FE42B";
+    $url = "https://migs.mastercard.com.au/vpcdps";  
+    //$url="http://localhost";     
+     $myvalues = "vpc_AccessCode=" . $vpc_AccessCode . 
+     "&vpc_Amount=" . $vpc_Amount . "&vpc_AVS_City=" . $vpc_AVS_City . 
+     "&vpc_AVS_Country=".$vpc_AVS_Country."&vpc_AVS_PostCode=" . $vpc_AVS_PostCode . 
+     "&vpc_AVS_Street01=" . $vpc_AVS_Street01 . "&vpc_CardExp=" . $vpc_CardExp . 
+     "&vpc_CardNum=" . $vpc_CardNum. "&vpc_CardSecurityCode=" . $vpc_CardSecurityCode .
+      "&vpc_card=" . $vpc_card . 
+      "&vpc_Command=" . $vpc_Command . "&vpc_gateway=" . $vpc_gateway . 
+      "&vpc_IPAddress=" . $vpc_IPAddress . "&vpc_Merchant=" . $vpc_Merchant . 
+      "&vpc_MerchTxnRef=" . $vpc_MerchTxnRef . "&vpc_RiskBypass=" . $vpc_RiskBypass . 
+      "&vpc_TxSourceSubType=" . $vpc_TxSourceSubType . "&vpc_Version=" . $vpc_Version . 
+      "&vpc_Currency=".$vpc_Currency."&vpc_OrderInfo=".$vpc_OrderInfo;  
+      
+      $hashed_Value = hash_hmac("SHA256",$myvalues,$key);   
+      $post_Data = $myvalues."&vpc_SecureHash=$hashed_Value&vpc_SecureHashType=$vpc_SecureHashType";
+      $user_Agent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.204 Safari/534.16";
+        
+      $ch = curl_init($url);
+      //curl_setopt($ch,CURLOPT_HEADER,1);
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+      curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch,CURLOPT_POSTFIELDS,$post_Data);      
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+      curl_setopt($ch, CURLOPT_USERAGENT, $user_Agent);
+      curl_setopt($ch, CURLOPT_REFERER, $url);
+      
+    
+      
+      $response = curl_exec($ch);
+      $cleanResp= urldecode($response); 
+      $respArray = explode("&",$cleanResp);
+      $perfectResponse = array();
+      foreach($respArray as $k=>$val){
+        $arrayValues = explode("=",$val);
+        $perfectResponse[$arrayValues[0]]=$arrayValues[1];         
+      }
+      return $perfectResponse;
+}
+function check_required_fields($required_fields){
+    $errors=array();
+    if(is_array($required_fields)){
+        foreach($required_fields as $field){
+            if(!isset($_POST[$field]) || empty($_POST[$field])){
+                $errors[]=$field;
+            }
+        }
+    }else{
+        if(!isset($_POST[$required_fields]) || empty($_POST[$required_fields])){
+                $errors[]=$field;
+            }
+    }
+    return $errors;
+}
+function redirect_to($destination=""){
+    echo "<fb:redirect url='http://apps.facebook.com/impalapay/{$destination}' />";
+}
+function check_is_registered($uid){
+    if(!isset($_SESSION["registered"]) & $_SESSION["registered"]!==$uid ){
+        redirect_to("http://apps.facebook.com/impalapay/register.php?notregistered");
+    }
+}
+function check_admin_logged_in(){
+   if(!isset($_SESSION["logedinadmin"]) || empty($_SESSION["logedinadmin"])) {
+	$url="http://apps.facebook.com/impalapay/impala_admins/login.php";
+	
+	echo "<fb:redirect url='{$url}' />";
+   }
+    
+}
+function payUsingImpala($amount,$callback_url,$email){
+    $api_url = "http://196.216.73.151:83/input.asmx?wsdl";
+    $soapClient = new SoapClient("http://196.216.73.151:83/input.asmx?WSDL");
+    $sh_param = array(
+                    'url'    =>  $callback_url,
+                    'amount'    =>    $amount,
+                    'sesion'    =>    $email
+                    );
+    try {
+        $info = $soapClient->__call("InsertData", array($sh_param));
+        
+    } catch (SoapFault $fault) {
+        $error = 1;
+    }
+    
+}
+function sendInfoBipResponse($msg,$receiver){
+        $posturl="http://api2.infobip.com/api/sendsms/xml";
+        $xmlString="<SMS>
+            <authentication>
+                <username>impalapay</username>
+                <password>impala123</password>
+            </authentication>
+            <message>
+                <sender>ImpalaPay</sender>
+                <text>{$msg}</text>
+            </message>
+            <recipients>
+               <gsm messageId=\"{$receiver}\">{$receiver}</gsm>
+                
+            </recipients>
+        </SMS>";
+        $fields="XML=".urlencode($xmlString);
+        $ch=curl_init();
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,0);
+        curl_setopt($ch,CURLOPT_URL,$posturl);
+        curl_setopt($ch,CURLOPT_POST,1);
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$fields);
+        $response=curl_exec($ch);
+        curl_close($ch);
+        //echo $response;
+}
+function formatMobile($receiver_mobile,$format=""){
+    
+    if(strtoupper($format) == "INTERNATIONAL"){
+        if((substr($receiver_mobile,0,1)=="0")){
+            return "254".substr($receiver_mobile,1);
+        }elseif((substr($receiver_mobile,0,3)=="254")){
+            return $receiver_mobile;
+        }elseif((substr($receiver_mobile,0,4)=="+254")){
+            return "254".substr($receiver_mobile,4);
+        }
+    }else{
+        if((substr($receiver_mobile,0,3)=="254")){
+            return "0".substr($receiver_mobile,3);
+        }elseif((substr($receiver_mobile,0,4)=="+254")){
+            return "0".substr($receiver_mobile,4);
+        }elseif((substr($receiver_mobile,0,1)=="0")){
+            return $receiver_mobile;
+        }
+    }
+}
+function check_if_logged_in(){
+
+}
+function ConvertKsh2Usd($amount){
+    return $usd=$amount/GetEchangeRate();
+}
+function ConvertUsd2Ksh($amount){
+    return $usd=$amount*GetEchangeRate();
+}
+function ConvertDate($date){
+    $dateTimeArray=explode(" ",$date);
+    $dateUnformated=$dateTimeArray[0];
+    $timeUnformated=$dateTimeArray[1];
+    $timeFormated=str_replace(":",",",$timeUnformated);
+    $dateArray=explode("-",$dateUnformated);
+    $dateFormated=number_format($dateArray[1]).", ".number_format($dateArray[2]).",".number_format($dateArray[0]);
+    
+    
+    
+    $timeStamp=mktime("{$timeFormated} ,{$dateFormated}");
+    $formatedDate=strftime("%a",$timeStamp);
+    return $formatedDate;
+}
+function GetExchangeRate(){
+    $query="SELECT amount FROM exchange_rate WHERE carrency='usd'";
+    $result=mysql_query($query) or die(mysql_error());
+    return mysql_result($result,0,"amount");
+    
+}
+function get_user_by_id($fb_id){
+    $query="SELECT * FROM users WHERE fb_id={$fb_id}";
+    $result=mysql_query($query);
+    if(!$result){
+        return false;
+    }else{
+        return $result;
+    }
+}
+function get_fb_id_by_email($email){
+    $query="SELECT fb_id FROM users WHERE email='{$email}'";
+    $result=mysql_query($query) or die(mysql_error());
+    $row=mysql_fetch_row($result);
+    $fb_id=$row["fb_id"];
+    return $fb_id;
+    
+}
+function getEmail($fb_id){
+    $query="SELECT email FROM users WHERE fb_id={$fb_id}";
+    $result=mysql_query($query) or die(mysql_error());
+    $email=mysql_result($result,0);
+    return $email;
+}
+function get_all_users(){
+    $query="SELECT fb_id FROM user";
+    $result=mysql_query($query);
+    if(!$result){
+        return false;
+    }else{
+        return $result;
+    }
+}
+function has_registeredd($fb_id){
+    //$result=get_user_by_id($fb_id);
+    $result = get_all_users();
+    if($result){  
+        $stored_ids=array();
+        while($user=mysql_fetch_array($result)){
+            $stored_ids[]=$user["fb_id"];
+        }
+        if(in_array($fb_id,$stored_ids)){
+            return true;
+        }else{
+            return false;
+        }
+        /*while($user=mysql_fetch_array($result)){
+            if($fb_id==$user["fb_id"]){
+                return true;
+             }else{
+                return false;
+            }
+        }*/
+    }
+    
+}
+function has_registered($fb_id){
+    $result=get_user_by_id($fb_id);
+    if($result){
+        if(mysql_numrows($result)>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+}
+function mysql_prep($value){
+    $cleaned_value=trim(addslashes($value));
+    return $cleaned_value;
+}
+function get_pin($uid){
+    $query_pin="SELECT pin From users WHERE fb_id={$uid}";
+    $result_pin=mysql_query($query_pin) or die(mysql_error());
+    $pin=mysql_result($result_pin,0);
+    return $pin;
+}
+function get_transactions($account_id){
+    $query="SELECT * FROM transaction WHERE account_id={$account_id} ORDER BY time DESC";
+    $result=mysql_query($query) or die(mysql_error());
+    return $result;
+}
+function getAccount($fb_id){
+    $query="SELECT * FROM account WHERE fb_id={$fb_id}";
+    $result_set=mysql_query($query) or die(mysql_error());
+    return $result_set;
+    
+}
+function GetUserBal($uid){
+    $query="SELECT amount FROM account WHERE fb_id={$uid}";
+    $result_set=mysql_query($query) or die(mysql_error());
+    return mysql_result($result_set,0);
+}
+function GetAccountId($uid){
+    $query="SELECT id FROM account WHERE fb_id={$uid}";
+    $result_set=mysql_query($query) or die(mysql_error());
+    return mysql_result($result_set,0);
+}
+function get_fb_id_by_account_id($account_id){
+    $query_id="SELECT fb_id From account WHERE id={$account_id}";
+    $result_id=mysql_query($query_id) or die(mysql_error());
+    $id=mysql_result($result_id,0,"fb_id");
+    return $id;
+}
+function getImpalaBalance(){
+    $query="SELECT amount FROM account WHERE id=1";
+    $result=mysql_query($query)or die(mysql_error());
+    $amount=mysql_result($result,0);
+    return $amount;
+}
+function login_impala_admin($username,$password){
+    $query="SELECT * FROM admin_users WHERE username='{$username}' AND password='{$password}' LIMIT 1";
+    $result=mysql_query($query) or die(mysql_error());
+    if($result){
+        $admin_id=mysql_result($result,0);
+        return $admin_id;
+    }else{
+        return false;
+    }
+    
+    
+}
+function get_tokens($uid){
+    $query="SELECT token FROM tokens WHERE fbid='$uid' and status=''";
+    $resultset=mysql_query($query) or die(mysql_error());
+    if(mysql_num_rows($resultset)>0){
+        $token_array=array();
+        while($tokens=mysql_fetch_array($resultset)){
+            $token_array[]=$tokens["token"];
+        }
+        return $token_array;
+    } 
+    return array();   
+}
+function check_if_user_exists($userId){
+    $query="SELECT * FROM users WHERE fb_id={$userId}";
+    $result=mysql_query($query) or die(mysql_error());
+    
+    if(mysql_num_rows($result)>0){
+        return true;
+    }else{
+        return false;
+    }
+    
+}
+function get_user_phone($uid){
+    $query="SELECT phone_number FROM users WHERE fb_id='$uid'";
+    $resultset=mysql_query($query) or die(mysql_error());
+    return mysql_result($resultset,0);
+}
+function get_user_email($uid){
+    $query="SELECT email FROM users WHERE fb_id='$uid'";
+    $resultset=mysql_query($query) or die(mysql_error());
+    return mysql_result($resultset,0);
+}
+function verify_admin_logged_in(){
+    
+}
+function CalculateImpalaCharges($sendAmount){
+    $withdrawFee=null;
+    switch($sendAmount){
+        
+        case $sendAmount<=(100): $withdrawFee=4.5;
+        break;
+        case $sendAmount>100 && $sendAmount<=150: $withdrawFee=6.6;
+        break;
+        case $sendAmount>150 && $sendAmount<=500: $withdrawFee=10;
+        break;
+        case $sendAmount>500 && $sendAmount<=1000: $withdrawFee=14;
+        break;
+        case $sendAmount>1000 && $sendAmount<=1500: $withdrawFee=19.2;
+        break;
+        case $sendAmount>1500 && $sendAmount<=2000: $withdrawFee=25;
+        break;
+        case $sendAmount>2000 && $sendAmount<=3000: $withdrawFee=27;
+        break;
+        case $sendAmount>3000 && $sendAmount<=4000: $withdrawFee=35;
+        break;
+        case $sendAmount>4000 && $sendAmount<=5000: $withdrawFee=40;
+        break;
+        case $sendAmount>5000 && $sendAmount<=6000: $withdrawFee=43;
+        break;
+        case $sendAmount>6000 && $sendAmount<=7500: $withdrawFee=48;
+        break;
+    }
+    return $withdrawFee;
+}
+function CalculateMpesaCharges($amount){
+    $withdrawFee=null;
+    switch($amount){
+        case $amount>=50 && $amount<100 : $withdrawFee=15;
+        break;
+        case $amount>100 && $amount<=2500 : $withdrawFee=25;
+        break;
+        case $amount>2500 && $amount<=5000 : $withdrawFee=45;
+        break;
+        case $amount>5000 && $amount<=10000 : $withdrawFee=75;
+        break;
+        case $amount>10000 && $amount<=20000 : $withdrawFee=145;
+        break;
+        case $amount>20000 && $amount<=35000 : $withdrawFee=170;
+        break;
+        case $amount>35000 && $amount<=50000 : $withdrawFee=250;
+        break;
+        case $amount>50000 && $amount<=70000 : $withdrawFee=300;
+        break;
+    }
+    return $withdrawFee;
+}
+function CalculatePayPalCharges($amount){
+    $payPal=$amount*(3/100);
+    $commision=number_format($payPal,2);
+    return $commision;
+}
+function calculateKCBCharges($amount){
+    $payPal=$amount*(3.5/100);
+    $commision=number_format($payPal,2);
+    return $commision;
+}
+function GetEchangeRate(){
+    $query="select amount from exchange_rate";
+    $result=mysql_query($query) or die(mysql_error());
+    
+    return mysql_result($result,0);
+}
+function sendEmail($msgBody,$subject,$to,$toName,$ccAddress=""){
+    require_once "class.phpmailer.php";
+    require_once "class.smtp.php";
+    $mail=new PHPMailer();
+    $mail->IsSMTP(); // telling the class to use SMTP
+    $mail->Host       =SMTPSERVER; // SMTP server
+    
+    $mail->SMTPDebug  = 1;                     // enables SMTP debug information (for testing)
+                                                // 1 = errors and messages
+                                                // 2 = messages only
+    $mail->SMTPAuth   = true;                  // enable SMTP authentication
+    //$mail->SMTPSecure = "ssl";                 // sets the prefix to the servier
+    $mail->Host       = SMTPSERVER;      // sets GMAIL as the SMTP server
+    $mail->Port       = 25;                   // set the SMTP port for the GMAIL server
+    $mail->Username   = EMAILADD ; // GMAIL username
+    $mail->Password   = EMAILPASS;            // GMAIL password
+    
+    $mail->SetFrom(EMAILADD, 'ImpalaPay');
+    
+    $mail->AddReplyTo(EMAILADD,"Administrator");
+    
+    $mail->Subject    = "{$subject}";
+    
+    //$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
+    $message= "<html><head></head><body>";               
+    $message.="<p>{$msgBody}</p>";
+    $message.="</body></html>";
+    //$mail->Body=$message;
+    $mail->MsgHTML($message);
+    
+    $mail->AddAddress($to, $toName);
+    $mail->AddCC($ccAddress);
+    $status=$mail->send();
+    if($status){
+        return true;
+    }else{
+        return false;
+    }
+}
+?>

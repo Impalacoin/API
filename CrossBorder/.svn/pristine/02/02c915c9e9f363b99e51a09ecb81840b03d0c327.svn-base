@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+$_SESSION = array();
+header("location:index.php");
+
+?>

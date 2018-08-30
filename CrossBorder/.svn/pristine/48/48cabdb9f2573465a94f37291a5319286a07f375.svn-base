@@ -1,0 +1,174 @@
+﻿Public Class LoginForm1
+
+    ' TODO: Insert code to perform custom authentication using the provided username and password 
+    ' (See http://go.microsoft.com/fwlink/?LinkId=35339).  
+    ' The custom principal can then be attached to the current thread's principal as follows: 
+    '     My.User.CurrentPrincipal = CustomPrincipal
+    ' where CustomPrincipal is the IPrincipal implementation used to perform authentication. 
+    ' Subsequently, My.User will return identity information encapsulated in the CustomPrincipal object
+    ' such as the username, display name, etc.
+
+    Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
+        Try
+
+            UserName = UsernameTextBox.Text
+            'APPNAME = "SMART PROPERTY"
+
+            UniversalHostConnection = New ADODB.Connection
+            'UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            'UniversalHostConnection.Open()
+
+
+
+            Dim RecSet As New ADODB.Recordset
+
+            If UsernameTextBox.Text <> "" Then
+                UserName = Trim(UsernameTextBox.Text)
+                Password = Trim(PasswordTextBox.Text)
+
+                UniversalHostConnection.Open("Provider=SQLOLEDB;" & _
+                                       "Data Source=" & Trim(TextBox2.Text) & ";Initial Catalog=" & Trim(TextBox1.Text) & ";User ID=" & UserName & ";Password=" & Password)
+
+            Else
+                Exit Sub
+            End If
+
+            'Dim cipherpass As String
+            'Dim SqlStr, Str2 As String
+
+            'Try
+            '    Dim path = AppDomain.CurrentDomain.BaseDirectory
+            '    cipherpass = My.Computer.FileSystem.ReadAllText(path &
+            '   "\licence.lic")
+
+            'Catch ex As Exception
+            '    MsgBox("Licence Not Found, please call +245 (0)720 677 928 for licence information", vbCritical, "")
+            '    Exit Sub
+            'End Try
+
+            'Try
+
+            '    Dim Plainpass2 As String
+            '    Str2 = "Select * from syssetup"
+            '    RecSet.Open(Str2, UniversalHostConnection)
+            '    Dim i As Int16 = 1
+            '    If RecSet.EOF = False Then
+            '        Dim cipherpass2 As String = RecSet.Fields(0).Value
+            '        Dim wrapper2 As New Simple3Des("EZEKIEL Ihtnamik: copy #1")
+            '        Plainpass2 = wrapper2.DecryptData(cipherpass2)
+
+            '    Else
+            '        CheckBox1.Enabled = True
+            '        MsgBox("Click (SYSTEM SETUP) for initial setings", , "")
+            '        Exit Sub
+            '    End If
+            '    RecSet.Close()
+
+            '    Dim wrapper1 As New Simple3Des("EZEKIEL Ihtnamik: copy #1")
+            '    Dim Plainpass As String = wrapper1.DecryptData(cipherpass)
+            '    Dim lenSc As Integer = InStr(1, Plainpass, "|", vbTextCompare)
+            '    If lenSc = 0 Then
+            '        MsgBox("Invalid Licence, please call +245 (0)720 677 928 for licence information", vbCritical, "")
+            '        Exit Sub
+            '    End If
+
+            '    APPNAME = Mid(Plainpass, 1, lenSc - 1)
+
+            '    If APPNAME <> Plainpass2 Then
+            '        MsgBox(UCase("WARNING!" & vbNewLine & "This copy is a pirated software, please call +245 (0)720 677 928 for valid copy and licence"), vbInformation, "")
+            '        Exit Sub
+            '    End If
+
+            '    'UniversalHostConnection.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\AIMS\RecModule\MainModule.accdb;Persist Security Info=True"
+            '    'UniversalHostConnection.Open()   'Microsoft.Jet.OLEDB.4.0=mdb
+
+            '    Str2 = "Select * from users where user_name = '" & UserName & "'"
+            '    RecSet.Open(Str2, UniversalHostConnection)
+
+            '    If RecSet.EOF = False Then
+            '        Dim cipherText As String = RecSet.Fields(2).Value
+
+            '        Dim wrapper As New Simple3Des(APPNAME)
+            '        Dim plainText As String = wrapper.DecryptData(cipherText)
+
+            '        If plainText = Password Then
+            '            Me.Hide()
+            '            Label1.Text = ""
+            '            ROLEID = RecSet.Fields(3).Value
+            '        Else
+            '            Label1.Text = "Incorrect password"
+            '        End If
+            '    Else
+            '        Label1.Text = "Incorrect password"
+            '    End If
+
+            ' DecryptData throws if the wrong password is used. 
+            Me.Hide()
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+
+
+        
+    End Sub
+
+    Private Sub Cancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Cancel.Click
+        End
+    End Sub
+
+    Private Sub LoginForm1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Label2.Text = Today
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
+
+        Try
+
+            Dim RecX As New ADODB.Recordset
+
+            If CheckBox1.Checked = True Then
+
+                If MsgBox("    THIS PROCESS WILL SET UP SYSTEM FOR THE FIRST TIME OR RELOAD SETTINGS.  " & vbNewLine & "  DO YOU WANT TO CONTINUE? ", vbYesNo, "") = vbNo Then
+                    Exit Sub
+                End If
+
+                Dim plainText As String = InputBox("ENTER COMPANY NAME:")
+                Dim password1 As String = "EZEKIEL Ihtnamik: copy #1"
+
+                plainText = UCase(plainText) '& "|" & Format(Today(), "yyyy-MM-dd") & "|60"
+
+                Dim wrapper As New Simple3Des(password1)
+
+                Dim cipherText As String = wrapper.EncryptData(plainText)  '& "|" & Format(Today(), "yyyy-MM-dd") & "|60") 'FOR LICENCE & "|" & Today() & "|60")
+                Dim path As String
+
+                'path = AppDomain.CurrentDomain.BaseDirectory
+                'My.Computer.FileSystem.WriteAllText(path & "\licence.lic", cipherText, False)
+
+                UniversalHostConnection.Execute("DELETE  from syssetup ")
+                UniversalHostConnection.Execute("insert into syssetup values('" & cipherText & "')")
+
+
+USRST:          Dim AppFullname As String = InputBox("ENTER FULL NAME:")
+                Dim AppUser As String = InputBox("ENTER ADMIN LOGIN ID:")
+                password1 = InputBox("ENTER PASSWORD:")
+                Dim password2 = InputBox("RE-ENTER PASSWORD:")
+
+                If password1 <> password2 Then
+                    MsgBox("    MIS-MATCH OFPASSWORD, RE-ENTER !   ", vbExclamation, "SMART PROPERTY")
+                    GoTo USRST
+                End If
+
+                wrapper = New Simple3Des(plainText)
+                cipherText = wrapper.EncryptData(password1)
+
+                UniversalHostConnection.Execute("DELETE  from users where user_name =  '" & Replace(AppUser, "'", "") & "'")
+                UniversalHostConnection.Execute("insert into users values('" & AppUser & "','" & AppFullname & "','" & cipherText & "',1)")
+
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+End Class

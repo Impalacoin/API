@@ -1,0 +1,190 @@
+package com.impalapay.airtel.persistence.accountmgmt.balance;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.junit.Assert.*;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import java.text.SimpleDateFormat;
+
+import javax.validation.constraints.AssertTrue;
+
+import com.impalapay.airtel.beans.accountmgmt.balance.AccountPurchase;
+import com.impalapay.airtel.beans.accountmgmt.balance.AccountPurchaseByCountry;
+import com.impalapay.airtel.beans.accountmgmt.Account;
+import com.impalapay.airtel.beans.accountmgmt.balance.MasterAccountFloatPurchase;
+import com.impalapay.airtel.beans.geolocation.Country;
+import com.impalapay.airtel.beans.transaction.Transaction;
+import com.impalapay.airtel.persistence.GenericDAO;
+import com.impalapay.airtel.persistence.accountmgmt.AccountDAO;
+import com.impalapay.airtel.persistence.geolocation.CountryDAO;
+
+
+public class TestAccountFloatPurchaseDAO {
+	final String DB_NAME = "airteldb";
+	final String DB_HOST = "localhost";
+	final String DB_USERNAME = "airtel";
+	final String DB_PASSWD = "LignuAv7";
+	final int DB_PORT = 5432;
+	
+	// Account holders' Uuids
+    public static final String SHUJAA_SOLUTIONS = "9756f889-811a-4a94-b13d-1c66c7655a7f";
+    public static final String KAKUZI = "48e249c2-856a-4269-820f-7b72c76b4957";
+    public static final String BLUE_TRIANGLE = "81bf3078-4495-4bec-a50d-c91a7c512d78";
+    public static final String SOFT_TOUCH = "7967107d-d61c-43dd-bc5b-aa12fd08497b";
+    public static final String MOBISOKO = "91fc8aae-cb76-4c64-ac45-48448fb5673f";
+    
+    
+    // Network operators, uuids
+    public static final String SAFARICOM = "602c66b6-83a4-46f4-a109-17a3bcd8d70b";
+    public static final String AIRTEL = "7965cb28-7b54-43b8-97f9-21abac2a06f6";
+    public static final String ORANGE = "ec13c373-2cf3-45a6-b1a7-629a27c443ae";
+    
+    final String CLIENTPURCHASE_UUID = "2d20bb0c-55ce-43f3-856b-27bc23868dd8";
+    final String CLIENTPURCHASE_ACCOUNT_UUID = "9756f889-811a-4a94-b13d-1c66c7655a7f";
+    final String CLIENTPURCHASE_NETWORK_UUID = "602c66b6-83a4-46f4-a109-17a3bcd8d70b";
+    final int CLIENTPURCHASE_AMOUNT = 200;
+    final String CLIENTPURCHASE_DATE = "2013-06-30 09:28:22";
+    
+    final String MASTERPURCHASE_UUID = "76c73484-215d-491e-9470-b5ef9bd12316";
+    final String MASTERPURCHASE_NETWORK_UUID = "602c66b6-83a4-46f4-a109-17a3bcd8d70b";
+    final double MASTERPURCHASE_AMOUNT = 1000;
+    final String MASTERPURCHASE_DATE = "2013-04-16 03:55:27";
+    
+    
+    final int ALL_CLIENTS_PURCHASE_COUNT = 150;
+    final int ALL_MASTER_FLOAT = 1;
+    
+    AccountPurchaseDAO storage = new AccountPurchaseDAO(DB_NAME, DB_HOST, DB_USERNAME, DB_PASSWD, DB_PORT);
+    
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+    
+    //@Ignore
+	@Test
+public void testPutMasterPurchase() {
+		MasterAccountFloatPurchase masterPurchase=new MasterAccountFloatPurchase();
+    
+     masterPurchase.setUuid(UUID.randomUUID().toString());
+     masterPurchase.setAccountUuid("b5f14606-e386-46bf-ac4b-19924e478629");
+    masterPurchase.setAmount(1000);
+     masterPurchase.setPurchaseDate(new Date());
+     
+     assertTrue(storage.putMasterFloat(masterPurchase));	
+}   @Ignore
+	@Test
+	public void testGetMasterAirtimeBalance() {
+		MasterAccountFloatPurchase b = storage.getMasterFloat(MASTERPURCHASE_UUID);
+				
+		assertEquals(b.getUuid(), MASTERPURCHASE_UUID);
+		assertEquals(b.getAccountUuid(), SHUJAA_SOLUTIONS);
+		//assertEquals(b.getAmount(), MASTERPURCHASE_AMOUNT);
+		System.out.println("Purchase dates: " + b.getPurchaseDate() + ", " + MASTERPURCHASE_DATE);		
+	}
+	@Ignore
+	@Test
+	public void testDeleteMasterFloat() {
+         String uuid="a895f323-bc0c-4ed2-8eaa-3d2ee5f367a9";
+         
+         assertTrue(storage.deleteMasterFloat(uuid));	
+	}
+    @Ignore
+	@Test
+	public void testGetAllMasterFloat() {
+      List<MasterAccountFloatPurchase> allMasterFloat = storage.getMasterFloat();
+        assertEquals(allMasterFloat.size(), ALL_MASTER_FLOAT);
+	
+	}
+	@Ignore
+	@Test
+	public void testGetMasterAccountsFloat() {
+	
+         Account a=new Account();
+         a.setUuid(SHUJAA_SOLUTIONS);
+         int clientCount=2;
+         
+        List<MasterAccountFloatPurchase> clientPurchases = storage.getMasterFloat(a);
+         
+         assertEquals(clientPurchases.size(), clientCount-1);
+         
+         //System.out.println(clientPurchases);
+	}
+	
+	//clients tests
+	//@Ignore
+	@Test
+  
+ 	public void testPutClientPurchase() {
+		
+		AccountPurchaseByCountry saved = new AccountPurchaseByCountry();
+
+		// saved.setId(ID);
+		saved.setUuid("61797229-eb8b-4f84-bb15-a0410dc5d33b");
+		saved.setAccountUuid("b5f14606-e386-46bf-ac4b-19924e478629");
+		saved.setCountryUuid("d4a676822f4546a0bee789e83070f788");
+		saved.setAmount(2250);
+		saved.setPurchaseDate(new Date());
+
+		assertTrue(storage.putClientPurchaseByCountry2(saved));
+    
+      	}
+	@Ignore 
+	@Test
+	public void testbycountrypurchase() {
+	
+		String uuid="jhbjkbjjjgbjjgbjjk";
+		
+		System.out.println(storage.getByCountryPurchase(uuid));
+         
+         //System.out.println(clientPurchases);
+	}
+	@Ignore
+	@Test
+	public void testdeleteclientpurchase(){
+		String uuid ="61797229-eb8b-4f84-bb15-a0410dc5d33b";
+		
+		assertTrue(storage.deleteClientPurchaseByCountry(uuid));
+	}
+	
+	@Ignore
+	@Test
+	public void testgetallclientpurchase(){
+		System.out.println(storage.getAllClientPurchasesByCountry());
+	
+	}
+	@Ignore
+	@Test
+	public void testgetaccountclientpurchases() {
+	
+         Account a=new Account();
+         a.setUuid(SHUJAA_SOLUTIONS);
+         int clientCount=2;
+         
+        List<AccountPurchaseByCountry> accountclientPurchases = storage.getClientPurchasesByCountry(a);
+         
+         assertEquals(accountclientPurchases.size(), clientCount-1);
+         
+         //System.out.println(clientPurchases);
+	}
+	@Ignore
+	@Test
+	public void  accountPurchasesByCountry(){
+		Account account = new Account();
+		Country country = new Country();
+		country.setUuid("d4a676822f4546a0bee789e83070f788");
+		;
+
+		account.setUuid("9756f889-811a-4a94-b13d-1c66c7655a7f");
+
+		//assertTrue(storage.getClientPurchasesByCountry(account, country));
+		System.out.println(storage.getClientPurchasesByCountry(account, country));
+		
+	}
+
+	
+}

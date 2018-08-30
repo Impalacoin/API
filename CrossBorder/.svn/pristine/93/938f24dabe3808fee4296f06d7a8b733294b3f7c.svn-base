@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "required.php";
+$db = new Database();
+function validateLoggedIn(){
+    require_once "Users.php";
+    if(!Users::isLoggedIn()){
+        header("Location:index.php");
+        exit();
+    }
+}
+function calculateFormHandler(){
+    if(isset($_POST["calc"])){
+        $amount = $_POST["amount"];
+        $cardFee = sprintf("%01.2f",($amount*(3.5/100)));
+        $total = $cardFee+$amount;
+        $ex_rate = getExchangeRate();
+        $kes = $amount*$ex_rate;
+        $output = '
+        <!--div class="GW_main_box"> 
+        <span class="GW_main_box_corner GW_main_box_topLeft"></span>
+        <span class="GW_main_box_corner GW_main_box_topRight"></span-->
+        <table class="calc-res">
+        <tr><td class="GW_txtfieldcaption">Amount to send</td><td>USD '.$amount.'</td></tr>
+        <tr><td class="GW_txtfieldcaption">Sending Fee</td><td>Free</td></tr>
+        <tr><td class="GW_txtfieldcaption">Card proccessing Fee</td><td> USD'.$cardFee.'</td></tr>
+        <tr><td class="GW_txtfieldcaption">Total</td><td>USD'.$total.'</td></tr>
+        <tr><td class="GW_txtfieldcaption">Beneficiary will receive </td><td>KES '.$kes.' @ '.$ex_rate.'</td></tr>
+        <tr><td class="bottom"><button class="GW_button_green_small" id="send-now-page" ><span>Send Now</span></button></td></tr>
+        <tr><td class="bottom"><a href="" id="calc-another">Calculate</a> another transaction</td></tr>
+        </table>
+        ';        
+        $_SESSION["payment"]=array("amount"=>$amount,"cardFee"=>$cardFee,"total"=>$total,"kes"=>$kes,"ex_rate"=>$ex_rate);        
+        return $output;
+    }
+}
+function getExchangeRate(){
+    
+    $query="SELECT exchange_rate FROM exchange_rates";
+    $result=Database::query($query);
+    if($result){
+        return mysql_result($result,0);
+    }else{
+        return false;
+    }
+}
+function formatMobile($receiver_mobile,$format=""){
+    
+    if(strtoupper($format) == "INTERNATIONAL"){
+        if((substr($receiver_mobile,0,1)=="0")){
+            return "254".substr($receiver_mobile,1);
+        }elseif((substr($receiver_mobile,0,3)=="254")){
+            return $receiver_mobile;
+        }elseif((substr($receiver_mobile,0,4)=="+254")){
+            return "254".substr($receiver_mobile,4);
+        }
+    }else{
+        if((substr($receiver_mobile,0,3)=="254")){
+            return "0".substr($receiver_mobile,3);
+        }elseif((substr($receiver_mobile,0,4)=="+254")){
+            return "0".substr($receiver_mobile,4);
+        }elseif((substr($receiver_mobile,0,1)=="0")){
+            return $receiver_mobile;
+        }
+    }
+}
+?>

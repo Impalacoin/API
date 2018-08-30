@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("engine.php");
+$registered=has_registered($uid);
+if(!$registered){
+    header('location:register.php?notregistered');
+}
+check_if_logged_in($me);
+display_navigation();
+if($me){
+if(isset($_GET["buy"])){
+    require_once "php/functions.php";
+     
+    if(isset($_GET["buy"]) && isset($_GET["makePayment"]) && isset($_POST["makePayment"])){
+        $amountUsd = $_POST["amountUsd"];
+        $kcbComm = $_POST["cardProcessingFee"];
+        $impalaComm = $_POST["impalapayFee"];
+        $total =$_POST["totalUSD"];
+        echo "<div class=pushRight id=notify ></div>";
+        
+        $output="";
+        $output.="<div class=pushRight ><table class='pretty-table' >";
+            $output.="<tr><th scope=row>Amount to Send</th><td>$ {$amountUsd}</td></tr>";
+            $output.="<tr><th scope=row>Card processing fee</th><td>$ {$kcbComm}</td></tr>";
+            $output.="<tr><th scope=row>Impala Pay fee</th><td>$ {$impalaComm}</td></tr>";
+            $output.="<tr><th scope=row>Total</th><td>$ {$total}</td></tr>";
+        $output.="</table></div>";
+        echo $output;
+        
+        echo "<div class='pushRight' > 
+        <p>Please fill in the details to complete transaction. All fields are mandatory.</p>
+        <form action='buy_credit.php' method='post' id='processPaymentForm'>";
+            echo "<fieldset>";
+                echo "<legend>Payment Details</legend>";
+                echo "<input type='hidden' name=amount id=first_name value='{$amountUsd}' />";
+                echo "<input type='hidden' name=total id=first_name value='{$total}' />";
+                echo "<label for = first_name>First Name</label><input type='text' name=firstName id=first_name />";
+                echo "<label for = last_name>Last Name</label><input type='text' name=lastName id=lastName_name />";
+                echo "<label for = card_number>Card Number</label><input type='text' name=cardNumber id=card_number />";
+                echo "<label for = cvv>CVV</label><input type='text' name=cvv id=cvv />";
+                
+                echo "<label for = exp_date>Expiry Date</label><input type='text' name=exp id=exp_date />";
+                
+            echo "</fieldset>";
+            echo "<input type='submit' class='button' name='pay' value='Process &nbsp; Transaction' />";
+        echo "</form></div>";
+        
+        
+        
+    }
+    
+
+?>
+<?php
+}
+if(!isset($_GET["buy"])){
+  echo "<div class=pushRight>";  
+  displayBuyCreditKCB();  
+  echo "</div>";
+}
+
+
+}
+include("includes/footer.php")
+?>

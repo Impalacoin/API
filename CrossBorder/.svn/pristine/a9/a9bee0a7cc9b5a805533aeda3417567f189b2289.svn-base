@@ -1,0 +1,432 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Public Class fee
+    Private ExtFilePath As String
+    Private RunStatus As Integer
+    Private LogEvents As String
+    Private Stud_id, Fname, Mname, Lname, SubCode, Subject, Gender, ClassN, Stream, YearE, Term, Exam_Date As String
+    Private Score, RecordCount, TotaScore, Count, LoadStatus, MAXScore As Integer
+    Private Term_Fee, Year_Fee As Integer
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Try
+
+            OpenFileDialog1.Filter = "(*.xlsx)|*.xlsx|(*.xls)|*.xls"
+            OpenFileDialog1.InitialDirectory = "D:\SCHOOL MASTER\"
+            OpenFileDialog1.FileName = ""
+            OpenFileDialog1.ShowDialog()
+            If ExtFilePath = Nothing Then
+                Exit Sub
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Try
+
+
+            Dim rPThread As New System.Threading.Thread(AddressOf FeeLoad)
+            RunStatus = 1
+            Timer1.Enabled = True
+            rPThread.Start()
+            'Else
+            'MsgBox("THIS SESSION IS NOT FOR LOADING EXAM RESULTS", vbExclamation, APPNAME)
+            'End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical)
+        End Try
+    End Sub
+
+
+    Private Sub FeeLoad()
+
+        Dim mRecSet As New ADODB.Recordset
+        Dim RecSet As New ADODB.Recordset
+        Dim xlApp As Excel.Application          'Excel Template Application
+        'Dim xlWbs As Excel.Workbooks            'Excel Application workbooks
+        Dim wb As Excel.Workbook        'Template Workbook
+        Dim ws As Excel.Worksheet        'Template Sheet
+        Dim wsRange As Excel.Range
+        Dim curCell, curRow As Long
+        Dim I As Integer = 0
+        Dim InsertStr As String
+        Dim SqqStr As String
+
+        RecordCount = 0
+        LogEvents = ""
+        RunStatus = 1
+
+
+        Try
+
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+
+            xlApp = New Excel.Application
+            If ExtFilePath = "" Then
+                MsgBox(UCase("Input File Not Found!"), vbCritical, "FEE FILE LOADING")
+                xlApp = Nothing
+                ws = Nothing
+                wb = Nothing
+                Exit Sub
+            End If
+            wb = xlApp.Workbooks.Open(ExtFilePath)
+            ws = wb.Worksheets(1) 'Specify your worksheet name
+            curCell = 1
+            curRow = 1
+            'Find First Cell and Row
+            For curCell = 1 To 10
+                For curRow = 1 To 10
+                    wsRange = ws.Cells(curRow, curCell)
+                    If wsRange.Value = "student id" Or wsRange.Value = "STUDENT ID" Then
+                        GoTo ROWCOLUMNFOUND
+                    End If
+                Next
+            Next
+            wb.Close(ExtFilePath)
+            xlApp = Nothing
+            ws = Nothing
+            wb = Nothing
+            MsgBox(UCase("Input File Is Empty! or wrongly formated"), vbCritical, "FILE LOADING")
+            Exit Sub
+ROWCOLUMNFOUND:
+            curRow = curRow + 1
+            wsRange = ws.Cells(curRow, curCell)
+
+            Dim UpdateQ As String = ""
+            Dim UpdateOriginal As String = ""
+            Dim Fee_Arrears = 0.0
+            Dim Term_PrePay = 0.0
+
+            Do While String.IsNullOrEmpty(wsRange.Value) = False
+                Stud_id = wsRange.Value
+                wsRange = ws.Cells(curRow, curCell + 5)
+                Fee_Arrears = IIf(String.IsNullOrEmpty(wsRange.Value), 0, wsRange.Value)
+
+
+                wsRange = ws.Cells(curRow, curCell + 6)
+                Term_PrePay = IIf(String.IsNullOrEmpty(wsRange.Value), 0, wsRange.Value)
+
+                SqqStr = "SELECT stud_id, std_fname, std_mname, std_lname,sex,class,stream FROM student where stud_id = '" & Stud_id & "'"
+                mRecSet.Open(SqqStr, UniversalHostConnection)
+                If mRecSet.EOF = False Then
+                    Fname = mRecSet.Fields(1).Value
+                    Mname = mRecSet.Fields(2).Value
+                    Lname = mRecSet.Fields(3).Value
+                    Gender = mRecSet.Fields(4).Value
+                    ClassN = mRecSet.Fields(5).Value
+                    Stream = IIf(IsDBNull(mRecSet.Fields(6).Value), "", mRecSet.Fields(6).Value)
+                    RecSet.Open("select * from student_fee_payment where stud_id = '" & Stud_id & "' and year = '" & YearE & "' and term = '" & Term & "' and class = " & ClassN, UniversalHostConnection)
+                    If RecSet.EOF = True Then
+                        InsertStr = "insert into student_fee_payment values('" & Stud_id & "','" & Fname & "','" & Mname & "','" & Lname & "','" & Gender & "'," & ClassN & ",'" & Stream & "','" & _
+                        YearE & "','" & Term & "',0,0,0,0)"
+                        UniversalHostConnection.Execute(UCase(InsertStr))
+                    End If
+                    UpdateQ = "update student_fee_payment set term_fee = " & Term_Fee & ", term_fee_arrears = " & Fee_Arrears & ", term_fee_prepay = " & Term_PrePay & ", year_fee = " & Year_Fee & "  where stud_id = '" & Stud_id & "' and year = '" & YearE & "' and term = '" & Term & "' and class = " & ClassN
+                    UniversalHostConnection.Execute(UCase(UpdateQ))
+                    RecSet.Close()
+                    RecordCount = RecordCount + 1
+                Else
+                    LogEvents = LogEvents & vbNewLine & Stud_id & ":   Student Admission Nr. not found"
+                End If
+                mRecSet.Close()
+                curRow = curRow + 1
+                wsRange = ws.Cells(curRow, curCell)
+            Loop
+            MsgBox(RecordCount & " FEES RECORDS FOR LOADED", vbInformation, APPNAME)
+FinishLINE:
+
+            wb.Close(ExtFilePath)
+            xlApp = Nothing
+            ws = Nothing
+            wb = Nothing
+            RunStatus = 0
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, "FEE FILE LOADING")
+            xlApp = Nothing
+            ws = Nothing
+            wb = Nothing
+            RunStatus = 0
+        End Try
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+
+        If MsgBox("This process will apply the monthly salary processing for every employee." & vbNewLine & " Click [OK] to 'Confirm Process' or [Cancel] to 'Stop and Exit'!", vbOKCancel) = vbCancel Then
+            Exit Sub
+        End If
+
+        Label2.Visible = True
+
+        Dim RecID As Integer = 1
+        Dim Qter As Int16 = 1
+        Dim ReCset As New ADODB.Recordset
+        Dim ReCX As New ADODB.Recordset
+
+        Dim PAYE As Double = 0.0
+        Dim NetIncome As Double = 0
+        Dim NSSF As Double = 200
+        Dim NHIF As Double = 200
+        Dim EMP_NSSF_GROSS As Double = 0
+        Dim GROSS_SALARY As Double = 0
+        Dim Relief As Double = 0
+        Dim Str As String = ""
+        Dim NETTOBank As Double = 0
+        Dim Taxable_Income As Double = 0
+        Dim SACCO As Double = 0
+        Dim WELFARE As Double = 0
+        Dim FINE As Double = 0
+        Dim SALARYADV As Double = 0
+        Dim Yr As Integer = Year(DateTimePicker1.Value)
+
+        Try
+            If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                Qter = 1
+            ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                Qter = 2
+            ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                Qter = 3
+            ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                Qter = 4
+            End If
+
+
+            Dim TRAN_TYPE As String
+
+
+            If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                Qter = 1
+            ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                Qter = 2
+            ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                Qter = 3
+            ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                Qter = 4
+            End If
+
+            ReCset.Open("select max(rec_id) from egeneraltrans ", UniversalHostConnection)
+            If IsNumeric(ReCset.Fields(0).Value) Then
+                RecID = ReCset.Fields(0).Value + 1
+            Else
+                RecID = 1
+            End If
+            ReCset.Close()
+
+
+            TRAN_TYPE = "STAFF WELFARE"
+            ReCset.Open("select emp_id,Sacco from employee where date_exit ='0' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+
+            UniversalHostConnection.Execute("DELETE from egeneraltrans where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and trans_type = '" & TRAN_TYPE & "' and owner = '" & Form1.OWNER & "'")
+            Do While ReCset.EOF = False
+                Str = "insert into egeneraltrans values(" & RecID & ",'" & DateTimePicker1.Value & "','" & TRAN_TYPE & "','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "',''," & ReCset.Fields(1).Value & ",'" & ReCset.Fields(0).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+                UniversalHostConnection.Execute(UCase(Str))
+                RecID = RecID + 1
+                ReCset.MoveNext()
+            Loop
+            ReCset.Close()
+            MsgBox(TRAN_TYPE & " APPLIED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+
+
+            TRAN_TYPE = "SACCO"
+            ReCset.Open("select emp_id,welfare from employee where date_exit ='0' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+
+            UniversalHostConnection.Execute("DELETE from egeneraltrans where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and trans_type = '" & TRAN_TYPE & "' and owner = '" & Form1.OWNER & "'")
+            Do While ReCset.EOF = False
+                Str = "insert into egeneraltrans values(" & RecID & ",'" & DateTimePicker1.Value & "','" & TRAN_TYPE & "','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "',''," & ReCset.Fields(1).Value & ",'" & ReCset.Fields(0).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+                UniversalHostConnection.Execute(UCase(Str))
+                RecID = RecID + 1
+                ReCset.MoveNext()
+            Loop
+            ReCset.Close()
+            MsgBox(TRAN_TYPE & " APPLIED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+
+            'Fine and Advance
+
+            ReCset.Open("select * from eprocess where monthe = " & Month(DateTimePicker1.Value) & " and yeare = " & Yr & " and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            Do While ReCset.EOF = False
+                TRAN_TYPE = ReCset.Fields(2).Value
+                UniversalHostConnection.Execute("DELETE from egeneraltrans where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and trans_type = '" & TRAN_TYPE & "' and owner = '" & Form1.OWNER & "'")
+
+                Str = "insert into egeneraltrans values(" & RecID & ",'" & DateTimePicker1.Value & "','" & TRAN_TYPE & "','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "',''," & ReCset.Fields(6).Value & ",'" & ReCset.Fields(8).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+                UniversalHostConnection.Execute(UCase(Str))
+                RecID = RecID + 1
+                ReCset.MoveNext()
+            Loop
+            ReCset.Close()
+            'MsgBox(TRAN_TYPE & " APPLIED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+
+
+
+
+
+
+
+
+            ReCset.Open("select max(rec_id) from esalary", UniversalHostConnection)
+            If IsNumeric(ReCset.Fields(0).Value) Then
+                RecID = ReCset.Fields(0).Value + 1
+            Else
+                RecID = 1
+            End If
+
+            UniversalHostConnection.Execute("DELETE from esalary where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and owner = '" & Form1.OWNER & "'")
+
+            ReCset.Close()
+            ReCset.Open("select emp_id,monthly_gross from employee where date_exit ='0' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            Do While ReCset.EOF = False
+                'Taxable income = (mothly salary + benefits) -(nssf + nhif)
+
+                Taxable_Income = ReCset.Fields(1).Value - (NSSF + NHIF)
+
+                If ReCset.Fields(1).Value < 11135 Then
+                    PAYE = 0
+                ElseIf Taxable_Income < 10165 Then
+                    PAYE = Taxable_Income * 10 / 100
+                ElseIf Taxable_Income < 19741 Then
+                    PAYE = ((Taxable_Income - 10165) * 15 / 100) + 1016
+                ElseIf Taxable_Income < 29317 Then
+                    PAYE = ((Taxable_Income - 19741) * 20 / 100) + 2452
+                ElseIf Taxable_Income < 38893 Then
+                    PAYE = ((Taxable_Income - 29317) * 25 / 100) + 4367
+                ElseIf Taxable_Income >= 38893 Then
+                    PAYE = ((Taxable_Income - 38892) * 30 / 100) + 6761
+                End If
+
+                Relief = 1162
+                If PAYE > Relief Then
+                    NetIncome = Taxable_Income - (PAYE - Relief)
+                    PAYE = PAYE - Relief
+                Else
+                    NetIncome = Taxable_Income
+                    PAYE = 0
+                End If
+
+                ReCX.Open("select trans_type,amount from egeneraltrans where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and employee_id = '" & ReCset.Fields(0).Value & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+                FINE = 0
+                SACCO = 0
+                WELFARE = 0
+                SALARYADV = 0
+                Do While ReCX.EOF = False
+                    If ReCX.Fields(0).Value = "FINE" Then
+                        FINE = FINE + ReCX.Fields(1).Value
+                    ElseIf ReCX.Fields(0).Value = "SACCO" Then
+                        SACCO = SACCO + ReCX.Fields(1).Value
+                    ElseIf ReCX.Fields(0).Value = "STAFF WELFARE" Then
+                        WELFARE = WELFARE + ReCX.Fields(1).Value
+                    ElseIf ReCX.Fields(0).Value = "SALARY ADVANCE" Then
+                        SALARYADV = SALARYADV + ReCX.Fields(1).Value
+                    End If
+                    ReCX.MoveNext()
+                Loop
+                ReCX.Close()
+
+                NETTOBank = NetIncome - (SACCO + FINE + WELFARE + SALARYADV)
+
+                Str = "insert into esalary values(" & RecID & ",'" & DateTimePicker1.Value & "','" & "SALARY PAYMENT" & "','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "'," & ReCset.Fields(1).Value & "," & NetIncome & "," & PAYE & "," & NSSF & "," & NHIF & ",'" & ReCset.Fields(0).Value & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & "," & WELFARE & "," & SALARYADV & "," & SACCO & "," & FINE & "," & NETTOBank & ",'" & Form1.OWNER & "')"
+                UniversalHostConnection.Execute(UCase(Str))
+                GROSS_SALARY = GROSS_SALARY + ReCset.Fields(1).Value
+                EMP_NSSF_GROSS = EMP_NSSF_GROSS + 200
+                RecID = RecID + 1
+                ReCset.MoveNext()
+            Loop
+            ReCset.Close()
+            MsgBox("SALARY APPLIED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+
+            'Else
+            'MsgBox("IMPORTANT DATA IS MISSING !!!", vbExclamation, APPNAME)
+            'Exit Sub
+            'nd If
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, APPNAME)
+        End Try
+
+
+
+        Try
+
+            If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                Qter = 1
+            ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                Qter = 2
+            ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                Qter = 3
+            ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                Qter = 4
+            End If
+
+
+
+            RecID = 1
+
+            ReCset.Open("select max(rec_id) from etransactionX ", UniversalHostConnection)
+            If IsNumeric(ReCset.Fields(0).Value) Then
+                RecID = ReCset.Fields(0).Value + 1
+            Else
+                RecID = 1
+            End If
+            ReCset.Close()
+
+            UniversalHostConnection.Execute("DELETE from etransactionX where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and expense_type = 'EMPLOYER NSSF CONTRIBUTION' and owner = '" & Form1.OWNER & "'")
+            Str = "insert into etransactionX values(" & RecID & ",'" & Format(DateTimePicker1.Value, "dd-MM-yyyy") & "','EMPLOYER NSSF CONTRIBUTION','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "'," & EMP_NSSF_GROSS & ",0,'NSSF CONTRIBUTION','','" & Form1.OWNER & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+            UniversalHostConnection.Execute(UCase(Str))
+
+
+            UniversalHostConnection.Execute("DELETE from etransactionX where yeare = " & Year(DateTimePicker1.Value) & " and monthe = " & Month(DateTimePicker1.Value) & " and expense_type = 'SALARY PAYMENT' and owner = '" & Form1.OWNER & "'")
+            Str = "insert into etransactionX values(" & RecID & ",'" & Format(DateTimePicker1.Value, "dd-MM-yyyy") & "','SALARY PAYMENT','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "'," & GROSS_SALARY & ",0,'SALARY PAYMENT','','" & Form1.OWNER & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ",'" & Form1.OWNER & "')"
+            UniversalHostConnection.Execute(UCase(Str))
+
+            MsgBox("SALARY EXPENSE RECORD UPDATED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+        Label2.Visible = False
+
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        'Dim reCset As New ADODB.Recordset
+        'Dim XreCset As New ADODB.Recordset
+        
+        Try
+
+
+            'SqlQry = "SELECT [stud_id], [std_fname], [std_mname], [std_lname], [sex], [class], [stream] " & _
+            '        " FROM student where stud_id ='" & Trim(TextBox1.Text) & "'"
+            'reCset.Open(SqlQry, UniversalHostConnection)
+            'If reCset.EOF = False Then
+
+            '    fname = IIf(IsDBNull(reCset.Fields(1).Value), "", reCset.Fields(1).Value)
+            '    mname = IIf(IsDBNull(reCset.Fields(2).Value), "", reCset.Fields(2).Value)
+            '    lname = IIf(IsDBNull(reCset.Fields(3).Value), "", reCset.Fields(3).Value)
+
+
+
+            '    TextBox2.Text = UCase(mname)
+            '    TextBox6.Text = UCase(fname)
+            '    TextBox3.Text = UCase(lname)
+            '    TextBox8.Text = "" 'exam name
+
+            '    TextBox7.Text = "" 'score
+            '    TextBox4.Text = reCset.Fields(5).Value 'class
+            '    TextBox5.Text = reCset.Fields(6).Value 'stream
+
+            'Else
+            '    MsgBox("    NO STUDENT RECORD FOUND!    ", vbExclamation, APPNAME)
+            'End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub fee_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+
+    End Sub
+End Class

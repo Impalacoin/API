@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+-->
+</style></head>
+
+<body>
+<?php
+session_start();
+session_destroy();
+
+?>
+<div style="text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:36px; font-weight:bold;">
+  <a href="#">Your Transaction has completed succesfully<br />
+thank you for using ImpalaPay</a></div>
+
+<div style="text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:25px; font-weight:bold; color:#F00;">
+  Your Transaction Reference number is...<br />
+<?php echo $_SESSION['message'];?></div>
+<div style="text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:36px; font-weight:bold;">
+  <a href="<?php echo $_SESSION['url'];?>">Click here to be redirect.....<br />
+</a></div>
+
+
+</div>
+</body>
+</html>
+
+
+
+
+

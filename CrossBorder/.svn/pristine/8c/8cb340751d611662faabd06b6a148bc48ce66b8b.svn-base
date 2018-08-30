@@ -1,0 +1,139 @@
+﻿+++++++++++++++++++++++++++++++++++++++++++++++
++ Impala Pay ClientMiddleware Database Layout.
++++++++++++++++++++++++++++++++++++++++++++++++
+
+=========================
+=========================
+1. Static Reference Data
+=========================
+=========================
+
+---------------
+Table country
+---------------
+- id (primary key)
+- UUID
+- name
+- Country Code
+- Currency
+- Currency Code
+- Airtel Network
+
+
+
+
+==================================
+==================================
+2. Account and Session Management
+==================================
+==================================
+
+--------------------
+Table Account
+--------------------
+This describes an account that is authorised to send airtime through the system.
+- Account Id (primary key)
+- uuid
+- AccountStatus uuid references AccountStatus
+- First Name
+- Last Name
+- Username 
+- Login Password
+- API Password
+- Email (only 1 primary one) - should be unique
+- Phone (only 1 primary one)
+- Creation Date
+
+
+---------------
+Table SessionLog
+---------------
+This table holds the session Ids that are used to authenticate client interaction 
+with the HTTP(s) API
+- Id (primary key)
+- Session  uuid
+- Account  uuid references Account
+- Creation Time
+- isValid  (boolean)
+
+
+---------------
+Table Client URls
+---------------
+This table holds the urls belonging to clients(used for sending sessions)
+- Id (primary key)
+- Uuid
+- Account  uuid references Account
+- Url
+- Date Active
+- Date Inactive
+- isActive  (boolean)
+
+
+---------------------------
+Table ClientBalance
+---------------------------
+This table captures the balance held by clients. As the account 
+holder utilizes his float/balance.
+- balanceId (primary key)
+- Account uuid references Account
+- balance(in usd)
+
+
+-------------------
+Table Topup
+-------------------
+This table records for topup from client.
+- Topup Id (primary key)
+- uuid
+- Account uuid refers to Account
+- Amount
+- Timestamp
+
+
+
+==================================
+==================================
+3. Transaction Management
+==================================
+==================================
+-------------------
+Table Transaction
+-------------------
+Contains parameters expected from the sender.
+- session_id
+- UUID
+- Account uuid refers to Account
+- account_name
+- source_country_uuid references Country
+- sender_name
+- recipient_mobile
+- amount
+- currency_code
+- recipient_country_uuid references Country
+- sender_token
+- client_datetime
+- reference_number
+
+
+
+-------------------
+Table TransactionStatus
+-------------------
+Represents various states that a transaction request can be in.
+- TransactionStatus Id
+- UUID
+- Status - a String value which is unique
+- Description
+
+
+
+
+
+
+
+
+
+
+
+

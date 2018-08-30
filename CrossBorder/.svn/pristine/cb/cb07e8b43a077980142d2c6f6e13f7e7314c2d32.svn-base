@@ -1,0 +1,3673 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "PostBridgeISO8583"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+'declarations
+    'Bitmap Arrays
+Private BITMAPOneArray() As Integer
+Private BITMAPTwoArray() As Integer
+Private BITMAPPrivateArray() As Integer
+Private BITMAPICCArray() As Integer
+Private BITMapINREQ() As Variant
+Private BITMapINREQPrivate() As Variant
+Private BITMapINREQIcc() As Variant
+
+    'Postilion Fields
+ Private VMessageTypeID As Variant ' message type
+ Private VBitMap As Variant
+ Private VPan As Variant '2
+ Private VProcessingCODE As Variant '3
+ Private VAmtTransaction As Variant '4
+ Private VAmtSettlement As Variant '5
+ Private VDatetimeTransmission As Variant '7
+ Private VConvRateSettle As Variant '9
+ Private VSysTraceAuditNum As Variant '11
+ Private VTimeLocTxn As Variant '12
+ Private VDateLocTxn As Variant '13
+ Private VDateExpiry As Variant '14
+ Private VDateSettle As Variant '15
+ Private VDateConversion As Variant '16
+ Private VMerchantType As Variant '18
+ Private VPOSEntryMode As Variant '22
+ Private VCardSeqNum As Variant '23
+ Private VPOSConditionCode As Variant '25
+ Private VPOSPinCaptureCode As Variant '26
+ Private VAuthIDRespLength As Variant '27
+ Private VAmtTxnFee As Variant '28
+ Private VAmtSettleFee As Variant '29
+ Private VAmtTxnProcessingFee As Variant '30
+ Private VAmtSettleProcessingFee As Variant '31
+ Private VAcquiringInstIdCode As Variant '32
+ Private VForwardingInstIdCode As Variant '33
+ Private VTrack2Data As Variant '35
+ Private VRetrievalRefNum As Variant '37
+ Private VAuthIdResp As Variant '38
+ Private VRespCode As Variant '39
+ Private VServiceRestrictionCode As Variant '40
+ Private VCardAcceptorTermId As Variant '41
+ Private VCardAcceptorIdCode As Variant '42
+ Private VCardAcceptorNameLoc As Variant '43
+ Private VAdditionalRespData As Variant '44
+ Private VAdditionalData As Variant '48
+ Private VCurrencyCodeTxn As Variant '49
+ Private VCurrencyCodeSettle As Variant '50
+ Private VPinData As Variant '52
+ Private VSecurityRelatedInfo As Variant '53
+ Private VAdditionalAmts As Variant '54
+ Private VMsgReasonCode As Variant '56
+ Private VAuthLifeCycleCode As Variant '57
+ Private VAuthAgentIdCode As Variant '58
+ Private VEchoData As Variant '59
+ Private VSettleCode As Variant '66
+ Private VExtendedPayCode As Variant '67
+ Private VNetMangtInfoCode As Variant '70
+ Private VDateAction As Variant '73
+ Private VCreditNumber As Variant '74
+ Private VCreditRevNumber As Variant '75
+ Private VDebitNumber As Variant '76
+ Private VDebitRevNumber As Variant '77
+ Private VTransferNumber As Variant '78
+ Private VTransferRevNumber As Variant '79
+ Private VInquiryNumber As Variant '80
+ Private VAuthNumber As Variant '81
+ Private VCreditsProcFeeAmt As Variant '82
+ Private VCreditsTxnFeeAmt As Variant '83
+ Private VDebitsProcFeeAmt As Variant '84
+ Private VDebitsTxnFeeAmt As Variant '85
+ Private VCreditAmt As Variant '86
+ Private VCreditRevAmt As Variant '87
+ Private VDebitAmt As Variant '88
+ Private VDebitRevAmt As Variant '89
+ Private VOriginalDataElements As Variant '90
+ Private VFileUpdateCode As Variant '91
+ Private VReplacementAmts As Variant '95
+ Private VAmtNetSettle As Variant '97
+ Private VPayee As Variant '98
+ Private VReceivingInstIdCode As Variant '100
+ Private VFileName As Variant '101
+ Private VAccIdOne As Variant '102
+ Private VAccIdTwo As Variant '103
+ Private VPaymentNumber As Variant '118
+ Private VPaymentRevNumber As Variant '119
+ Private VPOSDataCode As Variant '123
+ Private VNetMangtInfo As Variant '125
+ Private VMacExtended As Variant '128
+ 
+ Private VPrivateBitMap As Variant '127.1
+ Private VPSwitchKey As Variant '127.2
+ Private VPRoutingInfo As Variant '127.3
+ Private VPPOSData As Variant '127.4
+ Private VPServiceStationData As Variant '127.5
+ Private VPAuthProfile As Variant '127.6
+ Private VPCheckData As Variant '127.7
+ Private VPRetentionData As Variant '127.8
+ Private VPAdditionalNodeData As Variant '127.9
+ Private VPCVV2 As Variant '127.10
+ Private VPOriginalKey As Variant '127.11
+ Private VPTerminalOwner As Variant '127.12
+ Private VPPOSGeogData As Variant '127.13
+ Private VPSponsorBank As Variant '127.14
+ Private VPAddressVeriData As Variant '127.15
+ Private VPAddressVeriResult As Variant '127.16
+ Private VPCardHolderInfo As Variant '127.17
+ Private VPValidationData As Variant '127.18
+ Private VPBankDetails As Variant '127.19
+ Private VPAuthDateSettle As Variant '127.20
+ Private VPRecordID As Variant '127.21
+ Private VPStructuredData As StructuredData '127.22
+ Private VPPayeeNameAddress As Variant '127.23
+ Private VPPayerAccount As Variant '127.24
+ Private VPOriginalNode As Variant '127.26
+ Private VPCardVerificationResult As Variant '127.27
+ Private VPAmericanExpressCID As Variant '127.28
+ Private VP3DSecureData As Variant '127.29
+ Private VP3DSecureResult As Variant '127.30
+ Private VPIssuerNetID As Variant '127.31
+ Private VPUCAFData As Variant '127.32
+ Private VPExtendedTransactionType As Variant '127.33
+ Private VPAccountTypeQualifier As Variant '127.34
+ Private VPAcquirerNetID As Variant '127.35
+ Private VPOriginalRespCode As Variant '127.39
+ 
+ Private VPICCDataBitMap As Variant '127.25.1
+ Private VPICCAmtAuth As Variant '127.25.2
+ Private VPICCAmtOther As Variant '127.25.3
+ Private VPICCAppIdentifier As Variant '127.25.4
+ Private VPICCAppInterchangeProfile As Variant '127.25.5
+ Private VPICCAppTxnCounter As Variant '127.25.6
+ Private VPICCAppUsageControl As Variant '127.25.7
+ Private VPICCAuthRespCode As Variant '127.25.8
+ Private VPICCCardAuthRelyInd As Variant '127.25.9
+ Private VPICCCardAuthResCode As Variant '127.25.10
+ Private VPICCChipCondCode As Variant '127.25.11
+ Private VPICCCryptogram As Variant '127.25.12
+ Private VPICCCryptoInfoData As Variant '127.25.13
+ Private VPICCCVMList As Variant '127.25.14
+ Private VPICCCVMResults As Variant '127.25.15
+ Private VPICCInterfaceDevSerialNum As Variant '127.25.16
+ Private VPICCIssuerActionCode As Variant '127.25.17
+ Private VPICCIssuerAppData As Variant '127.25.18
+ Private VPICCIssuerScriptRes As Variant '127.25.19
+ Private VPICCTermAppVerNum As Variant '127.25.20
+ Private VPICCTermCapabilities As Variant '127.25.21
+ Private VPICCTermCountryCode As Variant '127.25.22
+ Private VPICCTermType As Variant '127.25.23
+ Private VPICCTermVeriRes As Variant '127.25.24
+ Private VPICCTxnCateCode As Variant '127.25.25
+ Private VPICCTxnCurrencyCode As Variant '127.25.26
+ Private VPICCTxnDate As Variant '127.25.27
+ Private VPICCTxnSeqCode As Variant '127.25.28
+ Private VPICCTxnType As Variant '127.25.29
+ Private VPICCUnpredictableNum As Variant '127.25.30
+ Private VPICCIssuerAuthData As Variant '127.25.31
+ Private VPICCIssuerScriptTemplateOne As Variant '127.25.32
+ Private VPICCIssuerScriptTemplateTwo As Variant '127.25.33
+
+Private Sub Class_Initialize()
+    VMessageTypeID = ""
+    VPan = "" '2
+    VProcessingCODE = "" '3
+    VAmtTransaction = "" '4
+    VAmtSettlement = "" '5
+    VDatetimeTransmission = "" '7
+    VConvRateSettle = "" '9
+    VSysTraceAuditNum = "" '11
+    VTimeLocTxn = "" '12
+    VDateLocTxn = "" '13
+    VDateExpiry = "" '14
+    VDateSettle = "" '15
+    VDateConversion = "" '16
+    VMerchantType = "" '18
+    VPOSEntryMode = "" '22
+    VCardSeqNum = "" '23
+    VPOSConditionCode = "" '25
+    VPOSPinCaptureCode = "" '26
+    VAuthIDRespLength = "" '27
+    VAmtTxnFee = "" '28
+    VAmtSettleFee = "" '29
+    VAmtTxnProcessingFee = "" '30
+    VAmtSettleProcessingFee = "" '31
+    VAcquiringInstIdCode = "" '32
+    VForwardingInstIdCode = "" '33
+    VTrack2Data = "" '35
+    VRetrievalRefNum = "" '37
+    VAuthIdResp = "" '38
+    VRespCode = "" '39
+    VServiceRestrictionCode = "" '40
+    VCardAcceptorTermId = "" '41
+    VCardAcceptorIdCode = "" '42
+    VCardAcceptorNameLoc = "" '43
+    VAdditionalRespData = "" '44
+    VAdditionalData = "" '48
+    VCurrencyCodeTxn = "" '49
+    VCurrencyCodeSettle = "" '50
+    VPinData = "" '52
+    VSecurityRelatedInfo = "" '53
+    VAdditionalAmts = "" '54
+    VMsgReasonCode = "" '56
+    VAuthLifeCycleCode = "" '57
+    VAuthAgentIdCode = "" '58
+    VEchoData = "" '59
+    VSettleCode = "" '66
+    VExtendedPayCode = "" '67
+    VNetMangtInfoCode = "" '70
+    VDateAction = "" '73
+    VCreditNumber = "" '74
+    VCreditRevNumber = "" '75
+    VDebitNumber = "" '76
+    VDebitRevNumber = "" '77
+    VTransferNumber = "" '78
+    VTransferRevNumber = "" '79
+    VInquiryNumber = "" '80
+    VAuthNumber = "" '81
+    VCreditsProcFeeAmt = "" '82
+    VCreditsTxnFeeAmt = "" '83
+    VDebitsProcFeeAmt = "" '84
+    VDebitsTxnFeeAmt = "" '85
+    VCreditAmt = "" '86
+    VCreditRevAmt = "" '87
+    VDebitAmt = "" '88
+    VDebitRevAmt = "" '89
+    VOriginalDataElements = "" '90
+    VFileUpdateCode = "" '91
+    VReplacementAmts = "" '95
+    VAmtNetSettle = "" '97
+    VPayee = "" '98
+    VReceivingInstIdCode = "" '100
+    VFileName = "" '101
+    VAccIdOne = "" '102
+    VAccIdTwo = "" '103
+    VPaymentNumber = "" '118
+    VPaymentRevNumber = "" '119
+    VPOSDataCode = "" '123
+    VNetMangtInfo = "" '125
+    VMacExtended = "" '128
+    
+    VPrivateBitMap = "" '127.1
+    VPSwitchKey = "" '127.2
+    VPRoutingInfo = "" '127.3
+    VPPOSData = "" '127.4
+    VPServiceStationData = "" '127.5
+    VPAuthProfile = "" '127.6
+    VPCheckData = "" '127.7
+    VPRetentionData = "" '127.8
+    VPAdditionalNodeData = "" '127.9
+    VPCVV2 = "" '127.10
+    VPOriginalKey = "" '127.11
+    VPTerminalOwner = "" '127.12
+    VPPOSGeogData = "" '127.13
+    VPSponsorBank = "" '127.14
+    VPAddressVeriData = "" '127.15
+    VPAddressVeriResult = "" '127.16
+    VPCardHolderInfo = "" '127.17
+    VPValidationData = "" '127.18
+    VPBankDetails = "" '127.19
+    VPAuthDateSettle = "" '127.20
+    VPRecordID = "" '127.21
+    Set VPStructuredData = New StructuredData  '127.22
+    VPPayeeNameAddress = "" '127.23
+    VPPayerAccount = "" '127.24
+    VPOriginalNode = "" '127.26
+    VPCardVerificationResult = "" '127.27
+    VPAmericanExpressCID = "" '127.28
+    VP3DSecureData = "" '127.29
+    VP3DSecureResult = "" '127.30
+    VPIssuerNetID = "" '127.31
+    VPUCAFData = "" '127.32
+    VPExtendedTransactionType = "" '127.33
+    VPAccountTypeQualifier = "" '127.34
+    VPAcquirerNetID = "" '127.35
+    VPOriginalRespCode = "" '127.39
+    
+    VPICCDataBitMap = "" '127.25.1
+    VPICCAmtAuth = "" '127.25.2
+    VPICCAmtOther = "" '127.25.3
+    VPICCAppIdentifier = "" '127.25.4
+    VPICCAppInterchangeProfile = "" '127.25.5
+    VPICCAppTxnCounter = "" '127.25.6
+    VPICCAppUsageControl = "" '127.25.7
+    VPICCAuthRespCode = "" '127.25.8
+    VPICCCardAuthRelyInd = "" '127.25.9
+    VPICCCardAuthResCode = "" '127.25.10
+    VPICCChipCondCode = "" '127.25.11
+    VPICCCryptogram = "" '127.25.12
+    VPICCCryptoInfoData = "" '127.25.13
+    VPICCCVMList = "" '127.25.14
+    VPICCCVMResults = "" '127.25.15
+    VPICCInterfaceDevSerialNum = "" '127.25.16
+    VPICCIssuerActionCode = "" '127.25.17
+    VPICCIssuerAppData = "" '127.25.18
+    VPICCIssuerScriptRes = "" '127.25.19
+    VPICCTermAppVerNum = "" '127.25.20
+    VPICCTermCapabilities = "" '127.25.21
+    VPICCTermCountryCode = "" '127.25.22
+    VPICCTermType = "" '127.25.23
+    VPICCTermVeriRes = "" '127.25.24
+    VPICCTxnCateCode = "" '127.25.25
+    VPICCTxnCurrencyCode = "" '127.25.26
+    VPICCTxnDate = "" '127.25.27
+    VPICCTxnSeqCode = "" '127.25.28
+    VPICCTxnType = "" '127.25.29
+    VPICCUnpredictableNum = "" '127.25.30
+    VPICCIssuerAuthData = "" '127.25.31
+    VPICCIssuerScriptTemplateOne = "" '127.25.32
+    VPICCIssuerScriptTemplateTwo = "" '127.25.33
+End Sub
+
+Public Property Get Pan() As Variant
+    Pan = VPan
+End Property
+
+Public Property Let Pan(ByVal vNewValue As Variant)
+    VPan = vNewValue
+End Property
+
+Public Property Get ProcessingCODE() As Variant
+    ProcessingCODE = VProcessingCODE
+End Property
+
+Public Property Let ProcessingCODE(ByVal vNewValue As Variant)
+    VProcessingCODE = vNewValue
+End Property
+
+Public Property Get AmtTransaction() As Variant
+    AmtTransaction = VAmtTransaction
+End Property
+
+Public Property Let AmtTransaction(ByVal vNewValue As Variant)
+    VAmtTransaction = vNewValue
+End Property
+
+Public Property Get AmtSettlement() As Variant
+    AmtSettlement = VAmtSettlement
+End Property
+
+Public Property Let AmtSettlement(ByVal vNewValue As Variant)
+    VAmtSettlement = vNewValue
+End Property
+
+Public Property Get DatetimeTransmission() As Variant
+    DatetimeTransmission = VDatetimeTransmission
+End Property
+
+Public Property Let DatetimeTransmission(ByVal vNewValue As Variant)
+    VDatetimeTransmission = vNewValue
+End Property
+
+Public Property Get ConvRateSettle() As Variant
+    ConvRateSettle = VConvRateSettle
+End Property
+
+Public Property Let ConvRateSettle(ByVal vNewValue As Variant)
+    VConvRateSettle = vNewValue
+End Property
+
+Public Property Get SysTraceAuditNum() As Variant
+    SysTraceAuditNum = VSysTraceAuditNum
+End Property
+
+Public Property Let SysTraceAuditNum(ByVal vNewValue As Variant)
+    VSysTraceAuditNum = vNewValue
+End Property
+
+Public Property Get TimeLocTxn() As Variant
+    TimeLocTxn = VTimeLocTxn
+End Property
+
+Public Property Let TimeLocTxn(ByVal vNewValue As Variant)
+    VTimeLocTxn = vNewValue
+End Property
+
+Public Property Get DateLocTxn() As Variant
+    DateLocTxn = VDateLocTxn
+End Property
+
+Public Property Let DateLocTxn(ByVal vNewValue As Variant)
+    VDateLocTxn = vNewValue
+End Property
+
+Public Property Get DateExpiry() As Variant
+    DateExpiry = VDateExpiry
+End Property
+
+Public Property Let DateExpiry(ByVal vNewValue As Variant)
+    VDateExpiry = vNewValue
+End Property
+
+Public Property Get DateSettle() As Variant
+    DateSettle = VDateSettle
+End Property
+
+Public Property Let DateSettle(ByVal vNewValue As Variant)
+    VDateSettle = vNewValue
+End Property
+
+Public Property Get DateConversion() As Variant
+    DateConversion = VDateConversion
+End Property
+
+Public Property Let DateConversion(ByVal vNewValue As Variant)
+    VDateConversion = vNewValue
+End Property
+
+Public Property Get MerchantType() As Variant
+    MerchantType = VMerchantType
+End Property
+
+Public Property Let MerchantType(ByVal vNewValue As Variant)
+    VMerchantType = vNewValue
+End Property
+
+Public Property Get POSEntryMode() As Variant
+    POSEntryMode = VPOSEntryMode
+End Property
+
+Public Property Let POSEntryMode(ByVal vNewValue As Variant)
+    VPOSEntryMode = vNewValue
+End Property
+
+Public Property Get CardSeqNum() As Variant
+    CardSeqNum = VCardSeqNum
+End Property
+
+Public Property Let CardSeqNum(ByVal vNewValue As Variant)
+    VCardSeqNum = vNewValue
+End Property
+
+Public Property Get POSConditionCode() As Variant
+    POSConditionCode = VPOSConditionCode
+End Property
+
+Public Property Let POSConditionCode(ByVal vNewValue As Variant)
+    VPOSConditionCode = vNewValue
+End Property
+
+Public Property Get POSPinCaptureCode() As Variant
+    POSPinCaptureCode = VPOSPinCaptureCode
+End Property
+
+Public Property Let POSPinCaptureCode(ByVal vNewValue As Variant)
+    VPOSPinCaptureCode = vNewValue
+End Property
+
+Public Property Get AuthIDRespLength() As Variant
+    AuthIDRespLength = VAuthIDRespLength
+End Property
+
+Public Property Let AuthIDRespLength(ByVal vNewValue As Variant)
+    VAuthIDRespLength = vNewValue
+End Property
+
+Public Property Get AmtTxnFee() As Variant
+    AmtTxnFee = VAmtTxnFee
+End Property
+
+Public Property Let AmtTxnFee(ByVal vNewValue As Variant)
+    VAmtTxnFee = vNewValue
+End Property
+
+Public Property Get AmtSettleFee() As Variant
+    AmtSettleFee = VAmtSettleFee
+End Property
+
+Public Property Let AmtSettleFee(ByVal vNewValue As Variant)
+    VAmtSettleFee = vNewValue
+End Property
+
+Public Property Get AmtTxnProcessingFee() As Variant
+    AmtTxnProcessingFee = VAmtTxnProcessingFee
+End Property
+
+Public Property Let AmtTxnProcessingFee(ByVal vNewValue As Variant)
+    VAmtTxnProcessingFee = vNewValue
+End Property
+
+Public Property Get AmtSettleProcessingFee() As Variant
+    AmtSettleProcessingFee = VAmtSettleProcessingFee
+End Property
+
+Public Property Let AmtSettleProcessingFee(ByVal vNewValue As Variant)
+    VAmtSettleProcessingFee = vNewValue
+End Property
+
+Public Property Get AcquiringInstIdCode() As Variant
+    AcquiringInstIdCode = VAcquiringInstIdCode
+End Property
+
+Public Property Let AcquiringInstIdCode(ByVal vNewValue As Variant)
+    VAcquiringInstIdCode = vNewValue
+End Property
+
+Public Property Get ForwardingInstIdCode() As Variant
+    ForwardingInstIdCode = VForwardingInstIdCode
+End Property
+
+Public Property Let ForwardingInstIdCode(ByVal vNewValue As Variant)
+    VForwardingInstIdCode = vNewValue
+End Property
+
+Public Property Get Track2Data() As Variant
+    Track2Data = VTrack2Data
+End Property
+
+Public Property Let Track2Data(ByVal vNewValue As Variant)
+    VTrack2Data = vNewValue
+End Property
+
+Public Property Get RetrievalRefNum() As Variant
+    RetrievalRefNum = VRetrievalRefNum
+End Property
+
+Public Property Let RetrievalRefNum(ByVal vNewValue As Variant)
+    VRetrievalRefNum = vNewValue
+End Property
+
+Public Property Get AuthIdResp() As Variant
+    AuthIdResp = VAuthIdResp
+End Property
+
+Public Property Let AuthIdResp(ByVal vNewValue As Variant)
+    VAuthIdResp = vNewValue
+End Property
+
+Public Property Get RespCode() As Variant
+    RespCode = VRespCode
+End Property
+
+Public Property Let RespCode(ByVal vNewValue As Variant)
+    VRespCode = vNewValue
+End Property
+
+Public Property Get ServiceRestrictionCode() As Variant
+    ServiceRestrictionCode = VServiceRestrictionCode
+End Property
+
+Public Property Let ServiceRestrictionCode(ByVal vNewValue As Variant)
+    VServiceRestrictionCode = vNewValue
+End Property
+
+Public Property Get CardAcceptorTermId() As Variant
+    CardAcceptorTermId = VCardAcceptorTermId
+End Property
+
+Public Property Let CardAcceptorTermId(ByVal vNewValue As Variant)
+    VCardAcceptorTermId = vNewValue
+End Property
+
+Public Property Get CardAcceptorIdCode() As Variant
+    CardAcceptorIdCode = VCardAcceptorIdCode
+End Property
+
+Public Property Let CardAcceptorIdCode(ByVal vNewValue As Variant)
+    VCardAcceptorIdCode = vNewValue
+End Property
+
+Public Property Get CardAcceptorNameLoc() As Variant
+    CardAcceptorNameLoc = VCardAcceptorNameLoc
+End Property
+
+Public Property Let CardAcceptorNameLoc(ByVal vNewValue As Variant)
+    VCardAcceptorNameLoc = vNewValue
+End Property
+
+Public Property Get AdditionalRespData() As Variant
+    AdditionalRespData = VAdditionalRespData
+End Property
+
+Public Property Let AdditionalRespData(ByVal vNewValue As Variant)
+    VAdditionalRespData = vNewValue
+End Property
+
+Public Property Get AdditionalData() As Variant
+    AdditionalData = VAdditionalData
+End Property
+
+Public Property Let AdditionalData(ByVal vNewValue As Variant)
+    VAdditionalData = vNewValue
+End Property
+
+Public Property Get CurrencyCodeTxn() As Variant
+    CurrencyCodeTxn = VCurrencyCodeTxn
+End Property
+
+Public Property Let CurrencyCodeTxn(ByVal vNewValue As Variant)
+    VCurrencyCodeTxn = vNewValue
+End Property
+
+Public Property Get CurrencyCodeSettle() As Variant
+    CurrencyCodeSettle = VCurrencyCodeSettle
+End Property
+
+Public Property Let CurrencyCodeSettle(ByVal vNewValue As Variant)
+    VCurrencyCodeSettle = vNewValue
+End Property
+
+Public Property Get PinData() As Variant
+    PinData = VPinData
+End Property
+
+Public Property Let PinData(ByVal vNewValue As Variant)
+    VPinData = vNewValue
+End Property
+
+Public Property Get SecurityRelatedInfo() As Variant
+    SecurityRelatedInfo = VSecurityRelatedInfo
+End Property
+
+Public Property Let SecurityRelatedInfo(ByVal vNewValue As Variant)
+    VSecurityRelatedInfo = vNewValue
+End Property
+
+Public Property Get AdditionalAmts() As Variant
+    AdditionalAmts = VAdditionalAmts
+End Property
+
+Public Property Let AdditionalAmts(ByVal vNewValue As Variant)
+    VAdditionalAmts = vNewValue
+End Property
+
+Public Property Get MsgReasonCode() As Variant
+    MsgReasonCode = VMsgReasonCode
+End Property
+
+Public Property Let MsgReasonCode(ByVal vNewValue As Variant)
+    VMsgReasonCode = vNewValue
+End Property
+
+Public Property Get AuthLifeCycleCode() As Variant
+    AuthLifeCycleCode = VAuthLifeCycleCode
+End Property
+
+Public Property Let AuthLifeCycleCode(ByVal vNewValue As Variant)
+    VAuthLifeCycleCode = vNewValue
+End Property
+
+Public Property Get AuthAgentIdCode() As Variant
+    AuthAgentIdCode = VAuthAgentIdCode
+End Property
+
+Public Property Let AuthAgentIdCode(ByVal vNewValue As Variant)
+    VAuthAgentIdCode = vNewValue
+End Property
+
+Public Property Get EchoData() As Variant
+    EchoData = VEchoData
+End Property
+
+Public Property Let EchoData(ByVal vNewValue As Variant)
+    VEchoData = vNewValue
+End Property
+
+Public Property Get SettleCode() As Variant
+    SettleCode = VSettleCode
+End Property
+
+Public Property Let SettleCode(ByVal vNewValue As Variant)
+    VSettleCode = vNewValue
+End Property
+
+Public Property Get ExtendedPayCode() As Variant
+    ExtendedPayCode = VExtendedPayCode
+End Property
+
+Public Property Let ExtendedPayCode(ByVal vNewValue As Variant)
+    VExtendedPayCode = vNewValue
+End Property
+
+Public Property Get NetMangtInfoCode() As Variant
+    NetMangtInfoCode = VNetMangtInfoCode
+End Property
+
+Public Property Let NetMangtInfoCode(ByVal vNewValue As Variant)
+    VNetMangtInfoCode = vNewValue
+End Property
+
+Public Property Get DateAction() As Variant
+    DateAction = VDateAction
+End Property
+
+Public Property Let DateAction(ByVal vNewValue As Variant)
+    VDateAction = vNewValue
+End Property
+
+Public Property Get CreditNumber() As Variant
+    CreditNumber = VCreditNumber
+End Property
+
+Public Property Let CreditNumber(ByVal vNewValue As Variant)
+    VCreditNumber = vNewValue
+End Property
+
+Public Property Get CreditRevNumber() As Variant
+    CreditRevNumber = VCreditRevNumber
+End Property
+
+Public Property Let CreditRevNumber(ByVal vNewValue As Variant)
+    VCreditRevNumber = vNewValue
+End Property
+
+Public Property Get DebitNumber() As Variant
+    DebitNumber = VDebitNumber
+End Property
+
+Public Property Let DebitNumber(ByVal vNewValue As Variant)
+    VDebitNumber = vNewValue
+End Property
+
+Public Property Get DebitRevNumber() As Variant
+    DebitRevNumber = VDebitRevNumber
+End Property
+
+Public Property Let DebitRevNumber(ByVal vNewValue As Variant)
+    VDebitRevNumber = vNewValue
+End Property
+
+Public Property Get TransferNumber() As Variant
+    TransferNumber = VTransferNumber
+End Property
+
+Public Property Let TransferNumber(ByVal vNewValue As Variant)
+    VTransferNumber = vNewValue
+End Property
+
+Public Property Get TransferRevNumber() As Variant
+    TransferRevNumber = VTransferRevNumber
+End Property
+
+Public Property Let TransferRevNumber(ByVal vNewValue As Variant)
+    VTransferRevNumber = vNewValue
+End Property
+
+Public Property Get InquiryNumber() As Variant
+    InquiryNumber = VInquiryNumber
+End Property
+
+Public Property Let InquiryNumber(ByVal vNewValue As Variant)
+    VInquiryNumber = vNewValue
+End Property
+
+Public Property Get AuthNumber() As Variant
+    AuthNumber = VAuthNumber
+End Property
+
+Public Property Let AuthNumber(ByVal vNewValue As Variant)
+    VAuthNumber = vNewValue
+End Property
+
+Public Property Get CreditsProcFeeAmt() As Variant
+    CreditsProcFeeAmt = VCreditsProcFeeAmt
+End Property
+
+Public Property Let CreditsProcFeeAmt(ByVal vNewValue As Variant)
+    VCreditsProcFeeAmt = vNewValue
+End Property
+
+Public Property Get CreditsTxnFeeAmt() As Variant
+    CreditsTxnFeeAmt = VCreditsTxnFeeAmt
+End Property
+
+Public Property Let CreditsTxnFeeAmt(ByVal vNewValue As Variant)
+    VCreditsTxnFeeAmt = vNewValue
+End Property
+
+Public Property Get DebitsProcFeeAmt() As Variant
+    DebitsProcFeeAmt = VDebitsProcFeeAmt
+End Property
+
+Public Property Let DebitsProcFeeAmt(ByVal vNewValue As Variant)
+    VDebitsProcFeeAmt = vNewValue
+End Property
+
+Public Property Get DebitsTxnFeeAmt() As Variant
+    DebitsTxnFeeAmt = VDebitsTxnFeeAmt
+End Property
+
+Public Property Let DebitsTxnFeeAmt(ByVal vNewValue As Variant)
+    VDebitsTxnFeeAmt = vNewValue
+End Property
+
+Public Property Get CreditAmt() As Variant
+    CreditAmt = VCreditAmt
+End Property
+
+Public Property Let CreditAmt(ByVal vNewValue As Variant)
+    VCreditAmt = vNewValue
+End Property
+
+Public Property Get CreditRevAmt() As Variant
+    CreditRevAmt = VCreditRevAmt
+End Property
+
+Public Property Let CreditRevAmt(ByVal vNewValue As Variant)
+    VCreditRevAmt = vNewValue
+End Property
+
+Public Property Get DebitAmt() As Variant
+    DebitAmt = VDebitAmt
+End Property
+
+Public Property Let DebitAmt(ByVal vNewValue As Variant)
+    VDebitAmt = vNewValue
+End Property
+
+Public Property Get DebitRevAmt() As Variant
+    DebitRevAmt = VDebitRevAmt
+End Property
+
+Public Property Let DebitRevAmt(ByVal vNewValue As Variant)
+    VDebitRevAmt = vNewValue
+End Property
+
+Public Property Get OriginalDataElements() As Variant
+    OriginalDataElements = VOriginalDataElements
+End Property
+
+Public Property Let OriginalDataElements(ByVal vNewValue As Variant)
+    VOriginalDataElements = vNewValue
+End Property
+
+Public Property Get FileUpdateCode() As Variant
+    FileUpdateCode = VFileUpdateCode
+End Property
+
+Public Property Let FileUpdateCode(ByVal vNewValue As Variant)
+    VFileUpdateCode = vNewValue
+End Property
+
+Public Property Get ReplacementAmts() As Variant
+    ReplacementAmts = VReplacementAmts
+End Property
+
+Public Property Let ReplacementAmts(ByVal vNewValue As Variant)
+    VReplacementAmts = vNewValue
+End Property
+
+Public Property Get AmtNetSettle() As Variant
+    AmtNetSettle = VAmtNetSettle
+End Property
+
+Public Property Let AmtNetSettle(ByVal vNewValue As Variant)
+    VAmtNetSettle = vNewValue
+End Property
+
+Public Property Get Payee() As Variant
+    Payee = VPayee
+End Property
+
+Public Property Let Payee(ByVal vNewValue As Variant)
+    VPayee = vNewValue
+End Property
+
+Public Property Get ReceivingInstIdCode() As Variant
+    ReceivingInstIdCode = VReceivingInstIdCode
+End Property
+
+Public Property Let ReceivingInstIdCode(ByVal vNewValue As Variant)
+    VReceivingInstIdCode = vNewValue
+End Property
+    
+Public Property Get FileName() As Variant
+    FileName = VFileName
+End Property
+
+Public Property Let FileName(ByVal vNewValue As Variant)
+    VFileName = vNewValue
+End Property
+
+Public Property Get AccIdOne() As Variant
+    AccIdOne = VAccIdOne
+End Property
+
+Public Property Let AccIdOne(ByVal vNewValue As Variant)
+    VAccIdOne = vNewValue
+End Property
+
+Public Property Get AccIdTwo() As Variant
+    AccIdTwo = VAccIdTwo
+End Property
+
+Public Property Let AccIdTwo(ByVal vNewValue As Variant)
+    VAccIdTwo = vNewValue
+End Property
+
+Public Property Get PaymentNumber() As Variant
+    PaymentNumber = VPaymentNumber
+End Property
+
+Public Property Let PaymentNumber(ByVal vNewValue As Variant)
+    VPaymentNumber = vNewValue
+End Property
+
+Public Property Get PaymentRevNumber() As Variant
+    PaymentRevNumber = VPaymentRevNumber
+End Property
+
+Public Property Let PaymentRevNumber(ByVal vNewValue As Variant)
+    VPaymentRevNumber = vNewValue
+End Property
+
+Public Property Get POSDataCode() As Variant
+    POSDataCode = VPOSDataCode
+End Property
+
+Public Property Let POSDataCode(ByVal vNewValue As Variant)
+    VPOSDataCode = vNewValue
+End Property
+
+Public Property Get NetMangtInfo() As Variant
+    NetMangtInfo = VNetMangtInfo
+End Property
+
+Public Property Let NetMangtInfo(ByVal vNewValue As Variant)
+    VNetMangtInfo = vNewValue
+End Property
+
+Public Property Get PrivateBitMap() As Variant
+    PrivateBitMap = VPrivateBitMap
+End Property
+
+Public Property Let PrivateBitMap(ByVal vNewValue As Variant)
+    VPrivateBitMap = vNewValue
+End Property
+
+Public Property Get PSwitchKey() As Variant
+    PSwitchKey = VPSwitchKey
+End Property
+
+Public Property Let PSwitchKey(ByVal vNewValue As Variant)
+    VPSwitchKey = vNewValue
+End Property
+
+Public Property Get PRoutingInfo() As Variant
+    PRoutingInfo = VPRoutingInfo
+End Property
+
+Public Property Let PRoutingInfo(ByVal vNewValue As Variant)
+    VPRoutingInfo = vNewValue
+End Property
+
+Public Property Get PPOSData() As Variant
+    PPOSData = VPPOSData
+End Property
+
+Public Property Let PPOSData(ByVal vNewValue As Variant)
+    VPPOSData = vNewValue
+End Property
+
+Public Property Get PServiceStationData() As Variant
+    PServiceStationData = VPServiceStationData
+End Property
+
+Public Property Let PServiceStationData(ByVal vNewValue As Variant)
+    VPServiceStationData = vNewValue
+End Property
+
+Public Property Get PAuthProfile() As Variant
+    PAuthProfile = VPAuthProfile
+End Property
+
+Public Property Let PAuthProfile(ByVal vNewValue As Variant)
+    VPAuthProfile = vNewValue
+End Property
+
+Public Property Get PCheckData() As Variant
+    PCheckData = VPCheckData
+End Property
+
+Public Property Let PCheckData(ByVal vNewValue As Variant)
+    VPCheckData = vNewValue
+End Property
+
+Public Property Get PRetentionData() As Variant
+    PRetentionData = VPRetentionData
+End Property
+
+Public Property Let PRetentionData(ByVal vNewValue As Variant)
+    VPRetentionData = vNewValue
+End Property
+
+Public Property Get PAdditionalNodeData() As Variant
+    PAdditionalNodeData = VPAdditionalNodeData
+End Property
+
+Public Property Let PAdditionalNodeData(ByVal vNewValue As Variant)
+    VPAdditionalNodeData = vNewValue
+End Property
+
+Public Property Get PCVV2() As Variant
+    PCVV2 = VPCVV2
+End Property
+
+Public Property Let PCVV2(ByVal vNewValue As Variant)
+    VPCVV2 = vNewValue
+End Property
+
+Public Property Get POriginalKey() As Variant
+    POriginalKey = VPOriginalKey
+End Property
+
+Public Property Let POriginalKey(ByVal vNewValue As Variant)
+    VPOriginalKey = vNewValue
+End Property
+
+Public Property Get PTerminalOwner() As Variant
+    PTerminalOwner = VPTerminalOwner
+End Property
+
+Public Property Let PTerminalOwner(ByVal vNewValue As Variant)
+    VPTerminalOwner = vNewValue
+End Property
+
+Public Property Get PPOSGeogData() As Variant
+    PPOSGeogData = VPPOSGeogData
+End Property
+
+Public Property Let PPOSGeogData(ByVal vNewValue As Variant)
+    VPPOSGeogData = vNewValue
+End Property
+
+Public Property Get PSponsorBank() As Variant
+    PSponsorBank = VPSponsorBank
+End Property
+
+Public Property Let PSponsorBank(ByVal vNewValue As Variant)
+    VPSponsorBank = vNewValue
+End Property
+
+Public Property Get PAddressVeriData() As Variant
+    PAddressVeriData = VPAddressVeriData
+End Property
+
+Public Property Let PAddressVeriData(ByVal vNewValue As Variant)
+    VPAddressVeriData = vNewValue
+End Property
+
+Public Property Get PAddressVeriResult() As Variant
+    PAddressVeriResult = VPAddressVeriResult
+End Property
+
+Public Property Let PAddressVeriResult(ByVal vNewValue As Variant)
+    VPAddressVeriResult = vNewValue
+End Property
+
+Public Property Get PCardHolderInfo() As Variant
+    PCardHolderInfo = VPCardHolderInfo
+End Property
+
+Public Property Let PCardHolderInfo(ByVal vNewValue As Variant)
+    VPCardHolderInfo = vNewValue
+End Property
+
+Public Property Get PValidationData() As Variant
+    PValidationData = VPValidationData
+End Property
+
+Public Property Let PValidationData(ByVal vNewValue As Variant)
+    VPValidationData = vNewValue
+End Property
+
+Public Property Get PBankDetails() As Variant
+    PBankDetails = VPBankDetails
+End Property
+
+Public Property Let PBankDetails(ByVal vNewValue As Variant)
+    VPBankDetails = vNewValue
+End Property
+    
+Public Property Get PAuthDateSettle() As Variant
+    PAuthDateSettle = VPAuthDateSettle
+End Property
+
+Public Property Let PAuthDateSettle(ByVal vNewValue As Variant)
+    VPAuthDateSettle = vNewValue
+End Property
+
+Public Property Get PRecordID() As Variant
+    PRecordID = VPRecordID
+End Property
+
+Public Property Let PRecordID(ByVal vNewValue As Variant)
+    VPRecordID = vNewValue
+End Property
+
+Public Property Get PStructuredData() As StructuredData
+    Set PStructuredData = New StructuredData
+    PStructuredData.Buffer_B = VPStructuredData.Buffer_B
+    PStructuredData.Buffer_C = VPStructuredData.Buffer_C
+    PStructuredData.StructuredData = VPStructuredData.StructuredData
+End Property
+
+Public Property Let PStructuredData(ByVal vNewValue As Variant)
+    VPStructuredData.Buffer_B = ""
+    VPStructuredData.Buffer_C = ""
+    VPStructuredData.StructuredData = vNewValue
+    
+    Dim Stream As String
+    Dim keyLenInd As Integer
+    Dim key As String
+    Dim dataLenInd As Integer
+    
+    'search for buffer b and buffer c
+    Stream = vNewValue
+    Do While Len(Stream) > 0
+        'get length indicator of the key length indicator
+        keyLenInd = Val(Mid(Stream, 1, 1))
+        'get key
+        key = Mid(Stream, (1 + keyLenInd + 1), Mid(Stream, 2, keyLenInd))
+        
+        'get stream to process data
+        Stream = Mid(Stream, (1 + keyLenInd + CInt(Mid(Stream, 2, keyLenInd)) + 1), _
+                (Len(Stream) - (1 + keyLenInd + CInt(Mid(Stream, 2, keyLenInd)))))
+                
+        'get length indicator of the key length indicator
+        dataLenInd = Val(Mid(Stream, 1, 1))
+        
+        'get data if key matches
+        Select Case UCase(key)
+            Case UCase("General Buffer B"):
+                VPStructuredData.Buffer_B = Mid(Stream, (1 + dataLenInd + 1), Mid(Stream, 2, dataLenInd))
+            Case UCase("General Buffer C"):
+                VPStructuredData.Buffer_C = Mid(Stream, (1 + dataLenInd + 1), Mid(Stream, 2, dataLenInd))
+            Case Else ' for future use
+        End Select
+        
+        'get remaining stream of data
+        Stream = Mid(Stream, (1 + dataLenInd + CInt(Mid(Stream, 2, dataLenInd)) + 1), _
+                (Len(Stream) - (1 + dataLenInd + CInt(Mid(Stream, 2, dataLenInd)))))
+    Loop
+    
+End Property
+
+Public Property Get PPayeeNameAddress() As Variant
+    PPayeeNameAddress = VPPayeeNameAddress
+End Property
+
+Public Property Let PPayeeNameAddress(ByVal vNewValue As Variant)
+    VPPayeeNameAddress = vNewValue
+End Property
+
+Public Property Get PPayerAccount() As Variant
+    PPayerAccount = VPPayerAccount
+End Property
+
+Public Property Let PPayerAccount(ByVal vNewValue As Variant)
+    VPPayerAccount = vNewValue
+End Property
+
+'ADDITIONAL FIELDS AS PER POSTILION 4.3
+
+Public Property Get POriginalNode() As Variant
+    POriginalNode = VPOriginalNode
+End Property
+
+Public Property Let POriginalNode(ByVal vNewValue As Variant)
+    VPOriginalNode = vNewValue
+End Property
+
+Public Property Get PCardVerificationResult() As Variant
+    PCardVerificationResult = VPCardVerificationResult
+End Property
+
+Public Property Let PCardVerificationResult(ByVal vNewValue As Variant)
+    VPCardVerificationResult = vNewValue
+End Property
+
+Public Property Get PAmericanExpressCID() As Variant
+    PAmericanExpressCID = VPAmericanExpressCID
+End Property
+
+Public Property Let PAmericanExpressCID(ByVal vNewValue As Variant)
+    VPAmericanExpressCID = vNewValue
+End Property
+
+Public Property Get P3DSecureData() As Variant
+    P3DSecureData = VP3DSecureData
+End Property
+
+Public Property Let P3DSecureData(ByVal vNewValue As Variant)
+    VP3DSecureData = vNewValue
+End Property
+
+Public Property Get P3DSecureResult() As Variant
+    P3DSecureResult = VP3DSecureResult
+End Property
+
+Public Property Let P3DSecureResult(ByVal vNewValue As Variant)
+    VP3DSecureResult = vNewValue
+End Property
+
+Public Property Get PIssuerNetID() As Variant
+    PIssuerNetID = VPIssuerNetID
+End Property
+
+Public Property Let PIssuerNetID(ByVal vNewValue As Variant)
+    VPIssuerNetID = vNewValue
+End Property
+
+Public Property Get PUCAFData() As Variant
+    PUCAFData = VPUCAFData
+End Property
+
+Public Property Let PUCAFData(ByVal vNewValue As Variant)
+    VPUCAFData = vNewValue
+End Property
+
+Public Property Get PExtendedTransactionType() As Variant
+    PExtendedTransactionType = VPExtendedTransactionType
+End Property
+
+Public Property Let PExtendedTransactionType(ByVal vNewValue As Variant)
+    VPExtendedTransactionType = vNewValue
+End Property
+
+Public Property Get PAccountTypeQualifier() As Variant
+    PAccountTypeQualifier = VPAccountTypeQualifier
+End Property
+
+Public Property Let PAccountTypeQualifier(ByVal vNewValue As Variant)
+    VPAccountTypeQualifier = vNewValue
+End Property
+
+Public Property Get PAcquirerNetID() As Variant
+    PAcquirerNetID = VPAccountTypeQualifier
+End Property
+
+Public Property Let PAcquirerNetID(ByVal vNewValue As Variant)
+    VPAcquirerNetID = vNewValue
+End Property
+
+Public Property Get POriginalRespCode() As Variant
+    POriginalRespCode = VPOriginalRespCode
+End Property
+
+Public Property Let POriginalRespCode(ByVal vNewValue As Variant)
+    VPOriginalRespCode = vNewValue
+End Property
+
+'END OF ADDITIONAL DATA
+
+Public Property Get PICCDataBitMap() As Variant
+    PICCDataBitMap = VPICCDataBitMap
+End Property
+
+Public Property Let PICCDataBitMap(ByVal vNewValue As Variant)
+    VPICCDataBitMap = vNewValue
+End Property
+
+Public Property Get PICCAmtAuth() As Variant
+    PICCAmtAuth = VPICCAmtAuth
+End Property
+
+Public Property Let PICCAmtAuth(ByVal vNewValue As Variant)
+    VPICCAmtAuth = vNewValue
+End Property
+
+Public Property Get PICCAmtOther() As Variant
+    PICCAmtOther = VPICCAmtOther
+End Property
+
+Public Property Let PICCAmtOther(ByVal vNewValue As Variant)
+    VPICCAmtOther = vNewValue
+End Property
+
+Public Property Get PICCAppIdentifier() As Variant
+    PICCAppIdentifier = VPICCAppIdentifier
+End Property
+
+Public Property Let PICCAppIdentifier(ByVal vNewValue As Variant)
+    VPICCAppIdentifier = vNewValue
+End Property
+
+Public Property Get PICCAppInterchangeProfile() As Variant
+    PICCAppInterchangeProfile = VPICCAppInterchangeProfile
+End Property
+
+Public Property Let PICCAppInterchangeProfile(ByVal vNewValue As Variant)
+    VPICCAppInterchangeProfile = vNewValue
+End Property
+
+Public Property Get PICCAppTxnCounter() As Variant
+    PICCAppTxnCounter = VPICCAppTxnCounter
+End Property
+
+Public Property Let PICCAppTxnCounter(ByVal vNewValue As Variant)
+    VPICCAppTxnCounter = vNewValue
+End Property
+
+Public Property Get PICCAppUsageControl() As Variant
+    PICCAppUsageControl = VPICCAppUsageControl
+End Property
+
+Public Property Let PICCAppUsageControl(ByVal vNewValue As Variant)
+    VPICCAppUsageControl = vNewValue
+End Property
+
+Public Property Get PICCAuthRespCode() As Variant
+    PICCAuthRespCode = VPICCAuthRespCode
+End Property
+
+Public Property Let PICCAuthRespCode(ByVal vNewValue As Variant)
+    VPICCAuthRespCode = vNewValue
+End Property
+
+Public Property Get PICCCardAuthRelyInd() As Variant
+    PICCCardAuthRelyInd = VPICCCardAuthRelyInd
+End Property
+
+Public Property Let PICCCardAuthRelyInd(ByVal vNewValue As Variant)
+    VPICCCardAuthRelyInd = vNewValue
+End Property
+
+Public Property Get PICCCardAuthResCode() As Variant
+    PICCCardAuthResCode = VPICCCardAuthResCode
+End Property
+
+Public Property Let PICCCardAuthResCode(ByVal vNewValue As Variant)
+    VPICCCardAuthResCode = vNewValue
+End Property
+
+Public Property Get PICCChipCondCode() As Variant
+    PICCChipCondCode = VPICCChipCondCode
+End Property
+
+Public Property Let PICCChipCondCode(ByVal vNewValue As Variant)
+    VPICCChipCondCode = vNewValue
+End Property
+
+Public Property Get PICCCryptogram() As Variant
+    PICCCryptogram = VPICCCryptogram
+End Property
+
+Public Property Let PICCCryptogram(ByVal vNewValue As Variant)
+    VPICCCryptogram = vNewValue
+End Property
+
+Public Property Get PICCCryptoInfoData() As Variant
+    PICCCryptoInfoData = VPICCCryptoInfoData
+End Property
+
+Public Property Let PICCCryptoInfoData(ByVal vNewValue As Variant)
+    VPICCCryptoInfoData = vNewValue
+End Property
+
+Public Property Get PICCCVMList() As Variant
+    PICCCVMList = VPICCCVMList
+End Property
+
+Public Property Let PICCCVMList(ByVal vNewValue As Variant)
+    VPICCCVMList = vNewValue
+End Property
+
+Public Property Get PICCCVMResults() As Variant
+    PICCCVMResults = VPICCCVMResults
+End Property
+
+Public Property Let PICCCVMResults(ByVal vNewValue As Variant)
+    VPICCCVMResults = vNewValue
+End Property
+
+Public Property Get PICCInterfaceDevSerialNum() As Variant
+    PICCInterfaceDevSerialNum = VPICCInterfaceDevSerialNum
+End Property
+
+Public Property Let PICCInterfaceDevSerialNum(ByVal vNewValue As Variant)
+    VPICCInterfaceDevSerialNum = vNewValue
+End Property
+
+Public Property Get PICCIssuerActionCode() As Variant
+    PICCIssuerActionCode = VPICCIssuerActionCode
+End Property
+
+Public Property Let PICCIssuerActionCode(ByVal vNewValue As Variant)
+    VPICCIssuerActionCode = vNewValue
+End Property
+
+Public Property Get PICCIssuerAppData() As Variant
+    PICCIssuerAppData = VPICCIssuerAppData
+End Property
+
+Public Property Let PICCIssuerAppData(ByVal vNewValue As Variant)
+    VPICCIssuerAppData = vNewValue
+End Property
+
+Public Property Get PICCIssuerScriptRes() As Variant
+    PICCIssuerScriptRes = VPICCIssuerScriptRes
+End Property
+
+Public Property Let PICCIssuerScriptRes(ByVal vNewValue As Variant)
+    VPICCIssuerScriptRes = vNewValue
+End Property
+
+Public Property Get PICCTermAppVerNum() As Variant
+    PICCTermAppVerNum = VPICCTermAppVerNum
+End Property
+
+Public Property Let PICCTermAppVerNum(ByVal vNewValue As Variant)
+    VPICCTermAppVerNum = vNewValue
+End Property
+
+Public Property Get PICCTermCapabilities() As Variant
+    PICCTermCapabilities = VPICCTermCapabilities
+End Property
+
+Public Property Let PICCTermCapabilities(ByVal vNewValue As Variant)
+    VPICCTermCapabilities = vNewValue
+End Property
+
+Public Property Get PICCTermCountryCode() As Variant
+    PICCTermCountryCode = VPICCTermCountryCode
+End Property
+
+Public Property Let PICCTermCountryCode(ByVal vNewValue As Variant)
+    VPICCTermCountryCode = vNewValue
+End Property
+
+Public Property Get PICCTermType() As Variant
+    PICCTermType = VPICCTermType
+End Property
+
+Public Property Let PICCTermType(ByVal vNewValue As Variant)
+    VPICCTermType = vNewValue
+End Property
+
+Public Property Get PICCTermVeriRes() As Variant
+    PICCTermVeriRes = VPICCTermVeriRes
+End Property
+
+Public Property Let PICCTermVeriRes(ByVal vNewValue As Variant)
+    VPICCTermVeriRes = vNewValue
+End Property
+
+Public Property Get PICCTxnCateCode() As Variant
+    PICCTxnCateCode = VPICCTxnCateCode
+End Property
+
+Public Property Let PICCTxnCateCode(ByVal vNewValue As Variant)
+    VPICCTxnCateCode = vNewValue
+End Property
+
+Public Property Get PICCTxnCurrencyCode() As Variant
+    PICCTxnCurrencyCode = VPICCTxnCurrencyCode
+End Property
+
+Public Property Let PICCTxnCurrencyCode(ByVal vNewValue As Variant)
+    VPICCTxnCurrencyCode = vNewValue
+End Property
+
+Public Property Get PICCTxnDate() As Variant
+    PICCTxnDate = VPICCTxnDate
+End Property
+
+Public Property Let PICCTxnDate(ByVal vNewValue As Variant)
+    VPICCTxnDate = vNewValue
+End Property
+
+Public Property Get PICCTxnSeqCode() As Variant
+    PICCTxnSeqCode = VPICCTxnSeqCode
+End Property
+
+Public Property Let PICCTxnSeqCode(ByVal vNewValue As Variant)
+    VPICCTxnSeqCode = vNewValue
+End Property
+
+Public Property Get PICCTxnType() As Variant
+    PICCTxnType = VPICCTxnType
+End Property
+
+Public Property Let PICCTxnType(ByVal vNewValue As Variant)
+    VPICCTxnType = vNewValue
+End Property
+
+Public Property Get PICCUnpredictableNum() As Variant
+    PICCUnpredictableNum = VPICCUnpredictableNum
+End Property
+
+Public Property Let PICCUnpredictableNum(ByVal vNewValue As Variant)
+    VPICCUnpredictableNum = vNewValue
+End Property
+
+Public Property Get PICCIssuerAuthData() As Variant
+    PICCIssuerAuthData = VPICCIssuerAuthData
+End Property
+
+Public Property Let PICCIssuerAuthData(ByVal vNewValue As Variant)
+    VPICCIssuerAuthData = vNewValue
+End Property
+
+Public Property Get PICCIssuerScriptTemplateOne() As Variant
+    PICCIssuerScriptTemplateOne = VPICCIssuerScriptTemplateOne
+End Property
+
+Public Property Let PICCIssuerScriptTemplateOne(ByVal vNewValue As Variant)
+    VPICCIssuerScriptTemplateOne = vNewValue
+End Property
+
+Public Property Get PICCIssuerScriptTemplateTwo() As Variant
+    PICCIssuerScriptTemplateTwo = VPICCIssuerScriptTemplateTwo
+End Property
+
+Public Property Let PICCIssuerScriptTemplateTwo(ByVal vNewValue As Variant)
+    VPICCIssuerScriptTemplateTwo = vNewValue
+End Property
+
+Public Property Get MacExtended() As Variant
+    MacExtended = VMacExtended
+End Property
+
+Public Property Let MacExtended(ByVal vNewValue As Variant)
+    VMacExtended = vNewValue
+End Property
+
+Public Property Get MessageTypeID() As Variant
+    MessageTypeID = VMessageTypeID
+End Property
+
+Public Property Let MessageTypeID(ByVal vNewValue As Variant)
+    VMessageTypeID = vNewValue
+End Property
+
+Public Property Get BitMap() As Variant
+    BitMap = VBitMap
+End Property
+
+Public Property Let BitMap(ByVal vNewValue As Variant)
+    VBitMap = vNewValue
+End Property
+
+Public Sub ResetBitMaps()
+    Dim i As Integer
+    
+    'initialize every bit to zero
+    Erase BITMAPOneArray()
+    Erase BITMAPTwoArray()
+    Erase BITMAPPrivateArray()
+    Erase BITMAPICCArray()
+    ReDim BITMAPOneArray(1 To 64)
+    ReDim BITMAPTwoArray(65 To 128)
+    ReDim BITMAPPrivateArray(1 To 64)
+    ReDim BITMAPICCArray(1 To 64)
+    
+    For i = 1 To 64
+        BITMAPOneArray(i) = 0
+        BITMAPTwoArray(64 + i) = 0
+        BITMAPPrivateArray(i) = 0
+        BITMAPICCArray(i) = 0
+    Next i
+End Sub
+
+Public Function Encode2ByteHeader(strText As String) As String
+    Dim posStrQuotient As String
+    Dim posStrRemainder As String
+    Dim posIntQuotient As Double
+    Dim posIntRemainder As Integer
+    Dim msgLen As Integer
+    
+    msgLen = Len(strText)
+    posIntQuotient = msgLen / 256
+    
+    posStrQuotient = Chr(GetWhole(CStr(posIntQuotient)))
+    posIntRemainder = msgLen Mod 256
+    posStrRemainder = Chr(posIntRemainder)
+    
+    Encode2ByteHeader = posStrQuotient & posStrRemainder
+End Function
+
+Public Function Decode2ByteHeader(Instream As String) As Integer
+    Dim intValue As Integer
+
+    intValue = Val(Asc(Mid(Instream, 1, 1))) * 256 + Val(Asc(Mid(Instream, 2, 1)))
+    
+    Decode2ByteHeader = intValue
+End Function
+
+Public Sub CreatePBBitMap(ISO8583field As Integer)
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    'This function creates the second component of the ISO8583 message  '
+    'for the Postbridge interface.The component is made up of one or    '
+    'two 8-byte bitmaps. Each bit signifies the presence (1) or the     '
+    'absence(0) in the message of the data element associated with the  '
+    'particular bit.                                                    '
+    'The primary bitmap (bits 1 - 64) is always present and the most    '
+    'frequently used data elements are indexed from these bit positions.'
+    'Less frequently used data elements are indexed from the secondary  '
+    'bitmap (bits 65 - 128). The presence of the secondary bitmap is    '
+    'indicated by setting bit 1 of the primary bitmap.                  '
+    '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    If ISO8583field < 65 Then
+        BITMAPOneArray(ISO8583field) = 1
+    ElseIf ISO8583field < 129 Then
+        BITMAPOneArray(1) = 1
+        BITMAPTwoArray(ISO8583field) = 1
+    ElseIf ISO8583field < 193 Then
+        BITMAPOneArray(1) = 1
+        BITMAPTwoArray(127) = 1
+        BITMAPPrivateArray(1) = 0
+        BITMAPPrivateArray(ISO8583field - 128) = 1
+    ElseIf ISO8583field < 257 Then
+        BITMAPOneArray(1) = 1
+        BITMAPTwoArray(127) = 1
+        BITMAPPrivateArray(1) = 0
+        BITMAPPrivateArray(25) = 1
+        BITMAPICCArray(1) = 0
+        BITMAPICCArray(ISO8583field - 192) = 1
+    Else
+        'error
+        'create log : fatal error occured in dll
+    End If
+    
+End Sub
+
+Public Function CnvSTDBitMap() As String
+    'this requires the breakdown of the bitmap into bytes then conversion to
+    'the character representation of the same
+    'to do this, convert the binary value of the bitmap into the decimal
+    'equivalent first.
+    Dim i As Integer, j As Integer
+    Dim strConvertedByte As String
+    Dim DecValue As Integer
+    strConvertedByte = ""
+    
+    'IRST 8-byte bitmap
+    For i = 0 To 15
+        DecValue = 0
+        For j = 1 To 4
+            DecValue = DecValue + BITMAPOneArray((i * 4) + (5 - j)) * 2 ^ (j - 1)
+        Next j
+        strConvertedByte = strConvertedByte & Hex(DecValue)
+    Next i
+    
+    '2ND 8-byte bitmap
+    If BITMAPOneArray(1) = 1 Then
+        For i = 0 To 15
+            DecValue = 0
+            For j = 1 To 4
+                DecValue = DecValue + BITMAPTwoArray(64 + (i * 4) + (5 - j)) * 2 ^ (j - 1)
+            Next j
+            strConvertedByte = strConvertedByte & Hex(DecValue)
+        Next i
+    End If
+   
+    CnvSTDBitMap = strConvertedByte
+End Function
+
+Public Function ConvertBitMapPrivate() As String
+Dim i As Integer, j As Integer
+Dim strConvertedByte  As String
+Dim DecValue As Integer
+
+    strConvertedByte = ""
+     'Postilion private data bitmap
+    If BITMAPTwoArray(127) = 1 Then
+        For i = 0 To 15
+            DecValue = 0
+            For j = 1 To 4
+                DecValue = DecValue + BITMAPPrivateArray((i * 4) + (5 - j)) * 2 ^ (j - 1)
+            Next j
+            strConvertedByte = strConvertedByte & Hex(DecValue)
+        Next i
+'        For i = 0 To 7
+'        DecValue = 0
+'        For j = 1 To 8
+'            DecValue = DecValue + BITMAPPrivateArray((i * 8) + (9 - j)) * 2 ^ (j - 1)
+'        Next j
+'        strConvertedByte = strConvertedByte & Chr(DecValue)
+'    Next i
+    End If
+            
+    ConvertBitMapPrivate = strConvertedByte
+End Function
+
+Public Function ConvertBitmapICC() As String
+Dim i As Integer, j As Integer
+Dim strConvertedByte  As String
+Dim DecValue As Integer
+
+    strConvertedByte = ""
+    'ICC data
+    If BITMAPPrivateArray(25) = 1 Then
+
+      For i = 0 To 15
+        DecValue = 0
+        For j = 1 To 4
+            DecValue = DecValue + BITMAPICCArray((i * 4) + (5 - j)) * 2 ^ (j - 1)
+        Next j
+        strConvertedByte = strConvertedByte & Hex(DecValue)
+      Next i
+
+'        For i = 0 To 7
+'            DecValue = 0
+'            For j = 1 To 8
+'                DecValue = DecValue + BITMAPICCArray((i * 8) + (9 - j)) * 2 ^ (j - 1)
+'            Next j
+'            strConvertedByte = strConvertedByte & Chr(DecValue)
+'        Next i
+    End If
+    
+    ConvertBitmapICC = strConvertedByte
+End Function
+
+Private Function GetWhole(strValue As String) As Integer
+    Dim DecPnt As Integer
+    
+    DecPnt = InStr(1, strValue, ".")
+    If DecPnt > 0 Then
+        GetWhole = Mid(strValue, 1, DecPnt - 1)
+    Else
+        GetWhole = strValue
+    End If
+End Function
+
+Public Sub ISO8583MsgBD(InREQMessage As String)
+ 'Dim POSTmsg As New PostISO8583
+ Dim InREQ As String
+ Dim intBase As Integer
+ 
+     intBase = 1
+     MessageTypeID = Mid(InREQMessage, 5, 4)
+     DecodeBitMap Mid(InREQMessage, 7, 32)
+     'main bitmap
+     'chop off header and bitmap to
+     'get message data elements
+     If BITMapINREQ(1) = 1 Then
+        InREQ = Mid(InREQMessage, 39, Len(InREQMessage) - 38)
+        BitMap = Mid(InREQMessage, 7, 32)
+
+     Else
+        InREQ = Mid(InREQMessage, 23, Len(InREQMessage) - 22)
+        BitMap = Mid(InREQMessage, 7, 16)
+     End If
+          
+     If BITMapINREQ(2) = 1 Then
+         'Dim Pan As Variant '2
+        Pan = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(3) = 1 Then
+        'Dim ProcessingCODE As Variant '3
+        ProcessingCODE = Mid(InREQ, intBase, 6)
+        intBase = intBase + 6
+     End If
+      
+     If BITMapINREQ(4) = 1 Then
+        'Dim AmtTransaction As Variant '4
+        AmtTransaction = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(5) = 1 Then
+        'Dim AmtSettlement As Variant '5
+        AmtSettlement = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(7) = 1 Then
+        'Dim DatetimeTransmission As Variant '7
+        DatetimeTransmission = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(9) = 1 Then
+        'Dim ConvRateSettle As Variant '9
+        ConvRateSettle = Mid(InREQ, intBase, 8)
+        intBase = intBase + 8
+     End If
+     
+     If BITMapINREQ(11) = 1 Then
+        'Dim SysTraceAuditNum As Variant '11
+        SysTraceAuditNum = Mid(InREQ, intBase, 6)
+        intBase = intBase + 6
+     End If
+     
+     If BITMapINREQ(12) = 1 Then
+        'Dim TimeLocTxn As Variant '12
+        TimeLocTxn = Mid(InREQ, intBase, 6)
+        intBase = intBase + 6
+     End If
+     
+     If BITMapINREQ(13) = 1 Then
+        'Dim DateLocTxn As Variant '13
+        DateLocTxn = Mid(InREQ, intBase, 4)
+        intBase = intBase + 4
+     End If
+     
+     If BITMapINREQ(14) = 1 Then
+        'Dim DateExpiry As Variant '14
+        DateExpiry = Mid(InREQ, intBase, 4)
+        intBase = intBase + 4
+     End If
+     
+     If BITMapINREQ(15) = 1 Then
+        'Dim DateSettle As Variant '15
+        DateSettle = Mid(InREQ, intBase, 4)
+        intBase = intBase + 4
+     End If
+     
+     If BITMapINREQ(16) = 1 Then
+        'Dim DateConversion As Variant '16
+        DateConversion = Mid(InREQ, intBase, 4)
+        intBase = intBase + 4
+     End If
+     
+     If BITMapINREQ(18) = 1 Then
+        'Dim MerchantType As Variant '18
+        MerchantType = Mid(InREQ, intBase, 4)
+        intBase = intBase + 4
+     End If
+     
+     If BITMapINREQ(22) = 1 Then
+        'Dim POSEntryMode As Variant '22
+        POSEntryMode = Mid(InREQ, intBase, 3)
+        intBase = intBase + 3
+     End If
+     
+     If BITMapINREQ(23) = 1 Then
+        'Dim CardSeqNum As Variant '23
+        CardSeqNum = Mid(InREQ, intBase, 3)
+        intBase = intBase + 3
+     End If
+     
+     If BITMapINREQ(25) = 1 Then
+        'Dim POSConditionCode As Variant '25
+        POSConditionCode = Mid(InREQ, intBase, 2)
+        intBase = intBase + 2
+     End If
+     
+     If BITMapINREQ(26) = 1 Then
+        'Dim POSPinCaptureCode As Variant '26
+        POSPinCaptureCode = Mid(InREQ, intBase, 2)
+        intBase = intBase + 2
+     End If
+     
+     If BITMapINREQ(27) = 1 Then
+        'Dim AuthIDRespLength As Variant '27
+        AuthIDRespLength = Mid(InREQ, intBase, 1)
+        intBase = intBase + 1
+     End If
+     
+     If BITMapINREQ(28) = 1 Then
+        'Dim AmtTxnFee As Variant '28
+        AmtTxnFee = Mid(InREQ, intBase, 9)
+        intBase = intBase + 9
+     End If
+     
+     If BITMapINREQ(29) = 1 Then
+        'Dim AmtSettleFee As Variant '29
+        AmtSettleFee = Mid(InREQ, intBase, 9)
+        intBase = intBase + 9
+     End If
+     
+     If BITMapINREQ(30) = 1 Then
+        'Dim AmtTxnProcessingFee As Variant '30
+        AmtTxnProcessingFee = Mid(InREQ, intBase, 9)
+        intBase = intBase + 9
+     End If
+     
+     If BITMapINREQ(31) = 1 Then
+        'Dim AmtSettleProcessingFee As Variant '31
+        AmtSettleProcessingFee = Mid(InREQ, intBase, 9)
+        intBase = intBase + 9
+     End If
+     
+     If BITMapINREQ(32) = 1 Then
+        'Dim AcquiringInstIdCode As Variant '32
+        AcquiringInstIdCode = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(33) = 1 Then
+        'Dim ForwardingInstIdCode As Variant '33
+        ForwardingInstIdCode = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(35) = 1 Then
+        'Dim Track2Data As Variant '35
+        Track2Data = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(37) = 1 Then
+        'Dim RetrievalRefNum As Variant '37
+        RetrievalRefNum = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(38) = 1 Then
+        'Dim AuthIdResp As Variant '38
+        AuthIdResp = Mid(InREQ, intBase, 6)
+        intBase = intBase + 6
+     End If
+     
+     If BITMapINREQ(39) = 1 Then
+        'Dim RespCode As Variant '39
+        RespCode = Mid(InREQ, intBase, 2)
+        intBase = intBase + 2
+     End If
+     
+     If BITMapINREQ(40) = 1 Then
+        'Dim ServiceRestrictionCode As Variant '40
+        ServiceRestrictionCode = Mid(InREQ, intBase, 3)
+        intBase = intBase + 3
+     End If
+     
+     If BITMapINREQ(41) = 1 Then
+        'Dim CardAcceptorTermId As Variant '41
+        CardAcceptorTermId = Mid(InREQ, intBase, 8)
+        intBase = intBase + 8
+     End If
+     
+     If BITMapINREQ(42) = 1 Then
+        'Dim CardAcceptorIdCode As Variant '42
+        CardAcceptorIdCode = Mid(InREQ, intBase, 15)
+        intBase = intBase + 15
+     End If
+     
+     If BITMapINREQ(43) = 1 Then
+        'Dim CardAcceptorNameLoc As Variant '43
+        CardAcceptorNameLoc = Mid(InREQ, intBase, 40)
+        intBase = intBase + 40
+     End If
+     
+     If BITMapINREQ(44) = 1 Then
+        'Dim AdditionalRespData As Variant '44
+        AdditionalRespData = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(48) = 1 Then
+        'Dim AdditionalData As Variant '48
+        AdditionalData = Mid(InREQ, intBase + 4, Val(Mid(InREQ, intBase, 4)))
+        intBase = intBase + 4 + Val(Mid(InREQ, intBase, 4))
+     End If
+     
+     If BITMapINREQ(49) = 1 Then
+        'Dim CurrencyCodeTxn As Variant '49
+        CurrencyCodeTxn = Mid(InREQ, intBase, 3)
+        intBase = intBase + 3
+     End If
+      
+     If BITMapINREQ(50) = 1 Then
+        'Dim CurrencyCodeSettle As Variant '50
+        CurrencyCodeSettle = Mid(InREQ, intBase, 3)
+        intBase = intBase + 3
+     End If
+     
+     If BITMapINREQ(52) = 1 Then
+        'Dim PinData As Variant '52
+        PinData = Mid(InREQ, intBase, 16)
+        intBase = intBase + 16
+     End If
+     
+     If BITMapINREQ(53) = 1 Then
+        'Dim SecurityRelatedInfo As Variant '53
+        SecurityRelatedInfo = Mid(InREQ, intBase, 48)
+        intBase = intBase + 48
+     End If
+     
+     If BITMapINREQ(54) = 1 Then
+        'Dim AdditionalAmts As Variant '54
+        AdditionalAmts = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(56) = 1 Then
+        'Dim MsgReasonCode As Variant '56
+        MsgReasonCode = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(57) = 1 Then
+        'Dim AuthLifeCycleCode As Variant '57
+        AuthLifeCycleCode = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(58) = 1 Then
+        'Dim AuthAgentIdCode As Variant '58
+        AuthAgentIdCode = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(59) = 1 Then
+        'Dim EchoData As Variant '59
+        EchoData = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(66) = 1 Then
+        'Dim SettleCode As Variant '66
+        SettleCode = Mid(InREQ, intBase, 1)
+        intBase = intBase + 1
+     End If
+     
+     If BITMapINREQ(67) = 1 Then
+        'Dim ExtendedPayCode As Variant '67
+        ExtendedPayCode = Mid(InREQ, intBase, 2)
+        intBase = intBase + 2
+     End If
+     
+     If BITMapINREQ(70) = 1 Then
+        'Dim NetMangtInfoCode As Variant '70
+        NetMangtInfoCode = Mid(InREQ, intBase, 3)
+        intBase = intBase + 3
+     End If
+     
+     If BITMapINREQ(73) = 1 Then
+        'Dim DateAction As Variant '73
+        DateAction = Mid(InREQ, intBase, 6)
+        intBase = intBase + 6
+     End If
+     
+     If BITMapINREQ(74) = 1 Then
+        'Dim CreditNumber As Variant '74
+        CreditNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(75) = 1 Then
+        'Dim CreditRevNumber As Variant '75
+        CreditRevNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(76) = 1 Then
+        'Dim DebitNumber As Variant '76
+        DebitNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(77) = 1 Then
+        'Dim DebitRevNumber As Variant '77
+        DebitRevNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(78) = 1 Then
+        'Dim TransferNumber As Variant '78
+        TransferNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(79) = 1 Then
+        'Dim TransferRevNumber As Variant '79
+        TransferRevNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(80) = 1 Then
+        'Dim InquiryNumber As Variant '80
+        InquiryNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(81) = 1 Then
+        'Dim AuthNumber As Variant '81
+        AuthNumber = Mid(InREQ, intBase, 10)
+        intBase = intBase + 10
+     End If
+     
+     If BITMapINREQ(82) = 1 Then
+        'Dim CreditsProcFeeAmt As Variant '82
+        CreditsProcFeeAmt = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(83) = 1 Then
+        'Dim CreditsTxnFeeAmt As Variant '83
+        CreditsTxnFeeAmt = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(84) = 1 Then
+        'Dim DebitsProcFeeAmt As Variant '84
+        DebitsProcFeeAmt = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(85) = 1 Then
+        'Dim DebitsTxnFeeAmt As Variant '85
+        DebitsTxnFeeAmt = Mid(InREQ, intBase, 12)
+        intBase = intBase + 12
+     End If
+     
+     If BITMapINREQ(86) = 1 Then
+        'Dim CreditAmt As Variant '86
+        CreditAmt = Mid(InREQ, intBase, 16)
+        intBase = intBase + 16
+     End If
+     
+     If BITMapINREQ(87) = 1 Then
+        'Dim CreditRevAmt As Variant '87
+        CreditRevAmt = Mid(InREQ, intBase, 16)
+        intBase = intBase + 16
+     End If
+     
+     If BITMapINREQ(88) = 1 Then
+        'Dim DebitAmt As Variant '88
+        DebitAmt = Mid(InREQ, intBase, 16)
+        intBase = intBase + 16
+     End If
+     
+     If BITMapINREQ(89) = 1 Then
+        'Dim DebitRevAmt As Variant '89
+        DebitRevAmt = Mid(InREQ, intBase, 16)
+        intBase = intBase + 16
+     End If
+     
+     If BITMapINREQ(90) = 1 Then
+        'Dim OriginalDataElements As Variant '90
+        OriginalDataElements = Mid(InREQ, intBase, 42)
+        intBase = intBase + 42
+     End If
+     
+     If BITMapINREQ(91) = 1 Then
+        'Dim FileUpdateCode As Variant '91
+        FileUpdateCode = Mid(InREQ, intBase, 1)
+        intBase = intBase + 1
+     End If
+     
+     If BITMapINREQ(95) = 1 Then
+        'Dim ReplacementAmts As Variant '95
+        ReplacementAmts = Mid(InREQ, intBase, 42)
+        intBase = intBase + 42
+     End If
+     
+     If BITMapINREQ(97) = 1 Then
+        'Dim AmtNetSettle As Variant '97
+        AmtNetSettle = Mid(InREQ, intBase, 17)
+        intBase = intBase + 17
+     End If
+     
+     If BITMapINREQ(98) = 1 Then
+        'Dim Payee As Variant '98
+        Payee = Mid(InREQ, intBase, 25)
+        intBase = intBase + 25
+     End If
+     
+     If BITMapINREQ(100) = 1 Then
+        'Dim ReceivingInstIdCode As Variant '100
+        ReceivingInstIdCode = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(101) = 1 Then
+        'Dim FileName As Variant '101
+        FileName = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(102) = 1 Then
+        'Dim AccIdOne As Variant '102
+        AccIdOne = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(103) = 1 Then
+        'Dim AccIdTwo As Variant '103
+        AccIdTwo = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+        intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+     End If
+     
+     If BITMapINREQ(118) = 1 Then
+        'Dim PaymentNumber As Variant '118
+        PaymentNumber = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(119) = 1 Then
+        'Dim PaymentRevNumber As Variant '119
+        PaymentRevNumber = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(123) = 1 Then
+        'Dim POSDataCode As Variant '123
+        POSDataCode = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(125) = 1 Then
+        'Dim NetMangtInfo As Variant '125
+        NetMangtInfo = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+        intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+     End If
+     
+     If BITMapINREQ(127) = 1 Then
+        
+'        If BITMAPPrivateArray(1) = 1 Then
+        Dim PBitMap As Variant '127.1
+        PrivateBitMap = Mid(InREQ, intBase + 6, 16)
+        DecodePrivateBitMap (PrivateBitMap)
+        intBase = intBase + 22
+'        End If
+        
+        If BITMapINREQPrivate(2) = 1 Then
+            'Dim PRoutingInfo As Variant '127.3
+            PSwitchKey = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(3) = 1 Then
+            'Dim PRoutingInfo As Variant '127.3
+            PRoutingInfo = Mid(InREQ, intBase, 48)
+            intBase = intBase + 48
+        End If
+       
+        If BITMapINREQPrivate(4) = 1 Then
+            'Dim PPOSData As Variant '127.4
+            PPOSData = Mid(InREQ, intBase, 22)
+            intBase = intBase + 22
+        End If
+        
+        If BITMapINREQPrivate(5) = 1 Then
+            'Dim PServiceStationData As Variant '127.5
+            PServiceStationData = Mid(InREQ, intBase, 73)
+            intBase = intBase + 73
+        End If
+        
+        If BITMapINREQPrivate(6) = 1 Then
+            'Dim PAuthProfile As Variant '127.6
+            PAuthProfile = Mid(InREQ, intBase, 2)
+            intBase = intBase + 2
+        End If
+        
+        If BITMapINREQPrivate(7) = 1 Then
+            'Dim PCheckData As Variant '127.7
+            PCheckData = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(8) = 1 Then
+            'Dim PRetentionData As Variant '127.8
+            PRetentionData = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+            intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+        End If
+        
+        If BITMapINREQPrivate(9) = 1 Then
+            'Dim PAdditionalNodeData As Variant '127.9
+            PAdditionalNodeData = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+            intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+        End If
+        
+        If BITMapINREQPrivate(10) = 1 Then
+            'Dim PCVV2 As Variant '127.10
+            PCVV2 = Mid(InREQ, intBase, 3)
+            intBase = intBase + 3
+        End If
+        
+        If BITMapINREQPrivate(11) = 1 Then
+            'Dim POriginalKey As Variant '127.11
+            POriginalKey = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(12) = 1 Then
+            'Dim PTerminalOwner As Variant '127.12
+            PTerminalOwner = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(13) = 1 Then
+            'Dim PPOSGeogData As Variant '127.13
+            PPOSGeogData = Mid(InREQ, intBase, 17)
+            intBase = intBase + 17
+        End If
+        
+        If BITMapINREQPrivate(14) = 1 Then
+            'Dim PSponsorBank As Variant '127.14
+            PSponsorBank = Mid(InREQ, intBase, 8)
+            intBase = intBase + 8
+        End If
+        
+        If BITMapINREQPrivate(15) = 1 Then
+            'Dim PAddressVeriData As Variant '127.15
+            PAddressVeriData = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(16) = 1 Then
+            'Dim PAddressVeriResult As Variant '127.16
+            PAddressVeriResult = Mid(InREQ, intBase, 1)
+            intBase = intBase + 1
+        End If
+        
+        If BITMapINREQPrivate(17) = 1 Then
+            'Dim PCardHolderInfo As Variant '127.17
+            PCardHolderInfo = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(18) = 1 Then
+            'Dim PValidationData As Variant '127.18
+            PValidationData = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(19) = 1 Then
+            'Dim PBankDetails As Variant '127.19
+            PBankDetails = Mid(InREQ, intBase, 31)
+            intBase = intBase + 31
+        End If
+        
+        If BITMapINREQPrivate(20) = 1 Then
+            'Dim PAuthDateSettle As Variant '127.20
+            PAuthDateSettle = Mid(InREQ, intBase, 8)
+            intBase = intBase + 8
+        End If
+        
+        If BITMapINREQPrivate(21) = 1 Then
+            'Dim PRecordID As Variant '127.21
+            PRecordID = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(22) = 1 Then
+            'Dim PStructuredData As Variant '127.22
+            PStructuredData = Mid(InREQ, intBase + 5, Val(Mid(InREQ, intBase, 5)))
+            intBase = intBase + 5 + Val(Mid(InREQ, intBase, 5))
+        End If
+        
+        If BITMapINREQPrivate(23) = 1 Then
+            'Dim PPayeeNameAddress As Variant '127.23
+            PPayeeNameAddress = Mid(InREQ, intBase, 253)
+            intBase = intBase + 253
+        End If
+        
+        If BITMapINREQPrivate(24) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PPayerAccount = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(25) = 1 Then
+        
+           Dim PICCDataBitMap As Variant '127.25.1
+           PICCDataBitMap = Mid(InREQ, intBase + 4, 16)
+           DecodeICCDataBitMap (PICCDataBitMap)
+           intBase = intBase + 20
+           
+           If BITMapINREQIcc(2) = 1 Then
+               'Dim PICCAmtAuth As Variant '127.25.2
+               PICCAmtAuth = Mid(InREQ, intBase, 12)
+               intBase = intBase + 12
+           End If
+           
+           If BITMapINREQIcc(3) = 1 Then
+               'Dim PICCAmtOther As Variant '127.25.3
+               PICCAmtOther = Mid(InREQ, intBase, 12)
+               intBase = intBase + 12
+           End If
+           
+           If BITMapINREQIcc(4) = 1 Then
+               'Dim PICCAppIdentifier As Variant '127.25.4
+               PICCAppIdentifier = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+               intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+           End If
+           
+           If BITMapINREQIcc(5) = 1 Then
+               'Dim PICCAppInterchangeProfile As Variant '127.25.5
+               PICCAppInterchangeProfile = Mid(InREQ, intBase, 4)
+               intBase = intBase + 4
+           End If
+           
+           If BITMapINREQIcc(6) = 1 Then
+               'Dim PICCAppTxnCounter As Variant '127.25.6
+               PICCAppTxnCounter = Mid(InREQ, intBase, 4)
+               intBase = intBase + 4
+           End If
+           
+           If BITMapINREQIcc(7) = 1 Then
+               'Dim PICCAppUsageControl As Variant '127.25.7
+               PICCAppUsageControl = Mid(InREQ, intBase, 4)
+               intBase = intBase + 4
+           End If
+           
+           If BITMapINREQIcc(8) = 1 Then
+               'Dim PICCAuthRespCode As Variant '127.25.8
+               PICCAuthRespCode = Mid(InREQ, intBase, 2)
+               intBase = intBase + 2
+           End If
+           
+           If BITMapINREQIcc(9) = 1 Then
+               'Dim PICCCardAuthRelyInd As Variant '127.25.9
+               PICCCardAuthRelyInd = Mid(InREQ, intBase, 1)
+               intBase = intBase + 1
+           End If
+           
+           If BITMapINREQIcc(10) = 1 Then
+               'Dim PICCCardAuthResCode As Variant '127.25.10
+               PICCCardAuthResCode = Mid(InREQ, intBase, 1)
+               intBase = intBase + 1
+           End If
+           
+           If BITMapINREQIcc(11) = 1 Then
+               'Dim PICCChipCondCode As Variant '127.25.11
+               PICCChipCondCode = Mid(InREQ, intBase, 1)
+               intBase = intBase + 1
+           End If
+           
+           If BITMapINREQIcc(12) = 1 Then
+               'Dim PICCCryptogram As Variant '127.25.12
+               PICCCryptogram = Mid(InREQ, intBase, 16)
+               intBase = intBase + 16
+           End If
+           
+           If BITMapINREQIcc(13) = 1 Then
+               'Dim PICCCryptoInfoData As Variant '127.25.13
+               PICCCryptoInfoData = Mid(InREQ, intBase, 2)
+               intBase = intBase + 2
+           End If
+           
+           If BITMapINREQIcc(14) = 1 Then
+               'Dim PICCCVMList As Variant '127.25.14
+               PICCCVMList = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+               intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+           End If
+           
+           If BITMapINREQIcc(15) = 1 Then
+               'Dim PICCCVMResults As Variant '127.25.15
+               PICCCVMResults = Mid(InREQ, intBase, 6)
+               intBase = intBase + 6
+           End If
+           
+           If BITMapINREQIcc(16) = 1 Then
+               'Dim PICCInterfaceDevSerialNum As Variant '127.25.16
+               PICCInterfaceDevSerialNum = Mid(InREQ, intBase, 8)
+               intBase = intBase + 8
+           End If
+           
+           If BITMapINREQIcc(17) = 1 Then
+               'Dim PICCIssuerActionCode As Variant '127.25.17
+               PICCIssuerActionCode = Mid(InREQ, intBase, 11)
+               intBase = intBase + 11
+           End If
+           
+           If BITMapINREQIcc(18) = 1 Then
+               'Dim PICCIssuerAppData As Variant '127.25.18
+               PICCIssuerAppData = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+               intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+           End If
+           
+           If BITMapINREQIcc(19) = 1 Then
+               'Dim PICCIssuerScriptRes As Variant '127.25.19
+               PICCIssuerScriptRes = Mid(InREQ, intBase + 3, Val(Mid(InREQ, intBase, 3)))
+               intBase = intBase + 3 + Val(Mid(InREQ, intBase, 3))
+           End If
+           
+           If BITMapINREQIcc(20) = 1 Then
+               'Dim PICCTermAppVerNum As Variant '127.25.20
+               PICCTermAppVerNum = Mid(InREQ, intBase, 4)
+               intBase = intBase + 4
+           End If
+           
+           If BITMapINREQIcc(21) = 1 Then
+               'Dim PICCTermCapabilities As Variant '127.25.21
+               PICCTermCapabilities = Mid(InREQ, intBase, 6)
+               intBase = intBase + 6
+           End If
+           
+           If BITMapINREQIcc(22) = 1 Then
+               'Dim PICCTermCountryCode As Variant '127.25.22
+               PICCTermCountryCode = Mid(InREQ, intBase, 3)
+               intBase = intBase + 3
+           End If
+           
+           If BITMapINREQIcc(23) = 1 Then
+               'Dim PICCTermType As Variant '127.25.23
+               PICCTermType = Mid(InREQ, intBase, 2)
+               intBase = intBase + 2
+           End If
+           
+           If BITMapINREQIcc(24) = 1 Then
+               'Dim PICCTermVeriRes As Variant '127.25.24
+               PICCTermVeriRes = Mid(InREQ, intBase, 10)
+               intBase = intBase + 10
+           End If
+           
+           If BITMapINREQIcc(25) = 1 Then
+               'Dim PICCTxnCateCode As Variant '127.25.25
+               PICCTxnCateCode = Mid(InREQ, intBase, 1)
+               intBase = intBase + 1
+           End If
+           
+           If BITMapINREQIcc(26) = 1 Then
+               'Dim PICCTxnCurrencyCode As Variant '127.25.26
+               PICCTxnCurrencyCode = Mid(InREQ, intBase, 3)
+               intBase = intBase + 3
+           End If
+           
+           If BITMapINREQIcc(27) = 1 Then
+               'Dim PICCTxnDate As Variant '127.25.27
+               PICCTxnDate = Mid(InREQ, intBase, 6)
+               intBase = intBase + 6
+           End If
+           
+           If BITMapINREQIcc(28) = 1 Then
+               'Dim PICCTxnSeqCode As Variant '127.25.28
+               PICCTxnSeqCode = Mid(InREQ, intBase + 1, Val(Mid(InREQ, intBase, 1)))
+               intBase = intBase + 1 + Val(Mid(InREQ, intBase, 1))
+           End If
+           
+           If BITMapINREQIcc(29) = 1 Then
+               'Dim PICCTxnType As Variant '127.25.29
+               PICCTxnType = Mid(InREQ, intBase, 2)
+               intBase = intBase + 2
+           End If
+           
+           If BITMapINREQIcc(30) = 1 Then
+               'Dim PICCUnpredictableNum As Variant '127.25.30
+               PICCUnpredictableNum = Mid(InREQ, intBase, 8)
+               intBase = intBase + 8
+           End If
+           
+           If BITMapINREQIcc(31) = 1 Then
+               'Dim PICCIssuerAuthData As Variant '127.25.31
+               PICCIssuerAuthData = Mid(InREQ, intBase, 32)
+               intBase = intBase + 32
+           End If
+           
+           If BITMapINREQIcc(32) = 1 Then
+               'Dim PICCIssuerScriptTemplateOne As Variant '127.25.32
+               PICCIssuerScriptTemplateOne = Mid(InREQ, intBase + 4, Val(Mid(InREQ, intBase, 4)))
+               intBase = intBase + 4 + Val(Mid(InREQ, intBase, 4))
+           End If
+           
+           If BITMapINREQIcc(33) = 1 Then
+               'Dim PICCIssuerScriptTemplateTwo As Variant '127.25.33
+               PICCIssuerScriptTemplateTwo = Mid(InREQ, intBase + 4, Val(Mid(InREQ, intBase, 4)))
+               intBase = intBase + 4 + Val(Mid(InREQ, intBase, 4))
+           End If
+        End If
+        
+        'continue with fields 26 to 39
+        If BITMapINREQPrivate(26) = 1 Then
+            'Dim POriginal Node As Variant '127.26
+            POriginalNode = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(27) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PCardVerificationResult = Mid(InREQ, intBase, 1)
+            intBase = intBase + 1
+        End If
+        
+        If BITMapINREQPrivate(28) = 1 Then
+            'Dim POriginal Node As Variant '127.26
+            PAmericanExpressCID = Mid(InREQ, intBase, 4)
+            intBase = intBase + 4
+        End If
+        
+        If BITMapINREQPrivate(29) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            P3DSecureData = Mid(InREQ, intBase, 40)
+            intBase = intBase + 40
+        End If
+        
+        If BITMapINREQPrivate(30) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            P3DSecureResult = Mid(InREQ, intBase, 1)
+            intBase = intBase + 1
+        End If
+        
+        If BITMapINREQPrivate(31) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PIssuerNetID = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(32) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PUCAFData = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(33) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PExtendedTransactionType = Mid(InREQ, intBase, 4)
+            intBase = intBase + 4
+        End If
+        
+        If BITMapINREQPrivate(34) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PAccountTypeQualifier = Mid(InREQ, intBase, 2)
+            intBase = intBase + 2
+        End If
+        
+        If BITMapINREQPrivate(35) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            PAcquirerNetID = Mid(InREQ, intBase + 2, Val(Mid(InREQ, intBase, 2)))
+            intBase = intBase + 2 + Val(Mid(InREQ, intBase, 2))
+        End If
+        
+        If BITMapINREQPrivate(39) = 1 Then
+            'Dim PPayerAccount As Variant '127.24
+            POriginalRespCode = Mid(InREQ, intBase, 2)
+            intBase = intBase + 2
+        End If
+     End If 'field 127
+     
+     If BITMapINREQ(128) = 1 Then
+        'Dim PPayerAccount As Variant '127.24
+        POriginalRespCode = Mid(InREQ, intBase, 8)
+        intBase = intBase + 8
+     End If
+End Sub
+
+Public Function CREATERespISO8538() As String
+
+ Dim REQRESP As String
+     REQRESP = ""
+     
+     'messagetype id
+     Dim msgtypeid  As String
+     If Mid(MessageTypeID, 4, 1) = "0" Then
+        msgtypeid = Mid(MessageTypeID, 1, 2) & _
+        CStr(Val(Mid(MessageTypeID, 3, 2)) + 10)
+     Else
+        msgtypeid = Mid(MessageTypeID, 1, 2) & _
+        CStr(Val(Mid(MessageTypeID, 3, 2)) + 9)
+     End If
+     REQRESP = msgtypeid
+     
+     Dim MainBitmap As String
+     MainBitmap = CnvSTDBitMap
+          
+     REQRESP = REQRESP & MainBitmap
+     
+     If BITMAPOneArray(2) = 1 Then REQRESP = REQRESP & _
+     Format(Len(Pan), "00") & Pan
+     
+     If BITMAPOneArray(3) = 1 Then REQRESP = REQRESP & ProcessingCODE
+      
+     If BITMAPOneArray(4) = 1 Then REQRESP = REQRESP & AmtTransaction
+     
+     If BITMAPOneArray(5) = 1 Then REQRESP = REQRESP & AmtSettlement
+     
+     If BITMAPOneArray(7) = 1 Then REQRESP = REQRESP & DatetimeTransmission
+        
+     If BITMAPOneArray(9) = 1 Then REQRESP = REQRESP & ConvRateSettle
+     
+     If BITMAPOneArray(11) = 1 Then REQRESP = REQRESP & SysTraceAuditNum
+      
+     If BITMAPOneArray(12) = 1 Then REQRESP = REQRESP & TimeLocTxn
+     
+     If BITMAPOneArray(13) = 1 Then REQRESP = REQRESP & DateLocTxn
+             
+     If BITMAPOneArray(14) = 1 Then REQRESP = REQRESP & DateExpiry
+     
+     If BITMAPOneArray(15) = 1 Then REQRESP = REQRESP & DateSettle
+     
+     If BITMAPOneArray(16) = 1 Then REQRESP = REQRESP & DateConversion
+        
+     If BITMAPOneArray(18) = 1 Then REQRESP = REQRESP & MerchantType
+     
+     If BITMAPOneArray(22) = 1 Then REQRESP = REQRESP & POSEntryMode
+        
+     If BITMAPOneArray(23) = 1 Then REQRESP = REQRESP & CardSeqNum
+        
+     If BITMAPOneArray(25) = 1 Then REQRESP = REQRESP & POSConditionCode
+             
+     If BITMAPOneArray(26) = 1 Then REQRESP = REQRESP & POSPinCaptureCode
+       
+     If BITMAPOneArray(27) = 1 Then REQRESP = REQRESP & AuthIDRespLength
+       
+     If BITMAPOneArray(28) = 1 Then REQRESP = REQRESP & AmtTxnFee
+     
+     If BITMAPOneArray(29) = 1 Then REQRESP = REQRESP & AmtSettleFee
+       
+     If BITMAPOneArray(30) = 1 Then REQRESP = REQRESP & AmtTxnProcessingFee
+     
+     If BITMAPOneArray(31) = 1 Then REQRESP = REQRESP & AmtSettleProcessingFee
+     
+     If BITMAPOneArray(32) = 1 Then REQRESP = REQRESP & _
+     Format(Len(AcquiringInstIdCode), "00") & AcquiringInstIdCode
+     
+     If BITMAPOneArray(33) = 1 Then REQRESP = REQRESP & _
+     Format(Len(ForwardingInstIdCode), "00") & ForwardingInstIdCode
+    
+     If BITMAPOneArray(35) = 1 Then REQRESP = REQRESP & _
+     Format(Len(Track2Data), "00") & Track2Data
+             
+     If BITMAPOneArray(37) = 1 Then REQRESP = REQRESP & RetrievalRefNum
+     
+     If BITMAPOneArray(38) = 1 Then REQRESP = REQRESP & AuthIdResp
+     
+     If BITMAPOneArray(39) = 1 Then REQRESP = REQRESP & RespCode
+     
+     If BITMAPOneArray(40) = 1 Then REQRESP = REQRESP & ServiceRestrictionCode
+     
+     If BITMAPOneArray(41) = 1 Then REQRESP = REQRESP & CardAcceptorTermId
+     
+     If BITMAPOneArray(42) = 1 Then REQRESP = REQRESP & CardAcceptorIdCode
+     
+     If BITMAPOneArray(43) = 1 Then REQRESP = REQRESP & CardAcceptorNameLoc
+     
+     If BITMAPOneArray(44) = 1 Then REQRESP = REQRESP & _
+     Format(Len(AdditionalRespData), "00") & AdditionalRespData
+     
+     If BITMAPOneArray(48) = 1 Then REQRESP = REQRESP & _
+        Format(Len(AdditionalData), "000") & AdditionalData
+        
+     If BITMAPOneArray(49) = 1 Then REQRESP = REQRESP & CurrencyCodeTxn
+        
+     If BITMAPOneArray(50) = 1 Then REQRESP = REQRESP & CurrencyCodeSettle
+     
+     If BITMAPOneArray(52) = 1 Then REQRESP = REQRESP & PinData
+     
+     If BITMAPOneArray(53) = 1 Then REQRESP = REQRESP & SecurityRelatedInfo
+     
+     If BITMAPOneArray(54) = 1 Then REQRESP = REQRESP & _
+     Format(Len(AdditionalAmts), "000") & AdditionalAmts
+     
+     If BITMAPOneArray(56) = 1 Then REQRESP = REQRESP & _
+     Format(Len(MsgReasonCode), "000") & MsgReasonCode
+     
+     If BITMAPOneArray(57) = 1 Then REQRESP = REQRESP & AuthLifeCycleCode
+     
+     If BITMAPOneArray(58) = 1 Then REQRESP = REQRESP & _
+     Format(Len(AuthAgentIdCode), "00") & AuthAgentIdCode
+     
+     If BITMAPOneArray(59) = 1 Then REQRESP = REQRESP & _
+     Format(Len(EchoData), "000") & EchoData
+     
+     If BITMAPTwoArray(66) = 1 Then REQRESP = REQRESP & SettleCode
+     
+     If BITMAPTwoArray(67) = 1 Then REQRESP = REQRESP & ExtendedPayCode
+     
+     If BITMAPTwoArray(70) = 1 Then REQRESP = REQRESP & NetMangtInfoCode
+     
+     If BITMAPTwoArray(73) = 1 Then REQRESP = REQRESP & DateAction
+     
+     If BITMAPTwoArray(74) = 1 Then REQRESP = REQRESP & CreditNumber
+     
+     If BITMAPTwoArray(75) = 1 Then REQRESP = REQRESP & CreditRevNumber
+     
+     If BITMAPTwoArray(76) = 1 Then REQRESP = REQRESP & DebitNumber
+     
+     If BITMAPTwoArray(77) = 1 Then REQRESP = REQRESP & DebitRevNumber
+     
+     If BITMAPTwoArray(78) = 1 Then REQRESP = REQRESP & TransferNumber
+     
+     If BITMAPTwoArray(79) = 1 Then REQRESP = REQRESP & TransferRevNumber
+     
+     If BITMAPTwoArray(80) = 1 Then REQRESP = REQRESP & InquiryNumber
+     
+     If BITMAPTwoArray(81) = 1 Then REQRESP = REQRESP & AuthNumber
+     
+     If BITMAPTwoArray(82) = 1 Then REQRESP = REQRESP & CreditsProcFeeAmt
+     
+     If BITMAPTwoArray(83) = 1 Then REQRESP = REQRESP & CreditsTxnFeeAmt
+     
+     If BITMAPTwoArray(84) = 1 Then REQRESP = REQRESP & DebitsProcFeeAmt
+     
+     If BITMAPTwoArray(85) = 1 Then REQRESP = REQRESP & DebitsTxnFeeAmt
+     
+     If BITMAPTwoArray(86) = 1 Then REQRESP = REQRESP & CreditAmt
+     
+     If BITMAPTwoArray(87) = 1 Then REQRESP = REQRESP & CreditRevAmt
+     
+     If BITMAPTwoArray(88) = 1 Then REQRESP = REQRESP & DebitAmt
+     
+     If BITMAPTwoArray(89) = 1 Then REQRESP = REQRESP & DebitRevAmt
+     
+     If BITMAPTwoArray(90) = 1 Then REQRESP = REQRESP & OriginalDataElements
+     
+     If BITMAPTwoArray(91) = 1 Then REQRESP = REQRESP & FileUpdateCode
+     
+     If BITMAPTwoArray(95) = 1 Then REQRESP = REQRESP & ReplacementAmts
+     
+     If BITMAPTwoArray(97) = 1 Then REQRESP = REQRESP & AmtNetSettle
+     
+     If BITMAPTwoArray(98) = 1 Then REQRESP = REQRESP & Payee
+     
+     If BITMAPTwoArray(100) = 1 Then REQRESP = REQRESP & _
+     Format(Len(ReceivingInstIdCode), "00") & ReceivingInstIdCode
+     
+     If BITMAPTwoArray(101) = 1 Then REQRESP = REQRESP & _
+     Format(Len(FileName), "00") & FileName
+     
+     If BITMAPTwoArray(102) = 1 Then REQRESP = REQRESP & _
+     Format(Len(AccIdOne), "00") & AccIdOne
+     
+     If BITMAPTwoArray(103) = 1 Then REQRESP = REQRESP & _
+     Format(Len(AccIdTwo), "00") & AccIdTwo
+     
+     If BITMAPTwoArray(118) = 1 Then REQRESP = REQRESP & PaymentNumber
+     
+     If BITMAPTwoArray(119) = 1 Then REQRESP = REQRESP & PaymentRevNumber
+     
+     If BITMAPTwoArray(123) = 1 Then REQRESP = REQRESP & _
+     Format(Len(POSDataCode), "000") & POSDataCode
+     
+     If BITMAPTwoArray(125) = 1 Then REQRESP = REQRESP & _
+     Format(Len(NetMangtInfo), "") & NetMangtInfo
+     
+     'check if Postilion private data elements present
+     If BITMAPTwoArray(127) = 1 Then
+        
+        'create bitmap for the private data elements
+        'required as part of the data in Chr form
+        Dim PrivateMSg As String
+        Dim PrivateBitMap As String
+        
+        PrivateMSg = ""
+        
+        PrivateBitMap = ConvertBitMapPrivate
+        PrivateMSg = PrivateBitMap & PrivateMSg
+        
+        'add rest of the private data elements
+        If BITMAPPrivateArray(2) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PSwitchKey), "00") & PSwitchKey
+        
+        If BITMAPPrivateArray(3) = 1 Then PrivateMSg = PrivateMSg & PRoutingInfo
+       
+        If BITMAPPrivateArray(4) = 1 Then PrivateMSg = PrivateMSg & PPOSData
+        
+        If BITMAPPrivateArray(5) = 1 Then PrivateMSg = PrivateMSg & PServiceStationData
+        
+        If BITMAPPrivateArray(6) = 1 Then PrivateMSg = PrivateMSg & PAuthProfile
+        
+        If BITMAPPrivateArray(7) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PCheckData), "00") & PCheckData
+        
+        If BITMAPPrivateArray(8) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PRetentionData), "000") & PRetentionData
+        
+        If BITMAPPrivateArray(9) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PAdditionalNodeData), "000") & PAdditionalNodeData
+        
+        If BITMAPPrivateArray(10) = 1 Then PrivateMSg = PrivateMSg & PCVV2
+        
+        If BITMAPPrivateArray(11) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(POriginalKey), "00") & POriginalKey
+        
+        If BITMAPPrivateArray(12) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PTerminalOwner), "00") & PTerminalOwner
+        
+        If BITMAPPrivateArray(13) = 1 Then PrivateMSg = PrivateMSg & PPOSGeogData
+        
+        If BITMAPPrivateArray(14) = 1 Then PrivateMSg = PrivateMSg & PSponsorBank
+        
+        If BITMAPPrivateArray(15) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PAddressVeriData), "00") & PAddressVeriData
+        
+        If BITMAPPrivateArray(16) = 1 Then PrivateMSg = PrivateMSg & PAddressVeriResult
+        
+        If BITMAPPrivateArray(17) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PCardHolderInfo), "00") & PCardHolderInfo
+        
+        If BITMAPPrivateArray(18) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PValidationData), "00") & PValidationData
+        
+        If BITMAPPrivateArray(19) = 1 Then PrivateMSg = PrivateMSg & PBankDetails
+        
+        If BITMAPPrivateArray(20) = 1 Then PrivateMSg = PrivateMSg & PAuthDateSettle
+        
+        If BITMAPPrivateArray(21) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PRecordID), "00") & PRecordID
+        
+        If BITMAPPrivateArray(22) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PStructuredData), "00000") & PStructuredData
+        
+        If BITMAPPrivateArray(23) = 1 Then PrivateMSg = PrivateMSg & PPayeeNameAddress
+        
+        If BITMAPPrivateArray(24) = 1 Then PrivateMSg = PrivateMSg & _
+        Format(Len(PPayerAccount), "00") & PPayerAccount
+        
+        'check if ICC data present
+        'if present, use bitmap to create message
+        If BITMAPPrivateArray(25) = 1 Then
+            
+            'create bitmap which must be in HEX
+            'required in the first field of ICC Data
+            Dim ICCMessage As String
+            Dim ICCBitmap As String
+            ICCBitmap = ConvertBitmapICC
+            
+            ICCMessage = ""
+            ICCMessage = ICCBitmap & ICCMessage
+            
+            'add rest of the ICC data elements based
+            'on the presence or absence indicator
+            If BITMapINREQIcc(2) = 1 Then ICCMessage = ICCMessage & PICCAmtAuth
+            
+            If BITMapINREQIcc(3) = 1 Then ICCMessage = ICCMessage & PICCAmtOther
+            
+            If BITMapINREQIcc(4) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCAppIdentifier), "00") & PICCAppIdentifier
+            
+            If BITMapINREQIcc(5) = 1 Then ICCMessage = ICCMessage & PICCAppInterchangeProfile
+            
+            If BITMapINREQIcc(6) = 1 Then ICCMessage = ICCMessage & PICCAppTxnCounter
+            
+            If BITMapINREQIcc(7) = 1 Then ICCMessage = ICCMessage & PICCAppUsageControl
+            
+            If BITMapINREQIcc(8) = 1 Then ICCMessage = ICCMessage & PICCAuthRespCode
+            
+            If BITMapINREQIcc(9) = 1 Then ICCMessage = ICCMessage & PICCCardAuthRelyInd
+            
+            If BITMapINREQIcc(10) = 1 Then ICCMessage = ICCMessage & PICCCardAuthResCode
+            
+            If BITMapINREQIcc(11) = 1 Then ICCMessage = ICCMessage & PICCChipCondCode
+            
+            If BITMapINREQIcc(12) = 1 Then ICCMessage = ICCMessage & PICCCryptogram
+            
+            If BITMapINREQIcc(13) = 1 Then ICCMessage = ICCMessage & PICCCryptoInfoData
+            
+            If BITMapINREQIcc(14) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCCVMList), "000") & PICCCVMList
+            
+            If BITMapINREQIcc(15) = 1 Then ICCMessage = ICCMessage & PICCCVMResults
+            
+            If BITMapINREQIcc(16) = 1 Then ICCMessage = ICCMessage & PICCInterfaceDevSerialNum
+            
+            If BITMapINREQIcc(17) = 1 Then ICCMessage = ICCMessage & PICCIssuerActionCode
+            
+            If BITMapINREQIcc(18) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCIssuerAppData), "00") & PICCIssuerAppData
+        
+            If BITMapINREQIcc(19) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCIssuerScriptRes), "000") & PICCIssuerScriptRes
+            
+            If BITMapINREQIcc(20) = 1 Then ICCMessage = ICCMessage & PICCTermAppVerNum
+            
+            If BITMapINREQIcc(21) = 1 Then ICCMessage = ICCMessage & PICCTermCapabilities
+            
+            If BITMapINREQIcc(22) = 1 Then ICCMessage = ICCMessage & PICCTermCountryCode
+            
+            If BITMapINREQIcc(23) = 1 Then ICCMessage = ICCMessage & PICCTermType
+            
+            If BITMapINREQIcc(24) = 1 Then ICCMessage = ICCMessage & PICCTermVeriRes
+            
+            If BITMapINREQIcc(25) = 1 Then ICCMessage = ICCMessage & PICCTxnCateCode
+            
+            If BITMapINREQIcc(26) = 1 Then ICCMessage = ICCMessage & PICCTxnCurrencyCode
+            
+            If BITMapINREQIcc(27) = 1 Then ICCMessage = ICCMessage & PICCTxnDate
+            
+            If BITMapINREQIcc(28) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCTxnSeqCode), "0") & PICCTxnSeqCode
+            
+            If BITMapINREQIcc(29) = 1 Then ICCMessage = ICCMessage & PICCTxnType
+            
+            If BITMapINREQIcc(30) = 1 Then ICCMessage = ICCMessage & PICCUnpredictableNum
+            
+            If BITMapINREQIcc(31) = 1 Then ICCMessage = ICCMessage & PICCIssuerAuthData
+            
+            If BITMapINREQIcc(32) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCIssuerScriptTemplateOne), "0000") & PICCIssuerScriptTemplateOne
+            
+            If BITMapINREQIcc(33) = 1 Then ICCMessage = ICCMessage & _
+            Format(Len(PICCIssuerScriptTemplateTwo), "0000") & PICCIssuerScriptTemplateTwo
+            
+            'prepend message length
+            ICCMessage = Format(Len(ICCMessage), "0000") & ICCMessage
+            
+            'prepend private message
+            PrivateMSg = PrivateMSg & ICCMessage
+         End If
+         
+       If BITMAPPrivateArray(26) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(POriginalNode), "00") & POriginalNode
+       
+       If BITMAPPrivateArray(27) = 1 Then PrivateMSg = PrivateMSg & PCardVerificationResult
+       
+       If BITMAPPrivateArray(28) = 1 Then PrivateMSg = PrivateMSg & PAmericanExpressCID
+       
+       If BITMAPPrivateArray(29) = 1 Then PrivateMSg = PrivateMSg & P3DSecureData
+       
+       If BITMAPPrivateArray(30) = 1 Then PrivateMSg = PrivateMSg & P3DSecureResult
+       
+       If BITMAPPrivateArray(31) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(PIssuerNetID), "00") & PIssuerNetID
+    
+       If BITMAPPrivateArray(32) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(PUCAFData), "00") & PUCAFData
+       
+       If BITMAPPrivateArray(33) = 1 Then PrivateMSg = PrivateMSg & PExtendedTransactionType
+       
+       If BITMAPPrivateArray(34) = 1 Then PrivateMSg = PrivateMSg & PAccountTypeQualifier
+       
+       If BITMAPPrivateArray(35) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(PAcquirerNetID), "00") & PAcquirerNetID
+       
+       If BITMAPPrivateArray(39) = 1 Then PrivateMSg = PrivateMSg & POriginalRespCode
+       
+         'prepend private message with message length
+         PrivateMSg = Format(Len(PrivateMSg), "000000") & PrivateMSg
+         
+         'prepend Private with iso message
+         REQRESP = REQRESP & PrivateMSg
+     End If
+    'create 2 byte header Requirement for all tcpip
+    'messages for postilion's postbridge
+    
+    Dim Byte2Hdr As String
+    Byte2Hdr = Encode2ByteHeader(REQRESP)
+    
+    'add to the beginning of the response string
+    REQRESP = Byte2Hdr & REQRESP
+   
+   CREATERespISO8538 = REQRESP
+End Function
+
+Public Function CREATEMsgISO8538() As String
+
+    Dim REQRESP As String
+    REQRESP = ""
+    
+    'messagetype id
+    REQRESP = MessageTypeID
+    
+    Dim MainBitmap As String
+    MainBitmap = CnvSTDBitMap
+        
+    REQRESP = REQRESP & MainBitmap
+    
+    If BITMAPOneArray(2) = 1 Then REQRESP = REQRESP & _
+    Format(Len(Pan), "00") & Pan
+    
+    If BITMAPOneArray(3) = 1 Then REQRESP = REQRESP & ProcessingCODE
+    
+    If BITMAPOneArray(4) = 1 Then REQRESP = REQRESP & AmtTransaction
+    
+    If BITMAPOneArray(5) = 1 Then REQRESP = REQRESP & AmtSettlement
+    
+    If BITMAPOneArray(7) = 1 Then REQRESP = REQRESP & DatetimeTransmission
+      
+    If BITMAPOneArray(9) = 1 Then REQRESP = REQRESP & ConvRateSettle
+    
+    If BITMAPOneArray(11) = 1 Then REQRESP = REQRESP & SysTraceAuditNum
+    
+    If BITMAPOneArray(12) = 1 Then REQRESP = REQRESP & TimeLocTxn
+    
+    If BITMAPOneArray(13) = 1 Then REQRESP = REQRESP & DateLocTxn
+           
+    If BITMAPOneArray(14) = 1 Then REQRESP = REQRESP & DateExpiry
+    
+    If BITMAPOneArray(15) = 1 Then REQRESP = REQRESP & DateSettle
+    
+    If BITMAPOneArray(16) = 1 Then REQRESP = REQRESP & DateConversion
+      
+    If BITMAPOneArray(18) = 1 Then REQRESP = REQRESP & MerchantType
+    
+    If BITMAPOneArray(22) = 1 Then REQRESP = REQRESP & POSEntryMode
+      
+    If BITMAPOneArray(23) = 1 Then REQRESP = REQRESP & CardSeqNum
+      
+    If BITMAPOneArray(25) = 1 Then REQRESP = REQRESP & POSConditionCode
+           
+    If BITMAPOneArray(26) = 1 Then REQRESP = REQRESP & POSPinCaptureCode
+     
+    If BITMAPOneArray(27) = 1 Then REQRESP = REQRESP & AuthIDRespLength
+     
+    If BITMAPOneArray(28) = 1 Then REQRESP = REQRESP & AmtTxnFee
+    
+    If BITMAPOneArray(29) = 1 Then REQRESP = REQRESP & AmtSettleFee
+     
+    If BITMAPOneArray(30) = 1 Then REQRESP = REQRESP & AmtTxnProcessingFee
+    
+    If BITMAPOneArray(31) = 1 Then REQRESP = REQRESP & AmtSettleProcessingFee
+    
+    If BITMAPOneArray(32) = 1 Then REQRESP = REQRESP & _
+    Format(Len(AcquiringInstIdCode), "00") & AcquiringInstIdCode
+    
+    If BITMAPOneArray(33) = 1 Then REQRESP = REQRESP & _
+    Format(Len(ForwardingInstIdCode), "00") & ForwardingInstIdCode
+    
+    If BITMAPOneArray(35) = 1 Then REQRESP = REQRESP & _
+    Format(Len(Track2Data), "00") & Track2Data
+           
+    If BITMAPOneArray(37) = 1 Then REQRESP = REQRESP & RetrievalRefNum
+    
+    If BITMAPOneArray(38) = 1 Then REQRESP = REQRESP & AuthIdResp
+    
+    If BITMAPOneArray(39) = 1 Then REQRESP = REQRESP & RespCode
+    
+    If BITMAPOneArray(40) = 1 Then REQRESP = REQRESP & ServiceRestrictionCode
+    
+    If BITMAPOneArray(41) = 1 Then REQRESP = REQRESP & CardAcceptorTermId
+    
+    If BITMAPOneArray(42) = 1 Then REQRESP = REQRESP & CardAcceptorIdCode
+    
+    If BITMAPOneArray(43) = 1 Then REQRESP = REQRESP & CardAcceptorNameLoc
+    
+    If BITMAPOneArray(44) = 1 Then REQRESP = REQRESP & _
+    Format(Len(AdditionalRespData), "00") & AdditionalRespData
+    
+    If BITMAPOneArray(48) = 1 Then REQRESP = REQRESP & _
+      Format(Len(AdditionalData), "000") & AdditionalData
+      
+    If BITMAPOneArray(49) = 1 Then REQRESP = REQRESP & CurrencyCodeTxn
+      
+    If BITMAPOneArray(50) = 1 Then REQRESP = REQRESP & CurrencyCodeSettle
+    
+    If BITMAPOneArray(52) = 1 Then REQRESP = REQRESP & PinData
+    
+    If BITMAPOneArray(53) = 1 Then REQRESP = REQRESP & SecurityRelatedInfo
+    
+    If BITMAPOneArray(54) = 1 Then REQRESP = REQRESP & _
+    Format(Len(AdditionalAmts), "000") & AdditionalAmts
+    
+    If BITMAPOneArray(56) = 1 Then REQRESP = REQRESP & _
+    Format(Len(MsgReasonCode), "000") & MsgReasonCode
+    
+    If BITMAPOneArray(57) = 1 Then REQRESP = REQRESP & AuthLifeCycleCode
+    
+    If BITMAPOneArray(58) = 1 Then REQRESP = REQRESP & _
+    Format(Len(AuthAgentIdCode), "00") & AuthAgentIdCode
+    
+    If BITMAPOneArray(59) = 1 Then REQRESP = REQRESP & _
+    Format(Len(EchoData), "000") & EchoData
+    
+    If BITMAPTwoArray(66) = 1 Then REQRESP = REQRESP & SettleCode
+    
+    If BITMAPTwoArray(67) = 1 Then REQRESP = REQRESP & ExtendedPayCode
+    
+    If BITMAPTwoArray(70) = 1 Then REQRESP = REQRESP & NetMangtInfoCode
+    
+    If BITMAPTwoArray(73) = 1 Then REQRESP = REQRESP & DateAction
+    
+    If BITMAPTwoArray(74) = 1 Then REQRESP = REQRESP & CreditNumber
+    
+    If BITMAPTwoArray(75) = 1 Then REQRESP = REQRESP & CreditRevNumber
+    
+    If BITMAPTwoArray(76) = 1 Then REQRESP = REQRESP & DebitNumber
+    
+    If BITMAPTwoArray(77) = 1 Then REQRESP = REQRESP & DebitRevNumber
+    
+    If BITMAPTwoArray(78) = 1 Then REQRESP = REQRESP & TransferNumber
+    
+    If BITMAPTwoArray(79) = 1 Then REQRESP = REQRESP & TransferRevNumber
+    
+    If BITMAPTwoArray(80) = 1 Then REQRESP = REQRESP & InquiryNumber
+    
+    If BITMAPTwoArray(81) = 1 Then REQRESP = REQRESP & AuthNumber
+    
+    If BITMAPTwoArray(82) = 1 Then REQRESP = REQRESP & CreditsProcFeeAmt
+    
+    If BITMAPTwoArray(83) = 1 Then REQRESP = REQRESP & CreditsTxnFeeAmt
+    
+    If BITMAPTwoArray(84) = 1 Then REQRESP = REQRESP & DebitsProcFeeAmt
+    
+    If BITMAPTwoArray(85) = 1 Then REQRESP = REQRESP & DebitsTxnFeeAmt
+    
+    If BITMAPTwoArray(86) = 1 Then REQRESP = REQRESP & CreditAmt
+    
+    If BITMAPTwoArray(87) = 1 Then REQRESP = REQRESP & CreditRevAmt
+    
+    If BITMAPTwoArray(88) = 1 Then REQRESP = REQRESP & DebitAmt
+    
+    If BITMAPTwoArray(89) = 1 Then REQRESP = REQRESP & DebitRevAmt
+    
+    If BITMAPTwoArray(90) = 1 Then REQRESP = REQRESP & OriginalDataElements
+    
+    If BITMAPTwoArray(91) = 1 Then REQRESP = REQRESP & FileUpdateCode
+    
+    If BITMAPTwoArray(95) = 1 Then REQRESP = REQRESP & ReplacementAmts
+    
+    If BITMAPTwoArray(97) = 1 Then REQRESP = REQRESP & AmtNetSettle
+    
+    If BITMAPTwoArray(98) = 1 Then REQRESP = REQRESP & Payee
+    
+    If BITMAPTwoArray(100) = 1 Then REQRESP = REQRESP & _
+    Format(Len(ReceivingInstIdCode), "00") & ReceivingInstIdCode
+    
+    If BITMAPTwoArray(101) = 1 Then REQRESP = REQRESP & _
+    Format(Len(FileName), "00") & FileName
+    
+    If BITMAPTwoArray(102) = 1 Then REQRESP = REQRESP & _
+    Format(Len(AccIdOne), "00") & AccIdOne
+    
+    If BITMAPTwoArray(103) = 1 Then REQRESP = REQRESP & _
+    Format(Len(AccIdTwo), "00") & AccIdTwo
+    
+    If BITMAPTwoArray(118) = 1 Then REQRESP = REQRESP & PaymentNumber
+    
+    If BITMAPTwoArray(119) = 1 Then REQRESP = REQRESP & PaymentRevNumber
+    
+    If BITMAPTwoArray(123) = 1 Then REQRESP = REQRESP & _
+    Format(Len(POSDataCode), "000") & POSDataCode
+    
+    If BITMAPTwoArray(125) = 1 Then REQRESP = REQRESP & _
+    Format(Len(NetMangtInfo), "") & NetMangtInfo
+    
+    'check if Postilion private data elements present
+    If BITMAPTwoArray(127) = 1 Then
+      
+      'create bitmap for the private data elements
+      'required as part of the data in Chr form
+      Dim PrivateMSg As String
+      Dim PrivateBitMap As String
+      
+      PrivateMSg = ""
+      
+      PrivateBitMap = ConvertBitMapPrivate
+      PrivateMSg = PrivateBitMap & PrivateMSg
+      
+      'add rest of the private data elements
+      If BITMAPPrivateArray(2) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PSwitchKey), "00") & PSwitchKey
+      
+      If BITMAPPrivateArray(3) = 1 Then PrivateMSg = PrivateMSg & PRoutingInfo
+     
+      If BITMAPPrivateArray(4) = 1 Then PrivateMSg = PrivateMSg & PPOSData
+      
+      If BITMAPPrivateArray(5) = 1 Then PrivateMSg = PrivateMSg & PServiceStationData
+      
+      If BITMAPPrivateArray(6) = 1 Then PrivateMSg = PrivateMSg & PAuthProfile
+      
+      If BITMAPPrivateArray(7) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PCheckData), "00") & PCheckData
+      
+      If BITMAPPrivateArray(8) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PRetentionData), "000") & PRetentionData
+      
+      If BITMAPPrivateArray(9) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PAdditionalNodeData), "000") & PAdditionalNodeData
+      
+      If BITMAPPrivateArray(10) = 1 Then PrivateMSg = PrivateMSg & PCVV2
+      
+      If BITMAPPrivateArray(11) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(POriginalKey), "00") & POriginalKey
+      
+      If BITMAPPrivateArray(12) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PTerminalOwner), "00") & PTerminalOwner
+      
+      If BITMAPPrivateArray(13) = 1 Then PrivateMSg = PrivateMSg & PPOSGeogData
+      
+      If BITMAPPrivateArray(14) = 1 Then PrivateMSg = PrivateMSg & PSponsorBank
+      
+      If BITMAPPrivateArray(15) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PAddressVeriData), "00") & PAddressVeriData
+      
+      If BITMAPPrivateArray(16) = 1 Then PrivateMSg = PrivateMSg & PAddressVeriResult
+      
+      If BITMAPPrivateArray(17) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PCardHolderInfo), "00") & PCardHolderInfo
+      
+      If BITMAPPrivateArray(18) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PValidationData), "00") & PValidationData
+      
+      If BITMAPPrivateArray(19) = 1 Then PrivateMSg = PrivateMSg & PBankDetails
+      
+      If BITMAPPrivateArray(20) = 1 Then PrivateMSg = PrivateMSg & PAuthDateSettle
+      
+      If BITMAPPrivateArray(21) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PRecordID), "00") & PRecordID
+      
+      If BITMAPPrivateArray(22) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PStructuredData), "00000") & PStructuredData
+      
+      If BITMAPPrivateArray(23) = 1 Then PrivateMSg = PrivateMSg & PPayeeNameAddress
+      
+      If BITMAPPrivateArray(24) = 1 Then PrivateMSg = PrivateMSg & _
+      Format(Len(PPayerAccount), "00") & PPayerAccount
+      
+      'check if ICC data present
+      'if present, use bitmap to create message
+      If BITMAPPrivateArray(25) = 1 Then
+          
+          'create bitmap which must be in HEX
+          'required in the first field of ICC Data
+          Dim ICCMessage As String
+          Dim ICCBitmap As String
+          ICCBitmap = ConvertBitmapICC
+          
+          ICCMessage = ""
+          ICCMessage = ICCBitmap & ICCMessage
+          
+          'add rest of the ICC data elements based
+          'on the presence or absence indicator
+          If BITMapINREQIcc(2) = 1 Then ICCMessage = ICCMessage & PICCAmtAuth
+          
+          If BITMapINREQIcc(3) = 1 Then ICCMessage = ICCMessage & PICCAmtOther
+          
+          If BITMapINREQIcc(4) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCAppIdentifier), "00") & PICCAppIdentifier
+          
+          If BITMapINREQIcc(5) = 1 Then ICCMessage = ICCMessage & PICCAppInterchangeProfile
+          
+          If BITMapINREQIcc(6) = 1 Then ICCMessage = ICCMessage & PICCAppTxnCounter
+          
+          If BITMapINREQIcc(7) = 1 Then ICCMessage = ICCMessage & PICCAppUsageControl
+          
+          If BITMapINREQIcc(8) = 1 Then ICCMessage = ICCMessage & PICCAuthRespCode
+          
+          If BITMapINREQIcc(9) = 1 Then ICCMessage = ICCMessage & PICCCardAuthRelyInd
+          
+          If BITMapINREQIcc(10) = 1 Then ICCMessage = ICCMessage & PICCCardAuthResCode
+          
+          If BITMapINREQIcc(11) = 1 Then ICCMessage = ICCMessage & PICCChipCondCode
+          
+          If BITMapINREQIcc(12) = 1 Then ICCMessage = ICCMessage & PICCCryptogram
+          
+          If BITMapINREQIcc(13) = 1 Then ICCMessage = ICCMessage & PICCCryptoInfoData
+          
+          If BITMapINREQIcc(14) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCCVMList), "000") & PICCCVMList
+          
+          If BITMapINREQIcc(15) = 1 Then ICCMessage = ICCMessage & PICCCVMResults
+          
+          If BITMapINREQIcc(16) = 1 Then ICCMessage = ICCMessage & PICCInterfaceDevSerialNum
+          
+          If BITMapINREQIcc(17) = 1 Then ICCMessage = ICCMessage & PICCIssuerActionCode
+          
+          If BITMapINREQIcc(18) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCIssuerAppData), "00") & PICCIssuerAppData
+      
+          If BITMapINREQIcc(19) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCIssuerScriptRes), "000") & PICCIssuerScriptRes
+          
+          If BITMapINREQIcc(20) = 1 Then ICCMessage = ICCMessage & PICCTermAppVerNum
+          
+          If BITMapINREQIcc(21) = 1 Then ICCMessage = ICCMessage & PICCTermCapabilities
+          
+          If BITMapINREQIcc(22) = 1 Then ICCMessage = ICCMessage & PICCTermCountryCode
+          
+          If BITMapINREQIcc(23) = 1 Then ICCMessage = ICCMessage & PICCTermType
+          
+          If BITMapINREQIcc(24) = 1 Then ICCMessage = ICCMessage & PICCTermVeriRes
+          
+          If BITMapINREQIcc(25) = 1 Then ICCMessage = ICCMessage & PICCTxnCateCode
+          
+          If BITMapINREQIcc(26) = 1 Then ICCMessage = ICCMessage & PICCTxnCurrencyCode
+          
+          If BITMapINREQIcc(27) = 1 Then ICCMessage = ICCMessage & PICCTxnDate
+          
+          If BITMapINREQIcc(28) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCTxnSeqCode), "0") & PICCTxnSeqCode
+          
+          If BITMapINREQIcc(29) = 1 Then ICCMessage = ICCMessage & PICCTxnType
+          
+          If BITMapINREQIcc(30) = 1 Then ICCMessage = ICCMessage & PICCUnpredictableNum
+          
+          If BITMapINREQIcc(31) = 1 Then ICCMessage = ICCMessage & PICCIssuerAuthData
+          
+          If BITMapINREQIcc(32) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCIssuerScriptTemplateOne), "0000") & PICCIssuerScriptTemplateOne
+          
+          If BITMapINREQIcc(33) = 1 Then ICCMessage = ICCMessage & _
+          Format(Len(PICCIssuerScriptTemplateTwo), "0000") & PICCIssuerScriptTemplateTwo
+          
+          'prepend message length
+          ICCMessage = Format(Len(ICCMessage), "0000") & ICCMessage
+          
+          'prepend private message
+          PrivateMSg = PrivateMSg & ICCMessage
+       End If
+       
+       If BITMAPPrivateArray(26) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(POriginalNode), "00") & POriginalNode
+       
+       If BITMAPPrivateArray(27) = 1 Then PrivateMSg = PrivateMSg & PCardVerificationResult
+       
+       If BITMAPPrivateArray(28) = 1 Then PrivateMSg = PrivateMSg & PAmericanExpressCID
+       
+       If BITMAPPrivateArray(29) = 1 Then PrivateMSg = PrivateMSg & P3DSecureData
+       
+       If BITMAPPrivateArray(30) = 1 Then PrivateMSg = PrivateMSg & P3DSecureResult
+       
+       If BITMAPPrivateArray(31) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(PIssuerNetID), "00") & PIssuerNetID
+    
+       If BITMAPPrivateArray(32) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(PUCAFData), "00") & PUCAFData
+       
+       If BITMAPPrivateArray(33) = 1 Then PrivateMSg = PrivateMSg & PExtendedTransactionType
+       
+       If BITMAPPrivateArray(34) = 1 Then PrivateMSg = PrivateMSg & PAccountTypeQualifier
+       
+       If BITMAPPrivateArray(35) = 1 Then PrivateMSg = PrivateMSg & _
+       Format(Len(PAcquirerNetID), "00") & PAcquirerNetID
+       
+       If BITMAPPrivateArray(39) = 1 Then PrivateMSg = PrivateMSg & POriginalRespCode
+       
+       'prepend private message with message length
+       PrivateMSg = Format(Len(PrivateMSg), "000000") & PrivateMSg
+       
+       'prepend Private with iso message
+       REQRESP = REQRESP & PrivateMSg
+    End If
+    
+    If BITMAPTwoArray(128) = 1 Then REQRESP = REQRESP & MacExtended
+    'create 2 byte header Requirement for all tcpip
+    'messages for postilion's postbridge
+    
+    Dim Byte2Hdr As String
+    Byte2Hdr = Encode2ByteHeader(REQRESP)
+    'Byte2Hdr = Format(Len(REQRESP), "0000")
+    'add to the beginning of the response string
+    REQRESP = Byte2Hdr & REQRESP
+    
+    CREATEMsgISO8538 = REQRESP
+End Function
+Private Sub DecodePrivateBitMap(ByVal InReqBitMap As String)
+    Dim i As Integer, j As Integer
+    Dim ByteChar As String
+    Dim ByteValue  As Integer
+    Dim BitChar As String
+    
+    Erase BITMapINREQPrivate()
+    ReDim BITMapINREQPrivate(1 To 64)
+    
+    For i = 0 To 15
+        ByteChar = Mid(InReqBitMap, i + 1, 1)
+        ByteValue = HexToDec(ByteChar)
+        BitChar = ""
+
+        'convert to binary
+        Do While ByteValue > 0
+            BitChar = ByteValue Mod 2 & BitChar
+            ByteValue = GetWhole(CStr(ByteValue / 2))
+        Loop
+        If BitChar = "" Then BitChar = "0"
+        BitChar = Format(BitChar, "0000")
+        For j = 1 To 4
+            BITMapINREQPrivate(i * 4 + j) = Mid(BitChar, j, 1)
+        Next j
+
+    Next i
+    
+'    For i = 0 To 7
+'        ByteChar = Mid(InReqBitMap, i + 1, 1)
+'        ByteValue = Val(Asc(ByteChar))
+'        BitChar = ""
+'
+'        'convert to binary
+'        Do While ByteValue > 0
+'            BitChar = ByteValue Mod 2 & BitChar
+'            ByteValue = GetWhole(CStr(ByteValue / 2))
+'        Loop
+'        If BitChar = "" Then BitChar = "0"
+'        BitChar = Format(BitChar, "00000000")
+'        For j = 1 To 8
+'            BITMapINREQPrivate(i * 8 + j) = Mid(BitChar, j, 1)
+'        Next j
+'
+'    Next i
+End Sub
+
+Private Sub DecodeICCDataBitMap(InReqBitMap As String)
+    Dim i As Integer, j As Integer
+    Dim ByteChar As String
+    
+    Dim ByteValue  As Integer
+    Dim BitChar As String
+    
+    Erase BITMapINREQIcc()
+    ReDim BITMapINREQIcc(1 To 64)
+    
+    For i = 0 To 15
+        ByteChar = Mid(InReqBitMap, i + 1, 1)
+        ByteValue = HexToDec(ByteChar)
+        BitChar = ""
+
+        'convert to binary
+        Do While ByteValue > 0
+            BitChar = ByteValue Mod 2 & BitChar
+            ByteValue = GetWhole(CStr(ByteValue / 2))
+        Loop
+        If BitChar = "" Then BitChar = "0"
+        BitChar = Format(BitChar, "0000")
+        For j = 1 To 4
+            BITMapINREQIcc(i * 4 + j) = Mid(BitChar, j, 1)
+        Next j
+
+    Next i
+'    For i = 0 To 7
+'        ByteChar = Mid(InReqBitMap, i + 1, 1)
+'        ByteValue = Val(Asc(ByteChar))
+'        BitChar = ""
+'
+'        'convert to binary
+'        Do While ByteValue > 0
+'            BitChar = ByteValue Mod 2 & BitChar
+'            ByteValue = GetWhole(CStr(ByteValue / 2))
+'        Loop
+'        If BitChar = "" Then BitChar = "0"
+'        BitChar = Format(BitChar, "00000000")
+'        For j = 1 To 8
+'            BITMapINREQIcc(i * 8 + j) = Mid(BitChar, j, 1)
+'        Next j
+'
+'    Next i
+End Sub
+
+Private Function HexToDec(HexByte As String) As Integer
+    Dim myByte As String
+    
+   On Error GoTo errorHandler
+   
+    myByte = Mid(HexByte, 1, 1)
+    Select Case Asc(myByte)
+    Case Asc("A"): HexToDec = 10
+    Case Asc("B"): HexToDec = 11
+    Case Asc("C"): HexToDec = 12
+    Case Asc("D"): HexToDec = 13
+    Case Asc("E"): HexToDec = 14
+    Case Asc("F"): HexToDec = 15
+    Case Else
+        If Not IsNumeric(HexByte) Then
+        'error
+            HexToDec = 0
+        Else
+            HexToDec = HexByte
+        End If
+    End Select
+errorHandler:
+End Function
+
+Private Sub DecodeBitMap(InREQMessage As String)
+    Dim bitmaplength As Integer
+    
+    'get length of the characterized bitmap
+    'length of whole message minus 2 bytes header
+    'minus 4 bytes for the message type id -
+    'minus length of the data elements
+    'indicates whether or not there is only 1
+    'single byte
+    
+    Erase BITMapINREQ()
+    ReDim BITMapINREQ(1 To 128)
+    
+    Dim i As Integer, j As Integer
+    Dim ByteChar As String
+    Dim ByteValue  As Integer
+    Dim BitChar As String
+    
+    '1st byte
+    
+    For i = 0 To 15
+        ByteChar = Mid(InREQMessage, i + 1, 1)
+        ByteValue = HexToDec(ByteChar)
+        BitChar = ""
+
+'        'convert to binary
+        Do While ByteValue > 0
+            BitChar = ByteValue Mod 2 & BitChar
+            ByteValue = GetWhole(CStr(ByteValue / 2))
+        Loop
+        If BitChar = "" Then BitChar = "0"
+        BitChar = Format(BitChar, "0000")
+        For j = 1 To 4
+            BITMapINREQ(i * 4 + j) = Mid(BitChar, j, 1)
+        Next j
+
+    Next i
+    
+    '2nd byte
+    If BITMapINREQ(1) = 1 Then
+    For i = 16 To 31
+        ByteChar = Mid(InREQMessage, i + 1, 1)
+        ByteValue = HexToDec(ByteChar)
+        BitChar = ""
+
+'        'convert to binary
+        Do While ByteValue > 0
+            BitChar = ByteValue Mod 2 & BitChar
+            ByteValue = GetWhole(CStr(ByteValue / 2))
+        Loop
+        If BitChar = "" Then BitChar = "0"
+        BitChar = Format(BitChar, "0000")
+        For j = 1 To 4
+            BITMapINREQ(i * 4 + j) = Mid(BitChar, j, 1)
+        Next j
+
+    Next i
+    
+    Else
+        For j = 65 To 128
+            BITMapINREQ(j) = 0
+        Next j
+    End If
+    ' -----------------------------------------------
+    'For i = 0 To 7
+    '    ByteChar = Mid(InREQMessage, i + 1, 1)
+    '    ByteValue = Val(Asc(ByteChar))
+    '    BitChar = ""
+        
+        'convert to binary
+    '    Do While ByteValue > 0
+    '        BitChar = ByteValue Mod 2 & BitChar
+    '        ByteValue = GetWhole(CStr(ByteValue / 2))
+    '    Loop
+    '    If BitChar = "" Then BitChar = "0"
+    '    BitChar = Format(BitChar, "00000000")
+    '    For j = 1 To 8
+    '        BITMapINREQ(i * 8 + j) = Mid(BitChar, j, 1)
+    '    Next j
+        
+    'Next i
+    
+    '2nd byte
+    'If BITMapINREQ(1) = 1 Then
+    '    For i = 8 To 15
+    '        ByteChar = Mid(InREQMessage, i + 1, 1)
+    '        ByteValue = Val(Asc(ByteChar))
+    '        BitChar = ""
+            
+            'convert to binary
+    ' '       Do While ByteValue > 0
+    '            BitChar = ByteValue Mod 2 & BitChar
+    '            ByteValue = GetWhole(CStr(ByteValue / 2))
+    '        Loop
+    '        If BitChar = "" Then BitChar = "0"
+    '        BitChar = Format(BitChar, "00000000")
+    '        For j = 1 To 8
+    '            BITMapINREQ(i * 8 + j) = Mid(BitChar, j, 1)
+    '        Next j
+    '    Next i
+    'Else
+    '    For j = 65 To 128
+    '        BITMapINREQ(j) = 0
+    '    Next j
+    'End If
+End Sub
+
+Private Function String2Hex(EvalString As String) As String
+    Dim intStrLen As Integer
+    Dim intLoop As Integer
+    Dim strHex As String
+    Dim temp_val As String
+     
+    EvalString = Trim(EvalString)
+    intStrLen = Len(EvalString)
+    For intLoop = 1 To intStrLen
+       temp_val = Hex(Asc(Mid(EvalString, intLoop, 1)))
+          If Len(temp_val) = 1 Then
+          temp_val = "0" & temp_val
+          ElseIf Len(temp_val) = 0 Then
+          temp_val = "00"
+          End If
+       strHex = strHex & temp_val 'Hex(Asc(Mid(EvalString, intLoop, 1)))
+       temp_val = ""
+    Next
+    String2Hex = strHex
+End Function
+
+Public Function Hex2Ascii(ByVal hextext As String) As String
+Dim Y As Integer
+Dim num As String
+Dim value As String
+For Y = 1 To Len(hextext)
+    num = Mid(hextext, Y, 2)
+    value = value & Chr(Val("&h" & num))
+    Y = Y + 1
+Next Y
+
+Hex2Ascii = value
+
+End Function
+

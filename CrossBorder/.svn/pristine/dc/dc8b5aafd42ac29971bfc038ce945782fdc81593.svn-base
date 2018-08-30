@@ -1,0 +1,2014 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form cust_mast 
+   BorderStyle     =   1  'Fixed Single
+   Caption         =   "Customer Browser"
+   ClientHeight    =   8985
+   ClientLeft      =   45
+   ClientTop       =   330
+   ClientWidth     =   14790
+   KeyPreview      =   -1  'True
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
+   ScaleHeight     =   8985
+   ScaleWidth      =   14790
+   Begin VB.Frame FrameLogin 
+      BackColor       =   &H00008000&
+      Caption         =   "Manager Login"
+      Height          =   2340
+      Left            =   6750
+      TabIndex        =   35
+      Top             =   5625
+      Width           =   6090
+      Begin VB.CommandButton cmdLoginCancel 
+         Caption         =   "Cancel"
+         Height          =   465
+         Left            =   2250
+         TabIndex        =   39
+         Top             =   1725
+         Width           =   1365
+      End
+      Begin VB.CommandButton cmdProceed 
+         Caption         =   "Proceed"
+         Height          =   465
+         Left            =   600
+         TabIndex        =   12
+         Top             =   1725
+         Width           =   1365
+      End
+      Begin VB.TextBox txtPasswd 
+         CausesValidation=   0   'False
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   360
+         IMEMode         =   3  'DISABLE
+         Left            =   1125
+         MaxLength       =   16
+         PasswordChar    =   "*"
+         TabIndex        =   11
+         Top             =   1125
+         Width           =   1815
+      End
+      Begin VB.PictureBox ucLogin 
+         Height          =   315
+         Left            =   1125
+         ScaleHeight     =   255
+         ScaleWidth      =   1755
+         TabIndex        =   10
+         Top             =   450
+         Width           =   1815
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Login Id"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   240
+         Left            =   225
+         TabIndex        =   38
+         Top             =   480
+         Width           =   840
+      End
+      Begin VB.Label lblName 
+         AutoSize        =   -1  'True
+         BackColor       =   &H00FFFFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "KLN Murty"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   240
+         Left            =   1125
+         TabIndex        =   37
+         Top             =   825
+         Width           =   3375
+      End
+      Begin VB.Label Label3 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Password"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   240
+         Left            =   75
+         TabIndex        =   36
+         Top             =   1125
+         Width           =   990
+      End
+   End
+   Begin VB.CommandButton cmdSort 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Status"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   5
+      Left            =   13665
+      Style           =   1  'Graphical
+      TabIndex        =   34
+      TabStop         =   0   'False
+      ToolTipText     =   "Click Here to Sort on Instruction Date"
+      Top             =   15
+      Width           =   750
+   End
+   Begin VB.CommandButton cmdSort 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Province"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   4
+      Left            =   12720
+      Style           =   1  'Graphical
+      TabIndex        =   33
+      TabStop         =   0   'False
+      ToolTipText     =   "Click Here to Sort on Instruction Date"
+      Top             =   0
+      Width           =   930
+   End
+   Begin VB.CommandButton cmdSort 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "City"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   3
+      Left            =   9840
+      Style           =   1  'Graphical
+      TabIndex        =   32
+      TabStop         =   0   'False
+      ToolTipText     =   "Click Here to Sort on Instruction Date"
+      Top             =   0
+      Width           =   2865
+   End
+   Begin VB.CommandButton cmdSort 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Address"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   2
+      Left            =   6555
+      Style           =   1  'Graphical
+      TabIndex        =   31
+      TabStop         =   0   'False
+      ToolTipText     =   "Click Here to Sort on Instruction Date"
+      Top             =   0
+      Width           =   3300
+   End
+   Begin VB.CommandButton cmdFstSel 
+      Caption         =   "Click This Button To View All Customers"
+      Height          =   840
+      Left            =   4905
+      TabIndex        =   29
+      Top             =   3315
+      Width           =   4515
+   End
+   Begin VB.CommandButton cmdSort 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Customer ID"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   0
+      Left            =   30
+      Style           =   1  'Graphical
+      TabIndex        =   28
+      TabStop         =   0   'False
+      ToolTipText     =   "Click Here to Sort on Instruction No."
+      Top             =   0
+      Width           =   1185
+   End
+   Begin VB.CommandButton cmdSort 
+      BackColor       =   &H00C0FFFF&
+      Caption         =   "Customer Name"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   1
+      Left            =   1215
+      Style           =   1  'Graphical
+      TabIndex        =   27
+      TabStop         =   0   'False
+      ToolTipText     =   "Click Here to Sort on Instruction Date"
+      Top             =   0
+      Width           =   5325
+   End
+   Begin VB.VScrollBar ScrollBar 
+      Height          =   7950
+      LargeChange     =   100
+      Left            =   14430
+      Max             =   1000
+      SmallChange     =   10
+      TabIndex        =   26
+      Top             =   30
+      Width           =   255
+   End
+   Begin VB.Frame FrameButton 
+      BackColor       =   &H00FF8080&
+      BorderStyle     =   0  'None
+      Height          =   945
+      Left            =   0
+      TabIndex        =   9
+      Top             =   8010
+      Width           =   14760
+      Begin VB.CommandButton cmdCustID 
+         BackColor       =   &H00FFFFF0&
+         Caption         =   "Customer ID"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   1125
+         Style           =   1  'Graphical
+         TabIndex        =   25
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to Set Filter on Customer ID Or Press <F1>"
+         Top             =   45
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdName 
+         BackColor       =   &H00FFFFF0&
+         Caption         =   "First Name"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   2220
+         Style           =   1  'Graphical
+         TabIndex        =   24
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to Set Filter on First Name Or Press <F2>"
+         Top             =   45
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdAdrs 
+         BackColor       =   &H00FFFFF0&
+         Caption         =   "Address"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   3330
+         Style           =   1  'Graphical
+         TabIndex        =   23
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to Set Filter on  Address Or Press <F3>"
+         Top             =   45
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdProv 
+         BackColor       =   &H00FFFFF0&
+         Caption         =   "Province"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   5535
+         Style           =   1  'Graphical
+         TabIndex        =   22
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to Set Filter on Province Or Press <F5>"
+         Top             =   45
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdStatus 
+         BackColor       =   &H00FFFFF0&
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   6630
+         Style           =   1  'Graphical
+         TabIndex        =   21
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to set Filter on Status Or Press <F6>"
+         Top             =   45
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdCity 
+         BackColor       =   &H00FFFFF0&
+         Caption         =   "City"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   4425
+         Style           =   1  'Graphical
+         TabIndex        =   20
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to Set Filter on City. Or Press <F4>"
+         Top             =   45
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdAdd 
+         BackColor       =   &H00C0FFC0&
+         Caption         =   "Add"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   9225
+         Style           =   1  'Graphical
+         TabIndex        =   19
+         TabStop         =   0   'False
+         ToolTipText     =   "Click Here to Add New Instruction or Press <Insert>"
+         Top             =   45
+         Width           =   1110
+      End
+      Begin VB.CommandButton cmdDelete 
+         BackColor       =   &H00C0C0FF&
+         Caption         =   "Close"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   11490
+         Style           =   1  'Graphical
+         TabIndex        =   18
+         TabStop         =   0   'False
+         ToolTipText     =   "Click Here to Cancel Instruction or Press <Delete>"
+         Top             =   45
+         Width           =   1155
+      End
+      Begin VB.CommandButton cmdAlter 
+         BackColor       =   &H00C0FFFF&
+         Caption         =   "Edit"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   10335
+         Style           =   1  'Graphical
+         TabIndex        =   17
+         TabStop         =   0   'False
+         ToolTipText     =   "Click Here to Amend Instruction or Press <Enter>"
+         Top             =   45
+         Width           =   1155
+      End
+      Begin VB.CommandButton cmdExit 
+         BackColor       =   &H00C0C0FF&
+         Caption         =   "Exit"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   13680
+         Style           =   1  'Graphical
+         TabIndex        =   16
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to close or Press<Esc>"
+         Top             =   45
+         Width           =   1080
+      End
+      Begin VB.CommandButton cmdList 
+         BackColor       =   &H00C0E0FF&
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Times New Roman"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   12645
+         Style           =   1  'Graphical
+         TabIndex        =   15
+         TabStop         =   0   'False
+         ToolTipText     =   "Click Here for Listing Or Press<F10>"
+         Top             =   45
+         Width           =   1020
+      End
+      Begin VB.CommandButton cmdZap 
+         BackColor       =   &H00DEDEEF&
+         Caption         =   "ZAP All Filters"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   7740
+         Style           =   1  'Graphical
+         TabIndex        =   14
+         TabStop         =   0   'False
+         ToolTipText     =   "Click here to Remove All Filters or Press <F9>"
+         Top             =   45
+         Width           =   1485
+      End
+      Begin VB.CommandButton cmdFilter 
+         BackColor       =   &H00DEDEEF&
+         Caption         =   "Set Filters"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   855
+         Left            =   15
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         TabStop         =   0   'False
+         ToolTipText     =   "Set Filters from <F1> to <F8>"
+         Top             =   45
+         Width           =   1110
+      End
+   End
+   Begin VB.Frame FrameFilter 
+      BackColor       =   &H00FFC0C0&
+      ForeColor       =   &H00000000&
+      Height          =   1065
+      Left            =   75
+      TabIndex        =   0
+      Top             =   4950
+      Width           =   6435
+      Begin VB.ComboBox cmbStatus 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C000C0&
+         Height          =   330
+         Left            =   1350
+         Style           =   2  'Dropdown List
+         TabIndex        =   4
+         Top             =   150
+         Width           =   2865
+      End
+      Begin VB.ComboBox cmbFreq 
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C000C0&
+         Height          =   330
+         Left            =   1350
+         Style           =   2  'Dropdown List
+         TabIndex        =   3
+         Top             =   150
+         Width           =   2865
+      End
+      Begin VB.CommandButton cmdFOk 
+         BackColor       =   &H00C0FFC0&
+         Caption         =   "Search"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   405
+         Left            =   5505
+         Style           =   1  'Graphical
+         TabIndex        =   2
+         ToolTipText     =   "Click Here to search Filter Range"
+         Top             =   120
+         Width           =   795
+      End
+      Begin VB.CommandButton cmdFCancel 
+         BackColor       =   &H00C0C0FF&
+         Caption         =   "Cancel"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   5505
+         Style           =   1  'Graphical
+         TabIndex        =   1
+         Top             =   540
+         Width           =   795
+      End
+      Begin VB.PictureBox ucFrom 
+         Height          =   375
+         Left            =   1980
+         ScaleHeight     =   315
+         ScaleWidth      =   1575
+         TabIndex        =   5
+         Top             =   135
+         Width           =   1635
+      End
+      Begin VB.PictureBox ucTill 
+         Height          =   375
+         Left            =   1980
+         ScaleHeight     =   315
+         ScaleWidth      =   1575
+         TabIndex        =   6
+         Top             =   585
+         Width           =   1635
+      End
+      Begin VB.Label lblTill 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Date Till"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C00000&
+         Height          =   315
+         Left            =   90
+         TabIndex        =   8
+         Top             =   600
+         Width           =   2385
+      End
+      Begin VB.Label lblFrom 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Date From"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00C00000&
+         Height          =   315
+         Left            =   90
+         TabIndex        =   7
+         Top             =   120
+         Width           =   2355
+      End
+   End
+   Begin MSFlexGridLib.MSFlexGrid FlexGrid 
+      Height          =   7995
+      Left            =   0
+      TabIndex        =   30
+      Top             =   0
+      Width           =   14520
+      _ExtentX        =   25612
+      _ExtentY        =   14102
+      _Version        =   393216
+      Rows            =   42
+      Cols            =   6
+      FixedCols       =   0
+      BackColorFixed  =   16773375
+      BackColorBkg    =   16777215
+      FocusRect       =   0
+      HighLight       =   0
+      FillStyle       =   1
+      ScrollBars      =   0
+      SelectionMode   =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+End
+Attribute VB_Name = "cust_mast"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+Option Explicit
+Public MyClass As MyClass, MyLibClass As MyLibClass
+Private VrRecSet As New ADODB.Recordset
+
+Private Frame_Voch_Open_Mode As Byte, Form_Load_Flag As Byte, Total_Recs As Long, Mid_Point As Long
+Private Esc_Flag As Byte, Edit_Flag As Byte, I As Integer, User_Scroll As Byte
+Private gUnifyDb As String
+
+Private Window_Height As Byte, Window_Offset As Integer
+Private Cur_Line As Integer, Max_Line As Integer, New_Line As Integer
+Private Buff_Size As Byte, Records_in_Buffer As Integer, Buffer_Offset As Long
+Private S_Buffer_Offset As Long, Temp_Load_Flag As Byte
+
+Private Status_Filter As Byte
+Private Cust_Filter As Byte, Filter_Type As Byte, Cur_Order As Byte, Sort_Flag As Byte
+Private Name_Filter As Byte, Adrs_Filter As Byte, City_Filter As Byte, Province_Filter As Byte
+
+Private Name_Str As String, Adrs_Str As String, City_Str As String
+Private Prov_From As String, Prov_Till As String
+Private Cust_From As Long, Cust_Till As Long
+
+Private Status_Type As Byte, Status_From As Byte, Status_Till As Byte
+Private Normal_Color As Long, HighLight_Color As Long
+
+'Buffer Variables
+Private Buff_CustID(60) As Long, Buff_Name(60) As String, Buff_Adrs(60) As String, Buff_City(60) As String
+Private Buff_Prov(60) As String, Buff_Status(60) As String
+Private cmdFst_Flag As Byte
+Private Selected_Customer As Long
+Private Db_Pass_word As String
+Private Sub CmdAdd_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    Call Form_KeyDown(vbKeyInsert, 0)
+End Sub
+
+Private Sub cmdAdrs_Click()
+'kk
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    lblFrom.Caption = "Customer From"
+    lblTill.Caption = "Customer Till"
+    
+    cmbStatus.Visible = False
+    cmbFreq.Visible = False
+    lblFrom.Visible = True
+    lblTill.Visible = False
+    ucFrom.Visible = True
+    ucTill.Visible = False
+    
+    ucFrom.BoxMaxLength = 15
+    ucFrom.SetDataType = 0
+    ucFrom.SetUpperCase = 1
+    
+    ucFrom.SetTextValue = Name_Str
+    ucFrom.SetBackColor = -2147483643
+    
+    Filter_Type = 3
+    Frame_Voch_Open_Mode = 3
+    Call Enable_Disable_Buttons(0)
+    FrameFilter.Visible = True
+    Call Set_Tab_Index_Frame_Filter
+    ucFrom.SetFocus
+
+End Sub
+
+Private Sub cmdAlter_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    Frame_Voch_Open_Mode = 9
+    FrameLogin.Visible = True
+    ucLogin.SetTextValue = ""
+    lblName.Caption = ""
+    txtPasswd.Text = ""
+    ucLogin.SetFocus
+    Exit Sub
+    'Call Form_KeyDown(18, 0)
+End Sub
+
+Private Sub cmdCity_Click()
+'kk
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    lblFrom.Caption = "Customer From"
+    lblTill.Caption = "Customer Till"
+    
+    cmbStatus.Visible = False
+    cmbFreq.Visible = False
+    lblFrom.Visible = True
+    lblTill.Visible = False
+    ucFrom.Visible = True
+    ucTill.Visible = False
+    
+    ucFrom.BoxMaxLength = 15
+    ucFrom.SetDataType = 0
+    ucFrom.SetUpperCase = 1
+    
+    ucFrom.SetTextValue = Name_Str
+    ucFrom.SetBackColor = -2147483643
+    
+    Filter_Type = 4
+    Frame_Voch_Open_Mode = 3
+    Call Enable_Disable_Buttons(0)
+    FrameFilter.Visible = True
+    Call Set_Tab_Index_Frame_Filter
+    ucFrom.SetFocus
+
+End Sub
+
+Private Sub cmdCustId_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    lblFrom.Caption = "Customer From"
+    lblTill.Caption = "Customer Till"
+    
+    cmbStatus.Visible = False
+    cmbFreq.Visible = False
+    lblFrom.Visible = True
+    lblTill.Visible = True
+    ucFrom.Visible = True
+    ucTill.Visible = True
+    
+    ucFrom.BoxMaxLength = 9
+    ucFrom.SetDataType = 1
+    ucFrom.LowerBound = 0
+    ucFrom.UpperBound = 999999999
+    
+    ucTill.BoxMaxLength = 9
+    ucTill.SetDataType = 1
+    ucTill.LowerBound = 0
+    ucTill.UpperBound = 999999999
+    
+    ucFrom.SetTextValue = Cust_From
+    ucTill.SetTextValue = Cust_Till
+    
+    ucFrom.SetBackColor = -2147483643
+    ucTill.SetBackColor = -2147483643
+    
+    Filter_Type = 1
+    Frame_Voch_Open_Mode = 3
+    Call Enable_Disable_Buttons(0)
+    FrameFilter.Visible = True
+    Call Set_Tab_Index_Frame_Filter
+    ucFrom.SetFocus
+End Sub
+
+
+Private Sub cmdDelete_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    Call Form_KeyDown(vbKeyDelete, 0)
+End Sub
+
+Private Sub cmdExit_Click()
+    Unload Me
+End Sub
+
+
+Private Sub cmdFCancel_Click()
+    Filter_Type = 0
+    Frame_Voch_Open_Mode = 0
+    Call Enable_Disable_Buttons(1)
+    FrameFilter.Visible = False
+    If ScrollBar.Enabled = True Then ScrollBar.SetFocus
+End Sub
+
+Private Sub cmdFOk_Click()
+
+'Added by Koshy on 02-04-2007
+'***************************
+Dim custStr As String
+Dim Cust_Br As Integer
+Dim C_Name As String
+'**************************
+
+
+    'Date Filter
+    Call Zap_Button(1)
+    'Cust No Filter
+    If Filter_Type = 1 Then
+'        Cust_From = Val(ucFrom.SetTextValue)
+        Cust_Till = Val(ucTill.SetTextValue)
+      If ucTill.SetTextValue = "" Then Exit Sub
+        
+        custStr = Right$("000" + Trim$(ucFrom.SetTextValue), 9)
+        Cust_Br = Val(Left$(custStr, 3))
+        If Right$(custStr, 6) <> "" Then Cust_From = Val(Right$(custStr, 6))
+        C_Name = MyLibClass.Get_Cust_Long_Name(Cust_Br, Cust_From)
+        If Cust_Br <> MyClass.Unit_Code Or C_Name = "" Then
+            Call MyClass.Display_Message("Invalid Customer")
+            ucFrom.SetTextValue = ""
+'            ucFrom.SetFocus
+            Exit Sub
+        End If
+        
+    custStr = ""
+    Cust_Br = 0
+    C_Name = ""
+        custStr = Right$("000" + Trim$(ucTill.SetTextValue), 9)
+        Cust_Br = Val(Left$(custStr, 3))
+        Cust_Till = Val(Right$(custStr, 6))
+        C_Name = MyLibClass.Get_Cust_Long_Name(Cust_Br, Cust_Till)
+        If Cust_Br <> MyClass.Unit_Code Or C_Name = "" Then
+            Call MyClass.Display_Message("Invalid Customer")
+            ucTill.SetTextValue = ""
+'            ucTill.SetFocus
+            Exit Sub
+        End If
+    
+'    ***************************************************
+        
+
+
+        
+        Cust_Filter = 1
+        cmdCustId.BackColor = vbGreen
+        Buffer_Offset = 0
+        Window_Offset = 0
+        Call Read_Kount
+        If Total_Recs > 0 Then Call Read_Buffer
+        Call Fill_Grid
+        Call cmdFCancel_Click
+        Exit Sub
+    End If
+    
+    If Filter_Type = 2 Then
+        Name_Str = Trim$(ucFrom.SetTextValue)
+        If Name_Str = "" Then
+            Call MyClass.Display_Message("Specify Name Matching Characters")
+            ucFrom.SetFocus
+            Exit Sub
+        End If
+        Name_Filter = 1
+        cmdName.BackColor = vbGreen
+        Buffer_Offset = 0
+        Window_Offset = 0
+        Call Read_Kount
+        If Total_Recs > 0 Then Call Read_Buffer
+        Call Fill_Grid
+        Call cmdFCancel_Click
+        Exit Sub
+    End If
+    
+    If Filter_Type = 3 Then
+        Adrs_Str = Trim$(ucFrom.SetTextValue)
+        If Adrs_Str = "" Then
+            Call MyClass.Display_Message("Specify Address Characters")
+            ucFrom.SetFocus
+            Exit Sub
+        End If
+        Adrs_Filter = 1
+        cmdAdrs.BackColor = vbGreen
+        Buffer_Offset = 0
+        Window_Offset = 0
+        Call Read_Kount
+        If Total_Recs > 0 Then Call Read_Buffer
+        Call Fill_Grid
+        Call cmdFCancel_Click
+        Exit Sub
+    End If
+    
+    If Filter_Type = 4 Then
+        City_Str = Trim$(ucFrom.SetTextValue)
+        If City_Str = "" Then
+            Call MyClass.Display_Message("Specify City")
+            ucFrom.SetFocus
+            Exit Sub
+        End If
+        City_Filter = 1
+        cmdCity.BackColor = vbGreen
+        Buffer_Offset = 0
+        Window_Offset = 0
+        Call Read_Kount
+        If Total_Recs > 0 Then Call Read_Buffer
+        Call Fill_Grid
+        Call cmdFCancel_Click
+        Exit Sub
+    End If
+
+    If Filter_Type = 5 Then
+        Prov_From = Trim$(ucFrom.SetTextValue)
+        If Prov_From = "" Then
+            Call MyClass.Display_Message("Specify Province")
+            ucFrom.SetFocus
+            Exit Sub
+        End If
+        Province_Filter = 1
+        cmdProv.BackColor = vbGreen
+        Buffer_Offset = 0
+        Window_Offset = 0
+        Call Read_Kount
+        If Total_Recs > 0 Then Call Read_Buffer
+        Call Fill_Grid
+        Call cmdFCancel_Click
+        Exit Sub
+    End If
+
+'    'Status Type
+'    If Filter_Type = 6 Then
+'        Status_Type = cmbStatus.ListIndex
+'        If Status_Type = 2 Then Status_Type = 9
+'        If Status_Type < 2 Then
+'            Status_From = 0
+'            Status_Till = 0
+'            If Status_Type = 1 Then
+'                Status_From = 9
+'                Status_Till = 9
+'            End If
+'        End If
+'        If Status_Type > 2 Then
+'            Status_From = 0
+'            Status_Till = 9
+'        End If
+'        Status_Filter = 1
+'        Buffer_Offset = 0
+'        Window_Offset = 0
+'        cmdStatus.BackColor = vbGreen
+'        Call Read_Kount
+'        If Total_Recs > 0 Then Call Read_Buffer
+'        Call Fill_Grid
+'        Call cmdFCancel_Click
+'        Exit Sub
+'    End If
+
+    Call cmdFCancel_Click
+End Sub
+Private Sub cmdFstSel_Click()
+    cmdFstSel.Enabled = False
+    cmdFstSel.Visible = False
+    cmdFst_Flag = 1
+    Call Read_Kount
+    If Total_Recs > 0 Then Call Read_Buffer
+    Call Fill_Grid
+End Sub
+
+Private Sub cmdLoginCancel_Click()
+    FrameLogin.Visible = False
+    FrameLogin.Refresh
+    Exit Sub
+End Sub
+
+Private Sub cmdName_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    lblFrom.Caption = "Customer From"
+    lblTill.Caption = "Customer Till"
+    
+    cmbStatus.Visible = False
+    cmbFreq.Visible = False
+    lblFrom.Visible = True
+    lblTill.Visible = False
+    ucFrom.Visible = True
+    ucTill.Visible = False
+    
+    ucFrom.BoxMaxLength = 15
+    ucFrom.SetDataType = 0
+    ucFrom.SetUpperCase = 1
+    
+    ucFrom.SetTextValue = Name_Str
+    ucFrom.SetBackColor = -2147483643
+    
+    Filter_Type = 2
+    Frame_Voch_Open_Mode = 3
+    Call Enable_Disable_Buttons(0)
+    FrameFilter.Visible = True
+    Call Set_Tab_Index_Frame_Filter
+    ucFrom.SetFocus
+End Sub
+
+Private Sub cmdProceed_Click()
+Dim Temp_Passwd As String
+
+    If Trim$(ucLogin.SetTextValue) = "" Then
+        Call MyClass.Display_Message("Specify Login ID")
+        ucLogin.SetTextValue = ""
+        ucLogin.SetFocus
+        Exit Sub
+    End If
+    
+    Temp_Passwd = UCase(Trim$(txtPasswd.Text))
+    If UCase(Trim$(Db_Pass_word)) <> Temp_Passwd Then
+        Call MyClass.Display_Message("Invalid Password")
+        txtPasswd.Text = ""
+        txtPasswd.SetFocus
+        Exit Sub
+    End If
+    FrameLogin.Visible = False
+    FrameLogin.Refresh
+    Frame_Voch_Open_Mode = 0
+    Call Form_KeyDown(18, 0)
+        Call MyClass.Set_Cust_Child(Selected_Customer, Edit_Flag, Esc_Flag)
+        Set CustChild = New CustChild
+        Set CustChild.MyClass = MyClass
+        Set CustChild.MyLibClass = MyLibClass
+        CustChild.Show
+    
+    Exit Sub
+End Sub
+
+Private Sub cmdProv_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    lblFrom.Caption = "Customer From"
+    lblTill.Caption = "Customer Till"
+    
+    cmbStatus.Visible = False
+    cmbFreq.Visible = False
+    lblFrom.Visible = True
+    lblTill.Visible = False
+    ucFrom.Visible = True
+    ucTill.Visible = False
+    
+    ucFrom.BoxMaxLength = 3
+    ucFrom.SetDataType = 0
+    ucFrom.SetUpperCase = 1
+    
+    ucFrom.SetTextValue = Name_Str
+    ucFrom.SetBackColor = -2147483643
+    
+    Filter_Type = 5
+    Frame_Voch_Open_Mode = 3
+    Call Enable_Disable_Buttons(0)
+    FrameFilter.Visible = True
+    Call Set_Tab_Index_Frame_Filter
+    ucFrom.SetFocus
+    'kk
+End Sub
+
+Private Sub cmdSort_Click(Index As Integer)
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    Cur_Order = Index + 1
+    Sort_Flag = Sort_Flag + 1
+    If Sort_Flag >= 2 Then Sort_Flag = 0
+    Buffer_Offset = 0
+    Window_Offset = 0
+    Call Read_Kount
+    Call Read_Buffer
+    Call Fill_Grid
+End Sub
+
+Private Sub cmdStatus_Click()
+    If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+    lblFrom.Caption = "Status"
+    lblTill.Caption = ""
+    
+    cmbStatus.Visible = True
+    cmbFreq.Visible = False
+    lblFrom.Visible = True
+    lblTill.Visible = False
+    ucFrom.Visible = False
+    ucTill.Visible = False
+    
+    Filter_Type = 6
+    Frame_Voch_Open_Mode = 3
+    Call Enable_Disable_Buttons(0)
+    Call Set_Tab_Index_Frame_Filter
+    FrameFilter.Visible = True
+    cmbStatus.ListIndex = 0
+    cmbStatus.SetFocus
+    Exit Sub
+End Sub
+
+Private Sub cmdZap_Click()
+    Call Clear_All_Filters
+    Window_Offset = 0
+    Buffer_Offset = 0
+    Call Read_Kount
+    If Total_Recs > 0 Then Call Read_Buffer
+    Call Fill_Grid
+    Exit Sub
+End Sub
+
+Private Sub Flexgrid_Click()
+Dim Mouse_Over_Line As Integer
+    
+    If Info_Window_Flag >= 1 Then Call Close_Info_Window
+    Mouse_Over_Line = Flexgrid.MouseRow
+    If Mouse_Over_Line >= 1 And Mouse_Over_Line <= Max_Line And Mouse_Over_Line <> Cur_Line Then
+        If Info_Window_Flag >= 1 Then Call Close_Info_Window
+        Call High_Light(0)
+        Cur_Line = Mouse_Over_Line
+        Call High_Light(1)
+    End If
+    Exit Sub
+End Sub
+
+Private Sub FlexGrid_DblClick()
+'    Call cmdAlter_Click
+'    If Info_Window_Flag >= 1 Then Call Close_Info_Window
+'    Call Form_KeyDown(18, 0)
+End Sub
+
+Private Sub Form_Activate()
+    If Form_Load_Flag = 99 Then Exit Sub
+    If Form_Load_Flag = 0 Then
+        Call Zap_Button(0)
+        Cust_Filter = 0
+        Name_Filter = 0
+        Adrs_Filter = 0
+        City_Filter = 0
+        Province_Filter = 0
+        Status_Filter = 0
+        Normal_Color = vbWhite
+        HighLight_Color = &H80FF80
+        Flexgrid.BackColor = Normal_Color
+        Frame_Voch_Open_Mode = 0
+        Call Clear_All_Filters
+        Window_Height = 24
+        Buff_Size = 48
+        Esc_Flag = 0
+        Cur_Line = 1
+        Buffer_Offset = 0
+        Window_Offset = 0
+        Cur_Order = 1
+        Form_Load_Flag = 99
+        Exit Sub
+    End If
+    If Form_Load_Flag >= 1 Then
+        Call MyClass.Get_Cust_Child(Selected_Customer, Edit_Flag, Esc_Flag)
+        If Cust_Filter > 0 Or Name_Filter > 0 Or Adrs_Filter > 0 Or City_Filter > 0 Or Province_Filter > 0 Or Status_Filter > 0 Then
+            If Esc_Flag = 0 Then
+                Buffer_Offset = 0
+                Window_Offset = 0
+                Call Read_Kount
+                If Total_Recs > 0 Then Call Read_Buffer
+                Call Fill_Grid
+            End If
+        Else
+            If Edit_Flag = 0 Then
+            
+            If Selected_Customer <> 0 Then ucFrom.SetTextValue = Val(Right$("000" + Trim$(CStr(MyClass.Unit_Code)), 3) + Right$("000000" + Trim$(CStr(Selected_Customer)), 6))
+
+            If Selected_Customer <> 0 Then ucTill.SetTextValue = Val(Right$("000" + Trim$(CStr(MyClass.Unit_Code)), 3) + Right$("000000" + Trim$(CStr(Selected_Customer)), 6))
+
+'                ucFrom.SetTextValue = Selected_Customer
+'                ucTill.SetTextValue = Selected_Customer
+                Filter_Type = 1
+                Call cmdFOk_Click
+                Exit Sub
+            End If
+        End If
+        Form_Load_Flag = 99
+        Exit Sub
+    End If
+End Sub
+Private Sub Form_Click()
+    Call Reset_Idle_Timer
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+Dim I As Integer, Temp_Knt As Long
+
+    Call Reset_Idle_Timer
+    If Info_Window_Flag >= 1 Then Call Close_Info_Window
+    If KeyCode = vbKeyEscape Then
+        If Frame_Voch_Open_Mode = 3 Then
+            Call cmdFCancel_Click
+            Exit Sub
+        End If
+        Esc_Flag = 1
+        Unload Me
+        Exit Sub
+    End If
+    
+    Call High_Light(0)
+    If KeyCode = 18 Then GoTo Process_Alter_Key
+    
+    If KeyCode = vbKeyLeft Then
+        Call Form_KeyPress(8)
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyRight Then
+        Call Form_KeyPress(32)
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyDown Then
+        Call Process_Movement(1)
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyUp Then
+        Call Process_Movement(-1)
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyHome Then
+        If Window_Offset = 0 And Buffer_Offset = 0 And Cur_Line = 1 Then
+            Call Open_Info_WIndow("This is the First Record!")
+            GoTo Get_Next_Key
+        End If
+        Cur_Line = 1
+        If Window_Offset = 0 And Buffer_Offset = 0 Then GoTo Get_Next_Key
+        If Buffer_Offset = 0 Then
+            Window_Offset = 0
+            Call Fill_Grid
+            Exit Sub
+        End If
+        Buffer_Offset = 0
+        Call Read_Buffer
+        Window_Offset = 0
+        Call Fill_Grid
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyEnd Then
+        Call High_Light(0)
+        Buffer_Offset = Total_Recs - Buff_Size
+        If Buffer_Offset < 0 Then Buffer_Offset = 0
+        Call Read_Buffer
+        Window_Offset = CInt(Records_in_Buffer) - Window_Height
+        If Window_Offset < 0 Then Window_Offset = 0
+        Cur_Line = Max_Line
+        Call Display_Window
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyPageUp Then
+        If Cur_Line > 1 Then
+            Cur_Line = 1
+            GoTo Get_Next_Key
+        End If
+        Call Process_Movement(1 - Window_Height)
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyPageDown Then
+       If Cur_Line < Max_Line Then
+            Cur_Line = Max_Line
+            GoTo Get_Next_Key
+        End If
+        Call Process_Movement(Window_Height - 1)
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyF1 Then
+        If Frame_Voch_Open_Mode = 0 Then Call cmdCustId_Click
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyF2 Then
+        If Frame_Voch_Open_Mode = 0 Then Call cmdName_Click
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyF3 Then
+        If Frame_Voch_Open_Mode = 0 Then Call cmdAdrs_Click
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyF4 Then
+        If Frame_Voch_Open_Mode = 0 Then Call cmdCity_Click
+        Exit Sub
+    End If
+    
+    If KeyCode = vbKeyF5 Then
+        If Frame_Voch_Open_Mode = 0 Then Call cmdProv_Click
+        Exit Sub
+    End If
+    
+'    If KeyCode = vbKeyF6 Then
+'        If Frame_Voch_Open_Mode = 0 Then Call cmdStatus_Click
+'        Exit Sub
+'    End If
+    
+    If KeyCode = vbKeyF9 Then
+        If Cust_Filter > 0 Or Name_Filter > 0 Or Adrs_Filter > 0 Or City_Filter > 0 _
+            Or Province_Filter > 0 Or Status_Filter > 0 Then
+            Call cmdZap_Click
+            Exit Sub
+        End If
+    End If
+    
+Insert_Key_Pressed:
+
+    If KeyCode = vbKeyInsert Then
+        If cmdFstSel.Visible = True Then cmdFstSel.Visible = False
+        I = Cur_Line + Window_Offset
+        Form_Load_Flag = 1
+        Edit_Flag = 0
+        Esc_Flag = 0
+        Selected_Customer = 0
+        Call MyClass.Set_Cust_Child(Selected_Customer, Edit_Flag, Esc_Flag)
+        Set CustChild = New CustChild
+        Set CustChild.MyClass = MyClass
+        Set CustChild.MyLibClass = MyLibClass
+        CustChild.Show
+        Exit Sub
+    End If
+
+    If KeyCode = vbKeyDelete Then
+        If Records_in_Buffer = 0 Then
+            Call Open_Info_WIndow("No Records Selected.")
+            Exit Sub
+        End If
+        Call High_Light(1)
+        I = Cur_Line + Window_Offset
+'        If Buff_Status(I) <> 0 Then Exit Sub
+        Selected_Customer = Buff_CustID(I)
+        Form_Load_Flag = 2
+        Edit_Flag = 2
+        Esc_Flag = 0
+        Exit Sub
+    End If
+
+Process_Alter_Key:
+
+        If Frame_Voch_Open_Mode > 0 Then Exit Sub
+        If Records_in_Buffer = 0 Then
+            Call Open_Info_WIndow("No Records Selected.")
+            GoTo Get_Next_Key
+        End If
+        High_Light (1)
+        I = Cur_Line + Window_Offset
+        'If Buff_Status(I) <> 0 Then Exit Sub
+        Selected_Customer = Buff_CustID(I)
+        Form_Load_Flag = 2
+        Edit_Flag = 1
+        Esc_Flag = 0
+'        Call MyClass.Set_Cust_Child(Selected_Customer, Edit_Flag, Esc_Flag)
+'        Set CustChild = New CustChild
+'        Set CustChild.MyClass = MyClass
+'        Set CustChild.MyLibClass = MyLibClass
+'        CustChild.Show
+        Exit Sub
+
+Get_Next_Key:
+
+    Call High_Light(1)
+    Exit Sub
+End Sub
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+    If Info_Window_Flag >= 1 Then Call Close_Info_Window
+    If Frame_Voch_Open_Mode > 0 Then Exit Sub
+End Sub
+
+Private Sub Form_Load()
+    Top = 0
+    Left = 0
+    Call Resize_Form(Me, 1024, 768)
+    Call MyClass.Inform_Loading(Me)
+    Me.Caption = Me.Caption + " : " + MyClass.Company_Name
+    FrameFilter.Visible = False
+    Form_Load_Flag = 0
+    Flexgrid.Rows = 1
+    gUnifyDb = MyClass.gUnifyDb
+    FrameLogin.Visible = False
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If Info_Window_Flag >= 1 Then Call Close_Info_Window
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Call MyClass.Inform_UnLoading(Me)
+End Sub
+Private Sub Clear_All_Filters()
+    Cust_Filter = 0
+    Name_Filter = 0
+    Adrs_Filter = 0
+    City_Filter = 0
+    Province_Filter = 0
+    Status_Filter = 0
+    
+    Call Zap_Button(0)
+
+    Cust_From = 0
+    Cust_Till = 999999999
+    Name_Str = ""
+    Adrs_Str = ""
+    City_Str = ""
+    Prov_From = ""
+    Prov_Till = ""
+    Status_Type = 0
+    Status_From = 0
+    Status_Till = 9
+    
+    cmdCustId.BackColor = &HFFFFF0
+    cmdName.BackColor = &HFFFFF0
+    cmdAdrs.BackColor = &HFFFFF0
+    cmdCity.BackColor = &HFFFFF0
+    cmdProv.BackColor = &HFFFFF0
+    cmdStatus.BackColor = &HFFFFF0
+    Exit Sub
+End Sub
+
+Private Sub Zap_Button(ByVal Sent_Flag As Byte)
+    If Sent_Flag = 0 And cmdZap.Visible = True Then
+        cmdAdd.Left = cmdZap.Left
+        cmdAdd.Width = cmdAdd.Width + cmdZap.Width
+        cmdZap.Visible = False
+        Exit Sub
+    End If
+    If Sent_Flag >= 1 And cmdZap.Visible = False Then
+        cmdZap.Visible = True
+        cmdAdd.Left = cmdZap.Left + cmdZap.Width
+        cmdAdd.Width = cmdAdd.Width - cmdZap.Width
+        Exit Sub
+    End If
+End Sub
+Private Sub High_Light(ByVal Color_Type As Byte)
+Dim Color As Long
+
+    If Cur_Line >= 1 And Cur_Line <= Window_Height Then
+        If Flexgrid.Rows > 1 Then
+            Flexgrid.Row = Cur_Line
+            Color = HighLight_Color
+            If Color_Type <= 0 Then Color = Normal_Color
+            Flexgrid.col = 0
+            Flexgrid.CellBackColor = Color
+            Flexgrid.col = 1
+            Flexgrid.CellBackColor = Color
+            Flexgrid.col = 2
+            Flexgrid.CellBackColor = Color
+            Flexgrid.col = 3
+            Flexgrid.CellBackColor = Color
+            Flexgrid.col = 4
+            Flexgrid.CellBackColor = Color
+            Flexgrid.col = 5
+            Flexgrid.CellBackColor = Color
+        End If
+        If Color_Type >= 1 Then
+            Call Set_Scroll_Bar
+            'If ScrollBar.Enabled = True Then ScrollBar.SetFocus
+        End If
+    End If
+    Exit Sub
+End Sub
+Private Sub Enable_Disable_Buttons(ByVal Sent_Flag As Byte)
+Dim I As Byte
+    If Sent_Flag = 0 Then
+        FrameButton.Enabled = False
+        Flexgrid.Enabled = False
+        For I = 0 To 5
+            cmdSort(I).Enabled = False
+        Next I
+        ScrollBar.Enabled = False
+    End If
+    If Sent_Flag > 0 Then
+        FrameButton.Enabled = True
+        Flexgrid.Enabled = True
+        For I = 0 To 5
+            cmdSort(I).Enabled = True
+        Next I
+        ScrollBar.Enabled = True
+    End If
+    Exit Sub
+End Sub
+
+Private Sub Process_Movement(ByVal User_Move As Integer)
+Dim New_Window_Offset As Integer, New_Buff_Record As Long
+
+    Call High_Light(0)
+    New_Line = Cur_Line + User_Move
+    If New_Line < 1 Then GoTo Backward_Movement
+    If New_Line > Max_Line Then GoTo Forward_Movement
+    Cur_Line = New_Line
+    GoTo Highlight_New_Account
+
+Forward_Movement:
+
+    New_Buff_Record = New_Line + Window_Offset
+    If New_Buff_Record > Records_in_Buffer Then GoTo Buffer_Changes
+    Window_Offset = Window_Offset + New_Line - Window_Height
+    If Window_Offset < 0 Then Window_Offset = 0
+    Cur_Line = Window_Height
+    Call Display_Window
+    Exit Sub
+
+Buffer_Changes:
+
+    If Records_in_Buffer = Buff_Size Then GoTo More_Recs_Available
+
+No_Further_Recs:
+
+    New_Window_Offset = CInt(Records_in_Buffer) - Window_Height
+    If New_Window_Offset < 0 Then New_Window_Offset = 0
+    If Window_Offset = New_Window_Offset Then
+        Cur_Line = Max_Line
+        GoTo Highlight_New_Account
+    End If
+    Window_Offset = New_Window_Offset
+    Cur_Line = Window_Height
+    Call Display_Window
+    Exit Sub
+
+More_Recs_Available:
+
+    If Records_in_Buffer < Buff_Size Then GoTo Beyond_Eof
+    Cur_Line = Window_Height
+    S_Buffer_Offset = Buffer_Offset
+    Buffer_Offset = Buffer_Offset + New_Buff_Record - Window_Height
+    Call Read_Buffer
+    If Records_in_Buffer = 0 Then
+        Buffer_Offset = S_Buffer_Offset
+        Call Read_Buffer
+    End If
+    Window_Offset = 0
+    Call Display_Window
+    Exit Sub
+
+Beyond_Eof:
+
+    New_Window_Offset = Buffer_Offset + Records_in_Buffer - Window_Height
+    If New_Window_Offset < 0 Then New_Window_Offset = 0
+    If Window_Offset = New_Window_Offset Then
+        Cur_Line = Max_Line
+        GoTo Highlight_New_Account
+    End If
+    Window_Offset = New_Window_Offset
+    Cur_Line = Window_Height
+    Call Display_Window
+    Exit Sub
+
+Backward_Movement:
+    'More Records are Available in the Buffer
+    If Window_Offset = 0 Then GoTo New_Buffer_Backward
+    Window_Offset = Window_Offset + New_Line - 1
+    If Window_Offset < 0 Then Window_Offset = 0
+    Cur_Line = 1
+    Call Display_Window
+    Exit Sub
+
+New_Buffer_Backward:
+
+   'No more Records available in the existing Buffer
+    If Buffer_Offset = 0 And Cur_Line = 1 Then
+        Call Open_Info_WIndow("This is the First Record!")
+        GoTo Highlight_New_Account
+    End If
+    If Buffer_Offset = 0 Then
+        Cur_Line = 1
+        GoTo Highlight_New_Account
+    End If
+    Buffer_Offset = Buffer_Offset + New_Line - 1
+    If Buffer_Offset < 0 Then Buffer_Offset = 0
+    Call Read_Buffer
+    Cur_Line = 1
+    Window_Offset = 0
+    Call Display_Window
+    Exit Sub
+
+Highlight_New_Account:
+
+    Call High_Light(1)
+    Exit Sub
+End Sub
+
+Private Sub Set_Scroll_Bar()
+'ScrollBar.Value = Buffer_Offset + Window_Offset + Cur_Line
+'User_Scroll = 1
+End Sub
+
+Private Sub Display_Window()
+    If Total_Recs > 0 Then
+        Call Fill_Grid
+        Call High_Light(1)
+        Exit Sub
+    End If
+    Call Form_KeyDown(vbKeyInsert, 0)
+    Exit Sub
+End Sub
+Private Sub Fill_Grid()
+Dim I As Integer, K As Integer
+    Flexgrid.Rows = 1
+    Max_Line = 0
+    For I = 1 To Window_Height
+        K = Window_Offset + I
+        If K <= Records_in_Buffer Then
+            Flexgrid.Rows = Flexgrid.Rows + 1
+            
+'''''            Modified by koshy on 02-04-2007
+'            ***************************************************
+'            FlexGrid.TextMatrix(I, 0) = CStr(Buff_CustID(K))
+            Flexgrid.TextMatrix(I, 0) = Val(Right$("000" + Trim$(CStr(MyClass.Unit_Code)), 3) + Right$("000000" + Trim$(CStr(Buff_CustID(K))), 6))
+'            ***************************************************
+           
+            Flexgrid.TextMatrix(I, 1) = Buff_Name(K)
+            Flexgrid.TextMatrix(I, 2) = Buff_Adrs(K)
+            Flexgrid.TextMatrix(I, 3) = Buff_City(K)
+            Flexgrid.TextMatrix(I, 4) = Buff_Prov(K)
+            Flexgrid.TextMatrix(I, 5) = Buff_Status(K)
+            
+            Max_Line = Max_Line + 1
+        End If
+    Next I
+    If Cur_Line > Max_Line Then Cur_Line = Max_Line
+    Call High_Light(1)
+    Exit Sub
+End Sub
+
+Private Function Make_Cust_Name(ByVal FstName As String, ByVal MidName As String, ByVal SurName As String) As String
+Dim strVar As String
+    strVar = Trim$(FstName) + " "
+    strVar = strVar + Trim$(MidName) + " "
+    strVar = strVar + Trim$(SurName)
+    Make_Cust_Name = strVar
+End Function
+Private Sub Read_Buffer()
+Dim AddSQL As String
+Dim I As Integer, J As Integer
+Dim Recs_To_Read As Long, Recs_Wanted As Integer, Working_OffSet As Long
+Dim Reverse_Flag As Byte, Read_OffSet As Long, Temp_Str As String
+
+    Read_OffSet = Buffer_Offset
+    Recs_Wanted = Buff_Size
+
+    If Read_OffSet >= Total_Recs Then
+        Records_in_Buffer = 0
+        Exit Sub
+    End If
+
+    Working_OffSet = Read_OffSet
+
+    Call Open_Info_Win("Reading Data. Please Wait.")
+    Reverse_Flag = 0
+    Recs_To_Read = Working_OffSet + Recs_Wanted
+    If Recs_To_Read > Total_Recs Then
+        Recs_To_Read = Total_Recs
+        Recs_Wanted = Total_Recs - Working_OffSet
+    End If
+    Sqlstr = "select cust_idno,cust_surname,cust_fstname,cust_midname,cust_mailaddr,cust_city,prov_code,cust_status" & _
+            " from " & MyClass.gUnifyDb & "customer " & _
+            " where br_code = " & MyClass.Unit_Code
+    AddSQL = " "
+    If Cust_Filter > 0 Then AddSQL = AddSQL + " and cust_idno >= " & Cust_From & " and cust_idno <= " & Cust_Till & ""
+'    If Status_Filter > 0 Then AddSQL = AddSQL + " and cust_status >= " & Status_From & " and cust_status <= " & Status_Till & " "
+    If Name_Filter > 0 Then AddSQL = AddSQL + " and cust_fstname like '" & Trim$(Name_Str) & "%'"
+    If Adrs_Filter > 0 Then AddSQL = AddSQL + " and cust_mailaddr like '" & Adrs_Str & "%'"
+    If City_Filter > 0 Then AddSQL = AddSQL + " and cust_city like '" & City_Str & "%'"
+    If Province_Filter > 0 Then AddSQL = AddSQL + " and prov_code = '" & Prov_From & "'"
+    If cmdFst_Flag = 2 Then
+'        AddSQL = AddSQL + " and cust_status =0 "
+        cmdFst_Flag = 3
+    End If
+    Sqlstr = Sqlstr + AddSQL
+    Sqlstr = Sqlstr + " order by "
+    'Descending Sequence Wanted
+    If (Sort_Flag = 0 And Reverse_Flag = 0) Or (Sort_Flag > 0 And Reverse_Flag = 1) Then
+        If Cur_Order = 1 Then Sqlstr = Sqlstr + "cust_idno desc"
+        If Cur_Order = 2 Then Sqlstr = Sqlstr + "cust_fstname desc,cust_midname desc,cust_surname desc"
+        If Cur_Order = 3 Then Sqlstr = Sqlstr + "cust_mailaddr desc"
+        If Cur_Order = 4 Then Sqlstr = Sqlstr + "cust_city desc"
+        If Cur_Order = 5 Then Sqlstr = Sqlstr + "prov_code desc"
+        If Cur_Order = 6 Then Sqlstr = Sqlstr + "cust_status desc"
+    End If
+    If (Sort_Flag > 0 And Reverse_Flag = 0) Or (Sort_Flag = 0 And Reverse_Flag = 1) Then
+        If Cur_Order = 1 Then Sqlstr = Sqlstr + "cust_idno"
+        If Cur_Order = 2 Then Sqlstr = Sqlstr + "cust_fstname,cust_midname,cust_surname"
+        If Cur_Order = 3 Then Sqlstr = Sqlstr + "cust_mailaddr"
+        If Cur_Order = 4 Then Sqlstr = Sqlstr + "cust_city"
+        If Cur_Order = 5 Then Sqlstr = Sqlstr + "prov_code"
+        If Cur_Order = 6 Then Sqlstr = Sqlstr + "cust_status"
+    End If
+    Call Fire_Sql(Sqlstr, VrRecSet, Sql_Error, MyClass.Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "Read_Buffer")
+
+'    If Recs_Read > Recs_To_Read Then Recs_Read = Recs_To_Read
+    I = 0
+    J = 0
+    Records_in_Buffer = recs_read - Recs_To_Read + Recs_Wanted
+    If Records_in_Buffer > Recs_Wanted Then Records_in_Buffer = Recs_Wanted
+    If Records_in_Buffer <= 0 Then
+        Records_in_Buffer = 0
+        GoTo No_More_Para
+    End If
+    VrRecSet.MoveFirst
+    For I = 1 To Read_OffSet
+        VrRecSet.MoveNext
+    Next I
+    J = 1
+    If Reverse_Flag = 1 Then J = 1
+
+Read_Next:
+
+    If VrRecSet.BOF Or VrRecSet.EOF Then GoTo No_More_Para
+    Buff_CustID(J) = VrRecSet!Cust_IdNo
+    Buff_Name(J) = Make_Cust_Name(IIf(IsNull(VrRecSet!Cust_FstName), "", VrRecSet!Cust_FstName), IIf(IsNull(VrRecSet!Cust_MidName), "", VrRecSet!Cust_MidName), IIf(IsNull(VrRecSet!Cust_SurName), "", VrRecSet!Cust_SurName))
+    Buff_Adrs(J) = Trim$(IIf(IsNull(VrRecSet!cust_mailaddr), "", VrRecSet!cust_mailaddr))
+    Buff_City(J) = Trim$(IIf(IsNull(VrRecSet!Cust_City), "", VrRecSet!Cust_City))
+    Buff_Prov(J) = Trim$(IIf(IsNull(VrRecSet!Prov_Code), "", VrRecSet!Prov_Code))
+    'Buff_Status(J) = IIf(IsNull(VrRecSet!Cust_Status), "0", VrRecSet!Cust_Status)
+   
+    J = J + 1
+    If J <= Recs_Wanted Then
+        VrRecSet.MoveNext
+        GoTo Read_Next
+    End If
+
+No_More_Para:
+
+    Buffer_Offset = Read_OffSet
+    Call Close_Info_Window
+    Exit Sub
+    
+Proc_Exit:
+    Exit Sub
+End Sub
+Private Sub Read_Kount()
+Dim I As Integer, AddSQL As String, Temp_Str As String
+
+    Sqlstr = "select count(*) from " & gUnifyDb & "customer where br_code = " & MyClass.Unit_Code
+    AddSQL = ""
+    If Cust_Filter > 0 Then AddSQL = AddSQL + " and cust_idno >= " & Cust_From & " and cust_idno <= " & Cust_Till & ""
+'    If Status_Filter > 0 Then AddSQL = AddSQL + " and cust_status >= " & Status_From & " and cust_status <= " & Status_Till & " "
+    If Name_Filter > 0 Then AddSQL = AddSQL + " and cust_fstname like '" & Trim$(Name_Str) & "%'"
+    If Adrs_Filter > 0 Then AddSQL = AddSQL + " and cust_mailaddr like '" & Adrs_Str & "%'"
+    If City_Filter > 0 Then AddSQL = AddSQL + " and cust_city like '" & City_Str & "%'"
+    If Province_Filter > 0 Then AddSQL = AddSQL + " and prov_code = '" & Prov_From & "'"
+    If cmdFst_Flag = 1 Then
+'        AddSQL = AddSQL + " and cust_status =0 "
+        cmdFst_Flag = cmdFst_Flag + 1
+    End If
+    Sqlstr = Sqlstr + AddSQL
+    Total_Recs = 0
+    Call Fire_Sql(Sqlstr, VrRecSet, Sql_Error, MyClass.Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "Read_Kount")
+    If Not VrRecSet.EOF Then Total_Recs = VrRecSet.Fields(0)
+    Records_in_Buffer = 0
+    Mid_Point = 0
+    If Total_Recs > 0 Then
+        Mid_Point = (Total_Recs + 1) \ 2
+        I = Total_Recs
+        If I < 1 Then I = 1
+        ScrollBar.Max = I
+        ScrollBar.Min = 1
+        ScrollBar.SmallChange = 1
+        If ScrollBar.Max >= 10 Then ScrollBar.LargeChange = ScrollBar.Max / 10
+        If ScrollBar.LargeChange < 1 Then ScrollBar.LargeChange = 1
+        If ScrollBar.LargeChange > 21 Then ScrollBar.LargeChange = 21
+    End If
+    If Total_Recs <= 0 Then ScrollBar.Enabled = False
+    If Total_Recs > 0 Then ScrollBar.Enabled = True
+    Exit Sub
+End Sub
+Private Sub Set_Tab_Index_Frame_Filter()
+    If Filter_Type <= 5 Or Filter_Type = 7 Then
+        ucFrom.TabIndex = 0
+        ucTill.TabIndex = 1
+        cmdFOk.TabIndex = 2
+        cmdFCancel.TabIndex = 3
+    End If
+    
+    If Filter_Type = 6 Then
+        cmbStatus.TabIndex = 0
+        cmdFOk.TabIndex = 1
+        cmdFCancel.TabIndex = 2
+    End If
+    
+    If Filter_Type = 8 Then
+        cmbFreq.TabIndex = 0
+        cmdFOk.TabIndex = 1
+        cmdFCancel.TabIndex = 2
+    End If
+End Sub
+
+
+Private Sub ScrollBar_Change()
+Dim I As Integer, New_Record_No As Long, User_Move As Integer
+If User_Scroll = 1 Then
+    User_Scroll = 0
+    Exit Sub
+End If
+If Info_Window_Flag >= 1 Then Call Close_Info_Window
+I = ScrollBar.value
+New_Record_No = I
+If New_Record_No < 1 Then New_Record_No = 1
+If New_Record_No > Total_Recs Then New_Record_No = Total_Recs
+User_Move = New_Record_No - Buffer_Offset - Window_Offset - Cur_Line
+If User_Move <> 0 Then
+    Call Process_Movement(User_Move)
+    User_Scroll = 0
+End If
+End Sub
+
+Private Sub txtPasswd_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = 13 Then
+        If cmdProceed.Enabled = True Then
+            cmdProceed.SetFocus
+            Exit Sub
+        End If
+    End If
+End Sub
+
+
+Private Sub ucFrom_ValidateData(fb_ValidationSuccess As Boolean)
+Dim Dt_From As Date, VrFrom As Long, AmtFrom As Currency
+
+    'For Loan
+    If Filter_Type = 1 Then
+        VrFrom = Val(ucFrom.SetTextValue)
+        If VrFrom <> 0 Then ucTill.SetTextValue = VrFrom
+    End If
+End Sub
+
+Private Sub ucTill_ValidateData(fb_ValidationSuccess As Boolean)
+Dim Dt_From As Date, Dt_Till As Date, VrFrom As Long, VrTill As Long, AmtFrom As Currency, AmtTill As Currency
+
+    If Filter_Type = 1 Then
+        VrFrom = Val(ucFrom.SetTextValue)
+        VrTill = Val(ucTill.SetTextValue)
+        If VrTill < VrFrom Then
+            Open_Info_WIndow ("Customer Till should not be Less than Customer From")
+            ucTill.SetTextValue = ""
+            ucTill.SetFocus
+            Exit Sub
+        End If
+    End If
+End Sub
+
+Private Sub cmbFreq_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = 13 Then
+        If cmdFOk.Enabled = True Then
+            cmdFOk.SetFocus
+            Exit Sub
+        End If
+    End If
+End Sub
+
+Private Sub cmbStatus_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = 13 Then
+        If cmdFOk.Enabled = True Then
+            cmdFOk.SetFocus
+            Exit Sub
+        End If
+    End If
+End Sub
+Private Sub ucLogin_ValidateData(fb_ValidationSuccess As Boolean)
+Dim ProfCode As Integer, ProfDesc As String
+Dim strVar As String
+Dim Pwd1 As String, Pwd2 As String
+Dim Login_ID As String, Temp_Recset As New ADODB.Recordset
+
+    Login_ID = Trim$(ucLogin.SetTextValue)
+    Login_Name = ""
+    
+    If UCase(Login_ID) = UCase(Trim$(gsUser_Login)) Then
+        Call MyClass.Display_Message("Same User Login.")
+        ucLogin.SetTextValue = ""
+        ucLogin.SetFocus
+        Exit Sub
+    End If
+    
+    Sqlstr = "select officer_code,officer_name,off_categ from " & MyClass.gUnifyDb & "officer where officer_code ='" & Login_ID & "'"
+    Call Fire_Sql(Sqlstr, Recset, Sql_Error, MyClass.Connection_No, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "UcLogin_ValidateData_1")
+    If Recset.EOF = True Then
+        Call MyClass.Display_Message("Invalid Login Id")
+        ucLogin.SetTextValue = ""
+        ucLogin.SetFocus
+        Exit Sub
+    End If
+    
+    If IIf(IsNull(Recset!Off_Categ), 0, Recset!Off_Categ) = 0 Then
+        Call MyClass.Display_Message("Only Manager Can Authorise to work")
+        ucLogin.SetTextValue = ""
+        ucLogin.SetFocus
+        Exit Sub
+    End If
+    Login_Name = Trim$(IIf(IsNull(Recset!Officer_Name), "", Recset!Officer_Name))
+    
+    Sqlstr = "select passwd1,passwd2 from Users where user_login = '" & Login_ID & "'"
+    Call Fire_Sql(Sqlstr, Temp_Recset, Sql_Error, 0, recs_read)
+    If Sql_Error <> 0 Then Call Abort_Program(Me, "UcLogin_ValidateData_1")
+    If Temp_Recset.EOF Then
+        MsgBox ("Invalid Login Id or No Unit/Branch allowed to This User")
+        lblName.Caption = ""
+        ucLogin.SetTextValue = ""
+        ucLogin.SetFocus
+        Exit Sub
+    End If
+    Pwd1 = Trim$(Temp_Recset!Passwd1)
+    Pwd2 = Trim$(Temp_Recset!Passwd2)
+    If Pwd1 = "" And Pwd2 = "" Then
+        Db_Pass_word = ""
+    Else
+        Call Vb_DeCrypt_Passwd(Pwd1, Pwd2, 0, 1, 1, Db_Pass_word)
+    End If
+    lblName.Caption = Login_Name
+    Exit Sub
+End Sub
+
+

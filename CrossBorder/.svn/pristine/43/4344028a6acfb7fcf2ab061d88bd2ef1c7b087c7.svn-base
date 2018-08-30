@@ -1,0 +1,303 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Imports System.Data.OleDb
+Imports System.Data.Odbc
+Imports System.Data.SqlClient
+
+Public Class frmReconEntity
+    Private AccessDBConnection As New OleDbConnection
+    Private AccessDBCommnd As New OleDbCommand
+    Private AccessADODB As New ADODB.Connection
+
+    Private Sub ToolStripTextBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Call AccessDBCon()
+        Call SQLDBCon()
+    End Sub
+
+    Private Sub ModifyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ModifyToolStripMenuItem.Click
+
+        On Error GoTo ErrTrap
+        Dim SqlStr, Str2 As String
+        Dim RecSet As OleDbDataReader
+        Dim RecX As New ADODB.Recordset
+        If (AccessDBConnection.State <> ConnectionState.Open) Then
+            MsgBox("Data Connection Error. Operation cannot be performed", vbExclamation, "Database Error")
+            Exit Sub
+        End If
+        If Trim(TextBox1.Text) <> "" And Trim(TextBox2.Text) <> "" And ComboBox1.SelectedText <> "" And Trim(TextBox4.Text) <> "" And Trim(TextBox5.Text) <> "" And Trim(TextBox6.Text) <> "" And Trim(TextBox3.Text) <> "" And ComboBox2.SelectedText <> "" Then
+            SqlStr = "Insert into recon_entity Values('" & Trim(TextBox1.Text) & "','" & Trim(TextBox2.Text) & "','" & ComboBox1.SelectedText & "','" & Trim(TextBox4.Text) & "','" & Trim(TextBox5.Text) & "','" & Trim(TextBox6.Text) & "','" & Trim(TextBox3.Text) & "','" & ComboBox2.SelectedText & "')"
+            Str2 = "Select * from recon_entity where entity_name = '" & Trim(TextBox1.Text) & "'"
+
+            RecX.Open(Str2, AccessADODB)
+            If RecX.EOF = False Then
+                With AccessDBCommnd
+                    .Connection = AccessDBConnection
+                    .CommandType = CommandType.Text
+                    .CommandText = "delete from recon_entity where entity_name = '" & Trim(TextBox1.Text) & "'"
+                    .ExecuteNonQuery()
+                    .CommandText = SqlStr
+                    .ExecuteNonQuery()
+                End With
+                MsgBox("The Entity Record Modified.", vbInformation, "DataBase Report")
+            Else
+                MsgBox("The Entity Name Does Not Exits.", vbExclamation, "DataBase Report")
+            End If
+
+            RecX.Close()
+        Else
+            MsgBox("Operation cannot be performed. One or more data item required", vbCritical, "DataBase Error")
+        End If
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical, "DataBase Error")
+
+    End Sub
+
+    Private Sub frmReconEntity_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        On Error GoTo ErrTrap
+
+        AccessDBConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Recon Service\ReconModule.accdb;Persist Security Info=True"
+        AccessDBConnection.Open()   'Microsoft.Jet.OLEDB.4.0=mdb
+
+        AccessADODB.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Recon Service\ReconModule.accdb;Persist Security Info=True"
+        AccessADODB.Open()
+        Dim RecX As New ADODB.Recordset
+        RecX.Open("Select * from recon_entity order by entity_name asc", AccessADODB)
+
+        DataGriRefresh()
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+
+    End Sub
+
+    Private Sub frmReconEntity_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 10
+        Me.DataGridView1.Width = GroupBox1.Width - 15
+        Me.DataGridView1.Height = Me.Height - 250
+        Me.GroupBox1.Height = Me.Height - 220
+        Me.GroupBox2.Width = GroupBox1.Width
+    End Sub
+
+    Private Sub getInfo()
+        'declares the variables
+        Dim excelApp As New Excel.Application
+        Dim excelBook As Excel.Workbook = excelApp.Workbooks.Add(System.Reflection.Missing.Value)
+        Dim partySheet As Excel.Worksheet = Nothing
+        'try to open the workbook and a worksheet
+        Try
+            excelBook = excelApp.Workbooks.Open("C:\Program Files\DISClient\Templates\TemplateMerge.xls")
+            partySheet = excelBook.Worksheets("MergeData")
+        Catch ex As Exception
+            MsgBox(ex)
+        Finally
+            'MAKE SURE TO KILL ALL INSTANCES BEFORE QUITING! if you fail to do this
+            'The service (excel.exe) will continue to run
+            NAR(partySheet)
+            excelBook.Close(False)
+            NAR(excelBook)
+            excelApp.Workbooks.Close()
+            NAR(excelApp.Workbooks)
+            'quit and dispose app
+            excelApp.Quit()
+            NAR(excelApp)
+            'VERY IMPORTANT
+            GC.Collect()
+        End Try
+    End Sub
+    Private Sub NAR(ByVal o As Object)
+        Try
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(o)
+        Catch ex As Exception
+        Finally
+            o = Nothing
+        End Try
+    End Sub
+
+    Private Sub AccessDBCon()
+        Dim cn As New OleDbConnection
+        On Error GoTo ErrTrap
+        cn.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\Recon Service\Data.accdb;Persist Security Info=True"
+        cn.Open()   'Microsoft.Jet.OLEDB.4.0=mdb
+        cn.Close()
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+
+    End Sub
+
+    Private Sub SQLDBCon()
+        Dim cn As New SqlConnection
+        On Error GoTo ErrTrap
+        cn.ConnectionString = "Server=172.17.0.165;Database=emserv;User Id=sa;Password=;"
+        cn.Open()   'Microsoft.Jet.OLEDB.4.0=mdb
+        cn.Close()
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+
+    End Sub
+
+    Private Sub GroupBox3_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox3.Enter
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        OpenFileDialog1.Title = "Please Select Data Source a File"
+        OpenFileDialog1.InitialDirectory = "D:\Data Source"
+
+        OpenFileDialog1.ShowDialog()
+
+    End Sub
+
+    Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+
+        Dim strm As System.IO.Stream
+        strm = OpenFileDialog1.OpenFile()
+        TextBox2.Text = OpenFileDialog1.FileName.ToString()
+        If Not (strm Is Nothing) Then
+            'insert code to read the file data
+            strm.Close()
+            'MessageBox.Show("File closed")
+        End If
+
+
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        OpenFileDialog2.Title = "Please Select Data Source a File"
+        OpenFileDialog2.InitialDirectory = "D:\Data Source"
+
+        OpenFileDialog2.ShowDialog()
+    End Sub
+
+    Private Sub OpenFileDialog2_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+
+        Dim strm As System.IO.Stream
+        strm = OpenFileDialog2.OpenFile()
+        TextBox6.Text = OpenFileDialog2.FileName.ToString()
+        If Not (strm Is Nothing) Then
+            'insert code to read the file data
+            strm.Close()
+            'MessageBox.Show("File closed")
+        End If
+
+
+
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem1.Click
+        On Error GoTo ErrTrap
+        Dim SqlStr, Str2 As String
+        Dim RecSet As OleDbDataReader
+        'Dim RecX As New ADODB.Recordset
+        If (AccessDBConnection.State <> ConnectionState.Open) Then
+            MsgBox("Data Connection Error. Operation cannot be performed", vbExclamation, "Database Error")
+            Exit Sub
+        End If
+        If Trim(TextBox1.Text) <> "" And Trim(TextBox2.Text) <> "" And ComboBox1.SelectedText <> "" And Trim(TextBox4.Text) <> "" And Trim(TextBox5.Text) <> "" And Trim(TextBox6.Text) <> "" And Trim(TextBox3.Text) <> "" And ComboBox2.SelectedText <> "" Then
+            SqlStr = "Insert into recon_entity Values('" & Trim(TextBox1.Text) & "','" & Trim(TextBox2.Text) & "','" & ComboBox1.SelectedText & "','" & Trim(TextBox4.Text) & "','" & Trim(TextBox5.Text) & "','" & Trim(TextBox6.Text) & "','" & Trim(TextBox3.Text) & "','" & ComboBox2.SelectedText & "')"
+            Str2 = "Select * from recon_entity where entity_name = '" & Trim(TextBox1.Text) & "'"
+
+            With AccessDBCommnd
+                .Connection = AccessDBConnection
+                .CommandType = CommandType.Text
+                .CommandText = Str2
+                RecSet = .ExecuteReader()
+                'End With
+                If RecSet.FieldCount > 0 Then
+                    'With AccessDBCommnd
+                    '.Connection = AccessDBConnection
+                    '.CommandType = CommandType.Text
+                    .CommandText = SqlStr
+                    .ExecuteNonQuery()
+                    MsgBox("The Entity Record Saved.", vbInformation, "DataBase Report")
+                Else
+                    MsgBox("The Entity Name Already Exits.", vbExclamation, "DataBase Report")
+                End If
+
+            End With
+        Else
+            MsgBox("Operation cannot be performed. One or more data item required", vbCritical, "DataBase Error")
+        End If
+                Exit Sub
+ErrTrap:
+                MsgBox(Err.Description, vbCritical, "DataBase Error")
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+
+    'Private Sub DataGridView1_CellContentDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentDoubleClick
+    '    Dim i As Integer
+    '    Dim j As Integer
+    '    i = Control.MousePosition.X
+    '    j = Control.MousePosition.Y
+
+    'End Sub
+
+    Private Sub DataGridView1_CellDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
+        Dim i As Integer
+        'Dim j As Integer
+        i = DataGridView1.CurrentCell.RowIndex
+    End Sub
+
+    Private Sub DeleteToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteToolStripMenuItem.Click
+        On Error GoTo ErrTrap
+        If (AccessDBConnection.State <> ConnectionState.Open) Then
+            MsgBox("Data Connection Error. Operation cannot be performed", vbExclamation, "Database Error")
+            Exit Sub
+        End If
+        If Trim(TextBox1.Text) <> "" Then
+            With AccessDBCommnd
+                .Connection = AccessDBConnection
+                .CommandType = CommandType.Text
+                .CommandText = "Delete from recon_entity where entity_name = '" + Trim(TextBox1.Text) + "'"
+                .ExecuteNonQuery()
+
+            End With
+        Else
+            MsgBox("Operation cannot be performed. Select Entity Name", vbCritical, "DataBase Error")
+        End If
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical, "DataBase Error")
+    End Sub
+
+    Private Sub DataGriRefresh()
+
+        '        On Error GoTo ErrTrap
+        '        Dim RecX As New ADODB.Recordset
+        '        RecX.Open("Select * from recon_entity order by entity_name asc", AccessADODB)
+        '        DataGridView1.RowCount = 2
+        '        Do While RecX.EOF = False
+        '            DataGridView1.d()
+        '        Loop
+
+
+
+        '        Exit Sub
+        'ErrTrap:
+        '        MsgBox(Err.Description, vbCritical)
+
+        '    End Sub
+
+
+        Try
+            
+            Dim da As OleDbDataAdapter = New OleDbDataAdapter("Select * from recon_entity order by entity_name asc", AccessDBConnection)
+            'create a new dataset
+            Dim ds As New DataSet()
+            'fill the datset
+            da.Fill(ds)
+            'attach dataset to the datagrid
+            DataGridView1.DataSource = ds.Tables(0)
+            ds = Nothing
+            da = Nothing
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+    End Sub
+End Class

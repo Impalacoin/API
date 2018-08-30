@@ -1,0 +1,301 @@
+Line 190: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 219: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 248: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 277: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 306: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 335: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 364: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 393: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 422: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 451: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 480: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 509: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 538: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 567: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 596: Class FFBS.SButton of control SButton1 was not a loaded control class.
+Line 633: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 662: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 691: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 720: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 749: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 778: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 807: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 836: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 865: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 894: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 923: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 952: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 981: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 1010: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 1039: Class FFBS.MainBtn of control MainBtn1 was not a loaded control class.
+Line 12: Property Icon in MenuForm had an invalid file reference.
+Line 197: The property name _ExtentX in SButton1 is invalid.
+Line 198: The property name _ExtentY in SButton1 is invalid.
+Line 199: The property name Caption in SButton1 is invalid.
+Line 203: Property Picture in SButton1 had an invalid file reference.
+Line 213: The property name EntityId in SButton1 is invalid.
+Line 214: The property name EntityLevel in SButton1 is invalid.
+Line 215: The property name EntityType in SButton1 is invalid.
+Line 216: The property name Object.ToolTipText in SButton1 is invalid.
+Line 226: The property name _ExtentX in SButton1 is invalid.
+Line 227: The property name _ExtentY in SButton1 is invalid.
+Line 228: The property name Caption in SButton1 is invalid.
+Line 232: Property Picture in SButton1 had an invalid file reference.
+Line 242: The property name EntityId in SButton1 is invalid.
+Line 243: The property name EntityLevel in SButton1 is invalid.
+Line 244: The property name EntityType in SButton1 is invalid.
+Line 245: The property name Object.ToolTipText in SButton1 is invalid.
+Line 255: The property name _ExtentX in SButton1 is invalid.
+Line 256: The property name _ExtentY in SButton1 is invalid.
+Line 257: The property name Caption in SButton1 is invalid.
+Line 261: Property Picture in SButton1 had an invalid file reference.
+Line 271: The property name EntityId in SButton1 is invalid.
+Line 272: The property name EntityLevel in SButton1 is invalid.
+Line 273: The property name EntityType in SButton1 is invalid.
+Line 274: The property name Object.ToolTipText in SButton1 is invalid.
+Line 284: The property name _ExtentX in SButton1 is invalid.
+Line 285: The property name _ExtentY in SButton1 is invalid.
+Line 286: The property name Caption in SButton1 is invalid.
+Line 290: Property Picture in SButton1 had an invalid file reference.
+Line 300: The property name EntityId in SButton1 is invalid.
+Line 301: The property name EntityLevel in SButton1 is invalid.
+Line 302: The property name EntityType in SButton1 is invalid.
+Line 303: The property name Object.ToolTipText in SButton1 is invalid.
+Line 313: The property name _ExtentX in SButton1 is invalid.
+Line 314: The property name _ExtentY in SButton1 is invalid.
+Line 315: The property name Caption in SButton1 is invalid.
+Line 319: Property Picture in SButton1 had an invalid file reference.
+Line 329: The property name EntityId in SButton1 is invalid.
+Line 330: The property name EntityLevel in SButton1 is invalid.
+Line 331: The property name EntityType in SButton1 is invalid.
+Line 332: The property name Object.ToolTipText in SButton1 is invalid.
+Line 342: The property name _ExtentX in SButton1 is invalid.
+Line 343: The property name _ExtentY in SButton1 is invalid.
+Line 344: The property name Caption in SButton1 is invalid.
+Line 348: Property Picture in SButton1 had an invalid file reference.
+Line 358: The property name EntityId in SButton1 is invalid.
+Line 359: The property name EntityLevel in SButton1 is invalid.
+Line 360: The property name EntityType in SButton1 is invalid.
+Line 361: The property name Object.ToolTipText in SButton1 is invalid.
+Line 371: The property name _ExtentX in SButton1 is invalid.
+Line 372: The property name _ExtentY in SButton1 is invalid.
+Line 373: The property name Caption in SButton1 is invalid.
+Line 377: Property Picture in SButton1 had an invalid file reference.
+Line 387: The property name EntityId in SButton1 is invalid.
+Line 388: The property name EntityLevel in SButton1 is invalid.
+Line 389: The property name EntityType in SButton1 is invalid.
+Line 390: The property name Object.ToolTipText in SButton1 is invalid.
+Line 400: The property name _ExtentX in SButton1 is invalid.
+Line 401: The property name _ExtentY in SButton1 is invalid.
+Line 402: The property name Caption in SButton1 is invalid.
+Line 406: Property Picture in SButton1 had an invalid file reference.
+Line 416: The property name EntityId in SButton1 is invalid.
+Line 417: The property name EntityLevel in SButton1 is invalid.
+Line 418: The property name EntityType in SButton1 is invalid.
+Line 419: The property name Object.ToolTipText in SButton1 is invalid.
+Line 429: The property name _ExtentX in SButton1 is invalid.
+Line 430: The property name _ExtentY in SButton1 is invalid.
+Line 431: The property name Caption in SButton1 is invalid.
+Line 435: Property Picture in SButton1 had an invalid file reference.
+Line 445: The property name EntityId in SButton1 is invalid.
+Line 446: The property name EntityLevel in SButton1 is invalid.
+Line 447: The property name EntityType in SButton1 is invalid.
+Line 448: The property name Object.ToolTipText in SButton1 is invalid.
+Line 458: The property name _ExtentX in SButton1 is invalid.
+Line 459: The property name _ExtentY in SButton1 is invalid.
+Line 460: The property name Caption in SButton1 is invalid.
+Line 464: Property Picture in SButton1 had an invalid file reference.
+Line 474: The property name EntityId in SButton1 is invalid.
+Line 475: The property name EntityLevel in SButton1 is invalid.
+Line 476: The property name EntityType in SButton1 is invalid.
+Line 477: The property name Object.ToolTipText in SButton1 is invalid.
+Line 487: The property name _ExtentX in SButton1 is invalid.
+Line 488: The property name _ExtentY in SButton1 is invalid.
+Line 489: The property name Caption in SButton1 is invalid.
+Line 493: Property Picture in SButton1 had an invalid file reference.
+Line 503: The property name EntityId in SButton1 is invalid.
+Line 504: The property name EntityLevel in SButton1 is invalid.
+Line 505: The property name EntityType in SButton1 is invalid.
+Line 506: The property name Object.ToolTipText in SButton1 is invalid.
+Line 516: The property name _ExtentX in SButton1 is invalid.
+Line 517: The property name _ExtentY in SButton1 is invalid.
+Line 518: The property name Caption in SButton1 is invalid.
+Line 522: Property Picture in SButton1 had an invalid file reference.
+Line 532: The property name EntityId in SButton1 is invalid.
+Line 533: The property name EntityLevel in SButton1 is invalid.
+Line 534: The property name EntityType in SButton1 is invalid.
+Line 535: The property name Object.ToolTipText in SButton1 is invalid.
+Line 545: The property name _ExtentX in SButton1 is invalid.
+Line 546: The property name _ExtentY in SButton1 is invalid.
+Line 547: The property name Caption in SButton1 is invalid.
+Line 551: Property Picture in SButton1 had an invalid file reference.
+Line 561: The property name EntityId in SButton1 is invalid.
+Line 562: The property name EntityLevel in SButton1 is invalid.
+Line 563: The property name EntityType in SButton1 is invalid.
+Line 564: The property name Object.ToolTipText in SButton1 is invalid.
+Line 574: The property name _ExtentX in SButton1 is invalid.
+Line 575: The property name _ExtentY in SButton1 is invalid.
+Line 576: The property name Caption in SButton1 is invalid.
+Line 580: Property Picture in SButton1 had an invalid file reference.
+Line 590: The property name EntityId in SButton1 is invalid.
+Line 591: The property name EntityLevel in SButton1 is invalid.
+Line 592: The property name EntityType in SButton1 is invalid.
+Line 593: The property name Object.ToolTipText in SButton1 is invalid.
+Line 603: The property name _ExtentX in SButton1 is invalid.
+Line 604: The property name _ExtentY in SButton1 is invalid.
+Line 605: The property name Caption in SButton1 is invalid.
+Line 609: Property Picture in SButton1 had an invalid file reference.
+Line 619: The property name EntityId in SButton1 is invalid.
+Line 620: The property name EntityLevel in SButton1 is invalid.
+Line 621: The property name EntityType in SButton1 is invalid.
+Line 622: The property name Object.ToolTipText in SButton1 is invalid.
+Line 640: The property name _ExtentX in MainBtn1 is invalid.
+Line 641: The property name _ExtentY in MainBtn1 is invalid.
+Line 642: The property name Caption in MainBtn1 is invalid.
+Line 644: The property name MBackColor in MainBtn1 is invalid.
+Line 645: The property name MForeColor in MainBtn1 is invalid.
+Line 646: Property Picture in MainBtn1 had an invalid file reference.
+Line 657: The property name EntityId in MainBtn1 is invalid.
+Line 658: The property name EntityLevel in MainBtn1 is invalid.
+Line 659: The property name EntityType in MainBtn1 is invalid.
+Line 660: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 669: The property name _ExtentX in MainBtn1 is invalid.
+Line 670: The property name _ExtentY in MainBtn1 is invalid.
+Line 671: The property name Caption in MainBtn1 is invalid.
+Line 673: The property name MBackColor in MainBtn1 is invalid.
+Line 674: The property name MForeColor in MainBtn1 is invalid.
+Line 675: Property Picture in MainBtn1 had an invalid file reference.
+Line 686: The property name EntityId in MainBtn1 is invalid.
+Line 687: The property name EntityLevel in MainBtn1 is invalid.
+Line 688: The property name EntityType in MainBtn1 is invalid.
+Line 689: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 698: The property name _ExtentX in MainBtn1 is invalid.
+Line 699: The property name _ExtentY in MainBtn1 is invalid.
+Line 700: The property name Caption in MainBtn1 is invalid.
+Line 702: The property name MBackColor in MainBtn1 is invalid.
+Line 703: The property name MForeColor in MainBtn1 is invalid.
+Line 704: Property Picture in MainBtn1 had an invalid file reference.
+Line 715: The property name EntityId in MainBtn1 is invalid.
+Line 716: The property name EntityLevel in MainBtn1 is invalid.
+Line 717: The property name EntityType in MainBtn1 is invalid.
+Line 718: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 727: The property name _ExtentX in MainBtn1 is invalid.
+Line 728: The property name _ExtentY in MainBtn1 is invalid.
+Line 729: The property name Caption in MainBtn1 is invalid.
+Line 731: The property name MBackColor in MainBtn1 is invalid.
+Line 732: The property name MForeColor in MainBtn1 is invalid.
+Line 733: Property Picture in MainBtn1 had an invalid file reference.
+Line 744: The property name EntityId in MainBtn1 is invalid.
+Line 745: The property name EntityLevel in MainBtn1 is invalid.
+Line 746: The property name EntityType in MainBtn1 is invalid.
+Line 747: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 756: The property name _ExtentX in MainBtn1 is invalid.
+Line 757: The property name _ExtentY in MainBtn1 is invalid.
+Line 758: The property name Caption in MainBtn1 is invalid.
+Line 760: The property name MBackColor in MainBtn1 is invalid.
+Line 761: The property name MForeColor in MainBtn1 is invalid.
+Line 762: Property Picture in MainBtn1 had an invalid file reference.
+Line 773: The property name EntityId in MainBtn1 is invalid.
+Line 774: The property name EntityLevel in MainBtn1 is invalid.
+Line 775: The property name EntityType in MainBtn1 is invalid.
+Line 776: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 785: The property name _ExtentX in MainBtn1 is invalid.
+Line 786: The property name _ExtentY in MainBtn1 is invalid.
+Line 787: The property name Caption in MainBtn1 is invalid.
+Line 789: The property name MBackColor in MainBtn1 is invalid.
+Line 790: The property name MForeColor in MainBtn1 is invalid.
+Line 791: Property Picture in MainBtn1 had an invalid file reference.
+Line 802: The property name EntityId in MainBtn1 is invalid.
+Line 803: The property name EntityLevel in MainBtn1 is invalid.
+Line 804: The property name EntityType in MainBtn1 is invalid.
+Line 805: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 814: The property name _ExtentX in MainBtn1 is invalid.
+Line 815: The property name _ExtentY in MainBtn1 is invalid.
+Line 816: The property name Caption in MainBtn1 is invalid.
+Line 818: The property name MBackColor in MainBtn1 is invalid.
+Line 819: The property name MForeColor in MainBtn1 is invalid.
+Line 820: Property Picture in MainBtn1 had an invalid file reference.
+Line 831: The property name EntityId in MainBtn1 is invalid.
+Line 832: The property name EntityLevel in MainBtn1 is invalid.
+Line 833: The property name EntityType in MainBtn1 is invalid.
+Line 834: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 843: The property name _ExtentX in MainBtn1 is invalid.
+Line 844: The property name _ExtentY in MainBtn1 is invalid.
+Line 845: The property name Caption in MainBtn1 is invalid.
+Line 847: The property name MBackColor in MainBtn1 is invalid.
+Line 848: The property name MForeColor in MainBtn1 is invalid.
+Line 849: Property Picture in MainBtn1 had an invalid file reference.
+Line 860: The property name EntityId in MainBtn1 is invalid.
+Line 861: The property name EntityLevel in MainBtn1 is invalid.
+Line 862: The property name EntityType in MainBtn1 is invalid.
+Line 863: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 872: The property name _ExtentX in MainBtn1 is invalid.
+Line 873: The property name _ExtentY in MainBtn1 is invalid.
+Line 874: The property name Caption in MainBtn1 is invalid.
+Line 876: The property name MBackColor in MainBtn1 is invalid.
+Line 877: The property name MForeColor in MainBtn1 is invalid.
+Line 878: Property Picture in MainBtn1 had an invalid file reference.
+Line 889: The property name EntityId in MainBtn1 is invalid.
+Line 890: The property name EntityLevel in MainBtn1 is invalid.
+Line 891: The property name EntityType in MainBtn1 is invalid.
+Line 892: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 901: The property name _ExtentX in MainBtn1 is invalid.
+Line 902: The property name _ExtentY in MainBtn1 is invalid.
+Line 903: The property name Caption in MainBtn1 is invalid.
+Line 905: The property name MBackColor in MainBtn1 is invalid.
+Line 906: The property name MForeColor in MainBtn1 is invalid.
+Line 907: Property Picture in MainBtn1 had an invalid file reference.
+Line 918: The property name EntityId in MainBtn1 is invalid.
+Line 919: The property name EntityLevel in MainBtn1 is invalid.
+Line 920: The property name EntityType in MainBtn1 is invalid.
+Line 921: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 930: The property name _ExtentX in MainBtn1 is invalid.
+Line 931: The property name _ExtentY in MainBtn1 is invalid.
+Line 932: The property name Caption in MainBtn1 is invalid.
+Line 934: The property name MBackColor in MainBtn1 is invalid.
+Line 935: The property name MForeColor in MainBtn1 is invalid.
+Line 936: Property Picture in MainBtn1 had an invalid file reference.
+Line 947: The property name EntityId in MainBtn1 is invalid.
+Line 948: The property name EntityLevel in MainBtn1 is invalid.
+Line 949: The property name EntityType in MainBtn1 is invalid.
+Line 950: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 959: The property name _ExtentX in MainBtn1 is invalid.
+Line 960: The property name _ExtentY in MainBtn1 is invalid.
+Line 961: The property name Caption in MainBtn1 is invalid.
+Line 963: The property name MBackColor in MainBtn1 is invalid.
+Line 964: The property name MForeColor in MainBtn1 is invalid.
+Line 965: Property Picture in MainBtn1 had an invalid file reference.
+Line 976: The property name EntityId in MainBtn1 is invalid.
+Line 977: The property name EntityLevel in MainBtn1 is invalid.
+Line 978: The property name EntityType in MainBtn1 is invalid.
+Line 979: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 988: The property name _ExtentX in MainBtn1 is invalid.
+Line 989: The property name _ExtentY in MainBtn1 is invalid.
+Line 990: The property name Caption in MainBtn1 is invalid.
+Line 992: The property name MBackColor in MainBtn1 is invalid.
+Line 993: The property name MForeColor in MainBtn1 is invalid.
+Line 994: Property Picture in MainBtn1 had an invalid file reference.
+Line 1005: The property name EntityId in MainBtn1 is invalid.
+Line 1006: The property name EntityLevel in MainBtn1 is invalid.
+Line 1007: The property name EntityType in MainBtn1 is invalid.
+Line 1008: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 1017: The property name _ExtentX in MainBtn1 is invalid.
+Line 1018: The property name _ExtentY in MainBtn1 is invalid.
+Line 1019: The property name Caption in MainBtn1 is invalid.
+Line 1021: The property name MBackColor in MainBtn1 is invalid.
+Line 1022: The property name MForeColor in MainBtn1 is invalid.
+Line 1023: Property Picture in MainBtn1 had an invalid file reference.
+Line 1034: The property name EntityId in MainBtn1 is invalid.
+Line 1035: The property name EntityLevel in MainBtn1 is invalid.
+Line 1036: The property name EntityType in MainBtn1 is invalid.
+Line 1037: The property name Object.ToolTipText in MainBtn1 is invalid.
+Line 1046: The property name _ExtentX in MainBtn1 is invalid.
+Line 1047: The property name _ExtentY in MainBtn1 is invalid.
+Line 1048: The property name Caption in MainBtn1 is invalid.
+Line 1050: The property name MBackColor in MainBtn1 is invalid.
+Line 1051: The property name MForeColor in MainBtn1 is invalid.
+Line 1052: Property Picture in MainBtn1 had an invalid file reference.
+Line 1063: The property name EntityId in MainBtn1 is invalid.
+Line 1064: The property name EntityLevel in MainBtn1 is invalid.
+Line 1065: The property name EntityType in MainBtn1 is invalid.
+Line 1066: The property name Object.ToolTipText in MainBtn1 is invalid.

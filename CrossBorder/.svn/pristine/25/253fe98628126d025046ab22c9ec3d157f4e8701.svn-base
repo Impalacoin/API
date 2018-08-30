@@ -1,0 +1,38 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once("../engine.php");
+check_admin_logged_in();
+echo "<div style='float:right;color:blue'>You are logged in as {$_SESSION["adminusername"]}</div>";
+display_admin_navigation();
+
+if(isset($_POST["update"])){
+    if(isset($_POST["rate"]) && !empty($_POST["rate"])){
+        $rate=$_POST["rate"];
+        $query="UPDATE exchange_rate SET amount={$rate}";
+        $result=mysql_query($query) or die(mysql_error());
+        if(mysql_affected_rows()==1){
+            echo "Update was successfull.";
+        }
+    }
+}
+
+//require_once "includes/footer.php"
+
+?>
+<form action="exchange_rate.php" method="post">
+    <table>
+        <tr>
+            <td><label>Exchange Rate</label></td><td><input type="text" id="rate" value="<?php echo GetExchangeRate(); ?>" name="rate" /></td>
+            <tr><td><input type="submit" name="update" value="update" /></td></tr>
+        </tr>
+    </table>
+</form>
+
+<?php
+ob_end_flush();
+?>

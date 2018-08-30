@@ -1,0 +1,443 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "functions.php";
+require_once "Users.php";
+$user=new Users;
+function calculate_form($dest){
+    $output="";
+    $output.=calculateFormHandler();
+    if(!isset($_POST["calc"])){
+    $output.='<table align="center" width="960">
+          <tr>
+            <td>
+              <!--div class="GW_main_box"> 
+              <span class="GW_main_box_corner GW_main_box_topLeft"></span>
+              <span class="GW_main_box_corner GW_main_box_topRight"></span-->
+        <form action="'.$dest.'" method="post">
+                          <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td><div class="GW_main_box_title">Calculate fee and send money to Kenya</div></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td><div class="GW_msg_info" style="margin:0 15px;">On this page you can calculate the approximate fees and the amount your recipient may receive in Kenya</div></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>
+              <!--form name="calculator" id="calculator" action="index.cfm?fuseaction=default_calculator&mode=show_result" method="post" onsubmit="return _CF_checkcalculator(this)"-->
+        	
+        	<table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">  
+        		
+                <tr>
+            		<td width="25%" height="30" class="GW_txtfieldcaption">Amount to Send ($) </td>
+            		<td>
+         			<input type="hidden" name="service_type" value="1">
+        			 <script language="javascript">
+                     function chkamount(){
+                         var currentamount=document.calculator.amount.value;
+                         if(currentamount=="0.00"){
+                             document.calculator.amount.value="";
+                         }
+                         if(currentamount==""){
+                             document.calculator.amount.value="0.00";
+                         }
+                     }
+                     </script>
+        			 
+        			 
+        			  
+        			  <script language="javascript" type="text/javascript">
+        			        function deleteSpecialChar(amount) {
+        			            !(/^[0-9.]*$/i).test(amount.value)?amount.value = amount.value.replace(/[^0-9.]/ig,\'\'):null;
+        			        }
+        			    </script>
+        				
+        			     <input name="amount" type="text" maxlength="7"  id="amount"  onkeyup="deleteSpecialChar(this)"  class="GW_textbox"  onblur="deleteSpecialChar(this)" />
+        			  
+        			
+        		  </td>
+        	  </tr>
+                
+                <tr>
+                	<td height="30" class="GW_txtfieldcaption">Exchange Rate </td>
+                	<td>1 USD = KES '.getExchangeRate().'</td>
+                </tr>
+        		
+        		
+        		
+        		
+          		<tr>
+            		<td height="30" class="GW_txtfieldcaption">Billing Method</td>
+            		<td>
+                    	<select name="payment_method" id="payment_method"  class="GW_selectbox" >
+        					<option value="Credit_card">Credit Card</option>
+        				</select>
+        			</td>
+        		</tr>
+          		<tr>
+            		<td height="40">&nbsp;<input type="hidden" name="type" value="basic_calc"> <input type="hidden" value="KES"></td>
+            		<td><button name="calc" type="submit" class="GW_button_green_small"><span>Calculate</span></button></td>
+          		</tr>
+          		<tr>
+            		<td>&nbsp;</td>
+            		<td>&nbsp;</td>
+          		</tr>
+          		<tr>
+            		<td>&nbsp;</td>
+            		<td><a href="http://www.chasebank.co.ke/section/diaspora-banking" target="_blank"><!--img src="images/logo-chase-bank.png" alt="Trusted Partner : Cashswift" border="0"--></a><img src="images/card-lists.jpg"></td>
+            	</tr>
+          		<tr>
+            		<td>&nbsp;</td>
+            		<td>&nbsp;</td>
+          		</tr>
+        	</table>
+        </form>
+        
+              </td>
+            </tr>
+            </table>
+        
+        <span class="GW_main_box_corner GW_main_box_bottomLeft">
+        </span><span class="GW_main_box_corner GW_main_box_bottomRight">
+        </span> </div>
+        </td>
+          </tr>
+        </table>';
+        }
+        
+        return $output;
+}
+function send_to_phone_form($dest){
+    $output='
+    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><div class="GW_main_box_title">Add Recipient\'s Information (Please select one)</div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+	  <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <form name="frm_recipient" id="delivery-form" action="" method="POST" >
+          <tr>
+            <td width="25%" class="GW_txtfieldcaption">Delivery Method</td>
+            <td>
+			
+			
+	
+			<input type="radio" name="delivery_type" value="mobile" checked class="delivery-type" /> 
+			<label for="SmartMoney">Deposit into mobile phone</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		
+		
+			<input type="radio" name="delivery_type" value="bank"  class="delivery-type" /> 
+			<label for="Deposit">Deposit into Bank Account</label>
+		&nbsp;</td> 
+			</td>
+          </tr>
+       
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </form>
+
+      </table></td>
+    </tr>
+  </table>
+  <div style="margin:0 15px;"><hr size="1" color="#eee" noshade="noshade"></div>
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+
+    <tr>
+        <td>&nbsp;</td>
+    </tr> 
+    <tr>
+        <td>
+            <form action="'.$dest.'" method="post" id="send-to-mobile">
+                <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                <td width="25%" class="GW_txtfieldcaption">Full name <span class="GW_txtred">*</span></td>
+                <td>
+                
+                <input class="validate-required GW_textbox" name="full_names" id="recipient_name"  type="text" maxlength="200" /></td>
+                </tr>
+                
+                <tr>
+                <td class="GW_txtfieldcaption">Address 1 <span class="GW_txtred">*</span></td>
+                <td><input class="validate-required GW_textbox" name="address" id="address"  type="text" maxlength="100"  /></td>
+                </tr>
+                <tr>
+                <td class="GW_txtfieldcaption">Address 2</td>
+                <td><input name="recipient_address2" id="recipient_address2"  type="text" maxlength="50"  class="GW_textbox"  /> <span class="GW_txtgrey">optional</span></td>
+                </tr>
+                
+                
+                <tr>
+                <td class="GW_txtfieldcaption">County <span class="GW_txtred">*</span></td>
+                <td>
+                <input class="validate-required GW_textbox" name="town_county" id="recipient_city"  type="text" maxlength="50" />
+                </td>
+                </tr>
+                
+                <tr>
+                <td class="GW_txtfieldcaption">Email Address</td>
+                <td><input name="email" id="email"  type="text" maxlength="50"  class="GW_textbox"  /> <span class="GW_txtgrey">optional</span></td>
+                </tr>
+                <tr>
+                <td class="GW_txtfieldcaption">
+                Mobile network provider<span class="GW_txtred"> *</span>
+                </td>
+                <td>
+                <select class="validate-required GW_textbox" name="network" id="selected-network"  /> 
+                 <option value ="">Select network provider</option>
+                 <option value ="Safaricom">Safaricom</option>
+                 <option value ="Airtel">Airtel</option>
+                </select>
+                </td>
+                </tr> 
+                <tr>
+                <td class="GW_txtfieldcaption">
+                Mobile Number<span class="GW_txtred"> *</span>
+                </td>
+                <td><input class="validate-required GW_textbox" name="mobile" id="mobile-number"  type="text" maxlength="15"  size="30" /> <span class="GW_txtgrey">Numbers only </span></td>
+                </tr> 
+                
+                <input type="hidden" name="recipient_delivery_type" value="SmartMoney" /><tr>
+                <td height="40" class="GW_txtfieldcaption">
+                
+                <td>
+                <button type="reset" class="GW_button_grey">
+                <span>Reset</span></button>
+                &nbsp;&nbsp;
+                <button type="submit" class="GW_button_grey"><span>Submit</span></button>      
+                </td>
+                </tr>
+                </table>
+            </form>
+        
+        
+        </td>
+    </tr>
+    <tr>
+    <td>&nbsp;</td>
+    </tr>
+</table>';
+
+  return $output;    
+}
+function billing_information($dest){
+    global $user;
+    $result = $user->getUserDetails();
+    if($result){
+        $first_name = mysql_result($result,0,"first_name");
+        $last_name = mysql_result($result,0,"last_name");
+        $address = mysql_result($result,0,"address");
+        $town = mysql_result($result,0,"town_city");
+        $zip = mysql_result($result,0,"postalcode_zip");
+        $country =mysql_result($result,0,"country");
+    }
+    $output='
+    <div class="GW_main_box_title">Card information</div>
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+
+    <tr>
+        <td>&nbsp;</td>
+    </tr> 
+    <tr>
+        <td>
+            <form action="'.$dest.'" method="post" id="master-card-form">
+                <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                <td width="25%" class="GW_txtfieldcaption">Card Type <span class="GW_txtred">*</span></td>
+                <td>
+                <select name="card">
+                    <option value="vc">Visa</option>
+                    <option value="mc">Master Card</option>
+                </select>
+                </tr>
+                
+                <tr>
+                <td class="GW_txtfieldcaption">Card Number <span class="GW_txtred">*</span></td>
+                <td><input class="validate-required" name="card_number" id="address"  type="text" maxlength="100"  /></td>
+                </tr>
+                <tr>
+                <td class="GW_txtfieldcaption">Expiry date<span class="GW_txtred">*</span></td>
+                <td><input class="validate-required" name="expiry_date"  type="text" maxlength="4" placeholder="YYMM" size="4"  /></td>
+                </tr>
+                
+                <tr>
+                <td class="GW_txtfieldcaption">CVV</td>
+                <td><input class="validate-required" name="cvv"   type="text" maxlength="3" size="4"  /></td>
+                </tr>
+                </table>
+                <div class="GW_main_box_title">Billing</div>
+                <div class="alert_info">Billing address is the address listed on your credit card statement</div>
+                <table width="96%">
+                <tr>
+                    <td class="GW_txtfieldcaption">First Name <span class="GW_txtred">*</span></td>
+                    <td><input name="first_name" type="text" maxlength="50" value="'.$first_name.'"   class="validate-required  GW_textbox"  /></td>
+                </tr>
+                  
+                <tr>
+                    <td class="GW_txtfieldcaption">Last Name <span class="GW_txtred">*</span></td>
+                    <td>
+                    <input name="last_name" type="text" maxlength="50"  value="'.$last_name.'"  class="validate-required GW_textbox"  /></td>
+                </tr>
+                <tr>
+                <td class="GW_txtfieldcaption">Address <span class="GW_txtred">*</span></td>
+                <td>
+                  <input class="validate-required GW_textbox" name="address" type="text" value="'.$address.'" /></td>
+                
+                <tr>
+                <td class="GW_txtfieldcaption">Town/City <span class="GW_txtred">*</span></td>
+                <td>
+                  <input class="validate-required GW_textbox" name="town_city" type="text" maxlength="30" value="'.$town.'" /></td>
+                </tr>
+                
+                <tr>
+                <td class="GW_txtfieldcaption">Postal/Zip Code <span class="GW_txtred">*</span></td>
+                <td>
+                  <input class="validate-required GW_textbox" name="postalcode_zip" type="text" value="'.$zip.'"  />
+                  </td>
+                </tr>
+                
+                <input type="hidden" name="recipient_delivery_type" value="SmartMoney" /><tr>
+                <td height="40" class="GW_txtfieldcaption">
+                
+                <td>
+                
+                <button type="submit" class="GW_button_green"><span>Make payment</span></button>      
+                </td>
+                </tr>
+                </table>
+            </form>
+        
+        
+        </td>
+    </tr>
+    <tr>
+    <td>&nbsp;</td>
+    </tr>
+</table>';
+
+  return $output;
+}
+function send_to_bank_form(){
+    $output='<table width="50%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><div class="GW_main_box_title">Add Recipient\'s Information (Please select one)</div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+	  <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <form name="frm_recipient" id="delivery-form" action="" method="POST" >
+          <tr>
+            <td width="25%" class="GW_txtfieldcaption">Delivery Method</td>
+            <td>
+			
+			
+	
+			<input type="radio" name="delivery_type" value="mobile" class="delivery-type" /> 
+			<label for="SmartMoney">Deposit into mobile phone</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		
+		
+			<input type="radio" name="delivery_type" value="bank" checked class="delivery-type" /> 
+			<label for="Deposit">Deposit into Bank Account</label>
+		&nbsp;</td>
+          </tr>
+       
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </form>
+
+      </table></td>
+    </tr>
+  </table>
+  <div style="margin:0 15px;"><hr size="1" color="#eee" noshade="noshade"></div>
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  
+    <tr>
+      <td>&nbsp;</td>
+    </tr> 
+    <tr>
+      <td>
+<form action="" method="post">
+      <input type="hidden" name="siteID" value="6">
+	   <input type="hidden" name="recipient_nickname" id="recipient_nickname" value="">
+	 
+		 
+
+    <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+      <td width="25%" class="GW_txtfieldcaption">Full name <span class="GW_txtred">*</span></td>
+      <td>
+      <input name="full_names" id="recipient_name"  type="text" maxlength="200"  class="validate-required GW_textbox"  /></td>
+    </tr>
+    
+    <tr>
+      <td class="GW_txtfieldcaption">Address 1 <span class="GW_txtred">*</span></td>
+      <td><input name="address"  type="text" maxlength="100"  class="validate-required GW_textbox"  /></td>
+    </tr>
+    <tr>
+      <td class="GW_txtfieldcaption">City/county <span class="GW_txtred">*</span></td>
+      <td>
+			<input name="town_county"   type="text" maxlength="50"  class="validate-required GW_textbox"  />
+		      </td>
+    </tr>
+    <tr>
+      <td class="GW_txtfieldcaption">Mobile <span class="GW_txtred">*</span></td>
+      <td>
+      <input name="recipient_phone" id="mobile"  type="text" maxlength="20"  class="validate-required GW_textbox"  /><span class="GW_txtgrey">e.g. 254732174100</span></td>
+    </tr>
+    
+    <tr>
+      <td class="GW_txtfieldcaption">Email Address</td>
+      <td><input name="email" id="email"  type="text" maxlength="50"  class="GW_textbox"  /> <span class="GW_txtgrey">optional</span></td>
+    </tr>	
+     <input type="hidden" name="delivery_type" value="bank">
+	
+    <tr>
+      <td class="GW_txtfieldcaption">ChaseBank account number <span class="GW_txtred">*</span></td>
+      <td><input name="account_number" id="recipient_bank_ac"  type="text" maxlength="30"  class="validate-required GW_textbox"  />
+	    <span class="GW_txtgrey">Bank Account length 10-16 digits</span>
+		</td>
+    </tr>
+ 
+    <tr>
+      <td height="40" class="GW_txtfieldcaption">
+      <input type="hidden" name="client_id" value="269021">
+	<input type="hidden" name="first_time" value="no"></td>
+      <td>
+      <button type="reset" class="GW_button_grey"><span>Reset</span></button>  <button type="submit" class="GW_button_grey"><span>Submit</span></button>      </td>
+    </tr>
+  </table>
+  </form>
+
+  
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  
+  ';
+  return $output;
+}
+?>

@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @author Nicholas N Chege
+ * @copyright 2011
+ */
+
+require_once("engine.php");
+$registered=has_registered($uid);
+if($registered==false){
+    echo "<fb:redirect url='register.php?notregistered'>";
+}
+
+
+
+display_navigation();
+if(isset($_POST["send"])){
+    $subject=mysql_prep($_POST["subject"]);
+    $message=mysql_prep($_POST["message"]);
+    $msgBody="<p>{$message}</p>";
+    $subject="{$subject}";
+    
+    $to="support@impalapay.com";
+    $cc="afcombiz@yahoo.com";
+    $toName="Support Team";
+    $email=sendEmail($msgBody,$subject,$to,$toName,$cc);
+    if($email){
+        echo "Your mail has been sent successfully. Our support team will get back to you shortly.";
+        $newConn=mysql_connect("192.168.220.6","nicholas","bashnjoy");
+        mysql_select_db("paymentonline");
+        $query="INSERT INTO ozekimessageout SET msg='There is a complaint regarding Impalapay, Please check your
+        email',receiver='0725999060',status='send'";
+        $result=mysql_query($query,$newConn) or die(mysql_error()) ;
+        $query="INSERT INTO ozekimessageout SET msg='There is a complaint regarding Impalapay, Please check your
+        email',receiver='0727717168',status='send'";
+        $result=mysql_query($query,$newConn)or die(mysql_error());
+        
+    }else{
+        echo "Error sending your email. Please try again";
+    }
+}
+
+
+check_if_logged_in($me);
+if($me){
+?>
+<form action="send_mail.php" method="post"><table>
+    <tbody>
+        
+            <tr><td colspan="2"><label>Subject</label></td></tr>
+            <tr><td colspan="2"><input type="text" name="subject" size="30"/></td></tr>
+            <tr><td colspan="2"><label>Message</label></td></tr>
+            <tr><td colspan="2"><textarea cols="50" rows="10" name="message"></textarea></td></tr>
+            <tr><td colspan="2"><input type="submit" name="send" value="send" /></td></tr>
+        
+        
+    </tbody>
+</table></form>
+    
+<?php
+
+}
+include("includes/footer.php");
+
+?>

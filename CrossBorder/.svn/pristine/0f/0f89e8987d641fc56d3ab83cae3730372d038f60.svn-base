@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Cashswift Money Transfer service payment processing platform</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META NAME="DESCRIPTION" CONTENT="Cashswift  money transfer service, Send money to Kenyain a secure way from abroad to your bank or mobile phone"> 
+<META NAME="KEYWORDS" CONTENT="Send money, Kenya, send mone to kenya, remittance, remit, money, Cashswift Kenya, Kenya online banking, Kenya exchange rate, exchange rate, gifts to Kenya, merchant services Kenya, account, bill, pay, wire,transfer,gifts,e-commerce, shopping, send money nairobi, send money mombasa, mobassa,">
+<META  NAME="ROBOTS" CONTENT="ALL">
+
+<style type="text/css">
+<!--
+body {
+	background-color: #F7F7F7;
+}
+.style1 {
+	font-family: Verdana;
+	font-size: 13.5pt;
+}
+-->
+</style>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+<link rel="stylesheet" type="text/css" href="ajaxtabs/ajaxtabs.css" />
+
+<script type="text/javascript" src="ajaxtabs/ajaxtabs.js">
+
+/***********************************************
+* Ajax Tabs Content script v2.2- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+</script>
+<style type="text/css">
+<!--
+.style2 {color: #FFFFFF}
+.style3 {font-size: 12pt}
+.style4 {
+	color: #DBF4F7;
+	font-weight: bold;
+}
+.style6 {color: #C6EFF2}
+
+</style>
+</head>
+<link rel="shortcut icon" href="favicon.ico" >
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" marginwidth="0" marginheight="0">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="20" align="left" valign="middle" background="button_1.jpg"><table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+      <tr>
+        <td><a href="index.php" class="style2">Home</a></td>
+        <td><a href="about-us.php" class="style2">About us</a></td>
+        <td><a href="faqs.php" class="style2">FAQs</a></td>
+        <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+<table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF"><table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr align="left">
+        <td valign="middle" background="banner_.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF"><table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                        <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                        <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td>
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>EXCHANGE RATE: KSH 85 </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF">
+		
+
+	
+		
+		
+<script language="JavaScript" type="text/javascript">
+function chkfrm(){
+  var aba = payment_form.ach_routing_number.value;
+  var valid = "0123456789";
+  var len = aba.length;
+  var bNum = true;
+  var iABA = parseInt(aba);
+  var sABA = aba.toString();
+  var iTotal = 0;
+  var bResult = false;
+  var temp;
+
+  for (var j=0; j<len; j++) {
+  temp = "" + aba.substring(j, j+1);
+  if (valid.indexOf(temp) == "-1") bNum = false;
+  }
+
+  if(len !=0) {  
+    if(len != 9) {
+    } else {
+      for (var i=0; i<len; i += 3) {
+        iTotal += parseInt(sABA.charAt(i),     10) * 3
+          +  parseInt(sABA.charAt(i + 1), 10) * 7
+          +  parseInt(sABA.charAt(i + 2), 10);
+        }
+		
+    if (iTotal != 0 && iTotal % 10 == 0){
+      bResult = true;
+    } else {
+      bResult = false;
+    }
+  }
+  } else {
+  }
+    
+  if (!bResult) {
+   alert("Please enter a valid routing number");
+     return false;
+  } else {
+  return true;
+
+  }
+
+}
+
+</script> 
+  <table align="center" width="960">
+		<tr>
+			<td>	
+	<div class="GW_main_box">
+		<span class="GW_main_box_corner GW_main_box_topLeft"></span><span class="GW_main_box_corner GW_main_box_topRight"></span>
+		  
+
+
+
+
+
+
+
+	
+
+
+
+
+
+	
+		
+
+
+
+
+	
+		
+
+		
+	
+
+
+
+
+
+
+
+
+		
+					
+
+
+
+
+
+
+ 
+
+
+
+<script language="javascript" type="text/javascript" >
+function SelectDeliveryType(del_method){
+
+if (del_method == "Deposit") {
+location.href = "deposit.php";}
+if (del_method == "HomeDelivery") {
+location.href = "home-delivery.php";}
+if (del_method == "SmartMoney") {
+location.href = "smart-money.php";}
+/*if (del_method == "BillPayment") {
+location.href = "index.cfm?fuseaction=recipient&mode=add&recipient_delivery_type=BillPayment";}*/
+}
+</script>		
+
+	 
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><div class="GW_main_box_title">Add Recipient's Information (Please select one)</div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+	  <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+        <form name="frm_recipient" id="frm_recipient" action="send-money-now.php" method="POST" onsubmit="return _CF_checkfrm_recipient(this)">
+          <tr>
+            <td width="25%" class="GW_txtfieldcaption">Delivery Method</td>
+            <td>
+			
+			
+	
+			<input type="radio" name="delivery_type" value="SmartMoney" id="SmartMoney"
+			checked
+			onclick="SelectDeliveryType('SmartMoney')"> 
+			<label for="SmartMoney">Deposit into mobile phone</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		
+		
+			<input type="radio" name="delivery_type" value="Deposit" id="Deposit"
+			
+			onclick="SelectDeliveryType('Deposit')"> 
+			<label for="Deposit">Deposit into Bank Account</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" name="delivery_type" value="Pickup" id="Pickup"
+			
+			onclick="SelectDeliveryType('Pickup')"> 
+			<label for="Pickup">Cash Pickup</label>
+	    
+		
+		
+		
+			
+	
+			</td>
+          </tr>
+       
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </form>
+
+      </table></td>
+    </tr>
+  </table>
+
+
+
+	<div style="margin:0 15px;"><hr size="1" color="#eee" noshade="noshade"></div>
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  
+    <tr>
+      <td>&nbsp;</td>
+    </tr> 
+    <tr>
+      <td>
+<form action="send-money-now.php" method="post">
+      <input type="hidden" name="siteID" value="6">
+	   <input type="hidden" name="recipient_nickname" id="recipient_nickname" value="">
+	 
+		 
+
+    <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+
+	
+	
+
+	
+	
+	
+	
+	
+    <tr>
+      <td width="25%" class="GW_txtfieldcaption">Full name <span class="GW_txtred">*</span></td>
+      <td>
+      <input name="recipient_name" id="recipient_name"  type="text" maxlength="200"  class="GW_textbox"  /></td>
+    </tr>
+    
+    <tr>
+      <td class="GW_txtfieldcaption">Address 1 <span class="GW_txtred">*</span></td>
+      <td><input name="recipient_address" id="recipient_address"  type="text" maxlength="100"  class="GW_textbox"  /></td>
+    </tr>
+    <tr>
+      <td class="GW_txtfieldcaption">Address 2</td>
+      <td><input name="recipient_address2" id="recipient_address2"  type="text" maxlength="50"  class="GW_textbox"  /> <span class="GW_txtgrey">optional</span></td>
+    </tr>
+     
+    
+    <tr>
+      <td class="GW_txtfieldcaption">City <span class="GW_txtred">*</span></td>
+      <td>
+      	<input name="recipient_province" id="recipient_province" type="hidden" value="" />
+      	
+			<input name="recipient_city" id="recipient_city"  type="text" maxlength="50"  class="GW_textbox"  />
+		      </td>
+    </tr>
+    
+    
+    <tr>
+      <td class="GW_txtfieldcaption">Phone <span class="GW_txtred">*</span></td>
+      <td>
+      <input name="recipient_phone" id="recipient_phone"  type="text" maxlength="20"  class="GW_textbox"  /><span class="GW_txtgrey">e.g. 9851022360 - Numbers only (ignore country code)</span></td>
+    </tr>
+    <tr>
+      <td class="GW_txtfieldcaption">Alternate Phone</td>
+      <td>
+      <input name="recipient_alt_phone" id="recipient_alt_phone"  type="text" maxlength="20"  class="GW_textbox"  /> <span class="GW_txtgrey">optional</span></td>
+    </tr>
+    <tr>
+      <td class="GW_txtfieldcaption">Email Address</td>
+      <td><input name="recipient_email" id="recipient_email"  type="text" maxlength="50"  class="GW_textbox"  /> <span class="GW_txtgrey">optional</span></td>
+    </tr>
+	
+	
+   		
+		
+		
+		<input type="hidden" name="recipient_gender" value="">
+		<input type="hidden" name="recipient_birth_month" value="">
+		<input type="hidden" name="recipient_birth_day" value="">
+		<input type="hidden" name="recipient_birth_year" value="">	
+		
+   
+	
+	
+	
+    <tr>
+      <td class="GW_txtfieldcaption">
+	  Mobile Number<span class="GW_txtred"> *</span>
+</td>
+      <td><input name="recipient_smartmoney_ac_number" id="recipient_smartmoney_ac_number"  type="text" maxlength="15"  size="30"  class="GW_textbox"  /> <span class="GW_txtgrey">Numbers only </span></td>
+    </tr> 
+    
+		    <input type="hidden" name="recipient_delivery_type" value="SmartMoney">
+	    	
+
+	
+    <tr>
+      <td height="40" class="GW_txtfieldcaption">
+      <input type="hidden" name="client_id" value="269021">
+	<input type="hidden" name="first_time" value="no"></td>
+      <td>
+      <button type="reset" class="GW_button_grey"><span>Reset</span></button>&nbsp;&nbsp;<button type="submit" class="GW_button_grey"><span>Submit</span></button>      </td>
+
+
+
+    </tr>
+  </table>
+  </form>
+
+  
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+<script language="Javascript" type="text/javascript"> 
+var txtBox=document.getElementById("recipient_name" );
+if (txtBox!=null ) txtBox.focus();
+</script>
+
+  
+  
+  
+  
+
+				
+
+           
+		<span class="GW_main_box_corner GW_main_box_bottomLeft"></span><span class="GW_main_box_corner GW_main_box_bottomRight"></span>
+	</div>
+	</td>
+		</tr>
+	</table>
+ 
+ <script>
+var txtBox=document.getElementById("ach_routing_number" );
+if (txtBox!=null ) txtBox.focus();
+</script>
+
+</td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, Cashswift Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,140 @@
+VERSION 5.00
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Begin VB.Form Form1 
+   Caption         =   "Issuer CBK"
+   ClientHeight    =   3090
+   ClientLeft      =   60
+   ClientTop       =   450
+   ClientWidth     =   5205
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   3090
+   ScaleWidth      =   5205
+   StartUpPosition =   3  'Windows Default
+   Begin MSWinsockLib.Winsock Winsock2 
+      Left            =   120
+      Top             =   2040
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
+   Begin VB.Timer ConnectionTimer 
+      Interval        =   5000
+      Left            =   120
+      Top             =   1320
+   End
+   Begin MSWinsockLib.Winsock Winsock1 
+      Index           =   0
+      Left            =   120
+      Top             =   720
+      _ExtentX        =   741
+      _ExtentY        =   741
+      _Version        =   393216
+   End
+   Begin VB.TextBox Text2 
+      Height          =   375
+      Left            =   1200
+      TabIndex        =   1
+      Top             =   2400
+      Width           =   3855
+   End
+   Begin VB.TextBox Text1 
+      Height          =   1815
+      Left            =   1080
+      MultiLine       =   -1  'True
+      ScrollBars      =   3  'Both
+      TabIndex        =   0
+      Top             =   360
+      Width           =   3975
+   End
+   Begin VB.Timer Timer1 
+      Interval        =   5000
+      Left            =   120
+      Top             =   120
+   End
+End
+Attribute VB_Name = "Form1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private HOST As String
+Private PORT As String
+Private HOST2 As String
+Private PORT2 As String
+Private Y As Integer
+Private Sub Form_Load()
+
+
+HOST = "127.0.0.1"
+PORT = "2500"
+
+HOST2 = "192.168.220.6"
+PORT2 = "8450"
+
+
+
+ Winsock1(0).LocalPort = PORT
+ Winsock1(0).Listen
+
+
+      
+DoEvents
+
+End Sub
+
+
+
+Private Sub Winsock1_Close(index As Integer)
+    
+    Winsock1(index).Close
+    Unload Winsock1(index)
+   
+End Sub
+
+Private Sub Winsock1_ConnectionRequest(index As Integer, ByVal requestID As Long)
+Y = Y + 1
+Load Winsock1(Y)
+Winsock1(Y).Accept requestID
+Text1.Text = "Connection Estblished"
+End Sub
+
+Private Sub Winsock1_DataArrival(index As Integer, ByVal bytesTotal As Long)
+Dim Message As String
+
+If Winsock1(index).State = sckConnected Then
+    Winsock1(index).GetData Message
+    Text1.Text = Message
+    Winsock1(index).SendData Message
+End If
+
+End Sub
+
+
+Private Sub Winsock2_Close()
+    Winsock1.Close
+   
+End Sub
+
+Private Sub Winsock2_Connect()
+   If Winsock2.State = sckConnected Then
+   Text2.Text = "Connected to Issuer"
+   
+   End If
+    
+End Sub
+
+
+
+Private Sub Winsock2_DataArrival(ByVal bytesTotal As Long)
+Dim Message As String
+
+If Winsock2.State = sckConnected Then
+    Winsock2.GetData Message
+        If Winsock1.State = sckConnected Then
+           Winsock1.SendData Message
+        End If
+End If
+
+End Sub
+
+

@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+function calculate_form($dest){
+    $output='<table align="center" width="960">
+          <tr>
+            <td>
+              <div class="GW_main_box"> <span class="GW_main_box_corner GW_main_box_topLeft"></span><span class="GW_main_box_corner GW_main_box_topRight"></span>
+<form action="'.$dest.'" method="post">
+                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><div class="GW_main_box_title">Calculate fee and send money to Kenya</div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td><div class="GW_msg_info" style="margin:0 15px;">On this page you can calculate the approximate fees and the amount your recipient may receive in Kenya</div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+		
+		
+			
+		
+		
+      <!--form name="calculator" id="calculator" action="index.cfm?fuseaction=default_calculator&mode=show_result" method="post" onsubmit="return _CF_checkcalculator(this)"-->
+	
+	
+	<table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">  
+		
+        <tr>
+    		<td width="25%" height="30" class="GW_txtfieldcaption">Amount to Send ($) </td>
+    		<td>
+ 			<input type="hidden" name="service_type" value="1">
+			 <script language="javascript">
+             function chkamount(){
+                 var currentamount=document.calculator.amount.value;
+                 if(currentamount=="0.00"){
+                     document.calculator.amount.value="";
+                 }
+                 if(currentamount==""){
+                     document.calculator.amount.value="0.00";
+                 }
+             }
+             </script>
+			 
+			 
+			  
+			  <script language="javascript" type="text/javascript">
+			        function deleteSpecialChar(amount) {
+			            !(/^[0-9.]*$/i).test(amount.value)?amount.value = amount.value.replace(/[^0-9.]/ig,''):null;
+			        }
+			    </script>
+				
+			     <input name="amount" type="text" maxlength="7"  id="amount"  onkeyup="deleteSpecialChar(this)"  class="GW_textbox"  onblur="deleteSpecialChar(this)" />
+			  
+			
+		  </td>
+	  </tr>
+        
+        <tr>
+        	<td height="30" class="GW_txtfieldcaption">Exchange Rate </td>
+        	<td>1USD = KES <?php echo getExchangeRate(); ?> </td>
+        </tr>
+		
+		
+		
+		
+  		<tr>
+    		<td height="30" class="GW_txtfieldcaption">Billing Method</td>
+    		<td>
+            	<select name="payment_method" id="payment_method"  class="GW_selectbox" >
+					<option value="Credit_card">Credit Card</option>
+				</select>
+			</td>
+		</tr>
+  		<tr>
+    		<td height="40">&nbsp;<input type="hidden" name="type" value="basic_calc"> <input type="hidden" value="KES"></td>
+    		<td><button name="calc" type="submit" class="GW_button_green_small"><span>Calculate</span></button></td>
+  		</tr>
+  		<tr>
+    		<td>&nbsp;</td>
+    		<td>&nbsp;</td>
+  		</tr>
+  		<tr>
+    		<td>&nbsp;</td>
+    		<td><a href="http://www.chasebank.co.ke/section/diaspora-banking" target="_blank"><img src="images/logo-chase-bank.png" alt="Trusted Partner : Cashswift" border="0"></a><img src="images/card-lists.jpg"></td>
+    	</tr>
+  		<tr>
+    		<td>&nbsp;</td>
+    		<td>&nbsp;</td>
+  		</tr>
+	</table>
+</form>
+
+      </td>
+    </tr>
+    </table>
+
+                  <span class="GW_main_box_corner GW_main_box_bottomLeft"></span><span class="GW_main_box_corner GW_main_box_bottomRight"></span> </div></td>
+          </tr>
+        </table>';
+}
+
+?>

@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2014
+ */
+
+
+
+require_once "Class.Display.php";
+
+Display::header("sub tenants");
+Display::headerTopSection();
+Display::navigation();
+$output='
+	    <div id="overlay" style="width: 1046px; margin: 0 auto; background: url(\'http://citycentrehouston.com/img/tenants/bg_anthropologie.jpg\');">
+	    
+        <div id="main" role="main" class="clear" style="background: url(\'img/overlay_white.png\') repeat;">
+	    
+	    <div class="wrap clear">
+	    
+  	    <div class="col">
+          <h1>Anthropologie</h1>
+        
+          <ul class="buttons clear nav">
+            <li><a href="#" target="_blank" class="btn btn_nav">Website</a></li>            
+            <li><a href="#" class="btn btn_nav">Store Map</a></li>                          
+          </ul><!-- /ul.buttons -->
+          <ul class="buttons clear nav">            
+            <li class="fb social"><a href="http://www.facebook.com/Anthropologie" target="_blank">Facebook</a></li>            
+            <li class="tw social"><a href="http://twitter.com/#!/anthropologie" target="_blank">Twitter</a></li>          
+          </ul>          
+        
+  	      <p>
+	           At Anthropologie we carefully design and select our products with an eye for craftsmanship, 
+               the smallest details, and that certain something special that makes each item you find in our 
+               stores more than novelty but a personal discovery. Our clothing, jewelry, and objects for home 
+               are always changing. Our hope at Anthropologie is to share with you in the breathtaking possibility 
+               of it all.
+         </p>
+
+	      
+  	    </div><!-- /div.col -->
+	    
+  	    <div class="col">
+	      
+    	    <div class="slider">
+		
+              
+              <p style="text-align:center;"><img src="http://citycentrehouston.com/uploads/3/image-anthropologie-01.jpg" alt="" /></p>
+              
+              <p style="text-align:center;"><img src="http://citycentrehouston.com/uploads/3/image-anthropologie-02.jpg" alt="" /></p>
+              
+              <p style="text-align:center;"><img src="http://citycentrehouston.com/uploads/3/image-anthropologie-03.jpg" alt="" /></p>
+              
+    	    
+
+      	  </div><!-- /.slider -->
+
+      	  <div class="slider_nav">
+
+      	  </div><!-- /.slider_nav -->
+    	  
+  	    </div><!-- /div.col -->
+  	    
+  	  </div><!-- /div.wrap -->
+	  
+	  </div><!-- /div#main -->
+  	
+	</div><!-- /#overlay -->
+	  ';
+
+Display::mainContent($output);
+Display::featured();
+Display::footer();
+
+?>

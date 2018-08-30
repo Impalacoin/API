@@ -1,0 +1,187 @@
+VERSION 5.00
+Begin VB.Form frmODBCLogon 
+   BackColor       =   &H00E0E0E0&
+   BorderStyle     =   4  'Fixed ToolWindow
+   Caption         =   "Database Logon"
+   ClientHeight    =   3885
+   ClientLeft      =   2850
+   ClientTop       =   1635
+   ClientWidth     =   5325
+   Icon            =   "frmODBCLogon.frx":0000
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   3885
+   ScaleWidth      =   5325
+   ShowInTaskbar   =   0   'False
+   StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
+      Caption         =   "Cancel"
+      Height          =   450
+      Left            =   3000
+      TabIndex        =   9
+      Top             =   3360
+      Width           =   1440
+   End
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "&OK"
+      Height          =   450
+      Left            =   1320
+      TabIndex        =   8
+      Top             =   3360
+      Width           =   1440
+   End
+   Begin VB.Frame fraStep3 
+      BackColor       =   &H00E0E0E0&
+      Caption         =   "Connection Values"
+      Height          =   3015
+      Index           =   0
+      Left            =   120
+      TabIndex        =   10
+      Top             =   240
+      Width           =   4935
+      Begin VB.TextBox txtUID 
+         Height          =   300
+         Left            =   1125
+         TabIndex        =   1
+         Text            =   "emcon"
+         Top             =   600
+         Width           =   3015
+      End
+      Begin VB.TextBox txtPWD 
+         Height          =   300
+         IMEMode         =   3  'DISABLE
+         Left            =   1125
+         PasswordChar    =   "*"
+         TabIndex        =   3
+         Text            =   "password"
+         Top             =   930
+         Width           =   3015
+      End
+      Begin VB.TextBox txtDatabase 
+         Height          =   300
+         Left            =   1125
+         TabIndex        =   5
+         Text            =   "emconnect"
+         Top             =   1260
+         Width           =   3015
+      End
+      Begin VB.TextBox txtServer 
+         Height          =   330
+         Left            =   1125
+         TabIndex        =   7
+         Text            =   "172.17.0.165"
+         Top             =   1560
+         Width           =   3015
+      End
+      Begin VB.Label lblStep3 
+         AutoSize        =   -1  'True
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "&User ID:"
+         Height          =   195
+         Index           =   2
+         Left            =   135
+         TabIndex        =   0
+         Top             =   630
+         Width           =   585
+      End
+      Begin VB.Label lblStep3 
+         AutoSize        =   -1  'True
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "&Password:"
+         Height          =   195
+         Index           =   3
+         Left            =   135
+         TabIndex        =   2
+         Top             =   975
+         Width           =   735
+      End
+      Begin VB.Label lblStep3 
+         AutoSize        =   -1  'True
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Data&base:"
+         Height          =   195
+         Index           =   4
+         Left            =   135
+         TabIndex        =   4
+         Top             =   1320
+         Width           =   735
+      End
+      Begin VB.Label lblStep3 
+         AutoSize        =   -1  'True
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "&Server IP:"
+         Height          =   195
+         Index           =   6
+         Left            =   135
+         TabIndex        =   6
+         Top             =   1680
+         Width           =   705
+      End
+   End
+End
+Attribute VB_Name = "frmODBCLogon"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Private Declare Function SQLDataSources Lib "ODBC32.DLL" (ByVal henv&, ByVal fDirection%, ByVal szDSN$, ByVal cbDSNMax%, pcbDSN%, ByVal szDescription$, ByVal cbDescriptionMax%, pcbDescription%) As Integer
+Private Declare Function SQLAllocEnv% Lib "ODBC32.DLL" (env&)
+Const SQL_SUCCESS As Long = 0
+Const SQL_FETCH_NEXT As Long = 1
+Public LOGINSUCCESS As Integer
+Public FORMNAME As Integer
+
+
+Private Sub cmdCancel_Click()
+    Me.Hide
+End Sub
+
+
+Private Sub cmdOK_Click()
+   
+        Dim Conn As ADODB.Connection
+        Dim rstRcd As ADODB.Recordset
+        Set Conn = New ADODB.Connection
+        Set rstRcd = New ADODB.Recordset
+    
+     On Error GoTo err:
+     
+     Conn.ConnectionString = "Provider=SQLOLEDB;Data Source=" & txtServer.Text & ";Initial Catalog=" & txtDatabase.Text & ";User Id=" & _
+          txtUID.Text & ";Password= " & txtPWD.Text & ";"
+          Conn.Open
+        LOGINSUCCESS = 1
+        If FORMNAME = 1 Then
+          
+          MchAddFrm.Show
+        ElseIf FORMNAME = 2 Then
+          currload.Show
+          
+        ElseIf FORMNAME = 3 Then
+          
+          frmQuery.Show
+        ElseIf FORMNAME = 4 Then
+          
+          frmHSM.Show
+          
+        ElseIf FORMNAME = 5 Then
+          
+          Interface.Show
+        End If
+          Me.Hide
+         
+    Exit Sub
+    
+err:      MsgBox "Login Failed. Try again.", vbCritical, "Login Error"
+LOGINSUCCESS = 0
+          'Me.Hide
+End Sub
+
+Private Sub Form_Load()
+    
+Me.Top = MainForm.Top + 1070
+Me.Left = MainForm.Left + 4300
+End Sub
+

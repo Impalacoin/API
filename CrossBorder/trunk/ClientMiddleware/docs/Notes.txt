@@ -1,0 +1,75 @@
+@@@@@@@@@@@@@@@@@@
+Airtel Remittance
+@@@@@@@@@@@@@@@@@@
+
+Client Interface for external integrators
+
+Production Application: http://airtime.impalapay.com
+
+
+======
+Design
+======
+
+- Client able to: query balance, query transaction Id status, query forex rates,
+  send money
+  
+- Upper limit to be set for daily amount sent to recipient and number of daily
+  transactions to recipient. No other limit imposed except for balance of client
+  account
+  
+
+
+
+Security Considerations:
+* Authorization - procedures must be provided to verify that the user can make 
+  the requested transactions.
+* Confidentiality assures you that data is not disclosed to unauthorized 
+  persons, processes, or devices.
+* Integrity assures you that any data sent between users is guaranteed not to 
+  have been tampered with in transit.
+* Authentication assures you that people you deal with are not imposters and are
+  trusted.
+* Non-Repudiation confirms that once the data has been sent, the sender cannot 
+  be able to deny that he/she sent the data. The user is provided with proof of
+  the transaction and the recipient is assured of the user’s identity.
+* Anti-replay - this stops users from resending data in an effort to pretend 
+  they are someone else. For example, if 2 users communicate and complete their
+  conversation, a malevolent third user may try communicating to one of the 
+  parties pretending to be the other valid party.
+* Eliminate internal fraud
+* Ease of technical implementation
+
+The following are some of the problems that cryptography helps to alleviate:
+* Lack of Privacy: people catching information in transit and reading it.
+* Identity Spoofing: this is where a malevolent user disguises his / her 
+ identity in order to gain access.
+* Data Modification: this is the changing of data in transit.
+* Replay Attacks: this is when a host captures another host's response to a 
+  system and uses this information to attempt to gain access to the system at a 
+  later stage.
+* Middleman Attacks: this is when a host sits between 2 communicating hosts, and
+  transparently monitors, captures and relays all communication between the 
+  hosts. Sometimes also referred to as Man-In-The-Middle attacks.
+* Password Attacks: attempting to figure out a username / password combo to gain
+  access to a system.
+  
+  
+============
+To Do
+============
+* Create Apache HttpComponents for sample HTTP and HTTPS calls
+* No fetching of items from the RDBMS using Id
+* Rename package com.impalapay.airtel.persistence.geolocaion to 
+  com.impalapay.airtel.persistence.geolocation
+* BeanProcessor in DAOs to be global
+* SessionLog does not need to extend StorableBean
+=============
+Connect to Airtel
+=============
+*Airtel webservice Endpoint url:http://196.216.73.150:9990/switch-rest/request/methodname
+
+============
+Highlight
+============
+if an account is made inactive make a new build of the project.

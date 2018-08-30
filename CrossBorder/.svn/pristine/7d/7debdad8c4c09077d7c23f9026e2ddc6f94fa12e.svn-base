@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+
+class Display{
+    public static function header($title,$jquery=""){
+        ?>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        
+        <head>
+        	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+        	<meta name="author" content="Nicholas N. Chege" />
+            <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+            <link rel="stylesheet" href="css/default.css" media="screen" />
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+            <script type="text/javascript" src="js/default.js"></script>
+        	<title><?php echo $title?></title>
+            <?php echo $jquery ?>
+        </head>
+        <body >
+        <div id="container">
+        <div class="header-main">
+            <div class="logo">
+                <a href="" name="top">
+                   <img src="images/banner.png" width="150" height="70"/> 
+                </a>
+            </div>
+            <?php if(!Users::checkIfLogedIn()){ ?>
+            <div class="login-block">
+                <span class="account">
+                    <a href="login.php">Login</a>
+                </span>
+            </div> 
+            <?php } ?>           
+        </div>
+        <?php
+    }
+    public static function nonMemberNavigation(){
+        ?>
+        <!--div class="nosearch-container">
+        
+        </div-->
+        <div class="navigation-inner">
+            <div class="home-icon"><a href="index.php"><img src="images/home_icon.png"/></a></div>
+            <ul>
+                <li><a href="login.php">My Account</a></li>
+                <li><a href="#">About us</a></li>
+                <li><a href="contact.php">Contact</a></li>
+                <li><a href="register.php">Register</a></li>
+            </ul>
+        </div>
+        
+        <?php
+    }
+    public static function memberNavigation(){
+        ?>
+        <!--div class="nosearch-container">
+        
+        </div-->
+        <div class="navigation-inner">
+        <?php if(Users::checkIfLogedIn()){ ?>
+            <div class="home-icon"><a href="main.php"><img src="images/home_icon.png"/></a></div>
+            <ul>
+                <li><a href="main.php">My Account</a></li>
+                <li><a href="send_money.php">Send Money</a></li>
+                <li><a href="">Transactions</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+            <?php } ?>
+        </div>
+        
+        <?php
+    }
+    public static function content($content){
+        ?>
+        <div id="content">
+          <div class="content-top"></div>
+          <div class="content-inner">
+          <?php echo $content;?>
+          </div>
+        </div>
+        <?php
+    }
+    public static function footer(){
+        ?>
+            </div>
+
+        </body>
+        </html>
+        <?php
+    }
+}
+
+?>

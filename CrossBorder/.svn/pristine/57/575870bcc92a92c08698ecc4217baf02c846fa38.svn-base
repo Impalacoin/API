@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+	font-family: "Comic Sans MS", cursive;
+}
+-->
+</style></head>
+
+<body>
+<?php
+session_start();
+session_destroy();
+
+?>
+<div style="text-align:center; font-family:Georgia, 'Times New Roman', Times, serif, Geneva, sans-serif, Helvetica, sans-serif; font-size:25px; font-weight:bold;">
+  <a href="#">Your Transaction has completed succesfully<br />
+thank you for using ImpalaPay</a></div>
+
+<div style="text-align:center; font-family:'Courier New', Courier, monospace, cursive, ; font-size:25px; font-weight:bold; color:#0CF;">
+  Your Transaction Reference number is...<br />
+<?php echo $_SESSION['message'];?></div>
+<div style="text-align:center; font-family:Arial, Helvetica, sans-serif; font-size:25px; font-weight:bold;">
+  <a href="<?php echo $_SESSION['url'];?>">Click here to be redirect.....<img src='redirect.jpg' width='100px'/><br />
+</a></div>
+
+
+</div>
+</body>
+</html>
+
+

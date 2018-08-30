@@ -1,0 +1,584 @@
+<!DOCTYPE HTML>
+<%-- 
+  Copyright (c) impalapay Ltd., June 23, 2014
+  
+  @author eugene chimita, eugenechimita@impalapay.com
+--%>
+<%@page import="com.impalapay.airtel.beans.accountmgmt.Account"%>
+
+
+
+<%@page import="com.impalapay.airtel.accountmgmt.session.SessionStatistics"%>
+<%@page import="com.impalapay.airtel.accountmgmt.session.SessionConstants"%>
+
+<%@page import="com.impalapay.airtel.cache.CacheVariables"%>
+
+<%@page import="org.apache.commons.lang3.StringUtils" %>
+
+<%@page import="net.sf.ehcache.Cache" %>
+<%@page import="net.sf.ehcache.CacheManager" %>
+<%@page import="net.sf.ehcache.Element"%>
+
+<%@page import="java.text.DecimalFormat"%>
+
+<%@page import="java.net.URLEncoder"%>
+
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Calendar"%>
+
+<%
+    // The following is for session management.    
+    if (session == null) {
+        response.sendRedirect("../client");
+    }
+
+    String sessionUsername = (String) session.getAttribute(SessionConstants.ACCOUNT_SIGN_IN_KEY);
+
+    if (StringUtils.isEmpty(sessionUsername)) {
+        response.sendRedirect("index.jsp");
+    }
+
+    session.setMaxInactiveInterval(SessionConstants.SESSION_TIMEOUT);
+    response.setHeader("Refresh", SessionConstants.SESSION_TIMEOUT + "; url=logout");
+    // End of session management code
+
+    CacheManager mgr = CacheManager.getInstance();
+    Cache accountsCache = mgr.getCache(CacheVariables.CACHE_ACCOUNTS_BY_USERNAME);
+
+    Cache statisticsCache = mgr.getCache(CacheVariables.CACHE_STATISTICS_BY_USERNAME);
+
+    Account account = new Account();
+    SessionStatistics statistics = new SessionStatistics();
+
+    Element element;
+
+    if ((element = accountsCache.get(sessionUsername)) != null) {
+        account = (Account) element.getObjectValue();
+    }
+
+   if ((element = statisticsCache.get(sessionUsername)) != null) {
+        statistics = (SessionStatistics) element.getObjectValue();
+    }
+
+
+    int count = 0; // A generic counter  
+%>
+
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>ImpalaPay</title>
+        <link  rel="icon" type="image/png"  href="../images/Airtel.png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="layout" content="main"/>
+
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
+        
+        <link href="../css/customize-template.css" type="text/css" media="screen, projection" rel="stylesheet" />
+
+        <style>
+            #body-content { padding-top: 40px;}
+        </style>
+<script src="fusionchart/fusioncharts.charts.js" type="text/javascript" ></script>
+        <script src="fusionchart/fusioncharts.gantt.js" type="text/javascript" ></script>
+        <script src="fusionchart/fusioncharts.widgets.js" type="text/javascript" ></script>
+        <script src="fusionchart/fusioncharts.maps.js" type="text/javascript" ></script>
+        <script src="fusionchart/fusioncharts.powercharts.js" type="text/javascript" ></script>
+        <script src="fusionchart/fusioncharts.js" type="text/javascript" ></script>
+        <script type="text/javascript" src="fusionchart/themes/fusioncharts.theme.fint.js"></script>
+        <script type="text/javascript">
+            FusionCharts.ready(function() {
+                var revenueChart = new FusionCharts({
+                    "type": "column3d",
+                    "renderAt": "chartContainer",
+                    "width": "100%",
+                    "height": "300",
+                    "dataFormat": "json",
+                    "dataSource": {
+                        "chart": {
+                            "caption": "Monthly Transfer",
+                            "subCaption": "Demo account",
+                            "xAxisName": "Month",
+                            "yAxisName": "Revenues (In USD)",
+                            "theme": "fint"
+                        },
+                        "data": [
+                            {
+                                "label": "Jan",
+                                "value": "420000"
+                            },
+                            {
+                                "label": "Feb",
+                                "value": "810000"
+                            },
+                            {
+                                "label": "Mar",
+                                "value": "720000"
+                            },
+                            {
+                                "label": "Apr",
+                                "value": "550000"
+                            },
+                            {
+                                "label": "May",
+                                "value": "910000"
+                            },
+                            {
+                                "label": "Jun",
+                                "value": "510000"
+                            },
+                            {
+                                "label": "Jul",
+                                "value": "680000"
+                            },
+                            {
+                                "label": "Aug",
+                                "value": "620000"
+                            },
+                            {
+                                "label": "Sep",
+                                "value": "610000"
+                            },
+                            {
+                                "label": "Oct",
+                                "value": "490000"
+                            },
+                            {
+                                "label": "Nov",
+                                "value": "900000"
+                            },
+                            {
+                                "label": "Dec",
+                                "value": "730000"
+                            }
+                        ]
+                    }
+
+                });
+                revenueChart.render();
+            })
+        </script>
+        <script type="text/javascript">
+            FusionCharts.ready(function() {
+                var salesByState = new FusionCharts({
+                    "type": "maps/usa",
+                    "renderAt": "chartContainer2",
+                    "width": "100%",
+                    "height": "100%",
+                    "dataFormat": "json",
+                    "dataSource": {
+                        "chart": {
+                            "caption": "Transfers From USA",
+                            "subcaption": "2013",
+                            "entityFillHoverColor": "#cccccc",
+                            "numberScaleValue": "1,1000,1000",
+                            "numberScaleUnit": "K,M,B",
+                            "numberPrefix": "$",
+                            "showLabels": "1",
+                            "theme": "fint"
+                        },
+                        "colorrange": {
+                            "minvalue": "0",
+                            "startlabel": "Low",
+                            "endlabel": "High",
+                            "code": "#e44a00",
+                            "gradient": "1",
+                            "color": [
+                                {
+                                    "maxvalue": "56580",
+                                    "displayvalue": "Average",
+                                    "code": "#f8bd19"
+                                },
+                                {
+                                    "maxvalue": "100000",
+                                    "code": "#6baa01"
+                                }
+                            ]
+                        },
+                        "data": [
+                            {
+                                "id": "HI",
+                                "value": "3189"
+                            },
+                            {
+                                "id": "DC",
+                                "value": "2879"
+                            },
+                            {
+                                "id": "MD",
+                                "value": "920"
+                            },
+                            {
+                                "id": "DE",
+                                "value": "4607"
+                            },
+                            {
+                                "id": "RI",
+                                "value": "4890"
+                            },
+                            {
+                                "id": "WA",
+                                "value": "34927"
+                            },
+                            {
+                                "id": "OR",
+                                "value": "65798"
+                            },
+                            {
+                                "id": "CA",
+                                "value": "61861"
+                            },
+                            {
+                                "id": "AK",
+                                "value": "58911"
+                            },
+                            {
+                                "id": "ID",
+                                "value": "42662"
+                            },
+                            {
+                                "id": "NV",
+                                "value": "78041"
+                            },
+                            {
+                                "id": "AZ",
+                                "value": "41558"
+                            },
+                            {
+                                "id": "MT",
+                                "value": "62942"
+                            },
+                            {
+                                "id": "WY",
+                                "value": "78834"
+                            },
+                            {
+                                "id": "UT",
+                                "value": "50512"
+                            },
+                            {
+                                "id": "CO",
+                                "value": "73026"
+                            },
+                            {
+                                "id": "NM",
+                                "value": "78865"
+                            },
+                            {
+                                "id": "ND",
+                                "value": "50554"
+                            },
+                            {
+                                "id": "SD",
+                                "value": "35922"
+                            },
+                            {
+                                "id": "NE",
+                                "value": "43736"
+                            },
+                            {
+                                "id": "KS",
+                                "value": "32681"
+                            },
+                            {
+                                "id": "OK",
+                                "value": "79038"
+                            },
+                            {
+                                "id": "TX",
+                                "value": "75425"
+                            },
+                            {
+                                "id": "MN",
+                                "value": "43485"
+                            },
+                            {
+                                "id": "IA",
+                                "value": "46515"
+                            },
+                            {
+                                "id": "MO",
+                                "value": "63715"
+                            },
+                            {
+                                "id": "AR",
+                                "value": "34497"
+                            },
+                            {
+                                "id": "LA",
+                                "value": "70706"
+                            },
+                            {
+                                "id": "WI",
+                                "value": "42382"
+                            },
+                            {
+                                "id": "IL",
+                                "value": "73202"
+                            },
+                            {
+                                "id": "KY",
+                                "value": "79118"
+                            },
+                            {
+                                "id": "TN",
+                                "value": "44657"
+                            },
+                            {
+                                "id": "MS",
+                                "value": "66205"
+                            },
+                            {
+                                "id": "AL",
+                                "value": "75873"
+                            },
+                            {
+                                "id": "GA",
+                                "value": "76895"
+                            },
+                            {
+                                "id": "MI",
+                                "value": "67695"
+                            },
+                            {
+                                "id": "IN",
+                                "value": "33592"
+                            },
+                            {
+                                "id": "OH",
+                                "value": "32960"
+                            },
+                            {
+                                "id": "PA",
+                                "value": "54346"
+                            },
+                            {
+                                "id": "NY",
+                                "value": "42828"
+                            },
+                            {
+                                "id": "VT",
+                                "value": "77411"
+                            },
+                            {
+                                "id": "NH",
+                                "value": "51403"
+                            },
+                            {
+                                "id": "ME",
+                                "value": "64636"
+                            },
+                            {
+                                "id": "MA",
+                                "value": "51767"
+                            },
+                            {
+                                "id": "CT",
+                                "value": "57353"
+                            },
+                            {
+                                "id": "NJ",
+                                "value": "80788"
+                            },
+                            {
+                                "id": "WV",
+                                "value": "95890"
+                            },
+                            {
+                                "id": "VA",
+                                "value": "83140"
+                            },
+                            {
+                                "id": "NC",
+                                "value": "97344"
+                            },
+                            {
+                                "id": "SC",
+                                "value": "88234"
+                            },
+                            {
+                                "id": "FL",
+                                "value": "88234"
+                            }
+                        ]
+                    }
+                });
+                salesByState.render();
+            });
+        </script>
+      
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript" src="../js/visualization-chart-script.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+        
+            <div class="navbar-inner">
+                <div class="container">
+
+
+
+                    <button class="btn btn-navbar" data-toggle="collapse" data-target="#app-nav-top-bar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                  </button>
+                    <a href="index.jsp" class="brand">IMT Portal</a>
+                    <!--
+                    <ul class="nav">
+                        <li class="#"><a href="index.jsp">Dashboard</a></li>
+                        <li><a href="viewtrans.jsp">Transactions</a></li>
+                        <li><a href="#about" data-toggle="modal">Help</a></li>
+                        <li><a href="search.jsp">Search</a></li>
+			<!--<li><a href="highcharttest.jsp">Reports</a></li>--
+                        <li>
+                            <a href="accountmanage.jsp">Account Management <b class="caret"></b></a>
+
+
+                        </li>
+                    </ul>-->
+
+              <div id="app-nav-top-bar" class="nav-collapse">
+                        
+                        <ul class="nav pull-right">
+                            <li>
+                               <div align="right"> 
+                    <%
+                                       if (!StringUtils.isEmpty(sessionUsername)) {
+                                           out.print("<form name=\"logoutForm\" method=\"post\" action=\"logout\">");
+                                           out.print("<a id=\"logout\"><span><span><input type=\"submit\" class=\"btn btn-success\" name=\"logout\"  id=\"logout\" value=\"Logout\"></span></span></a>");
+                                           out.print("</form>");
+                                       } else {
+                                           out.print("<a href=\"login.jsp\"><span><span>Sign In</span></span></a>");
+                                       }
+                    %>
+
+
+
+
+
+
+
+                </div>
+                            </li>
+                            
+                        </ul>
+                    </div>
+
+
+              </div>
+
+          </div>
+        </div>
+
+        <div id="body-container">
+            <div id="body-content">
+
+     <section class="nav nav-page">
+        <div class="container">
+            <div class="row">
+                
+                <div class="page-nav-options">
+                    <div class="span12">
+                        
+                        <ul class="nav nav-tabs">
+                        
+                        <li class="active"><a href="index.jsp"><i class="icon-home"></i>Dashboard</a></li>
+                        <li><a href="viewtrans.jsp"><i class="icon-briefcase"></i>Transactions</a></li>
+                        <li><a href="#about" data-toggle="modal"><i class="icon-exclamation-sign"></i>Help</a></li>
+                        <li><a href="search.jsp"><i class="icon-search"></i>Search</a></li>
+			<!--<li><a href="highcharttest.jsp">Reports</a></li>-->
+                        <li>
+                            <a href="accountmanage.jsp"><i class="icon-pushpin"></i>Account Management</a>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+                <section class="page container">
+<div class="row">
+     <div class="span18">
+                <div class="box">
+                    <div class="box-header">
+                        <i class="icon-bookmark"></i>
+                        <h5>Statistics</h5>
+                    </div>
+                    <div class="box-content">
+                        <div class="row">
+                        	<div class="span7">
+				<!--<div id="chartContainer">FusionCharts XT will load here!</div>-->
+                               <div id="student-bar-chart"></div>
+
+                <img
+                                    src="transactionBar?<% out.print("username=" + URLEncoder.encode(sessionUsername, "UTF-8"));%>"
+                                    alt="Transactions Bar Chart" />
+                              </div>
+                                <div class="span8">
+                                    <!--<div id="chartContainer2">FusionCharts XT will load here!</div>-->
+					
+<img
+                                    src="transactionPie?<% out.print("username=" + URLEncoder.encode(sessionUsername, "UTF-8"));%>"
+                                    alt="Transactions Pie Chart" />
+                                </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+    </section>
+</div>
+</div>
+<div class="row">
+    <footer class="footer">
+        <div class="container">
+
+            <div class="disclaimer">
+
+                <p>Copyright@ImpalaPay 2014-2015</p>
+                 <a href="#">Terms &amp; Conditions</a> | <a href="#">Privacy
+                        Policy</a> | ImpalaPay Ltd <%= Calendar.getInstance().get(Calendar.YEAR)%>. All rights reserved.
+                    <img id="madeInKenya" alt="Made in Kenya" src="#" width="100" height="100" />
+                </p>
+            </div>
+        </div>
+    </footer>
+</div>
+<!--
+<script src="../js/bootstrap/bootstrap-transition.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-alert.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-modal.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-dropdown.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-scrollspy.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-tab.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-tooltip.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-popover.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-button.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-collapse.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-carousel.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-typeahead.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-affix.js" type="text/javascript" ></script>
+<script src="../js/bootstrap/bootstrap-datepicker.js" type="text/javascript" ></script>
+<script src="../js/jquery/jquery-tablesorter.js" type="text/javascript" ></script>
+<script src="../js/jquery/jquery-chosen.js" type="text/javascript" ></script>
+<script src="../js/jquery/virtual-tour.js" type="text/javascript" ></script>
+<script type="text/javascript">
+$(function() {
+$('#sample-table').tablesorter();
+$('#datepicker').datepicker();
+$(".chosen").chosen();
+});
+</script>
+-->
+
+</body>
+</html>

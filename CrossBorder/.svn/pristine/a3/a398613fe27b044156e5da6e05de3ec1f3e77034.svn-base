@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "includes/functions.php";
+require_once "config/config.inc.php";
+//if(isset($_POST["process"])){
+    $amount=$_POST["amount"];
+    $total=$_POST["total"];
+    $cardNumber =$_POST["cardNumber"];
+    $exp = $_POST["exp"];
+    $cvv = $_POST["cvv"];
+    $firstName = $_POST["firstName"];
+    $lastName = $_POST["lastName"];
+    
+    $response=processCard($total,$cardNumber,$cvv,$exp);
+    //vpc_Message
+    /*echo "<pre>";
+        print_r($response);
+        print_r($_POST);
+    echo "</pre>";*/
+    
+    if(strtoupper($response["vpc_Message"]) == "APPROVED"){
+            
+            $total = $total;
+            $itemAmount=$amount;
+            $taxAmount=$total-$amount;
+            $account=getAccount($uid);
+            $row_account=mysql_fetch_array($account);
+            //$fb_id=get_fb_id_by_email(urldecode($response["email"]));
+            $old_amount=$row_account["amount"];
+            //echo $old_amount."<br />";
+            /*$b4PPamount=urldecode($response["PAYMENTREQUEST_0_AMT"]);
+            $commision=$b4PPamount*(3/100);
+            $amount=$b4PPamount-$commision;*/
+            $amount=$itemAmount;
+                      
+            $ImpalaFee=CalculateImpalaCharges($amount);
+            
+            $new_amount=$old_amount+$amount+$ImpalaFee;
+            $query="UPDATE account SET amount={$new_amount} WHERE fb_id='{$uid}' ";
+            $result=mysql_query($query) or die(mysql_error());
+            if($result){
+        
+                $id=$row_account["id"];
+                //echo $id."<br />";
+                $query_trans="INSERT INTO transaction SET account_id='{$id}', transaction='d',balance={$new_amount},amount={$amount} ";
+                $result_trans=mysql_query($query_trans) or die(mysql_error());
+                if(mysql_affected_rows()==1){
+                    echo "Transaction successfull.";
+                    //header('location:statement.php?trans_success');
+                }
+            }
+    }else{
+        echo $response["vpc_Message"];
+    }
+//}
+
+?>

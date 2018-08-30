@@ -1,0 +1,427 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form TermFrm 
+   BackColor       =   &H00C0FFC0&
+   Caption         =   "Terminal Configuration"
+   ClientHeight    =   8715
+   ClientLeft      =   60
+   ClientTop       =   345
+   ClientWidth     =   10965
+   Icon            =   "TermFrm.frx":0000
+   LinkTopic       =   "Form2"
+   MaxButton       =   0   'False
+   Moveable        =   0   'False
+   ScaleHeight     =   8715
+   ScaleWidth      =   10965
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame5 
+      BackColor       =   &H00C0FFFF&
+      Height          =   4455
+      Left            =   120
+      TabIndex        =   0
+      Top             =   0
+      Width           =   10695
+      Begin VB.TextBox Text3 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   6360
+         TabIndex        =   33
+         Top             =   2650
+         Width           =   2055
+      End
+      Begin VB.CommandButton Command3 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "---"
+         Height          =   300
+         Left            =   8040
+         Style           =   1  'Graphical
+         TabIndex        =   31
+         Top             =   1870
+         Width           =   375
+      End
+      Begin VB.ComboBox Combo2 
+         Height          =   315
+         Left            =   6360
+         TabIndex        =   30
+         Top             =   1450
+         Width           =   2055
+      End
+      Begin VB.ComboBox Combo5 
+         Height          =   315
+         Left            =   1800
+         TabIndex        =   29
+         Top             =   1080
+         Width           =   2055
+      End
+      Begin VB.ComboBox Combo4 
+         Height          =   315
+         Left            =   6360
+         TabIndex        =   28
+         Top             =   240
+         Width           =   2055
+      End
+      Begin VB.ComboBox Combo3 
+         Appearance      =   0  'Flat
+         Height          =   315
+         Left            =   6360
+         TabIndex        =   27
+         Top             =   2280
+         Width           =   2055
+      End
+      Begin VB.TextBox Text11 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   6360
+         TabIndex        =   25
+         Top             =   1850
+         Width           =   2055
+      End
+      Begin VB.TextBox Text9 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   6360
+         TabIndex        =   21
+         Top             =   1050
+         Width           =   2055
+      End
+      Begin VB.TextBox Text8 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   6360
+         TabIndex        =   19
+         Top             =   640
+         Width           =   2055
+      End
+      Begin VB.TextBox Text6 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   1800
+         TabIndex        =   17
+         Top             =   2280
+         Width           =   2055
+      End
+      Begin VB.ComboBox Combo1 
+         Height          =   315
+         ItemData        =   "TermFrm.frx":1082
+         Left            =   1800
+         List            =   "TermFrm.frx":1084
+         TabIndex        =   7
+         Text            =   "SAP Type"
+         Top             =   2760
+         Width           =   2055
+      End
+      Begin VB.TextBox Text5 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   1800
+         MaxLength       =   5
+         TabIndex        =   6
+         Top             =   1850
+         Width           =   2055
+      End
+      Begin VB.CommandButton Command1 
+         BackColor       =   &H00C0FFFF&
+         Caption         =   "Save"
+         Height          =   350
+         Left            =   1800
+         MaskColor       =   &H00400000&
+         Style           =   1  'Graphical
+         TabIndex        =   5
+         Top             =   3960
+         Width           =   1095
+      End
+      Begin VB.TextBox Text4 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   1800
+         TabIndex        =   4
+         Top             =   1450
+         Width           =   2055
+      End
+      Begin VB.TextBox Text2 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   1800
+         MaxLength       =   15
+         TabIndex        =   3
+         Top             =   640
+         Width           =   2055
+      End
+      Begin VB.TextBox Text1 
+         Appearance      =   0  'Flat
+         Height          =   350
+         Left            =   1800
+         MaxLength       =   20
+         TabIndex        =   2
+         Top             =   240
+         Width           =   2055
+      End
+      Begin VB.CommandButton Command2 
+         BackColor       =   &H00C0FFFF&
+         Caption         =   "Delete"
+         Height          =   350
+         Left            =   3120
+         MaskColor       =   &H00400000&
+         Style           =   1  'Graphical
+         TabIndex        =   1
+         Top             =   3960
+         Width           =   975
+      End
+      Begin VB.Label Label7 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Serial Number"
+         Height          =   375
+         Left            =   5160
+         TabIndex        =   32
+         Top             =   2640
+         Width           =   1215
+      End
+      Begin VB.Label Label6 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Participant"
+         Height          =   255
+         Left            =   5160
+         TabIndex        =   26
+         Top             =   2280
+         Width           =   1095
+      End
+      Begin VB.Label Label5 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Date Deployed"
+         Height          =   255
+         Left            =   5160
+         TabIndex        =   24
+         Top             =   1920
+         Width           =   1095
+      End
+      Begin VB.Label Label4 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Country"
+         Height          =   375
+         Left            =   5160
+         TabIndex        =   23
+         Top             =   1440
+         Width           =   1095
+      End
+      Begin VB.Label Label3 
+         BackStyle       =   0  'Transparent
+         Caption         =   "City"
+         Height          =   255
+         Left            =   5160
+         TabIndex        =   22
+         Top             =   1080
+         Width           =   975
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Location"
+         Height          =   255
+         Left            =   5160
+         TabIndex        =   20
+         Top             =   600
+         Width           =   1095
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Pin Master Key"
+         Height          =   255
+         Left            =   5160
+         TabIndex        =   18
+         Top             =   240
+         Width           =   1095
+      End
+      Begin VB.Label Label14 
+         BackColor       =   &H00C0FFFF&
+         Caption         =   "SAP Type"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   14
+         Top             =   2760
+         Width           =   975
+      End
+      Begin VB.Label Label13 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Maximum Connections "
+         Height          =   255
+         Left            =   120
+         TabIndex        =   13
+         Top             =   2280
+         Width           =   1695
+      End
+      Begin VB.Label Label12 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Communication Port"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   12
+         Top             =   1920
+         Width           =   1575
+      End
+      Begin VB.Label Label11 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "IP Addresss"
+         Height          =   225
+         Left            =   120
+         TabIndex        =   11
+         Top             =   1455
+         Width           =   1455
+      End
+      Begin VB.Label Label10 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Merchant ID"
+         Height          =   350
+         Left            =   120
+         TabIndex        =   10
+         Top             =   1050
+         Width           =   1575
+      End
+      Begin VB.Label Label9 
+         BackColor       =   &H00C0FFFF&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Terminal ID"
+         Height          =   350
+         Left            =   120
+         TabIndex        =   9
+         Top             =   640
+         Width           =   1575
+      End
+      Begin VB.Label Label8 
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Terminal Short Name"
+         ForeColor       =   &H80000008&
+         Height          =   315
+         Left            =   120
+         TabIndex        =   8
+         Top             =   240
+         Width           =   1575
+      End
+   End
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00C0FFC0&
+      Height          =   4215
+      Left            =   120
+      TabIndex        =   15
+      Top             =   4680
+      Width           =   10695
+      Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+         Height          =   3735
+         Left            =   120
+         TabIndex        =   16
+         Top             =   240
+         Width           =   10455
+         _ExtentX        =   18441
+         _ExtentY        =   6588
+         _Version        =   393216
+         Rows            =   20
+         Cols            =   7
+         FixedCols       =   0
+         FocusRect       =   0
+         SelectionMode   =   1
+         AllowUserResizing=   3
+         FormatString    =   $"TermFrm.frx":1086
+      End
+   End
+End
+Attribute VB_Name = "TermFrm"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private DbCon As ADODB.Connection
+Private Sub Command1_Click()
+Dim sqlString As String
+Dim sqlString2 As String
+On Error GoTo ErrorTrap
+sqlString = "INSERT INTO [dbo].[em_term] ([id],[short_name],[term_active],[support_team],[worst_event_severity]" & _
+           ",[card_acceptor],[participant_id],[pos_geographic_data],[sponsor_bank],[pos_data_code],[serial_nr]" & _
+           ",[date_deployed],[last_message_type],[last_message_time],[status],[hardware_config],[value_bars]" & _
+           ",[miscellaneous],[security_team],[media_team],[supplies_team],[term_mode],[last_tran_msg_time])"
+sqlString2 = "Values(" & Trim(Text2.Text) & "'," & _
+           "'" & Trim(Text1.Text) & "'," & _
+           "," & _
+           "," & _
+           "," & _
+           "'" & Combo5.List(Combo5.ListIndex) & "'," & _
+           "," & _
+           "," & _
+           "'" & Combo3.List(Combo3.ListIndex) & "'," & _
+           "," & _
+           "'" & Trim(Text3.Text) & "'," & _
+           "'" & Trim(Text11.Text) & "'," & _
+           "," & _
+           "," & _
+           "," & _
+           "'" & Trim(Text8.Text) & Space(20 - Len(Text8.Text)) & Trim(Text9.Text) & Space(15 - Len(Text9.Text)) & Combo3.List(Combo3.ListIndex) & "'," & _
+           "," & _
+           "'" & Combo4.List(Combo4.ListIndex) & "'," & _
+           "," & _
+           "," & _
+           "," & _
+           "1," & _
+           ","
+DbCon.Execute sqlString & sqlString2
+Exit Sub
+ErrorTrap:
+
+End Sub
+
+Private Sub Command3_Click()
+Combo2.Visible = True
+End Sub
+
+Private Sub Form_Load()
+
+Dim Recset As New ADODB.Recordset
+Dim i As Long
+Dim col As Long
+Dim J As Integer
+Me.Top = MainForm.Top + 1020
+Me.Left = MainForm.Left + 4300
+Me.Height = MainForm.TreeView1.Height - 20
+Frame1.Height = Me.Height / 2
+MSFlexGrid1.Height = Me.Height / 2 - 500
+
+Combo1.AddItem "Server", 0
+Combo1.AddItem "Client", 1
+Set DbCon = New ADODB.Connection
+On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLNCLI;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+Recset.Open ("Select * from em_merchants order by record_no asc"), DbCon
+
+
+
+col = 0
+i = 1
+
+Do While Not Recset.EOF
+col = 0
+MSFlexGrid1.Rows = MSFlexGrid1.Rows + 1
+
+For col = 0 To 6
+MSFlexGrid1.TextMatrix(i, col) = Recset.Fields(col).value
+Next col
+i = i + 1
+
+Recset.MoveNext
+Loop
+Recset.Close
+Exit Sub
+
+ErrorTrap:
+MsgBox "Please Login to Access the Configuration Console" & vbNewLine & _
+"Go to File Menu and click Database Login, " & vbNewLine & "DataBase Login Error occurred", vbCritical
+Unload Me
+'Me.Hide
+'frmODBCLogon.Show
+
+
+End Sub

@@ -1,0 +1,75 @@
+<?php
+function processCard($amount,$cardNumber,$cvv,$expiryDate){  
+     
+    $vpc_AccessCode = "BA63A10F";
+    $vpc_Amount = $amount*100;
+    $vpc_AVS_City = "Nairobi";
+    $vpc_AVS_Country = "KEN";
+    $vpc_AVS_PostCode = "30100";
+    $vpc_AVS_Street01 = "2823";
+    $vpc_card = "VC";
+    $vpc_CardExp = $expiryDate;
+    $vpc_CardNum = $cardNumber;
+    $vpc_CardSecurityCode = $cvv;
+    //$vpc_CashAdvance = "True";
+    $vpc_Currency = "USD";
+    $vpc_Command = "pay";
+    $vpc_gateway = "ssl";
+    $vpc_IPAddress = "196.216.73.150";
+    $vpc_Merchant = "61004002";
+    $vpc_MerchTxnRef = time();
+    $vpc_RiskBypass = "Y";
+    $vpc_OrderInfo=time();
+    $vpc_TxSourceSubType = "SINGLE";
+    $vpc_Version = "1";    
+    $vpc_SecureHashType = "SHA256";
+    $key="BB48A64077A1CBF08FF0D91C5A9FE42B";
+    $url = "https://migs.mastercard.com.au/vpcdps";  
+    //$url="http://localhost";     
+     $myvalues = "vpc_AccessCode=" . $vpc_AccessCode . 
+     "&vpc_Amount=" . $vpc_Amount . "&vpc_AVS_City=" . $vpc_AVS_City . 
+     "&vpc_AVS_Country=".$vpc_AVS_Country."&vpc_AVS_PostCode=" . $vpc_AVS_PostCode . 
+     "&vpc_AVS_Street01=" . $vpc_AVS_Street01 . "&vpc_CardExp=" . $vpc_CardExp . 
+     "&vpc_CardNum=" . $vpc_CardNum. "&vpc_CardSecurityCode=" . $vpc_CardSecurityCode .
+      "&vpc_card=" . $vpc_card . 
+      "&vpc_Command=" . $vpc_Command . "&vpc_gateway=" . $vpc_gateway . 
+      "&vpc_IPAddress=" . $vpc_IPAddress . "&vpc_Merchant=" . $vpc_Merchant . 
+      "&vpc_MerchTxnRef=" . $vpc_MerchTxnRef . "&vpc_RiskBypass=" . $vpc_RiskBypass . 
+      "&vpc_TxSourceSubType=" . $vpc_TxSourceSubType . "&vpc_Version=" . $vpc_Version . 
+      "&vpc_Currency=".$vpc_Currency."&vpc_OrderInfo=".$vpc_OrderInfo;  
+      
+      $hashed_Value = hash_hmac("SHA256",$myvalues,$key);   
+      $post_Data = $myvalues."&vpc_SecureHash=$hashed_Value&vpc_SecureHashType=$vpc_SecureHashType";
+      $user_Agent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.204 Safari/534.16";
+        
+      $ch = curl_init($url);
+      //curl_setopt($ch,CURLOPT_HEADER,1);
+      curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+      curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch,CURLOPT_POSTFIELDS,$post_Data);      
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+      curl_setopt($ch, CURLOPT_USERAGENT, $user_Agent);
+      curl_setopt($ch, CURLOPT_REFERER, $url);
+      
+    
+      
+      $response = curl_exec($ch);
+      $cleanResp= urldecode($response); 
+      $respArray = explode("&",$cleanResp);
+      $perfectResponse = array();
+      foreach($respArray as $k=>$val){
+        $arrayValues = explode("=",$val);
+        $perfectResponse[$arrayValues[0]]=$arrayValues[1];         
+      }
+      
+      if(strtoupper($perfectResponse["vpc_Message"])=="APPROVED"){
+        $this->deposit();
+      }
+      return $perfectResponse["vpc_Message"];
+      //return $cleanResp;
+}
+
+?>

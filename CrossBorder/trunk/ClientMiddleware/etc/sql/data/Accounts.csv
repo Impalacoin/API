@@ -1,0 +1,9 @@
+uuid|Account Status UUID|firstName|lastName|username|loginPasswd|apiUsername|apiPasswd|email|phone|creationDate (YYYY-MM-DD hh:mm:ss.xxx)
+9756f889-811a-4a94-b13d-1c66c7655a7f|acecb9fa-7e21-455d-8abb-c61a840cdbec|demo|demo|demo|fe01ce2a7fbac8fafaed7c982a04e229|airtel1|fe01ce2a7fbac8fafaed7c982a04e229|demo@demo.com|2540202509260|2013-01-01 15:05:05.805593-05
+81bf3078-4495-4bec-a50d-c91a7c512d78|acecb9fa-7e21-455d-8abb-c61a840cdbec|idtold|idtold|idtold|34bef5f7d97d280abfd86e52d013fbea|airtel1|34bef5f7d97d280abfd86e52d013fbea|idt@idt.com|782345123|2013-03-14 15:14:50.428862-04
+7967107d-d61c-43dd-bc5b-aa12fd08497b|acecb9fa-7e21-455d-8abb-c61a840cdbec|Soft|Touch Ltd|softtouch|passwd4|airtel1|smspasswd4|soft@touch.com|25532956781|2013-05-23 10:14:50.428862-04
+91fc8aae-cb76-4c64-ac45-48448fb5673f|acecb9fa-7e21-455d-8abb-c61a840cdbec|Mobisoko|NULL|mobisoko|passwd5|airtel1|smspasswd5|boss@mobisoko.com|20098326|2012-09-16 07:14:50.428862-04
+48e249c2-856a-4269-820f-7b72c76b4957|acecb9fa-7e21-455d-8abb-c61a840cdbec|error|error|error|6a14111653ea8171daf66296a434543c|airtel1|6a14111653ea8171daf66296a434543c|error@error.com|204321234|2013-02-05 15:05:27.235437-05
+d5677a9f-5eda-4b1c-a283-7415d4a18a75|acecb9fa-7e21-455d-8abb-c61a840cdbec|mhit|mhit|mhit|bb4288b53b74ebae38d1d43a0fbf0fb1|airtel1|bb4288b53b74ebae38d1d43a0fbf0fb1|mhits@demo.com|25471234556|2014-11-06 05:09:38.940003-05
+1e61b562-244f-4c28-ae34-454121a48ce2|acecb9fa-7e21-455d-8abb-c61a840cdbec|idt|idt|idt|34bef5f7d97d280abfd86e52d013fbea|airtel1|airtelidt|idt@idt2.com|254733159840|2015-03-04 04:09:11.326409-05
+bec02783-5899-48d4-b2d4-72fa57d4d2b1|acecb9fa-7e21-455d-8abb-c61a840cdbec|vitesse|vitesse|VitessePSP|446c75b06184a1ccc28a24601a682ca5|airtel1|airtelvitesse|vitese@gmail.com|254738495367|2015-03-25 01:34:25.375337-04

@@ -1,0 +1,240 @@
+﻿<?php session_start();
+
+
+
+	include("session/session.php");
+	include("session/DBConnection.php");
+	
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	
+<?php
+
+
+$user = $_SESSION['log']['username'];
+
+			$query = mysql_query("SELECT * FROM personal_user WHERE username = '$user'") or die (mysql_error()); 
+			$user_row = mysql_fetch_array($query);	?>
+
+	
+	<link rel="shortcut icon" HREF="images/favicon.ico" />
+    <title>impala | Transactions </title>
+	
+	<!-- Metadescription and MetaKeyWords are used for SEO -->
+	<meta content="Metadescription" name="Insert the description of this page here" />
+    <meta content="MetaKeyWords" name="Insert the keywords that descrive this page here" />
+	
+	<!-- JQUERY -->
+	<script type="text/javascript" SRC="js/jquery-1.4.2.min.js"></script>
+	<!-- -END- JQUERY -->
+	
+	<!-- Superfish Menu -->
+	<script type="text/javascript" SRC="js/superfish/hoverIntent.js"></script>
+	<script type="text/javascript" SRC="js/superfish/superfish.js"></script>
+	<script type="text/javascript" SRC="js/superfish/supersubs.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){ 
+			$("ul.sf-menu").supersubs({ 
+				minWidth:    12,   // minimum width of sub-menus in em units 
+				maxWidth:    27,   // maximum width of sub-menus in em units 
+				extraWidth:  1     // extra width can ensure lines don't sometimes turn over 
+								   // due to slight rounding differences and font-family 
+			}).superfish();  // call supersubs first, then superfish, so that subs are 
+							 // not display:none when measuring. Call before initialising 
+							 // containing tabs for same reason. 
+		}); 
+	</script>
+	<!-- -END- Superfish Menu -->
+	<link type='text/css' href='css1/basic.css' rel='stylesheet' media='screen' />
+	<!-- IE6 PNG Transparency Fix -->
+	<script type="text/javascript" SRC="js/jquery.pngFix.pack.js"></script>
+	<script type="text/javascript"> 
+		$(document).ready(function(){ 
+			$(document).pngFix(); 
+		}); 
+	</script>
+	<!-- -END- IE6 PNG Transparency Fix -->
+	
+	<!-- CUFON Font Replacement -->
+	<script SRC="js/cufon-yui.js" type="text/javascript"></script>
+	<script SRC="js/Liberation_Sans_font.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		Cufon.replace('h1,h2,h3,h4,h5,h6');
+		Cufon.replace('.logo', { color: '-linear-gradient(0.5=#FFF, 0.7=#DDD)' }); 
+	</script>
+	  <script type="text/javascript">
+$(document).ready(function(){
+
+$(".search").keyup(function() 
+{
+var searchbox = $(this).val();
+var dataString = 'searchword='+ searchbox;
+
+if(searchbox=='')
+{
+}
+else
+{
+
+$.ajax({
+type: "POST",
+url: "search2.php",
+data: dataString,
+cache: false,
+success: function(html)
+{
+
+$("#display").html(html).show();
+	
+	
+	}
+
+
+
+
+});
+}return false;    
+
+
+});
+});
+
+jQuery(function($){
+   $("#searchbox").Watermark("Search");
+   });
+</script>
+	<script type='text/javascript' src='js/jquery.js'></script>
+<script type='text/javascript' src='js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='js/basic.js'></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="contact.js"></script>
+
+	<!-- -END- CUFON Font Replacement -->
+	   <style type="text/css">
+<!--
+.style26 {font-size: 16px;
+	font-weight: bold;
+}
+.style25 {font-family: Arial, Helvetica, sans-serif;
+	color: #ff3000;
+}
+.style26 {color: #000}
+-->
+    </style>
+</head>
+<?php include("session/DBConnection.php");
+include("session/session.php");
+$error ="";
+?>
+<body>
+
+<!-- end header -->
+	
+	
+	
+
+		
+			
+			  <div align="">
+     
+ <table class="mailtable" align="center" background="img/box-tail.gif">
+ 
+ 
+ <tr>
+ <td>
+ <div id="panel" class="radius">
+				<ul class="radius-top clearfix" id="main-menu">
+					
+					
+					
+                    
+					<li>
+						<a class="active" href="mail.php">
+						
+							  <img alt="Newsletter" src="img/Mail[1].png">
+							    <span><h6>Transactions</h6></span>
+                                </a>
+						      
+					    
+						
+			    </li>
+                <!-------------------------
+					
+					<li>
+						<a href="withdraw.php">
+							<img alt="Custom" src="img/score-icon.png">
+							<span><h6>Withdraw Funds</h6></span>
+						</a>
+					</li>
+                    <li>
+						<a href="#">
+							<img alt="Custom" src="img/Zero-Gravity-Toilet-Safety-Instructions-icon.png">
+							<span><h6>Invoices</h6></span>
+						</a>
+					</li>
+                    ----------------------------->
+                    
+					<div class="clearfix"></div>
+				</ul>
+			</div>
+ 
+ 
+ </td>
+ </tr>
+  			<tr>
+            
+    		
+    
+<td width="" border="" style="border-bottom-width:">
+<?php
+include ("session/DBConnection.php");
+$id = $_GET['id'];
+			$query = mysql_query("SELECT * FROM transactions WHERE trans_id = '$id'") or die (mysql_error()); 
+			$display = mysql_fetch_array($query);	
+			$status2='read';
+			$query2=mysql_query("UPDATE transactions SET status='$status2' where trans_id='$id'")or die (mysql_error()); 
+echo '<div align="left">
+
+<table width="" height="" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    
+<td align="center" style="background: #333; border: 1px solid #331; color:#fff; font-weight: bold; width: 150px;">Transactions Details</td>
+<td></td>
+</tr>
+<tr>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>Transaction_id</strong></td>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;">' . $display["trans_id"] . '</td>
+<tr>
+
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>Total amount credited</strong></td>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;">' . $display["amount"] . '</td>
+</tr>
+<tr>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>item/services</strong></td>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;">' . $display["item_name"] . '</td>
+</tr>
+<tr>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold; width: 166px;"><strong>Date transacted</strong></td>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;">' . $display["date"] . '</td>
+</tr>
+<tr>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold; width: 166px;"><strong>Transaction reference_no</strong></td>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;">' . $display["transaction_ref"] . '</td>
+</tr>
+<tr>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;"><strong>Payermail</strong></td>
+<td align="center" style="background: #333; border: 1px solid #331;color:#fff; font-weight: bold;width: 166px;">' . $display["payee_mail"] . '</td>
+   </tr>';
+  
+
+
+
+?>
+</table></div>
+
+  

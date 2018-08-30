@@ -1,0 +1,88 @@
+﻿Imports System.Data.SqlClient
+
+Module GeneralGrp
+    'Public UniversalHostConnection As SqlClient.SqlConnection
+    Public UniversalHostConnection As ADODB.Connection
+    Public OleCommand As OleDb.OleDbCommand
+    Public HostName As String
+    Public Catalog As String
+    Public UserName As String
+    Public Password As String
+    Public BranchCode As String
+    Public APPNAME As String = ""
+    Public ROLEID As Integer
+    'examination load
+
+
+    Public Sub Dbconnection()
+        HostName = "172.17.0.198"
+        Catalog = "fbdbase"
+        'UserName = "Emcon"
+        'Password = "password"
+        'Schema = "R001"
+        'Recon_Unit = ""
+        Try
+
+
+            UniversalHostConnection = New ADODB.Connection
+            With UniversalHostConnection
+                .ConnectionString = "Provider=SQLNCLI;Data Source=" & HostName & ";Initial Catalog=" & Catalog & ";User Id=" & _
+                 UserName & ";Password= " & Password & ";"
+                ' ..ConnectionTimeout = 30
+                .Open()
+
+                'Form1.ToolStripMenuItem2.Text = "System Connected ..."
+                'Form1.ToolStripMenuItem2.BackColor = Color.LightGreen
+            End With
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, "Simple Teller")
+            'Form1.ToolStripMenuItem2.Text = "System Not Connected ..."
+            'Form1.ToolStripMenuItem2.BackColor = Color.LightCoral
+        End Try
+
+    End Sub
+
+    Public Sub SetUpLoad()
+
+        Dim file_no1 As Integer
+        file_no1 = FreeFile()
+        Dim TempStr As String = ""
+        Dim FileName As String = AppDomain.CurrentDomain.BaseDirectory & "\property.ini"
+        Try
+            'DbCon = New ADODB.Connection
+            'Dim RecSet As New ADODB.Recordset
+            'With DbCon
+            '    .ConnectionString = "Provider=SQLNCLI;Data Source=" & HostName & ";Initial Catalog=" & Catalog & ";User Id=" & _
+            '     UserName & ";Password= " & Password & ";"
+            '    .CommandTimeout = 30
+            '    .Open()
+
+            'End With
+            FileOpen(file_no1, FileName, OpenMode.Input, OpenAccess.Read, OpenShare.Shared)
+            Do While Not EOF(file_no1)
+                TempStr = LineInput(file_no1)
+                If InStr(1, TempStr, "Branch:", vbTextCompare) > 0 Then
+                ElseIf InStr(1, TempStr, "Branch Code:", vbTextCompare) > 0 Then
+                    BranchCode = GetValue(TempStr, ":")
+                End If
+            Loop
+            FileClose(file_no1)
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical)
+        End Try
+    End Sub
+    Public Function GetValue(ByVal strText As String, ByVal strSearchString As String) As String
+        On Error GoTo Error_Handle
+
+        GetValue = Trim(Mid(strText, InStr(1, strText, strSearchString, vbTextCompare) + 1, Len(strText) - InStr(1, strText, strSearchString, vbTextCompare) + 1))
+
+        Exit Function
+Error_Handle:
+        GetValue = ""
+    End Function
+
+
+
+
+    
+End Module

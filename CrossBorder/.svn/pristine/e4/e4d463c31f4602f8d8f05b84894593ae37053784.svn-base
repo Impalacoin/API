@@ -1,0 +1,193 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+iGateway
+</name>
+</assembly>
+<members>
+<member name="E:iGateway.TCP.WorkerClient.Disconnected">
+	<summary>
+ Raised when the remote party disconnects.
+ </summary>
+	<remarks>
+ This event is raised when the remote party disconnects the session.
+ </remarks>
+</member><member name="E:iGateway.TCP.WorkerClient.MessageArrived">
+	<summary>
+ Raised when data arrives from the remote party.
+ </summary>
+	<remarks>
+ This event is raised when a message is received from the remote party.
+ </remarks>
+</member><member name="P:iGateway.TCP.WorkerClient.IsConnected">
+	<summary>
+ Returns the connection status.
+ </summary>
+	<remarks>
+ Returns the connection status.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.#ctor(System.Net.Sockets.TcpClient)">
+	<summary>
+ Class constructor.
+ </summary>
+	<remarks>
+ The constructor accepts a connected <see cref="T:System.Net.Sockets.TcpClient"/> object.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.InitOps">
+	<summary>
+ Object initialization.
+ </summary>
+	<remarks>
+ Call this method after instantiating the WorkerClient object to begin waiting
+ for remote party messages.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.TermClient">
+	<summary>
+ Object termination.
+ </summary>
+	<remarks>
+ Call this method to terminate the connection to the remote party and cleanup.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.ClientIP">
+	<summary>
+ Returns the remote party IP address.
+ </summary>
+	<remarks>
+ Returns the remote party IP address.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.StreamReceive(System.IAsyncResult)">
+	<summary>
+ For internal use.
+ </summary>
+	<remarks>
+ Do not call this method directly.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.send(System.String)">
+	<summary>
+ Sends a message.
+ </summary>
+	<remarks>
+ This method sends a string message to the remote party.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.send(System.Byte[])">
+	<summary>
+ Sends a message.
+ </summary>
+	<remarks>
+ This method sends a byte array message to the remote party.
+ </remarks>
+</member><member name="M:iGateway.TCP.WorkerClient.GetBytes(System.String)">
+	<summary>
+ Determines whether EBCDIC encoding is enabled.
+ </summary>
+	<returns>True if EBCDIC encoding is enabled, false otherwise.</returns>
+	<remarks></remarks>
+</member><member name="T:iGateway.TCP.WorkerClient">
+	<summary>
+ TPC/IP utility class.
+ </summary>
+	<remarks>
+ The worker client is used to send and receive data from the host application.
+ It abstracts TCP/IP operations and includes logic to handle a 2-byte software header
+ that holds the length of the message data (excluding the length of the header itself).
+ </remarks>
+</member><member name="P:iGateway.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:iGateway.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:iGateway.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="P:iGateway.Message.Message.MessageData">
+	<summary>
+ The <b>complete</b> message data.
+ </summary>
+	<remarks>
+ This property returns all data present in the message.
+ </remarks>
+</member><member name="P:iGateway.Message.Message.CurrentIndex">
+	<summary>
+ Current positioning index.
+ </summary>
+	<remarks>
+ This property returns the current positioning index. The index value starts
+ at 0 and is advanced using the <see cref="M:iGateway.Message.Message.AdvanceIndex(System.Int32)"/> 
+ method.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.#ctor(System.String)">
+	<summary>
+ Default class constructor.
+ </summary>
+	<remarks>
+ This constructor initializes the object with a string representation of the
+ incoming message.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.#ctor(System.Byte[])">
+	<summary>
+ Alternative class constructor.
+ </summary>
+	<remarks>
+ This constructor initializes the object with a byte representation of the
+ incoming message.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.ResetIndex">
+	<summary>
+ Resets the positioning index.
+ </summary>
+	<remarks>
+ This method resets the positioning index to 0.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.AdvanceIndex(System.Int32)">
+	<summary>
+ Advances the positioning index.
+ </summary>
+	<remarks>
+ This method advances the positioning index by the specified number of bytes/characters.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.DecreaseIndex(System.Int32)">
+	<summary>
+ Decreases the positioning index.
+ </summary>
+	<param name="count">Number of bytes/characters to backtrack.</param>
+	<remarks></remarks>
+</member><member name="M:iGateway.Message.Message.GetSubstring(System.Int32)">
+	<summary>
+ Returns a substring of the message.
+ </summary>
+	<remarks>
+ This method returns a substring of the message, starting at the positioning index.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.GetRemainingBytes">
+	<summary>
+ Returns the remaining bytes of the message.
+ </summary>
+	<remarks>
+ Returns the remaining bytes of the message.
+ </remarks>
+</member><member name="M:iGateway.Message.Message.CharsLeft">
+	<summary>
+ Returns the number of characters left in the message.
+ </summary>
+	<remarks>
+ This method returns the number of characters left in the message. This is a
+ number calculated by subtracting the positioning index from the total number of
+ characters of the message.
+ </remarks>
+</member><member name="T:iGateway.Message.Message">
+	<summary>
+ This class depicts a string that represents a request message.
+ </summary>
+	<remarks>
+ Objects of this class can be used to hold incoming message data and perform
+ basic manipulation of the data.
+ </remarks>
+</member>
+</members>
+</doc>

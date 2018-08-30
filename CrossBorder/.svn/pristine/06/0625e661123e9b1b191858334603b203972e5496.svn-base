@@ -1,0 +1,39 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N Chege
+ * @copyright 2011
+ */
+
+require_once("../engine.php");
+check_admin_logged_in();
+echo "<div style='float:right;color:blue'>You are logged in as {$_SESSION["adminusername"]}</div>";
+display_admin_navigation();
+
+$query="SELECT transaction.*,users.email,account.fb_id FROM transaction,account,users where account.id=transaction.account_id AND account.fb_id=users.fb_id order by transaction.time desc";
+$result=mysql_query($query) or die(mysql_error());
+?>
+<table border="1px blue groove solid "><tr style="text-align: center;"><th>Userid</th><th>email</th><th>Transaction Type</th><th>Date</th><th>Amount</th></tr>
+<?php
+while($transactions=mysql_fetch_array($result)){
+    $fb_id=get_fb_id_by_account_id($transactions["account_id"]);
+    //$username=$facebook->api("/".$fb_id);
+    $transaction_type=$transactions["transaction"];
+    switch($transaction_type){
+        case "d":$transaction= "Deposit";
+        break;
+        case "w":$transaction= "Withdraw";
+        break;
+        case "s":$transaction= "Send";
+        break;
+        default: $transaction= "unkown";
+    }
+    
+    echo "<tr style='padding:10px'><td>{$fb_id}</td><td>{$transactions["email"]}</td><td>{$transaction}</td><td>{$transactions["time"]}</td><td>$ {$transactions["amount"]}</td></tr>";
+}
+?>
+</table>
+<?
+ob_end_flush();
+?>

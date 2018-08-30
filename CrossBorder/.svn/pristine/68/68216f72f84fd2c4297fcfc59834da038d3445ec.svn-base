@@ -1,0 +1,60 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N Chege
+ * @copyright 2011
+ */
+
+require_once("../engine.php");
+
+display_admin_navigation();
+//echo "i am on this page";
+if(!isset($_SESSION["logedinadmin"]) || empty($_SESSION["logedinadmin"])) {
+if(isset($_POST["login"])){
+  if(!empty($_POST["username"]) && !empty($_POST["password"])){
+	$username=trim(addslashes($_POST["username"]));
+	$password=trim(addslashes($_POST["password"]));
+  	$query="select admin_id,username,level,first_name,last_name from admin_users where username='{$username}' AND password='{$password}'";
+	$result=mysql_query($query) or die(mysql_error());
+	if(mysql_numrows($result)==1){
+		$_SESSION["logedinadmin"]=mysql_result($result,0,"admin_id");
+		$_SESSION["adminusername"]=mysql_result($result,0,"first_name")." ".mysql_result($result,0,"last_name");
+		$_SESSION["adminlevel"]=mysql_result($result,0,"level");
+		redirect_to("impala_admins");
+	}else{
+		echo "You are not registered.";
+	}
+  }else{
+	echo "Please fill both fields.";
+  }
+}
+
+?>
+
+<?php
+echo "
+
+<div id=register>
+<fieldset style='width:300px'>
+ <legend>Login</legend>
+<form action='login.php' method='post'>
+  <table>
+   
+
+   <tr><th>Username</th><td><input type='text' name='username' /></td></tr>
+   <tr><th>Password</th><td><input type='password' name='password' /></td></tr>
+   <tr><td colspan='2' ><input type='submit' name='login' value='login' /></td></tr>
+
+  
+  </table>
+ </form>
+</fieldset>
+</div>
+
+";
+}else{
+	echo "You are already logged in {$_SESSION["adminusername"]}";
+}
+ob_end_flush();
+?>

@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2014
+ */
+
+
+
+require_once "Class.Display.php";
+
+Display::header("home");
+Display::headerTopSection();
+Display::navigation();
+$output='
+	    
+	  ';
+
+Display::mainContent($output);
+Display::featured();
+Display::footer();
+
+?>

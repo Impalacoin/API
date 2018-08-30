@@ -1,0 +1,62 @@
+
+<!-- modal -->
+
+
+
+<div id="login" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+
+    </div>
+<div class="modal-body">
+
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Login!</strong>&nbsp;Please Enter the Details to login.
+        </div>
+        <form class="form-horizontal" method="post" action="login.php">
+            <div class="control-group">
+                <label class="control-label" for="inputEmail">Username</label>
+                <div class="controls">
+                    <input type="text" name="username" id="inputEmail" placeholder="Username">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword">Password</label>
+                <div class="controls">
+                    <input type="password" name="password" id="inputPassword" placeholder="Password">
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" name="submit" class="btn btn-info"><i class="icon-signin icon-large"></i>&nbsp;Sign in</button>
+                </div>
+
+
+            </div>
+
+          
+                
+
+        </form>
+           
+
+        <!-- teacher -->
+        <div align="right"><a href="forgetpassword.php">Forgot Your Password ?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div align="center"><img src="images/loginImage.jpg" alt="Login Please" width="300" height="200" /> </div>
+        <div style="font-family:Arial, Helvetica, sans-serif; color:#FF0000; font-size:12px;">
+
+
+
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign icon-large"></i>&nbsp;Close</button>
+
+    </div>
+    
+</div
+
+></div><!-- end modal -->

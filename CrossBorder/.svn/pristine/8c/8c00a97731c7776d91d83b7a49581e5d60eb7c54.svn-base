@@ -1,0 +1,178 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "Users.php";
+class NickDisplay{
+    public static function header($title="Cashswift Money Transfer service",$jquery=""){
+             $output='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+             <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+            <head>
+            	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+            	<meta name="author" content="Nicholas N. Chege" />
+                <title>'.$title.'</title>
+                <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />  
+                <link rel="stylesheet" href="css/default.css" media="screen" />
+                <link rel="shortcut icon" href="favicon.ico" >
+                <link href="style.css" rel="stylesheet" type="text/css" />
+                <link href="css/nickcss.css" rel="stylesheet" type="text/css"/>
+                <!--script src="js/jquery-1.10.2.min.js"></script-->
+                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+                <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+                <script type="text/javascript" src="js/default.js"></script>
+                <script type="text/javascript" >                
+                    '.$jquery.'
+                </script>     
+            </head>
+
+        <body>
+        ';
+        echo $output;
+    }
+    public static function topNavigation(){
+        
+        $output='
+            <div class="topNavs">
+            <table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+                      <tr>
+                        <td><a href="index.php" class="style2">Home</a></td>
+                        <td><a href="about-us.php" class="style2">About us</a></td>
+                        <td><a href="faqs.php" class="style2">FAQs</a></td>
+                        <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                      </tr>
+            </table>
+            </div>
+        ';
+        echo $output;
+    }
+    public static function topSection(){
+        $user = new Users;
+        $output='<div class="container">
+            <div class="top-section">
+              <div class="logo"><img src="logo.jpg" /></div>  
+              <div class="right">
+                <table width="100%"  border="0" cellspacing="0" cellpadding="">
+                      <tr>
+                      <td>You are logged in as '.$user->getUserNames().'  <a href="account.php">My Account</a>&nbsp;&nbsp;|&nbsp;&nbsp;  <a href="logout.php">Logout</a></td>
+                        <!--td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                        <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                        <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td-->
+                      </tr>
+                  </table>
+              </div>
+            </div>';
+    echo $output;
+    }
+    public static function content($content){
+        $output='<div class="content">
+                        '.$content.'
+                </div>';
+        echo $output;
+    }
+    public static function footer(){
+        $output='
+        <div class="foot">
+        <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, ImpalaPay Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div>
+        </div>
+
+                </body>
+                </html>';
+        echo $output;
+    }
+    public static function accountInfo(){
+        $user = new Users();
+        $output='<div class="my-account">
+    <div class="my-info">
+        <div class="GW_main_box_title">Account Information</div>
+        <table width=45% style="float:left" >
+        ';
+        $result = $user->getUserDetails();
+        if($result){
+            if(mysql_numrows($result)>0){
+                
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >First name</td><td>%s</td></tr>",
+                    mysql_result($result,0,"first_name"));
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Last name</td><td>%s</td></tr>",
+                    mysql_result($result,0,"last_name"));
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Country</td><td>%s</td></tr>",
+                    mysql_result($result,0,"country"));
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Address</td><td>%s</td></tr>",
+                    mysql_result($result,0,"address"));
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Email</td><td>%s</td></tr>",
+                    mysql_result($result,0,"email"));
+            }
+        }
+        $output.='</table>';
+        $output.='<table width=45% style="float:left">';
+        $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Mobile</td><td>%s</td></tr>",
+                    mysql_result($result,0,"phone"));
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Zip/postal</td><td>%s</td></tr>",
+                    mysql_result($result,0,"town_city"));
+                    $output.=sprintf("<tr><td class=\"GW_txtfieldcaption\" >Town/city</td><td>%s</td></tr>",
+                    mysql_result($result,0,"country"));
+                    
+        $output.='</table>';
+    $output.='</div>
+    <div class="right-nav">
+        <div>
+            <ul class="nav">
+            
+            <a href="account.php"><li>My Account</li></a>
+            <a href="calculate.php"><li>Send now</li></a>
+            <a href="#"><li>Transactions</li></a>
+            </ul>
+        </div>
+    </div>
+    <div class="GW_main_box_title">Recent Transactions</div>';
+    if(isset($_GET["success"])){
+        $output.='<div class="alert_info">Transaction completed successfully. Money will receive recipient in 2 minuntes</div>';
+    }
+    $output.='
+    <div id="record-diag"></div>
+    <div class="recent-trans">
+    
+        <table class="account-details" border=1>
+        <tr>
+        <th>Receiver Names</th><th>Mobile</th><th>Address</th><th>City/County</th><th>Email</th>
+        <th>Amount Usd</th><th>Exchange Rate</th><th>Amount KES</th><th>Delivery Method</th>
+        </tr>';
+        
+        $result = $user->getTransactions();
+        if($result){
+            if(mysql_numrows($result)>0){
+                while($trans=mysql_fetch_assoc($result)){
+                    $output.=sprintf("<tr class='db-record'>
+                    <td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>
+                    <td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                    $trans["full_names"],$trans["mobile"],$trans["address"],
+                    $trans["town_county"],$trans["email"],number_format($trans["amount"],2),
+                    number_format($trans["exchange_rate"],2),
+                    number_format(($trans["amount"]*$trans["exchange_rate"]),2),
+                    $trans["transaction_type"]);
+                }
+            }else{
+                $output.="<tr><td>No transactions</td></tr>";
+            }
+        }
+    $output.='
+    </table>
+    
+    </div>
+</div>';
+return $output;
+    }
+}
+
+?>

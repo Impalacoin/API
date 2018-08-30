@@ -1,0 +1,120 @@
+package com.impalapay.airtel.accountmgmt.session;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.impalapay.airtel.beans.accountmgmt.Account;
+import com.impalapay.airtel.cache.CacheVariables;
+import com.impalapay.airtel.persistence.geolocation.CountryDAO;
+import com.impalapay.airtel.persistence.util.CountUtils;
+
+
+//import com.impalapay.airtel..servlet.report.chart.bar.IncomingSMSBarDay;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.Hours;
+
+
+/**
+ * Creates statistics that are to be cached in the session of a user.
+ * <p>
+ * Copyright (c) ImpalaPay Ltd., July 31, 2014  
+ * 
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ * 
+ */
+public class SessionStatisticsFactoryoriginal {
+
+	private static CountUtils countUtils;	
+	private static CountryDAO countryDAO;
+	
+	static {
+		countUtils = CountUtils.getInstance();	
+		
+		//countryDAO = CountryDAO.getInstance();
+		
+		//CacheManager mgr = CacheManager.getInstance();
+		
+	}
+	
+	
+	/**
+	 * Some refactoring with reflection can be applied here.
+	 * 
+	 * @param account
+	 * @return {@link SessionStatistics}
+	 */
+	public static SessionStatisticsoriginal getSessionStatistics (Account account) {
+		SessionStatisticsoriginal stats = new SessionStatisticsoriginal();
+		
+		int count;
+		
+		
+		stats.setAllTransactionCount(countUtils.getAllTransactionCount(account.getUsername()));
+		
+		return stats;
+	  	
+	    // Set up data for the pie charts
+		/**
+	  	for(SMSC smsc : smscList) {
+            count = countUtils.getIncomingSMSCount(account.getUsername(), smsc);
+            if(count > 0) {
+            	stats.addSmscIncomingSMSCount(smsc, count);
+            }   
+            count = countUtils.getOutgoingSMSCount(account.getUsername(), smsc, acceptedDlrStatus);
+            if(count > 0) {
+            	stats.addSmscOutgoingSMSCount(smsc, count);
+            } 
+        }
+	  	
+	  	// Set up data for the bar charts
+	  	DateTime dateMidnightStart = new LocalDate().toDateTimeAtStartOfDay().minus(Hours.hours(24 * (IncomingSMSBarDay.DAY_COUNT-1)));
+	  	DateTime dateMidnightEnd = dateMidnightStart.plus(Hours.hours(24));
+	  	int numDays = 0;
+	  	do {
+			for(SMSC smsc : smscList) {
+				count = countUtils.getIncomingSMSCount(account.getUsername(), smsc, 
+						new Date(dateMidnightStart.getMillis()), new Date(dateMidnightEnd.getMillis()));
+				
+				if(count > 0) {
+					stats.addSmscIncomingSMSCountDay(new SimpleDateFormat("MMM d").format(new Date(dateMidnightStart.getMillis())), 
+						smsc, count);
+				}
+				
+				count = countUtils.getOutgoingSMSCount(account.getUsername(), smsc, acceptedDlrStatus, 
+						new Date(dateMidnightStart.getMillis()), new Date(dateMidnightEnd.getMillis()));
+				
+				if(count > 0) {
+					stats.addSmscOutgoingSMSCountDay(new SimpleDateFormat("MMM d").format(new Date(dateMidnightStart.getMillis())), 
+							smsc, count);
+				}
+			}
+			
+			dateMidnightStart = dateMidnightStart.plus(Hours.hours(24));
+			dateMidnightEnd = dateMidnightEnd.plus(Hours.hours(24));
+			numDays++;
+			
+		} while(numDays < IncomingSMSBarDay.DAY_COUNT);
+		**/		
+		
+	}
+}
+
+/*
+** Local Variables:
+**   mode: java
+**   c-basic-offset: 2
+**   tab-width: 2
+**   indent-tabs-mode: nil
+** End:
+**
+** ex: set softtabstop=2 tabstop=2 expandtab:
+**
+*/

@@ -1,0 +1,54 @@
+VERSION 5.00
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Begin VB.Form frmRoutes 
+   BackColor       =   &H00E0E0E0&
+   Caption         =   "Routing Configuration"
+   ClientHeight    =   7875
+   ClientLeft      =   120
+   ClientTop       =   390
+   ClientWidth     =   12360
+   Icon            =   "FrmRouting.frx":0000
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   7875
+   ScaleWidth      =   12360
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame1 
+      Height          =   6735
+      Left            =   120
+      TabIndex        =   0
+      Top             =   960
+      Width           =   12135
+      Begin MSFlexGridLib.MSFlexGrid MSFlexGrid1 
+         Height          =   6495
+         Left            =   120
+         TabIndex        =   1
+         Top             =   120
+         Width           =   12735
+         _ExtentX        =   22463
+         _ExtentY        =   11456
+         _Version        =   393216
+         Rows            =   5
+         Cols            =   7
+         FixedCols       =   0
+         BackColorBkg    =   16777215
+         FocusRect       =   0
+         SelectionMode   =   1
+         AllowUserResizing=   3
+         FormatString    =   $"FrmRouting.frx":0442
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+   End
+End
+Attribute VB_Name = "frmRoutes"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False

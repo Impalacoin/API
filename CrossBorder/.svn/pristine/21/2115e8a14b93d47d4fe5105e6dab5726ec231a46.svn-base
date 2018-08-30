@@ -1,0 +1,47 @@
+﻿Public Class frmDataConfig
+    Private MyControlArray As New LabelArray
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub frmDataConfig_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+
+
+
+    End Sub
+    Private Sub btnLabelAdd_Click( _
+         ByVal sender As System.Object, _
+         ByVal e As System.EventArgs) _
+         Handles btnLabelAdd.Click
+        ' Call the AddNewLabel method 
+        ' of MyControlArray.
+        'Dim m As Label
+        MyControlArray.AddNewLabel()
+        ' Change the BackColor property 
+        ' of the Button 0. 
+        MyControlArray(0).BackColor = _
+  System.Drawing.Color.Red
+    End Sub
+
+    '   Private Sub btnLabelRemove_Click( _
+    'ByVal sender As System.Object, _
+    'ByVal e As System.EventArgs) _
+    'Handles btnLabelRemove.Click
+    '       ' Call the Remove method of MyControlArray.
+    '       MyControlArray.Remove()
+    'End Sub
+
+
+
+    Private Sub frmDataConfig_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 20
+        GroupBox4.Width = Me.Width - 20
+        GroupBox4.Height = Me.Height - 245
+    End Sub
+
+    Private Sub loadCombos()
+        'Dim textBoxes As TextBox() = ControlArrayUtils.getControlArray(Me, "myTextBox")
+
+    End Sub
+End Class

@@ -1,0 +1,561 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>impala pay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	<link id="callCss" rel="stylesheet" href="themes/current/bootstrap.min.css" type="text/css" media="screen"/>
+	<link href="themes/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+	<link href="themes/css/font-awesome.css" rel="stylesheet" type="text/css">
+	<link href="themes/css/base.css" rel="stylesheet" type="text/css">
+	<style type="text/css" id="enject">
+	.container2 {
+	padding-right: 5%;
+	padding-left: 5%;
+}
+    
+    #footer1 {
+	margin-left: 2%;
+	padding-left: 35px;
+}
+
+.calc-form2 {
+	background-image:
+	url(themes/images/bg_top.jpg);
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	color: #FFF;
+	font-family: "Times New Roman", Times, serif;
+	font-weight: bolder;	
+}
+
+    </style>
+</head>
+  
+<body>
+
+<div class="row1" align="right">
+ <div class="pull-right">
+ 										 <a href="#logex"  data-toggle="modal"><button class="btn btn-success"><i class="icon-briefcase icon-large"></i>&nbsp;Login</button></a>
+
+<a href="registration.php" ><button class="btn btn-success"><i class="icon-bell icon-large"></i>&nbsp;Sign UP</button></a>
+                                    
+</div>
+
+</div>
+<section id="headerSection">
+	<div class="container">
+		<div class="navbar">
+			<div class="container">
+				<button type="button" class="btn btn-navbar active" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+                <div class="row">
+				<img src="assets/logo.jpg" alt="logo">
+                </div>
+                
+                </div>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li class="active"><a href="index.html">Home	</a></li>
+						<li class=""><a href="#">What we do?</a></li>  
+						<li class=""><a href="#">About us?</a></li>
+						
+				  
+						<li class=""><a href="#">Blog</a></li>
+						<li class=""><a href="#">Support</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+<!--Header Ends================================================ -->
+
+<div class="container">
+<section id="carouselSection" style="text-align:center">
+	<div id="myCarousel" class="carousel slide">
+			<div class="carousel-inner">
+				<div  style="text-align:center"  class="item active">
+					<div class="wrapper"><img src="themes/images/carousel/4.jpg" alt="business webebsite template">
+					
+                    
+					</div>
+				</div>
+<div  style="text-align:center"  class="item">
+					<div class="wrapper"><img src="themes/images/carousel/business_website_templates_2.jpg" alt="business themes">
+					<div class="carousel-caption">
+                      <h3>send money to kenya <img src="themes/images/clients/flinkedin_cloud.png" alt="social"></h3>
+                   <h4>Four Easy Steps to Send</h4>
+  						<ul> 
+						<li>Enter send amount and calculate</li>
+						<li>Select recipient</li>
+						<li>Choose payment method</li>
+						<li>Review and confirm</li>
+                        </ul>
+ 
+					  <a href="#" class="btn btn-mini btn-success">Read more</a>
+                    </div>
+					</div>
+				</div>
+				<div  style="text-align:center"  class="item">
+					<div class="wrapper"><img src="themes/images/carousel/time.jpg" alt="business themes">
+					<div class="carousel-caption">
+                      <h3>Cashswift Fea<img src="themes/images/clients/twitter_cloud.png" alt="social"> ures  </h3>
+                      <ul>
+
+ 					<li>Instant Transfer</li>
+ 					<li>Direct Deposit</li>
+ 					<li>Best Exchange rates</li>
+ 					</ul>
+					  <a href="#" class="btn btn-mini btn-success">Send Now</a>
+                    </div>
+					</div>
+				</div>
+				<div style="text-align:center"  class="item">
+					<div class="wrapper"><img src="themes/images/carousel/world.jpg" alt="business themes">
+					<div class="carousel-caption">
+                     <h3>Our Pickup Location<img src="themes/images/clients/skype_cloud.png" alt="social"></h3>
+                     <ul>
+						<li> Deposit to mobile phones</li>
+						<li> Direct deposit to any bank</li>
+                        <li> Cashswift pick-up outlets</li>
+					  <a href="#" class="btn btn-mini  btn-success">Find Out More</a>
+                    </div>
+					</div>
+				</div>
+				
+			</div>
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+			<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+		</div>
+        
+</section>
+</div>
+<?php include("busness2.php")?>
+                                   
+   <?php include("login_modal.php")?>
+<!-- Sectionone ends ======================================== -->
+
+<section id="middleSection">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=317597701721134";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="container">
+		<div class="row" style="text-align:center">
+			
+            <div class="container2">
+			<div class="span2">
+				<div class="well well-small">
+					<h4>
+					<a href="#" class="popOver" data-placement="top" data-content="three very<br>easy to follow<br>instructions on how to use " data-original-title="very easy..." style="display:block; text-decoration:none">
+					<i style="width:auto; font-size:2em; line-height:1em; height:auto" class="icon-briefcase"></i>
+					<span><br/>How it Works</span>
+					</a>
+					</h4>
+					
+				</div>
+			</div>
+            <div class="span2">
+				<div class="well well-small">
+					<h4>
+					<a href="#" class="popOver" data-placement="top" data-content=" send money from more<br> than 200 countries" data-original-title="countries..." style="display:block; text-decoration:none">
+					<i style="width:auto; font-size:2em; line-height:1em; height:auto" class="icon-globe"></i>
+					<span><br/>Countries</span>
+					</a>
+					</h4>
+					
+				</div>
+			</div>
+			<div class="span2">
+				<div class="well well-small">
+					<h4>
+					<a href="#" class="popOver" data-placement="top" data-content=" invite all your friends<br>through various social media <br>platforms (tweeter, facebook,linkedin etc.)" data-original-title="invite your friends..." style="display:block; text-decoration:none">
+					<i style="width:auto; font-size:2em; line-height:1em; height:auto" class="icon-cloud"></i>
+					<span><br/>Invite friends</span>
+					</a>
+					</h4>
+					
+				</div>
+			</div>
+			<div class="span2">
+				<div class="well well-small">
+					<h4>
+					<a href="#" class="popOver" data-placement="top" data-content="sign up for a money transfer <br>or merchant account<br>and enjoy the benefits" data-original-title="sign up now  ... " style="display:block; text-decoration:none">
+					<i style="width:auto; font-size:2em; line-height:1em; height:auto" class="icon-credit-card"></i>
+					<span><br/>sign up</span>
+					</a>
+					</h4>
+					
+				</div>
+			</div>
+			
+			
+			<div class="span2">
+				<div class="well well-small">
+					<h4>
+					<a href="#" class="popOver" data-placement="top" data-content="  tweet us<br>email us<br> or call us on +254 20 248747" data-original-title="contact us through..." style="display:block; text-decoration:none">
+					<i style="width:auto; font-size:2em; line-height:1em; height:auto" class="icon-phone"></i>
+					<span><br/>Contact us</span>
+                    
+					</a>
+					</h4>
+					
+				</div>
+			</div>	
+		</div>
+		</div>
+        </div>
+        
+</section>
+<div class="container">
+<div class="span6" >
+<div class="well well-small" >
+<form id="calc-form" action="" method="post" style="position:relative"  >
+	 <table border="0" cellpadding="0" cellspacing="0"  >
+	 
+	    
+   
+	 
+
+			 <tbody><tr>
+          	   
+			   <td class="GW_txtfieldcaption" height="25" width="">Amount to Send (usd) </td>
+                <td width="60%">
+				 <input name="service_type" value="1" type="hidden">
+				 
+             <input name="amount" maxlength="9" id="amount" onKeyUp="deleteSpecialChar(this)" onBlur="deleteSpecialChar(this)" type="text">	 
+				</td>
+			  </tr>
+			   
+			  <tr>
+                <td class="GW_txtfieldcaption" >Exchange Rate</td>
+                <td><b> KES 85.00 </b></td>
+              </tr>
+			  <tr>
+                <td class="GW_txtfieldcaption" >Delivery Currency</td>
+                <td>
+				<select name="delivery_currency" id="delivery_currency">
+
+                              <option value="local" selected="">KES</option>
+                </select>			    </td>
+		      </tr>
+			  <tr> 
+                <td class="GW_txtfieldcaption" >Billing Method</td>
+                <td> <select name="payment_method" id="payment_method">
+
+							  <option value="Credit_card">Credit Card</option>
+		                       </select></td>
+              </tr>
+		  	  <tr>
+                <td align="right">&nbsp;</td>
+			    <td>
+                <input type="submit" class="btn btn-mini btn-success"value="Calculate"></td>
+		      </tr>
+			  <tr>
+			    <td colspan="2" ></td>
+              </tr>
+			  <tr>
+                <td colspan="2" valign="bottom">
+                
+                </td>
+              </tr>
+      <tr>
+        <td class="GW_txtfieldcaption" style="color:#aaa">Our Trusted Partners:</td>
+        <td>&nbsp;</td>
+        </tr>
+      <tr>
+        <td><a href="http://www.chasebank.co.ke/section/diaspora-banking" target="_blank"><!--img src="images/logo-chase-bank.png" alt="Trusted Partner : Cashswift" border="0"--></a></td>
+        <td><img src="assets/card-lists.jpg" alt="mastercard"><img src="assets/aitel.jpg"  width="46" alt="airtel"><img src="assets/safcom.jpg"  width="50" alt="zain"></td>
+        <td></td>
+      </tr>
+     </tbody></table>
+     <script type="text/javascript">
+
+var countries=new ddajaxtabs("countrytabs", "countrydivcontainer")
+countries.setpersist(true)
+countries.setselectedClassTarget("link") //"link" or "linkparent"
+countries.init()
+
+     </script></form>
+
+</div>
+
+</div>
+<div class="span5">
+
+<a class="twitter-timeline" href="https://twitter.com/ImpalapayCash" data-widget-id="453446805573742592">Tweets by @ImpalapayCash</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
+
+
+
+
+
+
+</div>
+</div>
+<section id="bodySection">
+<div class="container">
+
+                                   
+<div class="row">
+	<h3 class="span12" style="text-align:center">The latest from cashswiftglobal</h3>
+	<div class="span4">
+		<div class="thumbnail">
+			<h4>Merchant Account</h4>
+			<a href="#"><img src="themes/images/1.jpg" class="img-circle" alt="bootstrap business templates"></a>
+			<p align="justify">
+			<br>
+we now have a secure, quick, cost-effective merchant account where one  can be able to register there business and be able to intergrate our payment platform
+ in their websites . Send money to your family, friends and business associates at much ease via Cashswiftglobal. 
+You don’t have to travel to a merchant, agent or bank to send money . . . 
+
+
+
+			</p>
+			
+		</div>
+	</div>
+	<div class="span4">
+		<div class="thumbnail">
+			<h4>Social media transfers</h4>
+			<a href="#"><img src="themes/images/22.jpg" class="img-circle"alt="bootstrap business templates"></a>
+			<p align="justify">
+			
+		Transfer money securely through our Facebook platform,
+It’s as easy as logging into your Facebook account and search for impalapay or use the link <a href="https://apps.facebook.com/impalapay">https://apps.facebook.com/impalapay/</a>
+On a successful registration you can send or receive money via the platform.
+
+	.<br/>
+			 </p>
+			
+		</div>
+	</div>
+	<div class="span4">
+		<div class="thumbnail">
+			<h4>Finacial solutions</h4>
+			<a href="#"><img src="themes/images/33.jpg" class="img-circle" alt="bootstrap business templates"></a>
+			<p align="justify">
+			<br/>
+		We are specialized in Online Money Transfer,Cross Border Mobile Payments, Prepaid Sales MPOS  C.M.S, Revenue Collection Systems, Bulk Payments and Bill Payments. 
+     
+			
+			 </p>
+			
+		</div>
+	</div>
+</div>
+<br/>
+</div>
+
+<!---------------juat added----->
+<div class="container">
+<div class="row">
+	<div class="span6">
+	<div class="well well-small">
+		<h3> Welcome !</h3>	
+		<p align="justify">
+	Cashswift Money Transfer is a licensed trademark of DTP L.L.C., a Birmingham, 
+    AL company dedicated to providing a secure, quick, cost-effective and easy way 
+    to remit money abroad. Sending money to Kenya does not have to be difficult or expensive.<br> 
+    Your family, friends or business associates cannot wait weeks to receive the funds, and you cannot afford 
+    the expensive fees, complications and insecurities typical of traditional money remittance services. 
+    You can count on Cashswift Money Transfer, built for the global Kenya! <br/>
+		</p>
+	</div>
+	</div>
+	<div class="span6">
+	<div class="well well-small">
+		<h3> News and Events</h3>
+		
+		<p align="justify">Mobile revolution is taking off at unprecedented speed! Consumers are increasingly using their mobile devices 
+        to manage their lives on a daily basis, creating a dependency on the capabilities the mobile channel provides to them.
+         You can nowadays pay your bills from your mobile device anytime, anywhere. Companies are now issuing bills via a 
+         full mobile bill pay suite that allows consumers to interact in the mode they prefer, whether it is via an app, 
+         SMS text or mobile browser, andensure all are integrated to prevent consumer frustration.</p> 
+         <p align="justify">Here comes ImpalaPay’s Cashswift Payment Platform, a comprehensive and seamless mobile money 
+        transfer cum payment experience that has significantly increased consumer satisfaction with minimal expenses.
+		</p>
+		
+	</div>
+	</div>
+	
+	<div class="span12">
+	
+	</div>
+</div>
+</div>
+
+
+<!--end here----------->
+</section>
+<section id="clientsSection2" style="border-left-color: #FFF; border-bottom-color: #FFF; border-right-color: #FFF; border-top-color: #FFF; text-align:center; padding:48px 0">
+<div class="container">
+	  <a href="#" ><img src="themes/images/clients/twitterLogo.jpg" alt="tweeter"></a>
+	  <a href="#" ><img src="themes/images/clients/googleLogo.jpg" alt="facebook"></a>    
+      <img src="themes/images/clients/facebookLogo.jpg" alt="business template">
+      <img src="themes/images/clients/flinkedin_cloud.png" alt="business template">
+	 
+</div>
+</section>
+<div class="container">
+
+
+<div class="fb-like-box" data-href="https://www.facebook.com/impalapaylimitedowneratcashswift"  data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true"></div>
+
+
+</div>
+<!-- body block end======================================== -->
+ <!-- Footer
+  ================================================== -->
+<section id="footerSection">
+
+<div class="container">
+    <footer class="footer well well-small">
+	<div class="row-fluid">
+	<div class="span5">
+			<h4>Newsletter and Subscription</h4>
+			<h5>Our aim</h5>
+			<em>
+			"Our aim is simple - to provide affordable systems and development services for both Mobile and Computer solutions by creating platforms that fully meet your requirements." <br/><br/>
+			</em>
+			
+			
+			<h5>Subscription</h5>
+			<form>
+			<div class="input-append">
+			  <input id="appendedInputButton"  placeholder="Enter your e-mail" type="text">
+			  <button class="btn btn-warning" type="button">send </button>
+			</div>
+			</form>
+		</div>
+		<div class="span4" id="footer1">
+		<h4>Visit us</h4>
+			<address style="margin-bottom:15px;">
+			<strong><a href="index.php" title="business"><i class=" icon-home"></i> impala pay(p.) Ltd. </a></strong><br>
+			 Twiga towers,Nairobi <br>
+				Kenya<br>
+			</address>
+			Phone: <i class="icon-phone-sign"></i> &nbsp; +254 20 248747 <br>
+			Email: <a href="#" title="contact"><i class="icon-envelope-alt"></i> info@impalapay.com</a><br/>
+			Link: <a href="index.php" title="Business ltd"><i class="icon-globe"></i> www.cashswift.com</a><br/><br/>
+		</div>
+	
+	<div class="span3">
+			
+		  <h5>Quick Links</h5>	
+			<a href="#" title="services"><i class="icon-cogs"></i> Terms of Services </a><br/>
+			<a href="#" title=""><i class="icon-info-sign"></i> About us </a><br/>
+            <a href="#" title="fees"><i class="icon-barcode"></i>Fees</a><br>
+            <a href="#" title="faqs"><i class="icon-eye-open"></i>FAQs</a><br>
+			<a href="#" title="policy"><i class="icon-question-sign"></i>Privacy Policy </a><br/>
+            <a href="#" title="contact"><i class="icon-phone-sign"></i>Contact Us</a><br>
+
+	<h5>Find us on</h5>	
+	<div style="font-size:2.5em;">
+		<a href="#facebook" role="button" data-toggle="modal" style="display:inline-block; width:1em"> <i class="icon-facebook-sign"> </i> </a> 
+		<a href="#twitter" role="button" data-toggle="modal" title="" style="display:inline-block; width:1em"> <i class="icon-twitter-sign"> </i> </a>
+		<a href="#youtube" role="button" data-toggle="modal" style="display:inline-block;width:1em"> <i class="icon-facetime-video"> </i> </a>
+		<a href="#" title="" style="display:inline-block;width:1em"> <i class="icon-google-plus-sign"> </i> </a>
+		<a href="#rss" role="button" data-toggle="modal" style="display:inline-block;width:1em" > <i class="icon-rss"> </i> </a>
+		<!-- Facebook -->
+		
+		<!-- Twitter -->
+		
+		<!-- Rss feed -->
+		
+		<!-- Youtube -->
+				
+	</div>
+	</div>
+    </div>
+
+	<p style="padding:18px ">&copy; 2014, allright reserved </p>
+    <p align="right">@chimitadesigns</p>
+    
+	</footer>
+    </div><!-- /container -->
+</section>
+<a href="#" class="btn" style="position: fixed; bottom: 38px; right: 10px; display: none; " id="toTop"> <i class="icon-arrow-up"></i> Go to top</a>
+<!-- Javascript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	<script src="themes/js/jquery-1.8.3.min.js"></script>
+	<script src="themes/js/bootstrap.min.js"></script>
+	<script src="themes/js/bootstrap-tooltip.js"></script>
+    <script src="themes/js/bootstrap-popover.js"></script>
+	<script src="themes/js/business_ltd_1.0.js"></script>
+    
+ 
+<!-- Themes switcher section =============================================================================================
+<div id="secectionBox">
+<link rel="stylesheet" href="themes/switch/themeswitch.css" type="text/css" media="screen" />
+<script src="themes/switch/theamswitcher.js" type="text/javascript" charset="utf-8"></script>
+	<div id="themeContainer">
+	<div id="hideme" class="themeTitle">Style Selector</div>
+	<div class="themeName">Oregional Skin</div>
+	<div class="images style">
+	<a href="themes/css/#" name="current"><img src="themes/switch/images/clr/current.png" alt="bootstrap business templates" class="active"></a>
+	</div>
+	<div class="themeName">Bootswatch Skins (11)</div>
+	<div class="images style">
+		<a href="themes/css/#" name="amelia" title="Amelia"><img src="themes/switch/images/clr/amelia.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="spruce" title="Spruce"><img src="themes/switch/images/clr/spruce.png" alt="bootstrap business templates" ></a>
+		<a href="themes/css/#" name="superhero" title="Superhero"><img src="themes/switch/images/clr/superhero.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="cyborg"><img src="themes/switch/images/clr/cyborg.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="cerulean"><img src="themes/switch/images/clr/cerulean.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="journal"><img src="themes/switch/images/clr/journal.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="readable"><img src="themes/switch/images/clr/readable.png" alt="bootstrap business templates"></a>	
+		<a href="themes/css/#" name="simplex"><img src="themes/switch/images/clr/simplex.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="slate"><img src="themes/switch/images/clr/slate.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="spacelab"><img src="themes/switch/images/clr/spacelab.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="united"><img src="themes/switch/images/clr/united.png" alt="bootstrap business templates"></a>
+		<p style="margin:0;line-height:normal;margin-left:-10px;display:none;"><small>These are just examples and you can build your own color scheme in the backend.</small></p>
+	</div>
+	<div class="themeName">Background Patterns </div>
+	<div class="images patterns">
+		<a href="themes/css/#" name="pattern1"><img src="themes/switch/images/pattern/pattern1.png" alt="bootstrap business templates" class="active"></a>
+		<a href="themes/css/#" name="pattern2"><img src="themes/switch/images/pattern/pattern2.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern3"><img src="themes/switch/images/pattern/pattern3.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern4"><img src="themes/switch/images/pattern/pattern4.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern5"><img src="themes/switch/images/pattern/pattern5.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern6"><img src="themes/switch/images/pattern/pattern6.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern7"><img src="themes/switch/images/pattern/pattern7.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern8"><img src="themes/switch/images/pattern/pattern8.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern9"><img src="themes/switch/images/pattern/pattern9.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern10"><img src="themes/switch/images/pattern/pattern10.png" alt="bootstrap business templates"></a>
+		
+		<a href="themes/css/#" name="pattern11"><img src="themes/switch/images/pattern/pattern11.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern12"><img src="themes/switch/images/pattern/pattern12.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern13"><img src="themes/switch/images/pattern/pattern13.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern14"><img src="themes/switch/images/pattern/pattern14.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern15"><img src="themes/switch/images/pattern/pattern15.png" alt="bootstrap business templates"></a>
+		
+		<a href="themes/css/#" name="pattern16"><img src="themes/switch/images/pattern/pattern16.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern17"><img src="themes/switch/images/pattern/pattern17.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern18"><img src="themes/switch/images/pattern/pattern18.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern19"><img src="themes/switch/images/pattern/pattern19.png" alt="bootstrap business templates"></a>
+		<a href="themes/css/#" name="pattern20"><img src="themes/switch/images/pattern/pattern20.png" alt="bootstrap business templates"></a>
+		 
+	</div>
+	</div>
+</div>
+ -->
+<span id="themesBtn"></span>
+</body>
+</html>

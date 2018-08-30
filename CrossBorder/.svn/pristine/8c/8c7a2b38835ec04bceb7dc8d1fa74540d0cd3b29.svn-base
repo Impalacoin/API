@@ -1,0 +1,313 @@
+VERSION 5.00
+Begin VB.Form Encrypt 
+   BackColor       =   &H00C0C0C0&
+   BorderStyle     =   4  'Fixed ToolWindow
+   Caption         =   "Initial Settings"
+   ClientHeight    =   6240
+   ClientLeft      =   45
+   ClientTop       =   285
+   ClientWidth     =   8055
+   LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
+   ScaleHeight     =   6240
+   ScaleWidth      =   8055
+   ShowInTaskbar   =   0   'False
+   StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame2 
+      BackColor       =   &H00E0E0E0&
+      Caption         =   "Payserv Database Settings"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   3255
+      Left            =   120
+      TabIndex        =   6
+      Top             =   240
+      Width           =   7815
+      Begin VB.TextBox Text5 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3000
+         TabIndex        =   11
+         Top             =   1080
+         Width           =   2295
+      End
+      Begin VB.TextBox Text4 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3000
+         TabIndex        =   10
+         Top             =   1680
+         Width           =   2295
+      End
+      Begin VB.TextBox Text3 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   3000
+         TabIndex        =   9
+         Top             =   480
+         Width           =   2295
+      End
+      Begin VB.Label Label5 
+         BackColor       =   &H00C0C0C0&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Database Name"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   240
+         TabIndex        =   12
+         Top             =   1080
+         Width           =   2655
+      End
+      Begin VB.Label Label4 
+         BackColor       =   &H00C0C0C0&
+         BackStyle       =   0  'Transparent
+         Caption         =   "User ID"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   240
+         TabIndex        =   8
+         Top             =   1680
+         Width           =   1455
+      End
+      Begin VB.Label Label3 
+         BackColor       =   &H00C0C0C0&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Database IP Address"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   240
+         TabIndex        =   7
+         Top             =   480
+         Width           =   2655
+      End
+   End
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00E0E0E0&
+      Caption         =   "Password Encryptor"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   2295
+      Left            =   120
+      TabIndex        =   0
+      Top             =   3720
+      Width           =   7815
+      Begin VB.CommandButton Command2 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Cancel"
+         Height          =   495
+         Left            =   5640
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         Top             =   1680
+         Width           =   1215
+      End
+      Begin VB.CommandButton Command1 
+         BackColor       =   &H00E0E0E0&
+         Caption         =   "Encypt and Update Settings"
+         Height          =   495
+         Left            =   3000
+         Style           =   1  'Graphical
+         TabIndex        =   5
+         Top             =   1680
+         Width           =   2415
+      End
+      Begin VB.TextBox Text2 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   2160
+         TabIndex        =   4
+         Top             =   1080
+         Width           =   5415
+      End
+      Begin VB.TextBox Text1 
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   405
+         IMEMode         =   3  'DISABLE
+         Left            =   2160
+         PasswordChar    =   "*"
+         TabIndex        =   3
+         Top             =   480
+         Width           =   2655
+      End
+      Begin VB.Label Label2 
+         BackColor       =   &H00C0C0C0&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Encrypted String"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   240
+         TabIndex        =   2
+         Top             =   1080
+         Width           =   2055
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00C0C0C0&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Plain Text"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   375
+         Left            =   240
+         TabIndex        =   1
+         Top             =   480
+         Width           =   1215
+      End
+   End
+End
+Attribute VB_Name = "Encrypt"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Sub Command1_Click()
+Dim enc As New EBL_Encryption.clsEncryption
+If Trim(Text1.Text) = "" Or Trim(Text5.Text) = "" Or Trim(Text3.Text) = "" Or Trim(Text4.Text) = "" Then
+   MsgBox "Missing parameters", vbCritical
+Else
+Text2.Text = enc.EncryptString("DES", Trim(Text1.Text), "XXXXX", True)
+
+    If WriteIni("zapbridge.ini") = True Then
+      MsgBox "New Settings uploaded", vbInformation, "Database Settings"
+    Else
+       MsgBox "Error occurred during New Settings uploaded", vbCritical, "Database Settings"
+    End If
+End If
+End Sub
+
+Public Function WriteIni(ByVal strFileName As String) As Boolean
+    Dim intFileNo As Integer
+    Dim strReadLine As String
+    Dim i As Integer
+    i = 0
+    On Error GoTo ErrorTrap
+    intFileNo = CInt(Mid(Format(Time, "ms"), 2, 1))
+    
+        Open App.Path & "\" & strFileName For Output As #intFileNo
+                            
+                Print #intFileNo, "EM_SERVER="; Text3.Text
+                Print #intFileNo, "DBN="; Text5.Text
+                Print #intFileNo, "USER_ID="; Text4.Text
+                Print #intFileNo, "PSW="; Text2.Text
+                Print #intFileNo, "LOCAL_MOBILE_PORT="; "2305"
+                Print #intFileNo, "ASA_IP="; "127.0.0.1"
+                Print #intFileNo, "ASA_PORT="; 8405
+                Print #intFileNo, "MT_IP="; "127.0.0.1"
+                Print #intFileNo, "MT_PORT="; "8506"
+                
+                
+               
+
+ 
+                
+                
+        Close #intFileNo
+    
+    
+    WriteIni = True
+    Exit Function
+ErrorTrap:
+    WriteIni = False
+End Function
+
+Private Sub Command2_Click()
+Unload Me
+End Sub
+
+Private Sub Form_Load()
+Me.Top = MainForm.Top + 1070
+Me.Left = MainForm.Left + 4300
+End Sub

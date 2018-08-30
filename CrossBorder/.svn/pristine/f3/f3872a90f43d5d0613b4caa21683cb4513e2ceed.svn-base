@@ -1,0 +1,7 @@
+uuid|Account Status UUID|firstName|lastName|username|loginPasswd|apiPasswd|email|phone|creationDate
+9756f889-811a-4a94-b13d-1c66c7655a7f|acecb9fa-7e21-455d-8abb-c61a840cdbec|demo|demo|demo|fe01ce2a7fbac8fafaed7c982a04e229|fe01ce2a7fbac8fafaed7c982a04e229|demo@demo.com|+254 020 250 9260|2013-01-01 15:05:05.805593-05
+81bf3078-4495-4bec-a50d-c91a7c512d78|acecb9fa-7e21-455d-8abb-c61a840cdbec|idt|idt|idt|34bef5f7d97d280abfd86e52d013fbea|34bef5f7d97d280abfd86e52d013fbea|idt@idt.com|0782 345 123|2013-03-14 15:14:50.428862-04
+7967107d-d61c-43dd-bc5b-aa12fd08497b|acecb9fa-7e21-455d-8abb-c61a840cdbec|Soft|Touch Ltd|softtouch|passwd4|smspasswd4|soft@touch.com|+255 32 956 781|2013-05-23 10:14:50.428862-04
+91fc8aae-cb76-4c64-ac45-48448fb5673f|acecb9fa-7e21-455d-8abb-c61a840cdbec|Mobisoko|NULL|mobisoko|passwd5|smspasswd5|boss@mobisoko.com|020 098 326|2012-09-16 07:14:50.428862-04
+48e249c2-856a-4269-820f-7b72c76b4957|acecb9fa-7e21-455d-8abb-c61a840cdbec|error|error|error|6a14111653ea8171daf66296a434543c|6a14111653ea8171daf66296a434543c|error@error.com|020 432 1234|2013-02-05 15:05:27.235437-05
+d5677a9f-5eda-4b1c-a283-7415d4a18a75|acecb9fa-7e21-455d-8abb-c61a840cdbec|mhit|mhit|mhit|bb4288b53b74ebae38d1d43a0fbf0fb1|bb4288b53b74ebae38d1d43a0fbf0fb1|mhits@demo.com|254 71234 556|2014-11-06 05:09:38.940003-05

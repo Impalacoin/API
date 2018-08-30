@@ -1,0 +1,531 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Public Class frmHouse
+    'Private AccessADODB As New ADODB.Connection
+    Public Audit_ID As Long
+    Private Table_name As String
+    Private Sub DataGridRefresh(ByVal Id As Long, ByVal table_name As String)
+        Dim i As Integer
+        Try
+
+            Dim RecSet As New ADODB.Recordset
+            Dim RecSetX As New ADODB.Recordset
+            Dim Deleted, Inserted As String
+            Dim n As Integer
+            Dim t As Char
+            t = Chr(149)
+
+            Inserted = ""
+            Deleted = ""
+            RecSetX.Open("SELECT COLUMN_NAME " & _
+                         " FROM INFORMATION_SCHEMA.COLUMNS " & _
+                         " WHERE TABLE_NAME = '" & table_name & "' AND TABLE_SCHEMA='dbo'", UniversalHostConnection)
+
+            RecSet.Open("Select deleted,inserted from at_log where id = " & Id, UniversalHostConnection)
+            DataGridView2.Rows.Clear()
+            If RecSet.EOF = False Then
+                If IsDBNull(RecSet.Fields(0).Value) = False Then
+                    Deleted = UCase(RecSet.Fields(0).Value)
+                Else
+                    Deleted = ""
+                End If
+
+                If IsDBNull(RecSet.Fields(1).Value) = False Then
+                    Inserted = UCase(RecSet.Fields(1).Value)
+                Else
+                    Inserted = ""
+                End If
+            End If
+
+            Do While RecSetX.EOF = False
+                DataGridView2.Rows.Add()
+                DataGridView2.Rows.Item(n).Cells(0).Value = UCase(RecSetX.Fields(0).Value)
+
+                If Deleted <> "" Then
+                    DataGridView2.Rows.Item(n).Cells(1).Value = Mid(Deleted, 1, InStr(1, Deleted, t, CompareMethod.Text) - 1)
+                    Deleted = Mid(Deleted, InStr(1, Deleted, t, CompareMethod.Text) + 1, Len(Deleted) - InStr(1, Deleted, t, CompareMethod.Text))
+                End If
+                If Inserted <> "" Then
+                    DataGridView2.Rows.Item(n).Cells(2).Value = Mid(Inserted, 1, InStr(1, Inserted, t, CompareMethod.Text) - 1)
+                    Inserted = Mid(Inserted, InStr(1, Inserted, t, CompareMethod.Text) + 1, Len(Inserted) - InStr(1, Inserted, t, CompareMethod.Text))
+
+                End If
+
+
+                If IsNothing(DataGridView2.Rows(n).Cells(1).Value) = False Then
+                    If DataGridView2.Rows(n).Cells(1).Value <> DataGridView2.Rows(n).Cells(2).Value Then
+                        DataGridView2.Rows(n).DefaultCellStyle.BackColor = Color.LightSalmon
+                    End If
+                End If
+
+
+                n = n + 1
+                RecSetX.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, "Smart Property")
+        End Try
+
+    End Sub
+
+    Private Sub frmHouse_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+
+    End Sub
+
+    Private Sub frmHouse_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+
+        On Error GoTo ErrTrap
+        Me.Text = "Audit Trail"
+        Me.Top = 0
+        Me.Left = 0
+
+        'Label1.Text = "PROPERTY OWNER:  " & Form1.OWNER
+
+       
+
+        Call LoadParameters()
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+
+    End Sub
+
+    Private Sub frmHouse_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        'Access
+        GroupBox1.Width = Me.Width / 2 - 10
+        GroupBox3.Left = GroupBox1.Width + GroupBox1.Left
+        GroupBox3.Width = Me.Width / 2 - 15
+        GroupBox2.Width = Me.Width - 30
+        GroupBox1.Height = Me.Height - 160
+        GroupBox3.Height = Me.Height - 160
+
+        
+
+    End Sub
+
+    Private Sub DataGridView1_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellClick
+        'ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+        'ContextMenuStrip1.Show(420, 150)
+        'ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+    End Sub
+
+    Private Sub DataGridView1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseClick
+
+        Try
+
+
+            If e.Button = Windows.Forms.MouseButtons.Left Then
+                Dim rowClicked
+                rowClicked = DataGridView1.HitTest(e.Location.X, e.Location.Y).RowIndex
+                Audit_ID = DataGridView1.Rows.Item(rowClicked).Cells(0).Value
+                Table_name = DataGridView1.Rows.Item(rowClicked).Cells(4).Value
+                DataGridRefresh(Audit_ID, Table_name)
+
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub AddNewHouseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddNewHouseToolStripMenuItem.Click
+        frmNewHouse.ShowDialog()
+        frmNewHouse.Text = "Add New House"
+    End Sub
+
+    Private Sub ModifyHouseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ModifyHouseToolStripMenuItem.Click
+
+        Try
+
+
+
+
+
+            Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+            frmNewHouse.Text = "Modify House: " & DataGridView1.Rows.Item(Row).Cells(3).Value
+
+
+
+            Dim RecSet As New ADODB.Recordset
+
+            Dim n As Integer
+            RecSet.Open("Select * from house_details where house_name = '" & DataGridView1.Rows.Item(Row).Cells(3).Value & "'", UniversalHostConnection)
+            If RecSet.EOF = False Then
+                frmNewHouse.TextBox1.Text = RecSet.Fields(0).Value
+                frmNewHouse.TextBox2.Text = RecSet.Fields(1).Value
+                frmNewHouse.TextBox3.Text = RecSet.Fields(2).Value
+                frmNewHouse.TextBox4.Text = RecSet.Fields(3).Value
+                frmNewHouse.ComboBox1.Text = RecSet.Fields(4).Value
+
+                frmNewHouse.TextBox11.Text = RecSet.Fields(13).Value
+                frmNewHouse.TextBox5.Text = RecSet.Fields(5).Value
+                frmNewHouse.TextBox6.Text = RecSet.Fields(6).Value
+                frmNewHouse.TextBox7.Text = RecSet.Fields(7).Value
+                frmNewHouse.TextBox8.Text = RecSet.Fields(8).Value
+                frmNewHouse.TextBox9.Text = RecSet.Fields(9).Value
+                frmNewHouse.TextBox10.Text = RecSet.Fields(10).Value
+
+            End If
+
+            frmNewHouse.ShowDialog()
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ViewTenantsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewTenantsToolStripMenuItem.Click
+        'Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+        'House_Name = DataGridView1.Rows.Item(Row).Cells(3).Value
+
+        frmTenant.Show()
+
+        frmTenant.MdiParent = MainForm
+        'frmTenant.Text = "TENANTS: " & House_Name
+        frmTenant.Show()
+        frmTenant.WindowState = FormWindowState.Maximized
+
+
+
+
+        'Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+        'frmTenant.Text = DataGridView1.Rows.Item(Row).Cells(3).Value
+    End Sub
+
+    
+
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        frmNewHouse.ShowDialog()
+        frmNewHouse.Text = "Add New House"
+
+    End Sub
+
+    
+
+    Private Sub ViewHouseUnitsAllocationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ViewHouseUnitsAllocationToolStripMenuItem.Click
+        Try
+
+            Dim RecSet As New ADODB.Recordset
+            Dim Str As String = ""
+
+            Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+            Dim House_Nam = DataGridView1.Rows.Item(Row).Cells(3).Value
+            Dim Flr As Integer
+            frmRooms.TextBox1.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(3).Value), "", DataGridView1.Rows.Item(Row).Cells(3).Value)
+            Flr = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(13).Value), 0, CInt(DataGridView1.Rows.Item(Row).Cells(13).Value))
+            'frmRooms.TextBox3.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(2).Value), "", DataGridView1.Rows.Item(Row).Cells(2).Value)
+            'boardHouse.TextBox4.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(3).Value), "", DataGridView1.Rows.Item(Row).Cells(3).Value)
+            frmRooms.ComboBox1.Items.Clear()
+            frmRooms.Floor = Flr + 1
+            For t As Integer = 0 To Flr
+                frmRooms.ComboBox1.Items.Add(t)
+            Next
+
+
+            'RecSet.Open("Select * from boardprice where house_name = '" & House_Nam & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            'If RecSet.EOF = False Then
+
+
+            '    boardHouse.TextBox11.Text = RecSet.Fields(4).Value
+            '    boardHouse.TextBox5.Text = RecSet.Fields(5).Value
+
+            '    boardHouse.TextBox7.Text = RecSet.Fields(6).Value
+            '    boardHouse.TextBox8.Text = RecSet.Fields(7).Value
+
+            '    boardHouse.TextBox9.Text = RecSet.Fields(8).Value
+            '    boardHouse.TextBox10.Text = RecSet.Fields(9).Value
+
+
+            'End If
+
+            frmRooms.ShowDialog()
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+
+
+    Private Sub PictureBox4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim Str As String = ""
+
+            Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+            Dim House_Nam = DataGridView1.Rows.Item(Row).Cells(3).Value
+
+            RecSet.Open("Select rental_type from house_details where house_name = '" & House_Nam & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            If RecSet.EOF = False Then
+                If RecSet.Fields(0).Value = 0 Then
+                    MsgBox("This House is not a Lodging. Only Lodging House can be setup", vbExclamation, APPNAME)
+                    Exit Sub
+                End If
+            End If
+            RecSet.Close()
+
+            boardHouse.TextBox1.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(0).Value), "", DataGridView1.Rows.Item(Row).Cells(0).Value)
+            boardHouse.TextBox2.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(1).Value), "", DataGridView1.Rows.Item(Row).Cells(1).Value)
+            boardHouse.TextBox3.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(2).Value), "", DataGridView1.Rows.Item(Row).Cells(2).Value)
+            boardHouse.TextBox4.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(3).Value), "", DataGridView1.Rows.Item(Row).Cells(3).Value)
+
+
+            RecSet.Open("Select * from boardprice where house_name = '" & House_Nam & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+            If RecSet.EOF = False Then
+
+
+                boardHouse.TextBox11.Text = RecSet.Fields(4).Value
+                boardHouse.TextBox5.Text = RecSet.Fields(5).Value
+
+                boardHouse.TextBox7.Text = RecSet.Fields(6).Value
+                boardHouse.TextBox8.Text = RecSet.Fields(7).Value
+
+                boardHouse.TextBox9.Text = RecSet.Fields(8).Value
+                boardHouse.TextBox10.Text = RecSet.Fields(9).Value
+
+
+            End If
+
+            boardHouse.ShowDialog()
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub PictureBox5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox5.Click
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim Str As String = ""
+
+            Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+            Dim House_Nam = DataGridView1.Rows.Item(Row).Cells(3).Value
+            Dim Flr As Integer
+            frmRooms.TextBox1.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(3).Value), "", DataGridView1.Rows.Item(Row).Cells(3).Value)
+            Flr = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(13).Value), 0, CInt(DataGridView1.Rows.Item(Row).Cells(13).Value))
+            'frmRooms.TextBox3.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(2).Value), "", DataGridView1.Rows.Item(Row).Cells(2).Value)
+            'boardHouse.TextBox4.Text = IIf(IsDBNull(DataGridView1.Rows.Item(Row).Cells(3).Value), "", DataGridView1.Rows.Item(Row).Cells(3).Value)
+            frmRooms.ComboBox1.Items.Clear()
+            frmRooms.Floor = Flr + 1
+            For t As Integer = 0 To Flr
+                frmRooms.ComboBox1.Items.Add(t)
+            Next
+
+            frmRooms.Panel3.Enabled = False
+
+            frmRooms.UNITEDIT = 1
+
+            frmRooms.ShowDialog()
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+
+        Label8.Visible = True
+        ExcelDataPull()
+        Label8.Visible = False
+
+    End Sub
+    Private Sub ExcelDataPull()
+        Try
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+
+
+
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Houses"
+            End With
+
+            row = 1
+            col = 1
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "HOUSES REPORT"
+            ws.Rows.Cells(3, 1) = Form1.OWNER
+
+
+
+
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+
+            ws.Range("A1:N5").Font.Bold = True
+
+
+            For M As Integer = 0 To DataGridView1.ColumnCount - 1
+                ws.Rows.Cells(row, M + 1) = UCase(DataGridView1.Columns.Item(M).HeaderText) 'DataGridView1.Rows.Item(N).Cells(M).Value
+            Next
+
+            row = row + 1
+
+            'ws.Range("A6:N" & row + DataGridView1.RowCount).NumberFormat = "@"
+
+            For L As Integer = 0 To DataGridView1.RowCount - 1
+                For M As Integer = 0 To DataGridView1.ColumnCount - 1
+                    ws.Rows.Cells(row, M + 1) = DataGridView1.Rows.Item(L).Cells(M).Value
+                Next
+                row = row + 1
+            Next
+
+Finish:
+            Dim Destination As String = "D:\SMART PROPERTY report"
+            FileName = Form1.OWNER & "_HOUSES_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+   
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim SqlStr As String = ""
+        Dim filterStr As String = ""
+        Dim StartDate, Enddate As String
+        Dim RecSet As New ADODB.Recordset
+
+        StartDate = Format(DateTimePicker1.Value.Date, "yyyy-MM-dd") & " 00:00:00.000"
+        Enddate = Format(DateTimePicker2.Value.Date, "yyyy-MM-dd") & " 23:59:59.999"
+
+        SqlStr = "select id,user_login,date_time,action_type,db_table,deleted,inserted from at_log "
+        If CboLogin.SelectedIndex > 0 Then
+            filterStr = "where user_login = '" & CboLogin.SelectedItem & "'"
+            If CboAction.SelectedIndex > 0 Then
+                filterStr = filterStr & " and action_type = '" & CboAction.SelectedItem & "'"
+                If cboObject.SelectedIndex > 0 Then
+                    filterStr = filterStr & " and db_table = '" & cboObject.SelectedItem & "'"
+                End If
+            End If
+
+        ElseIf CboAction.SelectedIndex > 0 Then
+            filterStr = "where action_type = '" & CboAction.SelectedItem & "'"
+            If cboObject.SelectedIndex > 0 Then
+                filterStr = filterStr & " and db_table = '" & cboObject.SelectedItem & "'"
+            End If
+
+        ElseIf cboObject.SelectedIndex > 0 Then
+            filterStr = "where db_table = '" & cboObject.SelectedItem & "'"
+        Else
+            filterStr = "where 1 = 1"
+        End If
+        If ChkDate.Checked = True Then
+            filterStr = filterStr & " and date_time between '" & StartDate & "' and '" & Enddate & "'"
+        End If
+        Dim n As Integer = 0
+        RecSet.Open(SqlStr & filterStr, UniversalHostConnection)
+        DataGridView1.Rows.Clear()
+        DataGridView2.Rows.Clear()
+        Do While RecSet.EOF = False
+            DataGridView1.Rows.Add()
+            For i As Integer = 0 To 4
+                DataGridView1.Rows.Item(n).Cells(i).Value = RecSet.Fields(i).Value
+            Next
+            n = n + 1
+
+            RecSet.MoveNext()
+        Loop
+    End Sub
+
+
+    Private Sub LoadParameters()
+        Dim i As Integer = 0
+        Try
+
+            'Dim RecSet As New ADODB.Recordset
+
+            'Dim n As Integer
+            'RecSet.Open("Select distinct(branch_code) from em_cards_1_a order by branch_code asc", UniversalHostConnection)
+            'CboLogin.Items.Clear()
+            'Do While RecSet.EOF = False
+            '    CboLogin.Items.Add(RecSet.Fields(0).Value)
+            '    n = n + 1
+            '    RecSet.MoveNext()
+            'Loop
+            'RecSet.Close()
+
+            'RecSet.Open("Select distinct(card_program) from em_cards_1_a", UniversalHostConnection)
+            'CboAction.Items.Clear()
+
+            'Do While RecSet.EOF = False
+            '    CboAction.Items.Add(RecSet.Fields(0).Value)
+            '    n = n + 1
+            '    RecSet.MoveNext()
+            'Loop
+            'RecSet.Close()
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, "Audit")
+        End Try
+
+    End Sub
+
+    Private Sub DataGridView2_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView2.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridView1_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridView1.SelectionChanged
+        'do something
+    End Sub
+
+    Private Sub ChkDate_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChkDate.CheckedChanged
+        If ChkDate.Checked = True Then
+
+            DateTimePicker1.Enabled = True
+            DateTimePicker2.Enabled = True
+        Else
+            DateTimePicker1.Enabled = False
+            DateTimePicker2.Enabled = False
+        End If
+
+
+    End Sub
+End Class

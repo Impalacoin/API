@@ -1,0 +1,47 @@
+$(function(){    
+    processPayment();
+   //calculateButton();
+   
+});
+
+function processPayment(){
+    var myForm = $("#processPaymentForm");
+    var process=true;
+    var postData="";
+    
+    myForm.submit(function(){
+        var makeSure = "";
+        $("#processPaymentForm input:text,#processPaymentForm input:hidden").each(function(){
+            if($(this).val()==""){
+                $(this).css({"background":"red"});
+                process =false;
+                makeSure=$(this).attr("name");
+            }else{
+                $(this).css({"background":"url(images/field_bg.gif)"});
+                postData+="\""+$(this).attr("name")+"\""+":\""+$(this).val()+"\",";
+                process=false;
+            }
+        })
+        if(makeSure == ""){
+            $("#notify").html("<img src='images/loader_four.gif' />");
+            $.post("process_card.php",$(this).serialize(),function(data,status){
+                
+                $("#notify").html("<p class='kcb-notification'>"+data+"</p>");
+            });
+        }
+        return process;
+    });
+}
+function calculateButton(){
+    var formElems = $("#calculateSend");
+    //alert(formElems.length);
+    formElems.submit(function(){
+        //alert("Gotcha");
+        //return false;
+    });
+    var isEmpty = new Array();
+    var counter = 0;
+    formElems.each(function(){
+        
+    });
+}

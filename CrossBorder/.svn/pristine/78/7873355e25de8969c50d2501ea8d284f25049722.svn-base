@@ -1,0 +1,157 @@
+VERSION 5.00
+Begin VB.Form FrmTrace 
+   Caption         =   "Trace View"
+   ClientHeight    =   8520
+   ClientLeft      =   60
+   ClientTop       =   450
+   ClientWidth     =   14280
+   Icon            =   "frmTrace.frx":0000
+   LinkTopic       =   "Form1"
+   ScaleHeight     =   8520
+   ScaleWidth      =   14280
+   StartUpPosition =   3  'Windows Default
+   Begin VB.ComboBox Combo1 
+      BackColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   2400
+      TabIndex        =   4
+      Top             =   0
+      Width           =   3855
+   End
+   Begin VB.CommandButton Command2 
+      Caption         =   "Clear"
+      Height          =   615
+      Left            =   80
+      Style           =   1  'Graphical
+      TabIndex        =   3
+      Top             =   1200
+      Width           =   615
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "Start"
+      Height          =   615
+      Left            =   80
+      Style           =   1  'Graphical
+      TabIndex        =   2
+      Top             =   480
+      Width           =   615
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Trace Dumps"
+      Height          =   8055
+      Left            =   720
+      TabIndex        =   0
+      Top             =   360
+      Width           =   13455
+      Begin VB.TextBox Text1 
+         BackColor       =   &H00FFFFFF&
+         ForeColor       =   &H00C00000&
+         Height          =   7695
+         Left            =   120
+         MultiLine       =   -1  'True
+         ScrollBars      =   3  'Both
+         TabIndex        =   1
+         Top             =   240
+         Width           =   13215
+      End
+   End
+   Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Interchange"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   1200
+      TabIndex        =   5
+      Top             =   10
+      Width           =   1095
+   End
+End
+Attribute VB_Name = "FrmTrace"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Trace_Flag As Integer
+Private DbCon As ADODB.Connection
+
+Private Sub Combo1_Change()
+Text1.Text = ""
+End Sub
+
+Private Sub Command1_Click()
+
+If Command1.Caption = "Start" Then
+   Trace_Flag = 1
+   Command1.Caption = "Stop"
+   Command1.BackColor = &H8080FF
+ElseIf Command1.Caption = "Stop" Then
+   Trace_Flag = 0
+   Command1.Caption = "Start"
+   Command1.BackColor = &HFFFFC0
+End If
+End Sub
+
+Private Sub Command2_Click()
+Text1.Text = ""
+End Sub
+
+
+
+Private Sub Form_Load()
+Trace_Flag = 0
+'Option1.value = True
+
+Set DbCon = New ADODB.Connection
+Dim RecSet As New ADODB.Recordset
+On Error GoTo ErrorTrap
+DbCon.ConnectionString = "Provider=SQLOLEDB;Data Source=" & frmODBCLogon.txtServer.Text & ";Initial Catalog=" & frmODBCLogon.txtDatabase.Text & ";User Id=" & _
+          frmODBCLogon.txtUID.Text & ";Password= " & frmODBCLogon.txtPWD.Text & ";"
+          DbCon.Open
+
+'DbCon.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\FBL MONEX\emconnect.accdb;Persist Security Info=True"
+'    DbCon.Open
+
+RecSet.Open ("Select merchant_name from em_merchants order by merchant_name"), DbCon
+
+
+Dim i As Integer
+i = 0
+Combo1.Clear
+Do While Not RecSet.EOF
+
+Combo1.AddItem RecSet.Fields(0).value, i
+i = i + 1
+RecSet.MoveNext
+Loop
+Combo1.ListIndex = 0
+Exit Sub
+ErrorTrap:
+MsgBox err.Description
+End Sub
+
+Private Sub Option1_Click()
+'Text1.Text = ""
+End Sub
+
+Private Sub Option2_Click()
+'Text1.Text = ""
+End Sub
+
+Private Sub Form_Resize()
+On Error GoTo ErrExit
+Frame1.Width = Me.Width - 1000
+Frame1.Height = Me.Height - 1000
+Text1.Width = Frame1.Width - 300
+Text1.Height = Frame1.Height - 300
+
+ErrExit:
+End Sub
+

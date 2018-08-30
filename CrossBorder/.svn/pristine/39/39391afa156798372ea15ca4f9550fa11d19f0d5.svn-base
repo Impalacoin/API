@@ -1,0 +1,762 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Public Class regisForm
+    Private SelectMode As Integer
+    Public SelectedID As String
+    Public SelectSTudent As String
+    Private RecordTOTALCOUNT As Integer
+    Private Sub regisForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Try
+            Dim reCset As New ADODB.Recordset
+
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+            reCset.Open("select distinct(work_station) from employee where owner = '" & Form1.OWNER & "' order by work_station asc", UniversalHostConnection)
+
+            ComboBox2.Items.Clear()
+
+            If reCset.EOF = False Then
+
+
+                ComboBox2.Items.Add("ALL")
+                Do While reCset.EOF = False
+                    ComboBox2.Items.Add(UCase(reCset.Fields(0).Value))
+                    reCset.MoveNext()
+                Loop
+                reCset.Close()
+                Call DataRefresh()
+            Else
+                'Button1.Enabled = False
+            End If
+            'reCset.Open("select distinct(stream) from class order by stream asc", UniversalHostConnection)
+            ''ComboBox6.Items.Clear()
+            'Do While reCset.EOF = False
+            '    ComboBox6.Items.Add(UCase(reCset.Fields(0).Value))
+            '    reCset.MoveNext()
+            'Loop
+            'reCset.Close()
+            'reCset.Open("select distinct(class_year) from class order by class_year asc", UniversalHostConnection)
+            ''ComboBox2.Items.Clear()
+            'Do While reCset.EOF = False
+            '    ComboBox2.Items.Add(UCase(reCset.Fields(0).Value))
+            '    reCset.MoveNext()
+            'Loop
+            'reCset.Close()
+
+
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub regisForm_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        Try
+
+            GroupBox4.Width = Me.Width - 30
+            GroupBox4.Height = Me.Height - 230
+
+            'GroupBox3.Left = GroupBox2.Left + GroupBox2.Width + 10
+            'GroupBox3.Top = GroupBox2.Top
+            'GroupBox3.Width = GroupBox4.Width / 2 - 300
+
+
+            'GroupBox3.Height = GroupBox2.Height
+            GroupBox4.Top = GroupBox2.Top + GroupBox2.Height + 10
+
+
+            'GroupBox1.Left = GroupBox2.Left
+            'GroupBox1.Top = GroupBox2.Top
+            'GroupBox1.Width = GroupBox2.Width
+            'GroupBox1.Height = GroupBox2.Height
+
+            'GroupBox5.Left = GroupBox2.Left
+            'GroupBox5.Top = GroupBox2.Top
+            'GroupBox5.Width = GroupBox2.Width
+            'GroupBox5.Height = GroupBox2.Height
+
+            'GroupBox6.Left = GroupBox4.Left
+            'GroupBox6.Top = GroupBox4.Top
+            'GroupBox6.Width = GroupBox4.Width
+            'GroupBox6.Height = GroupBox4.Height
+
+            'GroupBox7.Left = GroupBox4.Left
+            'GroupBox7.Top = GroupBox4.Top
+            'GroupBox7.Width = GroupBox4.Width
+            'GroupBox7.Height = GroupBox4.Height
+
+            PictureBox1.Left = GroupBox3.Width + GroupBox3.Left + 5
+            PictureBox1.Height = GroupBox3.Height - 10
+            PictureBox1.Width = GroupBox4.Width / 2 - 500
+            PictureBox1.Top = GroupBox3.Top + 10
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        
+    End Sub
+
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'If RadioButton2.Checked = True Then
+        '    If ROLEID = 1 Or ROLEID = 2 Then
+        '        GroupBox1.Visible = True
+        '        GroupBox6.Visible = True
+        '        ComboBox3.Items.Clear()
+        '        ComboBox3.Items.Add("TEACHERS LIST")
+        '    Else
+        '        RadioButton1.Checked = True
+        '        GroupBox2.Visible = True
+        '        GroupBox4.Visible = True
+        '        MsgBox("YOU HAVE NO SUFICIENT RIGHTS TO ACCESS THIS FUNCTION", vbExclamation, APPNAME)
+        '    End If
+        'Else
+        '    GroupBox1.Visible = False
+        '    GroupBox6.Visible = False
+        'End If
+    End Sub
+
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'If RadioButton3.Checked = True Then
+        '    If ROLEID = 1 Or ROLEID = 2 Then
+        '        GroupBox5.Visible = True
+        '        GroupBox7.Visible = True
+        '    Else
+        '        RadioButton1.Checked = True
+        '        GroupBox2.Visible = True
+        '        GroupBox4.Visible = True
+        '        MsgBox("YOU HAVE NO SUFICIENT RIGHTS TO ACCESS THIS FUNCTION", vbExclamation, APPNAME)
+        '    End If
+        'Else
+        '    GroupBox5.Visible = False
+        '    GroupBox7.Visible = False
+        'End If
+    End Sub
+
+    Private Sub DataRefresh()
+        Dim reCset As New ADODB.Recordset
+        Dim sqlQry As String = ""
+        Dim n As Integer
+        Dim fname, mname, lname As String
+        'Dim yearbirth As Date
+
+        RecordTOTALCOUNT = 0
+
+        'Dim YearE As String
+        Dim ClassName As String
+        'Dim StreamName As String
+
+        'YearE = IIf(ComboBox2.SelectedIndex = -1 Or ComboBox2.SelectedIndex = 0, "", "  and year_entry = '" & ComboBox2.SelectedItem & "'")
+
+        ClassName = IIf(ComboBox2.SelectedIndex = -1 Or ComboBox2.SelectedIndex = 0, "", "  and work_station = '" & ComboBox2.SelectedItem & "'")
+        'StreamName = IIf(ComboBox6.SelectedIndex = -1 Or ComboBox6.SelectedIndex = 0, "", "  and stream = '" & ComboBox6.SelectedItem & "'")
+
+        Try
+
+            If Trim(TextBox1.Text) <> "" Then
+                SelectMode = 1
+                sqlQry = "SELECT * FROM employee where emp_id ='" & Trim(TextBox1.Text) & "'  and owner = '" & Form1.OWNER & "'" & ClassName
+            ElseIf Trim(TextBox1.Text) = "" And Trim(TextBox3.Text) <> "" Then
+                SelectMode = 1
+                sqlQry = "SELECT * FROM employee where nat_id ='" & Trim(TextBox3.Text) & "' and owner = '" & Form1.OWNER & "'" & ClassName
+
+            Else
+                SelectMode = 0
+                sqlQry = "SELECT * FROM employee where date_exit = '0' and owner = '" & Form1.OWNER & "'" & ClassName
+
+            End If
+
+            If CheckBox1.Checked = True Then
+                sqlQry = "SELECT * FROM employee where date_exit <> '0' and owner = '" & Form1.OWNER & "'"
+            End If
+
+            reCset.Open(sqlQry, UniversalHostConnection)
+            If reCset.EOF = True Then
+                DataGridView1.Rows.Clear()
+                MsgBox(UCase("The REQUESTED Employee registry Details " & vbNewLine & "were not found." & vbNewLine & "KINDY CHANGE SELECTION CRITERIA"), vbExclamation, APPNAME)
+                Exit Sub
+            Else
+
+                DataGridView1.Rows.Clear()
+                Do While reCset.EOF = False
+                    DataGridView1.Rows.Add()
+                    DataGridView1.Rows.Item(n).Cells(0).Value = reCset.Fields(0).Value
+                    DataGridView1.Rows.Item(n).Cells(1).Value = reCset.Fields(1).Value
+                    fname = IIf(IsDBNull(reCset.Fields(2).Value), "", reCset.Fields(2).Value)
+                    mname = IIf(IsDBNull(reCset.Fields(3).Value), "", reCset.Fields(3).Value)
+                    lname = IIf(IsDBNull(reCset.Fields(4).Value), "", reCset.Fields(4).Value)
+                    DataGridView1.Rows.Item(n).Cells(2).Value = UCase(fname & " " & mname & " " & lname)
+                    If SelectMode = 1 Then
+                        TextBox2.Text = UCase(fname & " " & mname & " " & lname)
+                        TextBox3.Text = reCset.Fields(1).Value
+                    Else
+                        TextBox2.Text = ""
+                        TextBox3.Text = ""
+                    End If
+                    DataGridView1.Rows.Item(n).Cells(3).Value = Format(reCset.Fields(5).Value, "dd/MM/yyyy")
+                    'yearbirth = reCset.Fields(4).Value
+
+                    DataGridView1.Rows.Item(n).Cells(4).Value = CInt(Year(Now)) - CInt(Year(reCset.Fields(5).Value))
+                    DataGridView1.Rows.Item(n).Cells(5).Value = reCset.Fields(6).Value
+
+                    If SelectMode = 1 Then
+                        ComboBox2.SelectedItem = reCset.Fields(7).Value
+                    End If
+
+                    DataGridView1.Rows.Item(n).Cells(6).Value = reCset.Fields(7).Value
+                    DataGridView1.Rows.Item(n).Cells(7).Value = reCset.Fields(8).Value
+                    DataGridView1.Rows.Item(n).Cells(8).Value = reCset.Fields(9).Value
+                    DataGridView1.Rows.Item(n).Cells(9).Value = reCset.Fields(10).Value
+                    DataGridView1.Rows.Item(n).Cells(10).Value = Format(reCset.Fields(11).Value, "dd/MM/yyyy")
+                    DataGridView1.Rows.Item(n).Cells(11).Value = Format(reCset.Fields(12).Value, "#,###")
+                    DataGridView1.Rows.Item(n).Cells(12).Value = reCset.Fields(13).Value
+                    DataGridView1.Rows.Item(n).Cells(13).Value = reCset.Fields(14).Value
+                    DataGridView1.Rows.Item(n).Cells(14).Value = reCset.Fields(15).Value
+                    DataGridView1.Rows.Item(n).Cells(15).Value = Format(reCset.Fields(16).Value, "#,###")
+                    DataGridView1.Rows.Item(n).Cells(16).Value = reCset.Fields(17).Value
+                    DataGridView1.Rows.Item(n).Cells(17).Value = reCset.Fields(18).Value
+                    DataGridView1.Rows.Item(n).Cells(18).Value = reCset.Fields(19).Value
+                    DataGridView1.Rows.Item(n).Cells(19).Value = reCset.Fields(20).Value
+                    DataGridView1.Rows.Item(n).Cells(20).Value = reCset.Fields(23).Value
+                    DataGridView1.Rows.Item(n).Cells(21).Value = reCset.Fields(24).Value
+
+
+                    'DataGridView1.Rows.Item(n).Cells(18).Value = reCset.Fields(21).Value
+                    'reCset.Open("select sex from student where stud_id = '" & nRecset.Fields(0).Value & "'", UniversalHostConnection)
+                    'If reCset.EOF = False Then
+                    '    DataGridView1.Rows.Item(n).Cells(2).Value = reCset.Fields(0).Value
+                    'End If
+                    'reCset.Close()
+                    n = n + 1
+                    reCset.MoveNext()
+                    RecordTOTALCOUNT = RecordTOTALCOUNT + 1
+                Loop
+                TextBox7.Text = n
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Call DataRefresh()
+    End Sub
+    Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+    Private Sub UploadExaminationResultToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'studUpload.ShowDialog()
+    End Sub
+
+    Private Sub DataGridView1_Layout(ByVal sender As Object, ByVal e As System.Windows.Forms.LayoutEventArgs) Handles DataGridView1.Layout
+
+    End Sub
+
+    Private Sub DataGridView1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            Try
+                Dim recset As New ADODB.Recordset
+                Dim rowClicked As Integer
+                rowClicked = DataGridView1.HitTest(e.Location.X, e.Location.Y).RowIndex
+                ContextMenuStrip1.Show(DataGridView1, e.Location)
+                SelectedID = DataGridView1.Rows.Item(rowClicked).Cells(0).Value
+            Catch ex As Exception
+
+            End Try
+        End If
+    End Sub
+
+    Private Sub DataGridView2_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs)
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            'Try
+            '    Dim recset As New ADODB.Recordset
+            '    Dim rowClicked As Integer
+            '    rowClicked = DataGridView2.HitTest(e.Location.X, e.Location.Y).RowIndex
+            '    ContextMenuStrip2.Show(DataGridView2, e.Location)
+            '    SelectedID = DataGridView2.Rows.Item(rowClicked).Cells(0).Value
+            'Catch ex As Exception
+
+            'End Try
+        End If
+    End Sub
+    Private Sub POPOUTDETAILSToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles POPOUTDETAILSToolStripMenuItem.Click
+        SelectSTudent = 1
+        If SelectedID <> "" Then
+            studDetails.Show()
+            studDetails.WindowState = FormWindowState.Maximized
+        End If
+    End Sub
+
+    Private Sub UpdateStudentRecordToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'studDetails.MdiParent = MainForm
+        SelectSTudent = 0
+        studDetails.Show()
+        studDetails.WindowState = FormWindowState.Maximized
+
+    End Sub
+
+    Private Sub POPOUTTEACHERDETAILSToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles POPOUTTEACHERDETAILSToolStripMenuItem.Click
+        SelectSTudent = 1
+        If SelectedID <> "" Then
+            'teacherForm.ShowDialog()
+        End If
+
+    End Sub
+
+    Private Sub UpdateRegistryRecordToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub AddTeacherRecordToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'If ROLEID = 1 Or ROLEID = 2 Then
+        '    SelectSTudent = 0
+        '    'frmLeave.ShowDialog()
+        'Else
+        '    MsgBox("YOU DO NOT HAVE PERMISSION TO ACCESS THIS FUNCTION", vbInformation, APPNAME)
+        'End If
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Try
+
+            Shell("Explorer.exe D:\SMART PROPERTY REPORT", AppWinStyle.NormalFocus)
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Dim Stream = ""
+        'If CheckBox1.Checked = True Then
+        '    Call ClassReport(ComboBox2.SelectedIndex, Stream)
+        'ElseIf CheckBox1.Checked = True Then
+
+        '    If ComboBox2.SelectedIndex = -1 Or ComboBox2.SelectedIndex = 0 Then
+        '        MsgBox("PLEASE SELECT THE PARTICULAR YEAR OF ENTRY", vbInformation, APPNAME)
+        '        Exit Sub
+        '    End If
+        '    Call ClassoLDReport(ComboBox2.SelectedItem, Stream)
+        'Else
+        '    Call ClassReport(ComboBox2.SelectedIndex, Stream)
+        'End If
+
+
+    End Sub
+
+    'Private Sub ClassReport(ByVal ClassNam As String, ByVal Stream As String)
+
+    '    Dim Stud_prev As String = ""
+    '    Dim reCset As New ADODB.Recordset
+    '    Dim XreCset As New ADODB.Recordset
+
+    '    Try
+    '        If ComboBox3.SelectedItem <> "STUDENT REGISTRY UPLOAD FORM" Then
+
+    '            If ComboBox1.SelectedIndex = -1 Or ComboBox1.SelectedIndex = 0 Then
+    '                MsgBox("PLEASE SELECT THE CLASS AND STREAM", vbInformation, APPNAME)
+    '                Exit Sub
+    '            End If
+
+    '            Dim sqlQry = "SELECT stud_id, std_fname, std_mname, std_lname,sex,class,stream" & _
+    '                         " FROM  student where class = " & ClassNam & Stream 'stud_id = '" & Trim(TextBox1.Text) & "'"
+
+    '            XreCset.Open(sqlQry, UniversalHostConnection)
+    '            If XreCset.EOF = True Then
+    '                MsgBox("    NO RECORDS FOUND  !!   ", vbExclamation, APPNAME)
+    '                Exit Sub
+    '            End If
+    '        Else
+
+    '        End If
+
+    '        Dim wb As Microsoft.Office.Interop.Excel.Workbook
+    '        Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+    '        Dim xRange As Excel.Range
+    '        Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+    '        Dim row As Integer
+    '        Dim col As Integer
+    '        Dim SubJ As String = ""
+    '        Dim SqlStrRpt As String
+    '        Dim FileName As String
+    '        Dim RPTFORMAT As String
+    '        Dim RPTLOC As String
+    '        Dim MAXROWS As Integer
+
+    '        'Dim resp_code As String
+    '        'Dim Tran_Type As String
+
+    '        mvarExcel = New Excel.Application
+    '        'ws = New Excel.Worksheet
+    '        mvarExcel.Visible = False
+    '        RPTFORMAT = ""
+    '        FileName = ""
+    '        RPTLOC = ""
+    '        SqlStrRpt = ""
+
+
+    '        mvarExcel.SheetsInNewWorkbook = 1
+    '        wb = mvarExcel.Workbooks.Add()
+    '        'wb = mvarExcel.Application.Application.ActiveWorkbook
+
+    '        MAXROWS = 0
+
+    '        mvarExcel.Worksheets(1).Select()
+    '        ws = wb.ActiveSheet
+
+    '        With (ws)
+    '            .Name = "Class  " & ClassNam & ComboBox6.SelectedItem
+    '        End With
+
+
+    '        'xRange = ws.Range("A3:Y3")
+    '        'xRange.Interior.Color = RGB(219, 238, 243)
+    '        'xRange.Interior.Color = Color.White
+
+    '        row = 1
+    '        col = 1
+    '        xRange = ws.Range("A1:G1")
+    '        xRange.Font.Bold = True
+    '        xRange.Font.Size = 18
+    '        xRange.Font.Color = Color.Black
+    '        xRange.Range("A1:G1").Interior.Color = RGB(40, 203, 236)
+    '        xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '        'xRange.Cells.NumberFormat = "@"
+    '        ws.Range("A1:G1").Merge()
+    '        ws.Range("A1:G1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '        'xRange = ws.Range("A2:Y2")
+    '        'xRange.Font.Bold = True
+    '        'xRange.Font.Size = 14
+
+    '        ws.Range("A2:G2").Merge()
+    '        ws.Range("A2:G2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '        xRange.Interior.Color = RGB(219, 238, 243)
+    '        xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '        xRange.Font.Size = 14
+    '        ws.Range("A2:g2").Font.Bold = True
+    '        ws.Rows.Cells(1, 1) = APPNAME
+
+    '        xRange = ws.Range("A3:Y3")
+    '        ws.Range("A3:G3").Merge()
+    '        ws.Range("A3:G3").Font.Bold = True
+    '        xRange.Font.Size = 14
+    '        ws.Range("A3:G3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '        ws.Rows.Cells(3, 1) = UCase("FORM : " & ClassNam & " " & ComboBox6.SelectedItem)
+
+
+
+
+    '        xRange = ws.Range("A4:G4")
+    '        xRange.Font.Size = 12
+    '        xRange.Font.Bold = True
+    '        xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '        xRange.Interior.Color = RGB(197, 217, 241)
+    '        row = 4
+    '        ws.Rows.Cells(row, 1) = UCase("Student Id")
+    '        ws.Rows.Cells(row, 2) = UCase("First Name")
+    '        ws.Rows.Cells(row, 3) = UCase("Second Name")
+    '        ws.Rows.Cells(row, 4) = UCase("Last Name")
+
+    '        Dim Rpt As Integer = 0
+
+    '        If ComboBox3.SelectedItem = "STUDENTS LIST" Then
+    '            ws.Rows.Cells(2, 1) = "STUDENTS LIST"
+    '            ws.Rows.Cells(row, 5) = UCase("Gender")
+    '            ws.Rows.Cells(row, 6) = UCase("Class")
+    '            ws.Rows.Cells(row, 7) = UCase("Stream")
+    '            Rpt = 1
+    '            FileName = "STUDENT LIST_" & ClassNam
+    '        ElseIf ComboBox3.SelectedItem = "EXAMINATION SCORE FORM" Then
+    '            ws.Rows.Cells(2, 1) = "EXAMINATION SCORE FORM"
+    '            ws.Rows.Cells(row, 5) = UCase("SCORE")
+    '            ws.Rows.Cells(row, 6) = UCase("OUT OF")
+    '            ws.Rows.Cells(row, 7) = UCase("Stream")
+    '            Rpt = 0
+    '            FileName = "EXAMINATION_" & ClassNam
+    '        ElseIf ComboBox3.SelectedItem = "FEE FORM" Then
+    '            ws.Rows.Cells(2, 1) = "FEE FORM"
+    '            ws.Rows.Cells(row, 5) = UCase("NEXT term fee")
+    '            ws.Rows.Cells(row, 6) = UCase("fee arrears")
+    '            ws.Rows.Cells(row, 7) = UCase("prepaid fee")
+    '            FileName = "FEE LIST_" & ClassNam
+    '            Rpt = 0
+    '        End If
+    '        If ComboBox3.SelectedItem <> "STUDENT REGISTRY UPLOAD FORM" Then
+    '            row = row + 1
+
+    '            Dim M As Integer = 0
+    '            Do While Not XreCset.EOF
+    '                For K As Int32 = 0 To 6
+    '                    If K >= 4 And Rpt = 1 Then
+    '                        ws.Rows.Cells(row, K + 1) = XreCset.Fields(K).Value
+    '                    ElseIf K < 4 Then
+    '                        ws.Rows.Cells(row, K + 1) = XreCset.Fields(K).Value
+    '                    End If
+
+
+    '                Next
+    '                XreCset.MoveNext()
+    '                row = row + 1
+    '            Loop
+    '        Else
+    '            '						contact person 3	Relation3	address 3	Telephone 3
+
+    '            xRange = ws.Range("A1:x1")
+    '            xRange.Font.Bold = True
+    '            xRange.Font.Size = 18
+    '            xRange.Font.Color = Color.Black
+    '            xRange.Range("A1:x1").Interior.Color = RGB(40, 203, 236)
+    '            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '            'xRange.Cells.NumberFormat = "@"
+    '            ws.Range("A1:x1").Merge()
+    '            ws.Range("A1:X1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '            'xRange = ws.Range("A2:Y2")
+    '            'xRange.Font.Bold = True
+    '            'xRange.Font.Size = 14
+
+    '            ws.Range("A2:X2").Merge()
+    '            ws.Range("A2:X2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '            xRange.Interior.Color = RGB(219, 238, 243)
+    '            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '            xRange.Font.Size = 14
+    '            ws.Range("A2:X2").Font.Bold = True
+
+    '            ws.Rows.Cells(1, 1) = APPNAME
+
+    '            xRange = ws.Range("A3:X3")
+    '            ws.Range("A3:X3").Merge()
+    '            ws.Range("A3:X3").Font.Bold = True
+    '            xRange.Font.Size = 14
+    '            ws.Range("A3:X3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '            ws.Rows.Cells(3, 1) = UCase("FORM : " & ClassNam & " " & ComboBox6.SelectedItem)
+
+
+
+
+    '            xRange = ws.Range("A4:X4")
+    '            xRange.Font.Size = 12
+    '            xRange.Font.Bold = True
+    '            xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '            xRange.Interior.Color = RGB(197, 217, 241)
+
+
+
+    '            ws.Rows.Cells(2, 1) = "STUDENT REGISTRY UPLOAD FORM"
+    '            ws.Rows.Cells(3, 1) = ""
+    '            ws.Rows.Cells(row, 5) = UCase("date of birth")
+    '            ws.Rows.Cells(row, 6) = UCase("gender")
+    '            ws.Rows.Cells(row, 7) = UCase("class")
+    '            ws.Rows.Cells(row, 8) = UCase("stream")
+    '            ws.Rows.Cells(row, 9) = UCase("year entry")
+    '            ws.Rows.Cells(row, 10) = UCase("date entry")
+    '            ws.Rows.Cells(row, 11) = UCase("boarding house")
+    '            ws.Rows.Cells(row, 12) = UCase("home address")
+    '            ws.Rows.Cells(row, 13) = UCase("contact person 1")
+    '            ws.Rows.Cells(row, 14) = UCase("Relation")
+    '            ws.Rows.Cells(row, 15) = UCase("address 1")
+    '            ws.Rows.Cells(row, 16) = UCase("Telephone 1")
+    '            ws.Rows.Cells(row, 17) = UCase("contact person 2")
+    '            ws.Rows.Cells(row, 18) = UCase("Relation 2")
+    '            ws.Rows.Cells(row, 19) = UCase("address 2")
+    '            ws.Rows.Cells(row, 20) = UCase("Telephone 2")
+    '            ws.Rows.Cells(row, 21) = UCase("contact person 3")
+    '            ws.Rows.Cells(row, 22) = UCase("Relation 3")
+    '            ws.Rows.Cells(row, 23) = UCase("address 3")
+    '            ws.Rows.Cells(row, 24) = UCase("Telephone 3")
+    '            FileName = "STUDENT REGITRY FORM"
+
+    '        End If
+
+    '        Dim Destination As String = "D:\Data source"
+
+    '        mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+    '        mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+
+    '        ws = Nothing
+    '        wb = Nothing
+    '        xRange = Nothing
+    '        mvarExcel.Quit()
+    '        Runtime.InteropServices.Marshal.ReleaseComObject(mvarExcel)
+
+    '    Catch EX As Exception
+    '        MsgBox(EX.Message, vbCritical, APPNAME)
+    '    End Try
+    'End Sub
+    'Private Sub ClassoLDReport(ByVal YearE As String, ByVal Stream As String)
+
+    '    Dim Stud_prev As String = ""
+    '    Dim reCset As New ADODB.Recordset
+    '    Dim XreCset As New ADODB.Recordset
+
+    '    Try
+
+    '        Dim sqlQry = "SELECT stud_id, std_fname, std_mname, std_lname,sex,class,stream,year_entry,home_address,date_exit,exit_reason" & _
+    '                     " FROM  OLD_student where year_entry = '" & YearE & "' " & Stream 'stud_id = '" & Trim(TextBox1.Text) & "'"
+    '        XreCset.Open(sqlQry, UniversalHostConnection)
+    '        If XreCset.EOF = True Then
+    '            MsgBox("    NO RECORDS FOUND  !!!   ", vbExclamation, APPNAME)
+    '            Exit Sub
+    '        End If
+
+    '        Dim wb As Microsoft.Office.Interop.Excel.Workbook
+    '        Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+    '        Dim xRange As Excel.Range
+    '        Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+    '        Dim row As Integer
+    '        Dim col As Integer
+    '        Dim SubJ As String = ""
+    '        Dim SqlStrRpt As String
+    '        Dim FileName As String
+    '        Dim RPTFORMAT As String
+    '        Dim RPTLOC As String
+    '        Dim MAXROWS As Integer
+
+    '        'Dim resp_code As String
+    '        'Dim Tran_Type As String
+
+    '        mvarExcel = New Excel.Application
+    '        'ws = New Excel.Worksheet
+    '        mvarExcel.Visible = False
+    '        RPTFORMAT = ""
+    '        FileName = ""
+    '        RPTLOC = ""
+    '        SqlStrRpt = ""
+
+
+    '        mvarExcel.SheetsInNewWorkbook = 1
+    '        wb = mvarExcel.Workbooks.Add()
+    '        'wb = mvarExcel.Application.Application.ActiveWorkbook
+
+    '        MAXROWS = 0
+
+    '        mvarExcel.Worksheets(1).Select()
+    '        ws = wb.ActiveSheet
+
+    '        With (ws)
+    '            .Name = "Year  " & YearE & "  " & ComboBox6.SelectedItem
+    '        End With
+
+
+    '        'xRange = ws.Range("A3:Y3")
+    '        'xRange.Interior.Color = RGB(219, 238, 243)
+    '        'xRange.Interior.Color = Color.White
+
+    '        row = 1
+    '        col = 1
+    '        xRange = ws.Range("A1:G1")
+    '        xRange.Font.Bold = True
+    '        xRange.Font.Size = 16
+    '        xRange.Font.Color = Color.Black
+    '        xRange.Range("A1:G1").Interior.Color = RGB(40, 203, 236)
+    '        xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '        'xRange.Cells.NumberFormat = "@"
+    '        ws.Range("A1:G1").Merge()
+    '        ws.Range("A1:G1").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '        'xRange = ws.Range("A2:Y2")
+    '        'xRange.Font.Bold = True
+    '        'xRange.Font.Size = 14
+    '        'ws.Range("A2:Y2").Merge()
+    '        'ws.Range("A2:Y2").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '        'ws.Rows.Cells(2, 1) = "" 'UCase("ADMISSION NO: " & Stud_id)
+    '        'xRange.Interior.Color = RGB(219, 238, 243)
+    '        'xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '        row = 4
+    '        ws.Rows.Cells(1, 1) = UCase("CLASS : " & YearE & " " & ComboBox6.SelectedItem)
+
+    '        'xRange = ws.Range("A3:Y3")
+    '        'ws.Range("A3:Y3").Merge()
+    '        'ws.Range("A3:Y3").Font.Bold = True
+    '        'ws.Range("A3:Y3").HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter
+    '        '' ws.Rows.Cells(3, 1) = "YEAR:  " & YearE & "   TERM:  " & Term
+
+
+    '        xRange = ws.Range("A4:G4")
+    '        xRange.Font.Size = 12
+    '        xRange.Font.Bold = True
+    '        xRange.Cells.BorderAround(1, Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic)
+    '        xRange.Interior.Color = RGB(197, 217, 241)
+
+    '        ws.Rows.Cells(row, 1) = UCase("Student Nr")
+    '        ws.Rows.Cells(row, 2) = UCase("First Name")
+    '        ws.Rows.Cells(row, 3) = UCase("Second Name")
+    '        ws.Rows.Cells(row, 4) = UCase("Last Name")
+    '        ws.Rows.Cells(row, 5) = UCase("Gender")
+    '        ws.Rows.Cells(row, 6) = UCase("Class")
+    '        ws.Rows.Cells(row, 7) = UCase("Stream")
+    '        ws.Rows.Cells(row, 8) = UCase("year entry")
+    '        ws.Rows.Cells(row, 9) = UCase("home Address")
+    '        ws.Rows.Cells(row, 10) = UCase("Date exit")
+    '        ws.Rows.Cells(row, 11) = UCase("Exit reason")
+
+    '        row = row + 1
+
+    '        Dim M As Integer = 0
+
+    '        Do While Not XreCset.EOF
+    '            For K As Int32 = 0 To 10
+    '                ws.Rows.Cells(row, K + 1) = XreCset.Fields(K).Value
+    '            Next
+    '            XreCset.MoveNext()
+    '            row = row + 1
+    '        Loop
+
+    '        Dim Destination As String = "D:\Data source"
+    '        FileName = "CLASS" & YearE & ComboBox6.SelectedItem & "_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+    '        mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+    '        mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+
+
+
+    '        ws = Nothing
+    '        wb = Nothing
+    '        xRange = Nothing
+    '        mvarExcel.Quit()
+    '        Runtime.InteropServices.Marshal.ReleaseComObject(mvarExcel)
+
+    '    Catch EX As Exception
+    '        MsgBox(EX.Message, vbCritical, APPNAME)
+    '    End Try
+
+    'End Sub
+
+    Private Sub RadioButton4_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Call DataRefresh()
+    End Sub
+
+    Private Sub RadioButton5_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        Call DataRefresh()
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs)
+
+    End Sub
+
+    Private Sub TextBox7_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox7.TextChanged
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        SelectSTudent = 0
+        studDetails.ShowDialog()
+        'studDetails.WindowState = FormWindowState.Maximized
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Dim Row As Integer = DataGridView1.CurrentCellAddress.Y
+        SelectedID = DataGridView1.Rows.Item(Row).Cells(0).Value
+
+        SelectSTudent = 1
+        studDetails.ShowDialog()
+        'studDetails.WindowState = FormWindowState.Maximized
+    End Sub
+End Class

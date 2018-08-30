@@ -1,0 +1,56 @@
+package com.impalapay.airtel.util.net;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gson.Gson;
+
+public class TestPostminusThread {
+	
+	public boolean vevexcan(){
+		return true;
+	}
+	public static void main(String args[]) {
+		final String CLIENT_URL ="http://196.216.73.150:9990/switch-rest/request/checkForex";
+		
+		Map<String,String> toairtel = new HashMap< >();
+        toairtel.put("username", "Airtel_KE");
+        toairtel.put("password", "password");
+        toairtel.put("sessionId", "eugene5544542");
+        //toairtel.put("applicationId", "1234567890");
+        toairtel.put("sourceCountryCode", "254");
+        toairtel.put("destinationCountryCode", "256");
+        toairtel.put("sourceAmount", "1000");
+        
+        Date now = new Date();
+        
+        Map<String,String> remit = new HashMap< >();
+        remit.put("username", "Airtel_KE");
+        remit.put("password", "password");
+        remit.put("transactionRef", "uyeggeygeywy");
+        remit.put("sourceCountryCode", "254");
+        remit.put("destinationCountryCode", "256");
+        remit.put("sessionId", "eugene5542");
+        remit.put("applicationId", "1234567890");
+        remit.put("sourceAddress", "25476366");
+        remit.put("sourceAmount", "1000");
+        remit.put("destinationAddress", "254733565664");
+        remit.put("dateTime", now.toString());
+        
+       
+        
+     
+
+        
+        Gson g = new Gson();
+        String jsonData = g.toJson(toairtel);
+		
+		PostMinusThread veve = new PostMinusThread(CLIENT_URL, jsonData);
+		
+		
+		String omo = veve.doPost();
+	    System.out.println(omo);
+    }
+
+}

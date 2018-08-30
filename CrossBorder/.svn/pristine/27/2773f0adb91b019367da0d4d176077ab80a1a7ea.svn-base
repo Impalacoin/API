@@ -1,0 +1,16 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N Chege
+ * @copyright 2011
+ */
+
+require_once("../engine.php");
+check_admin_logged_in();
+echo "<div style='float:right;color:blue'>You are logged in as {$_SESSION["adminusername"]}</div>";
+display_admin_navigation();
+
+echo "<p>Current Fee from transactions is <b>".getImpalaBalance()."</b></p>";
+ob_end_flush();
+?>

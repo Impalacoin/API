@@ -1,0 +1,219 @@
+package com.impalapay.airtel.beans.accountmgmt;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.impalapay.airtel.beans.StorableBean;
+
+import java.util.Date;
+
+/**
+ * Represents an account holder who can send and receive SMS through the system.
+ * <p>
+ * Copyright (c) ImpalaPay LTD., June 14, 2014
+ *
+ * @author <a href="mailto:eugene@impalapay.com">Eugene Chimita</a>
+ * @version %I%, %G%
+ * 
+ */
+public class Account extends StorableBean {
+
+	private String accountStatusUuid;
+	private String firstName;
+	private String lastName;
+	private String username;
+	private String loginPasswd;
+	private String apiPasswd;
+	private String email;
+	private String phone;
+	private Date creationDate;
+
+	/**
+     *
+     */
+	public Account() {
+		super();
+		accountStatusUuid = "";
+		firstName = "";
+		lastName = "";
+		username = "";
+		loginPasswd = "";
+		apiPasswd = "";
+		email = "";
+		phone = "";
+		creationDate = new Date();
+	}
+
+	/**
+	 * @return the accountStatusUuid
+	 */
+	public String getAccountStatusUuid() {
+		return accountStatusUuid;
+	}
+
+	/**
+	 * @param accountStatusUuid
+	 *            the accountStatusUuid to set
+	 */
+	public void setAccountStatusUuid(String accountStatusUuid) {
+		this.accountStatusUuid = accountStatusUuid;
+	}
+
+	
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
+
+	/**
+	 * @param firstName
+	 *            the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = StringUtils.trimToEmpty(firstName);
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
+
+	/**
+	 * @param lastName
+	 *            the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = StringUtils.trimToEmpty(lastName);
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username
+	 *            the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = StringUtils.trimToEmpty(username);
+	}
+
+	/**
+	 * @return the loginPasswd
+	 */
+	public String getLoginPasswd() {
+		return loginPasswd;
+	}
+
+	/**
+	 * @param loginPasswd
+	 *            the loginPasswd to set
+	 */
+	public void setLoginPasswd(String loginPasswd) {
+		this.loginPasswd = StringUtils.trimToEmpty(loginPasswd);
+	}
+
+	/**
+	 * @return the apiPasswd
+	 */
+	public String getApiPasswd() {
+		return apiPasswd;
+	}
+
+	/**
+	 * @param apiPasswd
+	 *            the apiPasswd to set
+	 */
+	public void setApiPasswd(String apiPasswd) {
+		this.apiPasswd = StringUtils.trimToEmpty(apiPasswd);
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email
+	 *            the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = StringUtils.trimToEmpty(email);
+	}
+
+	/**
+	 * @return the phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
+
+	/**
+	 * @param phone
+	 *            the phone to set
+	 */
+	public void setPhone(String phone) {
+		this.phone = StringUtils.trimToEmpty(phone);
+	}
+
+	/**
+	 * @return the creationDate
+	 */
+	public Date getCreationDate() {
+		return new Date(creationDate.getTime());
+	}
+
+	/**
+	 * @param date
+	 *            the creationDate to set
+	 */
+	public void setCreationDate(Date date) {
+		if (date != null) {
+			creationDate = new Date(date.getTime());
+		}
+	}
+
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Account [getUuid()=");
+		builder.append(getUuid());
+		builder.append(", accountStatusUuid=");
+		builder.append(accountStatusUuid);
+		builder.append(", firstName=");
+		builder.append(firstName);
+		builder.append(", lastName=");
+		builder.append(lastName);
+		builder.append(", username=");
+		builder.append(username);
+		builder.append(", loginPasswd=");
+		builder.append(loginPasswd);
+		builder.append(", apiPasswd=");
+		builder.append(apiPasswd);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", phone=");
+		builder.append(phone);
+		builder.append(", creationDate=");
+		builder.append(creationDate);
+		builder.append("]");
+		return builder.toString();
+	}
+}
+
+/*
+ * * Local Variables:* mode: java* c-basic-offset: 2* tab-width: 2*
+ * indent-tabs-mode: nil* End:** ex: set softtabstop=2 tabstop=2 expandtab:*
+ */

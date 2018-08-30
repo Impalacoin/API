@@ -1,0 +1,277 @@
+﻿Public Class Gpayments
+    Private rowClicked As Integer
+    Private Record As Integer
+    Private monthC As Integer
+    Private yearC As Integer
+    Private empID As String
+    Private Amount As Integer
+        Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Try
+            Dim recset As New ADODB.Recordset
+            Dim Str As String = ""
+            Dim RecID As Integer = 1
+            Dim VAT As Double = 0.0
+            Dim Qter As Int16 = 1
+            Dim Yr As Integer = Year(Today)
+            Dim Vatable As Double = 0.0
+            Dim Instalments As Double = 0
+            Dim Period As Int32 = 1
+            Dim Monthe As Integer = 1
+            Dim MyDate As Date
+            If Month(DateTimePicker1.Value) = 1 Or Month(DateTimePicker1.Value) = 2 Or Month(DateTimePicker1.Value) = 3 Then
+                Qter = 1
+            ElseIf Month(DateTimePicker1.Value) = 4 Or Month(DateTimePicker1.Value) = 5 Or Month(DateTimePicker1.Value) = 6 Then
+                Qter = 2
+            ElseIf Month(DateTimePicker1.Value) = 7 Or Month(DateTimePicker1.Value) = 8 Or Month(DateTimePicker1.Value) = 9 Then
+                Qter = 3
+            ElseIf Month(DateTimePicker1.Value) = 10 Or Month(DateTimePicker1.Value) = 11 Or Month(DateTimePicker1.Value) = 12 Then
+                Qter = 4
+            End If
+
+
+            recset.Open("select max(rec_id) from eprocess ", UniversalHostConnection)
+            If IsNumeric(recset.Fields(0).Value) Then
+                RecID = recset.Fields(0).Value + 1
+            Else
+                RecID = 1
+            End If
+
+            recset.Close()
+
+            If ComboBox1.SelectedItem <> "" And TextBox1.Text <> "" And IsNumeric(TextBox2.Text) And IsNumeric(TextBox3.Text) And IsNumeric(TextBox4.Text) Then
+
+                Period = TextBox3.Text
+                Instalments = CInt(TextBox2.Text) / Period
+
+                MyDate = DateTimePicker1.Value
+                Monthe = Month(MyDate)
+                Yr = Year(MyDate)
+
+                For k As Integer = 1 To Period
+                    Str = "insert into eprocess values(" & RecID & ",'" & DateTimePicker1.Value & "','" & ComboBox1.SelectedItem & "','" & MyDate & "','" & MyDate.AddMonths(1) & "'," & Trim(TextBox2.Text) & "," & Instalments & "," & Period & ",'" & TextBox1.Text & "','" & UserName & "'," & Qter & "," & Yr & "," & Monthe & ",'" & Form1.OWNER & "')"
+                    UniversalHostConnection.Execute(UCase(Str))
+                    MyDate = MyDate.AddMonths(1)
+
+                    Monthe = Month(MyDate)
+                    Yr = Year(MyDate)
+                    'RecID = RecID + 1
+                Next
+                'Str = "insert into egeneraltrans values(" & RecID & ",'" & DateTimePicker1.Value & "','" & ComboBox1.SelectedItem & "','" & DateTimePicker1.Value & "','" & DateTimePicker1.Value & "','" & Trim(TextBox10.Text) & "'," & TextBox2.Text & ",'" & TextBox1.Text & "','" & UserName & "'," & Qter & "," & Yr & "," & Month(DateTimePicker1.Value) & ")"
+                MsgBox("RECORD UPDATED SUCCESSFULLY", MsgBoxStyle.Information, APPNAME)
+                Call DatarefreshX(Trim(TextBox1.Text))
+            Else
+                MsgBox("ENTER VALID DATA !!!", vbExclamation, APPNAME)
+                Exit Sub
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+
+        Dim RecX As New ADODB.Recordset
+        RecX.Open("select * from employee where emp_id = '" & Trim(TextBox1.Text) & "' and owner = '" & Form1.OWNER & "'", UniversalHostConnection)
+        If RecX.EOF = False Then
+            TextBox6.Text = RecX.Fields(2).Value & " " & RecX.Fields(3).Value & " " & RecX.Fields(4).Value
+        End If
+    End Sub
+
+    Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        If IsNumeric(TextBox2.Text) And IsNumeric(TextBox3.Text) Then
+            TextBox4.Text = CInt(TextBox2.Text) / CInt(TextBox3.Text)
+        Else
+            MsgBox("ENTER VALID DATA", vbExclamation, "")
+        End If
+    End Sub
+
+    Private Sub Button1_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button1.Resize
+       
+    End Sub
+
+    Private Sub Gpayments_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Text = Form1.OWNER & ":  GENERAL PAYMENTS"
+        If UniversalHostConnection.State = 0 Then
+            UniversalHostConnection = New ADODB.Connection
+            UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            UniversalHostConnection.Open()
+        End If
+    End Sub
+
+    Private Sub Gpayments_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox4.Width = Me.Width - 30
+        GroupBox4.Height = Me.Height / 2 + 10
+    End Sub
+
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim RecSetX As New ADODB.Recordset
+            Dim n As Integer
+
+            Dim Filter As String = ""
+            'Particular Monthe
+            'RecSetX.Open("select employee_id,gross_amount,instal_amount,period,start_date,trans_type from eprocess where monthe = " & MonthE & " and yeare = " & YearE & "  order by rec_id desc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            If ComboBox5.SelectedItem = "" And ComboBox2.SelectedItem <> "" Then
+                Filter = " and yeare = " & ComboBox2.SelectedItem
+            ElseIf ComboBox5.SelectedItem <> "" And ComboBox2.SelectedItem <> "" Then
+                Filter = " and monthe = " & ComboBox5.SelectedItem & " and yeare = " & ComboBox2.SelectedItem
+            ElseIf Trim(TextBox1.Text) = "" Then
+                MsgBox("Select criteria", vbExclamation, APPNAME)
+                Exit Sub
+
+            End If
+            'particular employee
+            Dim t As Integer = 0
+            Dim AmountPaid As Double = 0
+            Dim Tran_type As String = ""
+            Dim Rec_id As Integer = 1
+
+            If Trim(TextBox1.Text) = "" Then
+                RecSet.Open("select rec_id,employee_id,gross_amount,instal_amount,period,start_date,end_date,trans_type,monthe,yeare from eprocess where owner = '" & Form1.OWNER & "'" & Filter & " order by yeare,monthe asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            Else
+                RecSet.Open("select rec_id,employee_id,gross_amount,instal_amount,period,start_date,end_date,trans_type,monthe,yeare from eprocess where employee_id = '" & Trim(TextBox1.Text) & "' and owner = '" & Form1.OWNER & "' order by yeare,monthe asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            End If
+            'RecSet.Open("select rec_id,employee_id,gross_amount,instal_amount,period,start_date,end_date,trans_type,monthe,yeare from eprocess where employee_id = '" & EmpID & "' and owner = '" & Form1.OWNER & "' order by yeare,monthe asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                'For t As Integer = 0 To 10
+
+                If Rec_id <> RecSet.Fields(0).Value Then
+                    AmountPaid = 0
+                End If
+                DataGridView1.Rows.Item(n).Cells(0).Value = RecSet.Fields(0).Value
+                DataGridView1.Rows.Item(n).Cells(1).Value = RecSet.Fields(1).Value
+                DataGridView1.Rows.Item(n).Cells(2).Value = RecSet.Fields(5).Value
+                DataGridView1.Rows.Item(n).Cells(3).Value = RecSet.Fields(7).Value
+                DataGridView1.Rows.Item(n).Cells(4).Value = RecSet.Fields(2).Value - AmountPaid
+                DataGridView1.Rows.Item(n).Cells(5).Value = RecSet.Fields(3).Value
+                DataGridView1.Rows.Item(n).Cells(6).Value = RecSet.Fields(8).Value
+                DataGridView1.Rows.Item(n).Cells(7).Value = RecSet.Fields(9).Value
+
+                If CInt(Year(RecSet.Fields(6).Value)) = CInt(Year(Today)) Then
+                    If CInt(Month(RecSet.Fields(6).Value)) <= CInt(Month(Today)) Then
+                        DataGridView1.Rows.Item(n).Cells(8).Value = "PAID"
+                    Else
+                        DataGridView1.Rows.Item(n).Cells(8).Value = "NOT PAID"
+                    End If
+                ElseIf CInt(Year(RecSet.Fields(6).Value)) < CInt(Year(Today)) Then
+                    DataGridView1.Rows.Item(n).Cells(8).Value = "PAID"
+                ElseIf CInt(Year(RecSet.Fields(6).Value)) > CInt(Year(Today)) Then
+                    DataGridView1.Rows.Item(n).Cells(8).Value = "NOT PAID"
+                End If
+                Tran_type = RecSet.Fields(7).Value
+                Rec_id = RecSet.Fields(0).Value
+                AmountPaid = AmountPaid + RecSet.Fields(3).Value
+                Rec_id = RecSet.Fields(0).Value
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub DatarefreshX(ByVal EmpID As String)
+
+        Try
+            Dim RecSet As New ADODB.Recordset
+            Dim RecSetX As New ADODB.Recordset
+            Dim n As Integer
+
+            Dim Filter As String = ""
+            'Particular Monthe
+            'RecSetX.Open("select employee_id,gross_amount,instal_amount,period,start_date,trans_type from eprocess where monthe = " & MonthE & " and yeare = " & YearE & "  order by rec_id desc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            'If ComboBox5.SelectedItem = "" And ComboBox2.SelectedItem <> "" Then
+            '    Filter = "and yeare = " & ComboBox2.SelectedItem
+            'ElseIf ComboBox5.SelectedItem <> "" And ComboBox2.SelectedItem <> "" Then
+            '    Filter = " and monthe = " & ComboBox5.SelectedItem & " yeare = " & ComboBox2.SelectedItem"
+            'End If
+            'particular employee
+            Dim t As Integer = 0
+            Dim AmountPaid As Double = 0
+            Dim Tran_type As String = ""
+            Dim Rec_id As Integer = 1
+
+            If EmpID = "" Then
+                RecSet.Open("select rec_id,employee_id,gross_amount,instal_amount,period,start_date,end_date,trans_type,monthe,yeare from eprocess where owner = '" & Form1.OWNER & "' order by yeare,monthe asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            Else
+                RecSet.Open("select rec_id,employee_id,gross_amount,instal_amount,period,start_date,end_date,trans_type,monthe,yeare from eprocess where employee_id = '" & EmpID & "' and owner = '" & Form1.OWNER & "' order by yeare,monthe asc", UniversalHostConnection) 'expense_type <> 'SALARY PAYMENT'
+            End If
+            DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+
+                If Rec_id <> RecSet.Fields(0).Value Then
+                    AmountPaid = 0
+                End If
+                DataGridView1.Rows.Item(n).Cells(0).Value = RecSet.Fields(0).Value
+                DataGridView1.Rows.Item(n).Cells(1).Value = RecSet.Fields(1).Value
+                DataGridView1.Rows.Item(n).Cells(2).Value = RecSet.Fields(5).Value
+                DataGridView1.Rows.Item(n).Cells(3).Value = RecSet.Fields(7).Value
+                DataGridView1.Rows.Item(n).Cells(4).Value = RecSet.Fields(2).Value - AmountPaid
+                DataGridView1.Rows.Item(n).Cells(5).Value = RecSet.Fields(3).Value
+                DataGridView1.Rows.Item(n).Cells(6).Value = RecSet.Fields(8).Value
+                DataGridView1.Rows.Item(n).Cells(7).Value = RecSet.Fields(9).Value
+
+                If CInt(Year(RecSet.Fields(6).Value)) = CInt(Year(Today)) Then
+                    If CInt(Month(RecSet.Fields(6).Value)) <= CInt(Month(Today)) Then
+                        DataGridView1.Rows.Item(n).Cells(8).Value = "PAID"
+                    Else
+                        DataGridView1.Rows.Item(n).Cells(8).Value = "NOT PAID"
+                    End If
+                ElseIf CInt(Year(RecSet.Fields(6).Value)) < CInt(Year(Today)) Then
+                    DataGridView1.Rows.Item(n).Cells(8).Value = "PAID"
+                ElseIf CInt(Year(RecSet.Fields(6).Value)) > CInt(Year(Today)) Then
+                    DataGridView1.Rows.Item(n).Cells(8).Value = "NOT PAID"
+                End If
+                Tran_type = RecSet.Fields(7).Value
+                Rec_id = RecSet.Fields(0).Value
+                AmountPaid = AmountPaid + RecSet.Fields(3).Value
+                Rec_id = RecSet.Fields(0).Value
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Information, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub DataGridView1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles DataGridView1.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+
+            Try
+
+
+                Dim recset As New ADODB.Recordset
+
+
+                'Dim rowClicked As Long
+                'Dim EntitySelected As Long
+                rowClicked = DataGridView1.HitTest(e.Location.X, e.Location.Y).RowIndex
+                'ContextMenuStrip1.Items.Add(rowClicked.ToString)
+                ContextMenuStrip1.Show(DataGridView1, e.Location)
+                monthC = DataGridView1.Rows.Item(rowClicked).Cells(6).Value
+                yearC = DataGridView1.Rows.Item(rowClicked).Cells(7).Value
+                empID = DataGridView1.Rows.Item(rowClicked).Cells(1).Value
+                Record = DataGridView1.Rows.Item(rowClicked).Cells(0).Value
+                Amount = DataGridView1.Rows.Item(rowClicked).Cells(5).Value
+
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+            End Try
+        End If
+
+    End Sub
+
+    Private Sub UpdateTransactionToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UpdateTransactionToolStripMenuItem.Click
+        GpayUpdate.ShowDialog()
+    End Sub
+End Class

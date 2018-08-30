@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+
+$connection=mysql_connect("41.220.241.61","nicholas","Impala123jump.") or die(mysql_error());
+if($connection){
+    echo "i am connected using public ip";
+}
+
+?>

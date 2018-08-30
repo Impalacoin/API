@@ -1,0 +1,105 @@
+<?php
+//define exported data
+$country=$_POST['country'];
+$cardnumber=$_POST['Cardno'];
+$cvv=$_POST['cse'];
+$firstname=$_POST['firstname'];
+$lastname=$_POST['lastname'];
+$adress=$_POST['address'];
+$town=$_POST['city'];
+$postcode=$_POST['postcode'];
+$cardmail=$_POST['email'];
+$phonenumber=$_POST['phone'];
+
+//hidden fields data
+$amount=$_POST['totalcash'];
+$product=$_POST['itemname'];
+$paymentid=$_POST['randomid'];
+$merchantmail=$_POST['storemail'];
+$currencytype=$_POST['currency'];
+$sucess=$_POST['succesurl'];
+$failure=$_POST['failurl'];
+$fail=$_POST['notifyurl'];
+
+
+
+   //function process card and return approved or not approve
+    $response=processCard($amount,$cardNumber,$cvv,$exp);
+    //vpc_Message
+    echo "<pre>";
+        print_r($response);
+        print_r($_POST);
+        echo $exp;
+    echo "</pre>";
+    
+//if response is approved perform the below tasks
+  if(strtoupper($response["vpc_Message"]) == "APPROVED"){
+	  $Today = date('y:m:d');
+	  $status="unread";
+	  
+	  //insert data into transaction table;
+	  //$insert="INSERT INTO transactions SET confirmation_code='$_POST[$paymentid]',merchant_mail='$_POST[$merchantmail]',item_name='$_POST[$product]',amount='$_POST[$amount]',date='$_POST[  $Today]',status='$_POST[$status]'";
+	  
+	  $add_trans=mysql_query($insert);
+	 
+	 //sellect from account table where email====traansemail
+            $calc=$_POST['storemail'];
+
+			$query = mysql_query("SELECT * FROM account_table WHERE email = '$calc'") or die (mysql_error()); 
+			$user_row = mysql_fetch_array($query);
+	  
+	  //perform calculations
+	         $current=$user_row['account_balance'];
+			 
+			 $calculated=$current+$amount;
+			 
+			 //update accounts table to reflect the payment;
+			 
+			 $sql3 = "UPDATE account_table SET account_balance='$calculated' WHERE email='$calc'";
+			 
+			 $result3 = mysql_query($sql3);
+			 
+			 
+			 //end-----------------here
+			 
+	       // calculate totals
+			//update amount
+              
+              $total = $total;
+              $itemAmount=$amount;
+             $taxAmount=$total-$amount;
+             $account=getAccount($uid);
+             $row_account=mysql_fetch_array($account);
+             //$fb_id=get_fb_id_by_email(urldecode($response["email"]));
+           $old_amount=$row_account["amount"];
+            //echo $old_amount."<br />";
+              /*$b4PPamount=urldecode($response["PAYMENTREQUEST_0_AMT"]);
+             $commision=$b4PPamount*(3/100);
+            $amount=$b4PPamount-$commision;
+              $amount=$itemAmount;
+                       
+             $ImpalaFee=CalculateImpalaCharges($amount);*/
+              
+              $new_amount=$old_amount+$amount+$ImpalaFee;
+              $query="UPDATE account SET amount={$new_amount} WHERE fb_id='{$uid}' ";
+              $result=mysql_query($query) or die(mysql_error());
+              if($result){
+          
+                  $id=$row_account["id"];
+                  //echo $id."<br />";
+                  $query_trans="INSERT INTO transaction SET account_id='{$id}', transaction='d',balance={$new_amount},amount={$amount} ";
+                  $result_trans=mysql_query($query_trans) or die(mysql_error());
+                  if(mysql_affected_rows()==1){
+                      echo "Transaction successfull.";
+                      //header('location:statement.php?trans_success');
+                  }
+              }
+			  
+			  //if response is falls perform the below tasks
+      }else{
+          echo $response["vpc_Message"].$response["vpc_Amount"];
+    }
+ 
+//}
+
+?>

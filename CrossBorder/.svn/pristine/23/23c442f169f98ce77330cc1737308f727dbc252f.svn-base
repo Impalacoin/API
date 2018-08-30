@@ -1,0 +1,14 @@
+package com.impalapay.airtel.persistence.highcharts;
+
+/**
+ * Test our {@link com.impalapay.airtel.persistence.accountmgmt.AccountStatusDAO}
+ * <p>
+ * Copyright (c) ImpalaPay LTD., November 05, 2014
+ *
+ * @author <a href="mailto:kmuli@impalapay.com">Kelvin Muli</a>
+ * 
+ */
+
+public class HighchartDAO {
+
+}

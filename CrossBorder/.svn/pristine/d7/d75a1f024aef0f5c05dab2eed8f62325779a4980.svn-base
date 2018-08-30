@@ -1,0 +1,25 @@
+Line 61: Class FFBS.UcDataField of control ucLogin was not a loaded control class.
+Line 655: Class FFBS.UcDataField of control ucFrom was not a loaded control class.
+Line 667: Class FFBS.UcDataField of control ucTill was not a loaded control class.
+Line 67: The property name _ExtentX in ucLogin is invalid.
+Line 68: The property name _ExtentY in ucLogin is invalid.
+Line 69: The property name SetUpperCase in ucLogin is invalid.
+Line 418: Property DownPicture in cmdAdd had an invalid file reference.
+Line 430: Property Picture in cmdAdd had an invalid file reference.
+Line 452: Property Picture in cmdDelete had an invalid file reference.
+Line 474: Property Picture in cmdAlter had an invalid file reference.
+Line 559: Property Picture in cmdFilter had an invalid file reference.
+Line 588: Property ItemData in cmbStatus had an invalid file reference.
+Line 590: Property List in cmbStatus had an invalid file reference.
+Line 608: Property ItemData in cmbFreq had an invalid file reference.
+Line 610: Property List in cmbFreq had an invalid file reference.
+Line 661: The property name _ExtentX in ucFrom is invalid.
+Line 662: The property name _ExtentY in ucFrom is invalid.
+Line 663: The property name Set_Font_Size in ucFrom is invalid.
+Line 664: The property name BoxMaxLength in ucFrom is invalid.
+Line 665: The property name SetTextValue in ucFrom is invalid.
+Line 673: The property name _ExtentX in ucTill is invalid.
+Line 674: The property name _ExtentY in ucTill is invalid.
+Line 675: The property name Set_Font_Size in ucTill is invalid.
+Line 676: The property name BoxMaxLength in ucTill is invalid.
+Line 736: Property FormatString in FlexGrid had an invalid value.

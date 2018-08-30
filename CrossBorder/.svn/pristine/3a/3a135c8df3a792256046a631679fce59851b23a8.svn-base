@@ -1,0 +1,42 @@
+<?php
+ob_start();
+session_start();
+/**
+ * @author Nicholas N Chege
+ * @copyright 2011
+ */
+
+require_once("../engine.php");
+check_admin_logged_in();
+echo "<div style='float:right;color:blue'>You are logged in as {$_SESSION["adminusername"]}</div>";
+display_admin_navigation();
+
+$query="SELECT sent_money.*,users.email FROM sent_money,users where users.fb_id=sent_money.sender_id order by sent_money.date desc";
+$result=mysql_query($query) or die(mysql_error());
+?>
+<table border="1 blue groove">
+<tr align="center"><th>Sender email</th><th>Receiver mobile</th><th>Amount</th><th>Impala Fee</th><th>Mpesa Fee</th><th>Date</th></tr>
+<?php
+
+(float)$sent_total=null;
+(float)$sending_fee=null;
+while($sent=mysql_fetch_array($result)){
+    $sent_total+=$sent["amount"];
+    $sending_fee+=$sent["impalaFee"];
+    $sentAmountKsh=ConvertUsd2Ksh($sent["amount"]);
+    $mpesaFeeKsh=CalculateMpesaCharges($sentAmountKsh);
+    $mpesaFeeUsd=convertKsh2Usd($mpesaFeeKsh);	
+   $mpesaFeeNum=number_format($mpesaFeeUsd,2);
+   $newImpFee=$sent["impalaFee"]-$mpesaFeeNum;
+    echo "<tr><td>{$sent["email"]}</td><td>{$sent["receiverMobile"]}</td><td>{$sent["amount"]}Usd</td><td>{$newImpFee}Usd</td><td>".$mpesaFeeNum."Usd</td>";
+
+
+	echo "<td>{$sent["date"]}</td></tr>";
+}
+echo "<tr><th>Total</th><td>&nbsp;</td><th>".number_format($sent_total,2)."</th><th>".number_format($sending_fee,2)."</th></tr>";
+?>
+
+</table>
+<?php
+ob_end_flush();
+?>

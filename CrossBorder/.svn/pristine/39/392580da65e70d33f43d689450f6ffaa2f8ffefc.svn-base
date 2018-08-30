@@ -1,0 +1,373 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2013
+ */
+require_once "Users.php";
+class Forms{
+    public static function paymentForm($destination){
+        $user = new Users;
+        $output="";
+        if(isset($_POST["calculate"]) && !isset($_POST["makePayment"])){
+            $sendAmount=trim($_POST["amount"]);
+                    
+            $PayPal=$user->calculateKCBCharges($sendAmount);
+            //$impalapay=CalculateImpalaCharges($sendAmount);
+            $commission=$PayPal;
+            $total=$PayPal+$sendAmount;
+            $output.= "
+            <form action=main.php? method=post >
+                <table class=pretty-table>
+                    <tr><th scope=col>Card Processing Fee</th><th scope=col>Amount</th><th scope=col>Total</th></tr>
+                    <tr><td>$ {$PayPal}</td><td>$ {$sendAmount}</td><td>$ {$total}</td></tr>
+                    <input type='hidden' name='cardProcessingFee' value='{$PayPal}' />
+                    <input type='hidden' name='amount' value='{$sendAmount}' />
+                    <input type='hidden' name='calculate' />
+                    <input type='hidden' name='totalUSD' value='{$total}' />
+                    <tr>
+                    <td colspan=4></td>
+                    </tr>
+                </table>
+                <input type='submit' class='button' name='makePayment' value='Make&nbsp;payment' />
+            </form>
+            ";
+        }
+        if(!isset($_GET["buy"]) && !isset($_GET["makePayment"]) && isset($_POST["makePayment"])){
+            $output.= '
+            <div class="main-content">
+                    <div id="blog-entries">
+                    <ul class="portfolio">
+                        <li data-id="id-1" class="two-columns">';
+                        
+            $output.="<div class='pushRight' > 
+            <p>Please fill in the details to complete transaction. All fields are mandatory.</p>
+            <form action='buy_credit.php' method='post' id='processPaymentForm' class=fb>";
+            $output.="<fieldset>";
+            $output.="<legend>Payment Details</legend>";
+            $output.="<input type='hidden' name=amount id=first_name value='{$amountUsd}' />";
+            $output.="<input type='hidden' name=total id=first_name value='{$total}' />";
+            $output.="<label for = first_name>First Name</label><input type='text' name=firstName class='input-text' id=first_name />";
+            $output.="<label for = last_name>Last Name</label><input type='text' class='input-text' name=lastName id=lastName_name />";
+            $output.="<label for = card_number>Card Number</label><input type='text' class='input-text' name=cardNumber id=card_number />";
+            $output.="<label for = cvv>CVV</label><input type='text' class='input-text' size=3 name=cvv id=cvv />";
+            
+            $output.="<label for = exp_date>Expiry Date</label><input type='text' size=4 class='input-text' name=exp id=exp_date />";
+                
+            $output.="</fieldset>";
+            $output.="<input type='submit' class='button' name='pay' value='Process &nbsp; Transaction' />";
+            $output.="</form></div>";
+            $output.='</li
+                        </ul>
+                    </div>
+            </div>';
+        }
+        return $output;
+    }
+    public static function culculateSendingFee($destination){
+        $user = new Users;
+        
+        $output = '
+        <div class="main-content">
+                <div id="blog-entries">
+                <ul class="portfolio">
+                    <li data-id="id-1" class="two-columns">
+                    <p class=alert_info>On this page you can calculate the approximate fees and the amount your recipient may receive in Kenya</p>                      
+                            <form name="checkout" method="post" action="'.$destination.'" class="send-m" id="calc-form">
+                                <div class="col2-set" id="customer-details">
+                                    <div class="col-1">
+                                     <p class="form-row form-row-wide validate-required" id="receiver-name" >
+                                        <div>Exchange Rate 1$='.$user->getExchangeRate().'KSH</div>
+                                     </p>
+                                     <p class="form-row form-row-wide validate-required" id="receiver-name" >
+                                        <label for="register_address">
+                                        Amount in USD
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="amount"  id="amount" class="input-text"/>
+                                     </p>
+                                     
+                                     <p id="cf_submit_p">
+                                        <input type="submit" id="" class="button" value="Send" name="calculate" />
+                                    </p>
+                                    </div>
+                                </div>
+                            </form>
+                    </li
+                    </ul>
+                </div>
+        </div>
+        ';
+        return $output;
+    }
+    public static function sendToMobileForm($destination){
+        $output = '
+        <div class="main-content">
+                <ul id="blog-entries">
+                    <li class="blog-entry single">
+                        <h3 class="blog-title">Send Money</h3>
+                        <!--div class="woocommerce"-->
+                            <form name="checkout" method="post" action="'.$destination.'" class="send-m" id="send-money">
+                                <div class="col2-set" id="customer-details">
+                                    <div class="col-1">
+                                     
+                                     <p class="form-row form-row-wide validate-required" id="receiver-name" >
+                                        <label for="register_address">
+                                        Receiver full name
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="receiver_name"  id="receiver_name" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-wide validate-required" id="Register-address">
+                                        <label for="register_address">
+                                        Address
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="address"  id="register_address" placeholder="Street Address" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-wide validate-required" id="Register-town-city">
+                                        <label for="register_zip_code">
+                                        Town/City
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="town_city" placeholder="Town / City"  id="register_town_city" class="input-text"/>
+                                     </p>
+                                     
+                                     <p class="form-row form-row-first" id="register-email">
+                                        <label for="register_email">
+                                        Email                                        
+                                        </label>                                        
+                                        <input type="text" name="email" id="register_email" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-last validate-required" id="register-phone">
+                                        <label for="register_phone">
+                                        Phone 
+                                        <abbr class="required" title="required">*</abbr>                                     
+                                        </label>                                                                               
+                                        <input type="text" name="phone" id="register_phone" placeholder="0722******" class="input-text"/>
+                                     </p>
+                                     
+                                     <p id="cf_submit_p">
+                                        <input type="submit" id="" class="button" value="Send" name="register" />
+                                    </p>
+                                    </div>
+                                    <div class="col-2" >
+                                    <p class="green_box">More content here</p>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        <!--/div-->
+                    </li>
+                </ul>
+            </div>';
+            return $output;
+    }
+    public static function loginForm($destination){
+        $output='
+        <div class="main-content">
+                <ul id="blog-entries">
+                    <li class="blog-entry">
+                        <h3 class="blog-page-title">My Account</h3>
+                        <div class="my-div">
+                            <p><br class="clear" /></p>
+                            <h5>Login</h5>
+                            <form method="post" action="'.$destination.'" id="login-form">
+                                <p class="form-row form-row-first">
+                                    <label for="email-address">Email
+                                    <abbr class="required" title="required">*</abbr></label>
+                                    <input type="text" name="email" class="input-text" id="email-address"/>
+                                </p>
+                                <p class="form-row form-row-last">
+                                    <label for="password">Password
+                                    <abbr class="required" title="required">*</abbr>
+                                    </label>
+                                    <input type="password" name="password" class="input-text" id="password"/>
+                                </p>
+                                <div class="clear"></div>
+                                <p class="form-row">
+                                <input type="submit" class="button" name="login" value="Login" />
+                                <br class="clear" />
+                                <a href="register.php">Register</a>
+                                <br />
+                                <a href="#">Lost password?</a>
+                                </p>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+        </div>
+        ';
+        return $output;
+    }
+    public static function registrationForm($destination){
+        $output = '
+        <div class="main-content">
+                <ul id="blog-entries">
+                    <li class="blog-entry single">
+                        <h3 class="blog-title">Register</h3>
+                        <!--div class="woocommerce"-->
+                            <form name="checkout" method="post" action="'.$destination.'" class="checkout" id="reg-form">
+                                <div class="col2-set" id="customer-details">
+                                    <div class="col-1">
+                                     <!--h4 class="related_products_title">Billing Address</h4-->
+                                     
+                                     <p class="form-row form-row-first validate-required" id="register_first_name_filed">
+                                        <label for="register_first_name">
+                                        First Name
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="first_name" id="register_first_name" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-last validate-required" id="register_last_name_filed">
+                                        <label for="register_last_name">
+                                        Last Name
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="last_name" id="register_last_name" class="input-text"/>
+                                     </p>
+                                     <!--div class="clear"></div-->
+                                     <p class="form-row form-row-wide validate-required" id="Register-country" >
+                                        <label for="register_address">
+                                        Country
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="country"  id="register_country" placeholder="Country" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-wide validate-required" id="Register-address">
+                                        <label for="register_address">
+                                        Address
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="address"  id="register_address" placeholder="Street Address" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-wide validate-required" id="Register-town-city">
+                                        <label for="register_zip_code">
+                                        Town/City
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="town_city" placeholder="Town / City"  id="register_town_city" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-first validate-required" id="register-postal-code">
+                                        <label for="register_postal_code">
+                                        Postalcode
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="postalcode_zip" placeholder="Postalcode / Zip" id="register_postal_code" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-last" id="register-county">
+                                        <label for="register_county">
+                                        County                                        
+                                        </label>                                        
+                                        <input type="text" name="county_state" placeholder="County / State" id="register_county" class="input-text"/>
+                                     </p>
+                                     <div class="clear"></div>
+                                     <p class="form-row form-row-first validate-required" id="register-email">
+                                        <label for="register_email">
+                                        Email
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="text" name="email" id="register_email" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-last validate-required" id="register-phone">
+                                        <label for="register_phone">
+                                        Phone 
+                                        <abbr class="required" title="required">*</abbr>                                     
+                                        </label>                                                                               
+                                        <input type="text" name="phone" id="register_phone" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-first validate-required" id="register-password">
+                                        <label for="register_password">
+                                        Password
+                                        <abbr class="required" title="required">*</abbr>
+                                        </label>                                        
+                                        <input type="password" name="password" id="register_password" class="input-text"/>
+                                     </p>
+                                     <p class="form-row form-row-last validate-required" id="register-confirm-password">
+                                        <label for="register_confirm_password">
+                                        Confirm Password
+                                        <abbr class="required" title="required">*</abbr>                                     
+                                        </label>                                                                               
+                                        <input type="password" name="confirm_password" id="register_confirm_password" class="input-text"/>
+                                     </p>
+                                     <p id="cf_submit_p">
+                                        <input type="submit" id="" class="button" value="Register" name="register" />
+                                    </p>
+                                    </div>
+                                    <div class="col-2" >
+                                    <p>More content here</p>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                        <!--/div-->
+                    </li>
+                </ul>
+            </div>
+        ';
+        return $output;
+    }
+    public static function contactForm($destination){
+        $output='
+        <div class="full-width-content">
+        <ul id="blog-entries">
+            <li class="blog-entry single">
+                <h3 class="blog-page-title">Contacts</h3>
+                <div class="sh-one-half float-left">
+                <h5>Send us a message</h5>
+                <div class="comment-form-container" id="contact-wrapper">
+                    <form method="post" action="'.$destination.'" id="contactform">
+                        <div class="form-name float-left">
+                            <label for="contact_name">Your name</label>
+                            <input  type="text" size="50" name="contact_name" id="contact_name" class="required form-name input-text" />
+                            <div class="clear"></div>
+                            <span id="name_error" class="contact_error">* Please enter your name</span>
+                        </div>
+                        <div class="form-name float-right">
+                            <label for="contact_email">Your email</label>
+                            <input  type="text" size="50" name="contact_email" id="contact_email" class="required email form-name input-text" />
+                            <div class="clear"></div>
+                            <span id="contact_error" class="contact_error">* Please enter a valid email id</span>
+                        </div>
+                        <br class="clear"/>
+                        <div class="form-comment">
+                            <label for="contact_message">Message</label>
+                            <textarea rows="4" cols="20" name="contact_message" id="contact_message" class="required txtarea-comment"></textarea>
+                            <div class="clear"></div>
+                            <span id="message_error" class="contact_error">* What do you want to tell us</span>
+                        </div>
+                        <div class="clear"></div>
+                        <div id="mail_success" class="contact_error alert_success">Email sent! We will get back to you as soon as we can.</div>
+                        <div id="mail_fail" class="contact_error alert_error">Sorry, we don\'t know what happened. Please try again later.</div>
+                        <p id="cf_submit_p">
+                            <input type="submit" id="send_message" class="button" value="Send Message" name="send_message" />
+                        </p>
+                    </form>
+                </div>
+                </div>
+                <div class="sh-one-half float-left column-last">
+                    <h5>Contact details</h5>
+                    <p class="icon-list-map">
+                        Nairobi, Kenya <br />
+                        Kirinyaga Road off Moi avenue, Twiga Towers, 2nd floor
+                    </p>
+                    <div class="divider"></div>
+                    <p class="icon-list-phone">
+                    +254723254254<br />
+                    +254723254256
+                    </p>
+                    <div class="divider"></div>
+                    <p class="icon-list-mail">
+                        info@impalapay.com
+                    </p>
+                </div>
+            </li>
+        </ul>
+         
+        </div>
+        ';
+        return $output;
+    }
+}
+
+?>

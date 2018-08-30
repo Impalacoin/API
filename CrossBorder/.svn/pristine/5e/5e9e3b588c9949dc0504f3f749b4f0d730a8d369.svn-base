@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+require_once "includes/constants.php";
+require_once("config/config.inc.php");
+require_once("includes/functions.php");
+require_once  "includes/output_fns.php";
+require_once "includes/header.php";
+
+
+?>

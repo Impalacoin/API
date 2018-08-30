@@ -1,0 +1,11 @@
+UUID|Status|Description
+3b6edb35-654d-4049-b7ea-0f1db29c6e77|ACCEPTED_FOR_DELIVERY|Accepted for delivery
+e5998ec1-57b3-43ba-ad19-f875e3efbeac|SUBMITTED_TO_OPERATOR|Submitted to mobile operator
+4a991e99-ffa2-4fcd-91ed-27e6ce078832|TRANSFER_SUCESS|Transfer success
+796e797d-6721-4f5e-938f-241b4b4c5f6c|TRANSFER_FAILURE|Transfer ailure
+4f3d09eb-10e0-428a-b8c1-38f476a4ab31|UNKNOWN_USERNAME|Unknown username
+9454a86a-c1ac-410c-882e-d9a6e9048c81|WRONG_PASSWORD|Wrong password
+397554ce-6935-4699-8b99-727574b6a49f|ACCOUNT_SUSPENDED|Account suspended
+857d1e0b-df0d-487c-b7bb-6e9d8c3eb212|INVALID_PARAMETERS|Invalid or missing parameters
+ea430328-ef8b-4459-95c6-7102ba16ddc5|INSUFFICIENT_FUNDS|Insufficient funds
+b3dd378b-10c8-4e77-a80b-d5da6d7b9c08|SERVER_ERROR|Internal server error

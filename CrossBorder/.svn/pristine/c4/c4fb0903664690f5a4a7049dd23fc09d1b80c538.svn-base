@@ -1,0 +1,74 @@
+package com.impalapay.airtel.accountmgmt.session;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+//import com.impalapay.airtel.beans.network.Network;
+import com.impalapay.airtel.beans.geolocation.Country;
+
+/**
+ * This object holds data that is displayed on the portal once a user has logged
+ * in. It is meant to be cached while a session is still active to avoid
+ * expensive computations with the RDBMS.
+ * <p>
+ *
+ * Copyright (c) Impalapay Ltd., August 15, 2014
+ *
+ * @author <a href="mailto:eugene@impalapay">Eugene Chimita</a>
+ * @version %I%, %G%
+ */
+public class SessionStatistics implements Serializable {
+
+	private int AllTransactionCount;
+
+	private int transactionCountSuccess;
+
+	private int transactionByUuidCount;
+
+	/**
+	 * Default constructor,intializes objects
+	 *
+	 */
+	public SessionStatistics() {
+
+	}
+
+	/**
+	 * 
+	 * @return AllTransactionCount
+	 */
+	public int getAllTransactionCount() {
+		return AllTransactionCount;
+	}
+
+	/**
+	 * 
+	 * @param AllTransactionCount
+	 */
+	public void setAllTransactionCount(int AllTransactionCount) {
+		this.AllTransactionCount = AllTransactionCount;
+	}
+
+	/**
+	 * 
+	 * @return transactionByUuidCount
+	 */
+	public int getTransactionByUuidCount() {
+		return transactionByUuidCount;
+	}
+
+	/**
+	 * 
+	 * @param transactionByUuidCount
+	 */
+	public void setTransactionByUuidCount(int transactionByUuidCount) {
+		this.transactionByUuidCount = transactionByUuidCount;
+	}
+
+}
+
+/*
+ * * Local Variables:* mode: java* c-basic-offset: 2* tab-width: 2*
+ * indent-tabs-mode: nil* End:** ex: set softtabstop=2 tabstop=2 expandtab:*
+ */

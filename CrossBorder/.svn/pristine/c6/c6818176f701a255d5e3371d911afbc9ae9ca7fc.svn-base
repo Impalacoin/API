@@ -1,0 +1,634 @@
+﻿Public Class frmMenu
+
+    Private Sub StatusStrip1_ItemClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs)
+
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem1.Click
+
+    End Sub
+
+    Private Sub ToolStripMenuItem3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+
+    Private Sub frmMenu_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+    End Sub
+
+    Private Sub frmMenu_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 10
+        GroupBox1.Height = Me.Height - 85
+        GroupBox10.Top = 450
+        GroupBox10.Width = Me.Width - 20
+
+
+        GroupBox10.Left = 5
+        Button1.Left = 10
+        Button2.Left = Button1.Left + Button1.Width + 5
+        Button3.Left = Button2.Left + Button1.Width + 5
+        Button4.Left = Button3.Left + Button1.Width + 5
+        Button5.Left = Button4.Left + Button1.Width + 5
+        Button6.Left = Button5.Left + Button1.Width + 5
+        Button7.Left = Button6.Left + Button1.Width + 5
+        Button8.Left = Button7.Left + Button1.Width + 5
+
+        'Dim butt As New UserButton
+        'butt.Label1.Text = "House && Tenant"
+        'butt.Top = 20
+        'butt.Visible = True
+
+        Button2.Height = Button1.Height
+        Button3.Height = Button1.Height
+        Button4.Height = Button1.Height
+        Button5.Height = Button1.Height
+        Button6.Height = Button1.Height
+        Button7.Height = Button1.Height
+        Button8.Height = Button1.Height
+
+        GroupBox2.Top = Button1.Top + Button1.Height
+
+        Button2.Top = Button1.Top
+        Button3.Top = Button1.Top
+        Button4.Top = Button1.Top
+        Button5.Top = Button1.Top
+        Button6.Top = Button1.Top
+        Button7.Top = Button1.Top
+        Button8.Top = Button1.Top
+
+        Button1.Width = 88
+
+        Button2.Width = Button1.Width
+        Button3.Width = Button1.Width
+        Button4.Width = Button1.Width
+        Button5.Width = Button1.Width
+        Button6.Width = Button1.Width
+        Button7.Width = Button1.Width
+        Button8.Width = Button1.Width
+
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+
+
+        GroupBox3.Text = ""
+        GroupBox2.Text = ""
+        GroupBox4.Text = ""
+        GroupBox5.Text = ""
+        GroupBox6.Text = ""
+        GroupBox7.Text = ""
+        GroupBox8.Text = ""
+        GroupBox9.Text = ""
+
+
+        'Button 1 Menus
+        '---skip
+
+        'Button2 Menus
+
+        UserButton1.Top = 7
+        UserButton1.Label1.Text = "Rent Payments"
+        UserButton1.Left = 1
+        UserButton2.Top = UserButton1.Top + UserButton1.Height + 0
+        UserButton2.Label1.Text = "Close Tenant Account"
+        UserButton2.Left = 1
+        UserButton3.Top = UserButton2.Top + UserButton1.Height + 0
+        UserButton3.Label1.Text = "Adjust Monthly Rent"
+        UserButton3.Left = 1
+        UserButton4.Top = UserButton3.Top + UserButton1.Height + 0
+        UserButton4.Label1.Text = "Enquiries"
+        UserButton4.Left = 1
+
+       
+
+        GroupBox3.Left = Button2.Left
+        GroupBox3.Top = GroupBox2.Top
+        GroupBox3.Height = (4 * UserButton1.Height) + 10
+
+        'Button 3 Menus
+
+
+        UserButton5.Top = 7
+        UserButton5.Label1.Text = "New Deposit Account"
+        UserButton5.Left = 1
+        UserButton6.Top = UserButton5.Top + UserButton5.Height + 0
+        UserButton6.Label1.Text = "Rent Deposits"
+        UserButton6.Left = 1
+        UserButton7.Top = UserButton6.Top + UserButton5.Height + 0
+        UserButton7.Label1.Text = "Electricity Deposits"
+        UserButton7.Left = 1
+        UserButton8.Top = UserButton7.Top + UserButton5.Height + 0
+        UserButton8.Label1.Text = "Water Deposits"
+        UserButton8.Left = 1
+        'UserButton9.Top = UserButton8.Top + UserButton5.Height + 0
+        'UserButton9.Label1.Text = "Deposit Claims"
+        'UserButton9.Left = 1
+        GroupBox4.Left = Button3.Left
+        GroupBox4.Top = GroupBox2.Top
+        GroupBox4.Height = (4 * UserButton5.Height) + 10
+        GroupBox4.Width = GroupBox3.Width
+
+
+        'Button 4 Menus
+
+        UserButton10.Top = 7
+        UserButton10.Label1.Text = "Repairs && Maintenance"
+        UserButton10.Left = 1
+        UserButton11.Top = UserButton10.Top + UserButton10.Height + 0
+        UserButton11.Label1.Text = "Recurrent Bills"
+        UserButton11.Left = 1
+        UserButton12.Top = UserButton11.Top + UserButton10.Height + 0
+        UserButton12.Label1.Text = "Land Rates"
+        UserButton12.Left = 1
+
+        GroupBox5.Left = Button4.Left
+        GroupBox5.Top = GroupBox2.Top
+        GroupBox5.Height = (3 * UserButton10.Height) + 10
+        GroupBox5.Width = GroupBox3.Width
+
+
+
+        'Button 5 Menus
+        UserButton13.Top = 7
+        UserButton13.Width = UserButton1.Width
+        UserButton13.Label1.Text = "Loan Maintenance"
+        UserButton13.Left = 1
+        UserButton14.Top = UserButton13.Top + UserButton13.Height + 0
+        UserButton14.Label1.Text = "Morgage"
+        UserButton14.Left = 1
+        UserButton14.Width = UserButton1.Width
+        UserButton15.Top = UserButton14.Top + UserButton13.Height + 0
+        UserButton15.Label1.Text = "Project Development"
+        UserButton15.Left = 1
+        UserButton15.Width = UserButton1.Width
+        UserButton16.Top = UserButton15.Top + UserButton13.Height + 0
+        UserButton16.Label1.Text = "Project Reports"
+        UserButton16.Left = 1
+        UserButton16.Width = UserButton1.Width
+
+        GroupBox6.Left = Button5.Left
+        GroupBox6.Top = GroupBox2.Top
+        GroupBox6.Height = (4 * UserButton13.Height) + 10
+        GroupBox6.Width = GroupBox3.Width
+
+
+
+        'Button 6 Menus 
+        UserButton17.Top = 7
+        UserButton17.Label1.Text = "Cash Book"
+        UserButton17.Left = 1
+        UserButton18.Top = UserButton17.Top + UserButton17.Height + 0
+        UserButton18.Label1.Text = "Bank Accounts"
+        UserButton18.Left = 1
+
+        UserButton19.Top = UserButton18.Top + UserButton17.Height + 0
+        UserButton19.Label1.Text = "Cash Vouchers"
+        UserButton19.Left = 1
+
+        GroupBox7.Left = Button6.Left
+        GroupBox7.Top = GroupBox2.Top
+        GroupBox7.Height = (3 * UserButton17.Height) + 10
+        GroupBox7.Width = GroupBox3.Width
+
+
+        'Button 1 Menu
+
+        UserButton20.Top = 7
+        UserButton20.Label1.Text = "Houses && Tenants"
+        UserButton20.Left = 1
+        UserButton20.Width = UserButton13.Width
+        UserButton21.Top = UserButton20.Top + UserButton21.Height + 0
+        UserButton21.Label1.Text = "Other Properties"
+        UserButton21.Left = 1
+        UserButton21.Width = UserButton13.Width
+        GroupBox2.Width = GroupBox3.Width
+        GroupBox2.Height = (2 * UserButton1.Height) + 10
+        GroupBox2.Left = Button1.Left
+
+        'Button 7 Menus
+
+        UserButton22.Top = 7
+        UserButton22.Width = UserButton1.Width
+        UserButton22.Label1.Text = "Staff Accounts"
+        UserButton22.Left = 1
+        UserButton23.Top = UserButton22.Top + UserButton13.Height + 0
+        UserButton23.Label1.Text = "Duty Rota"
+        UserButton23.Left = 1
+        UserButton23.Width = UserButton1.Width
+        UserButton24.Top = UserButton23.Top + UserButton13.Height + 0
+        UserButton24.Label1.Text = "Administration"
+        UserButton24.Left = 1
+        UserButton24.Width = UserButton1.Width
+        UserButton25.Top = UserButton24.Top + UserButton13.Height + 0
+        UserButton25.Label1.Text = "Budget Analysis"
+        UserButton25.Left = 1
+        UserButton25.Width = UserButton1.Width
+        UserButton26.Top = UserButton25.Top + UserButton13.Height + 0
+        UserButton26.Label1.Text = "Payroll Reports"
+        UserButton26.Left = 1
+        UserButton26.Width = UserButton1.Width
+        GroupBox8.Left = Button7.Left
+        GroupBox8.Top = GroupBox2.Top
+        GroupBox8.Width = GroupBox3.Width
+        GroupBox8.Height = (5 * UserButton1.Height) + 10
+
+
+
+        'Button 8 Menus
+        UserButton27.Top = 7
+        UserButton27.Width = UserButton1.Width
+        UserButton27.Label1.Text = "Month End Process"
+        UserButton27.Left = 1
+        UserButton28.Top = UserButton27.Top + UserButton13.Height + 0
+        UserButton28.Label1.Text = "Year End Process"
+        UserButton28.Left = 1
+        UserButton28.Width = UserButton1.Width
+        UserButton29.Top = UserButton28.Top + UserButton13.Height + 0
+        UserButton29.Label1.Text = "System Parameters"
+        UserButton29.Left = 1
+        UserButton29.Width = UserButton1.Width
+        GroupBox9.Left = Button8.Left - 100
+        GroupBox9.Top = GroupBox2.Top
+        GroupBox9.Width = GroupBox3.Width
+        GroupBox9.Height = (3 * UserButton1.Height) + 10
+
+
+        
+        
+
+
+        'ICONs
+        PictureBox1.Left = 15
+        PictureBox2.Left = PictureBox1.Width + PictureBox1.Left
+        PictureBox3.Left = PictureBox2.Width + PictureBox2.Left
+        PictureBox4.Left = PictureBox3.Width + PictureBox3.Left
+        PictureBox5.Left = PictureBox4.Width + PictureBox4.Left
+        PictureBox6.Left = PictureBox5.Width + PictureBox5.Left
+        PictureBox7.Left = PictureBox6.Width + PictureBox6.Left
+        PictureBox8.Left = PictureBox7.Width + PictureBox7.Left
+        'PictureBox9.Left = PictureBox8.Width + PictureBox8.Left
+
+    End Sub
+
+    Private Sub GroupBox2_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim x As Integer
+        Dim y As Integer
+        x = MousePosition.X
+        y = MousePosition.Y
+        'ContextMenuStrip1.Show(Button1.Location.X + Button1.Height, Button1.Left)
+    End Sub
+    Private Sub Button1_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button1.MouseHover
+        'Button1.BackColor = Color.SteelBlue
+        'GroupBox2.Visible = True
+        'GroupBox3.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = False
+
+    End Sub
+
+    Private Sub Button1_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button1.MouseLeave
+        Button1.BackColor = Color.LightBlue
+    End Sub
+    Private Sub Button2_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button2.MouseHover
+        'Button2.BackColor = Color.SteelBlue
+        'GroupBox3.Visible = True
+        'GroupBox2.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = False
+
+
+
+    End Sub
+
+    Private Sub Button2_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button2.MouseLeave
+        Button2.BackColor = Color.LightBlue
+    End Sub
+    Private Sub Button3_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button3.MouseHover
+        'Button3.BackColor = Color.SteelBlue
+        'GroupBox4.Visible = True
+        'GroupBox3.Visible = False
+        'GroupBox2.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button3_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button3.MouseLeave
+        Button3.BackColor = Color.LightBlue
+    End Sub
+    Private Sub Button4_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button4.MouseHover
+        'Button4.BackColor = Color.SteelBlue
+        'GroupBox5.Visible = True
+        'GroupBox3.Visible = False
+        'GroupBox2.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button4_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button4.MouseLeave
+        Button4.BackColor = Color.LightBlue
+    End Sub
+
+    Private Sub Button5_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button5.MouseHover
+        'Button5.BackColor = Color.SteelBlue
+        'GroupBox3.Visible = False
+        'GroupBox2.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = True
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button5_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button5.MouseLeave
+        Button5.BackColor = Color.LightBlue
+    End Sub
+    Private Sub Button6_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button6.MouseHover
+        'Button6.BackColor = Color.SteelBlue
+        'GroupBox3.Visible = False
+        'GroupBox2.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = True
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button6_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button6.MouseLeave
+        Button6.BackColor = Color.LightBlue
+    End Sub
+    Private Sub Button7_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button7.MouseHover
+        'Button7.BackColor = Color.SteelBlue
+        'GroupBox3.Visible = False
+        'GroupBox2.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = True
+        'GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button7_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button7.MouseLeave
+        Button7.BackColor = Color.LightBlue
+    End Sub
+    Private Sub Button8_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button8.MouseHover
+        'Button8.BackColor = Color.SteelBlue
+        'GroupBox3.Visible = False
+        'GroupBox2.Visible = False
+        'GroupBox4.Visible = False
+        'GroupBox5.Visible = False
+        'GroupBox6.Visible = False
+        'GroupBox7.Visible = False
+        'GroupBox8.Visible = False
+        'GroupBox9.Visible = True
+    End Sub
+
+    Private Sub Button8_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button8.MouseLeave
+        Button8.BackColor = Color.LightBlue
+    End Sub
+
+
+    
+
+
+    Private Sub GroupBox3_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox3.Enter
+
+    End Sub
+
+    Private Sub Label1_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs)
+        'Label1.BackColor = Color.LightSkyBlue
+    End Sub
+
+    Private Sub GroupBox1_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox1.Enter
+
+    End Sub
+
+    
+
+    Private Sub Button8_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button8.MouseMove
+        Button8.BackColor = Color.SteelBlue
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = True
+    End Sub
+
+    Private Sub Button7_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button7.MouseMove
+        Button7.BackColor = Color.SteelBlue
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = True
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button6_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button6.MouseMove
+        Button6.BackColor = Color.SteelBlue
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = True
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button5_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button5.MouseMove
+        Button5.BackColor = Color.SteelBlue
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = True
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button4_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button4.MouseMove
+        Button4.BackColor = Color.SteelBlue
+        GroupBox5.Visible = True
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button3_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button3.MouseMove
+        Button3.BackColor = Color.SteelBlue
+        GroupBox4.Visible = True
+        GroupBox3.Visible = False
+        GroupBox2.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button2.MouseMove
+        Button2.BackColor = Color.SteelBlue
+        GroupBox3.Visible = True
+        GroupBox2.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub Button1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Button1.MouseMove
+        Button1.BackColor = Color.SteelBlue
+        GroupBox2.Visible = True
+        GroupBox3.Visible = False
+        GroupBox4.Visible = False
+        GroupBox5.Visible = False
+        GroupBox6.Visible = False
+        GroupBox7.Visible = False
+        GroupBox8.Visible = False
+        GroupBox9.Visible = False
+    End Sub
+
+    Private Sub GroupBox7_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox7.Enter
+
+    End Sub
+
+    Private Sub GroupBox8_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox8.Enter
+
+    End Sub
+
+    Private Sub ToolStripMenuItem3_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripMenuItem3.Click
+
+    End Sub
+
+    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox1.Click
+        frmTenant.Show()
+
+        frmTenant.Left = Form1.GroupBox1.Left
+        frmTenant.Top = Form1.GroupBox1.Top + 162
+        frmTenant.Height = Form1.TreeView1.Height - 142
+        frmTenant.Width = Form1.GroupBox1.Width
+    End Sub
+
+    Private Sub PictureBox1_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox1.MouseClick
+        PictureBox1.BackColor = Color.LightBlue
+        'ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+
+    End Sub
+
+    Private Sub PictureBox1_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox1.MouseLeave
+        PictureBox1.BackColor = Color.AliceBlue
+        'ContextMenuStrip1.Close()
+    End Sub
+
+    Private Sub PictureBox1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox1.MouseMove
+        PictureBox1.BackColor = Color.LightBlue
+        'ContextMenuStrip1.Show(MousePosition.X, MousePosition.Y)
+    End Sub
+
+    Private Sub PictureBox2_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox2.MouseLeave
+        PictureBox2.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox2_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox2.MouseMove
+        PictureBox2.BackColor = Color.LightBlue
+    End Sub
+
+
+    Private Sub PictureBox3_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox3.MouseLeave
+        PictureBox3.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox3_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox3.MouseMove
+        PictureBox3.BackColor = Color.LightBlue
+    End Sub
+
+    Private Sub PictureBox4_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox4.MouseLeave
+        PictureBox4.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox4_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox4.MouseMove
+        PictureBox4.BackColor = Color.LightBlue
+    End Sub
+
+    Private Sub PictureBox5_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox5.MouseLeave
+        PictureBox5.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox5_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox5.MouseMove
+        PictureBox5.BackColor = Color.LightBlue
+    End Sub
+
+
+    Private Sub PictureBox6_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox6.MouseLeave
+        PictureBox6.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox6_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox6.MouseMove
+        PictureBox6.BackColor = Color.LightBlue
+    End Sub
+    Private Sub PictureBox7_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox7.MouseLeave
+        PictureBox7.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox7_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox7.MouseMove
+        PictureBox7.BackColor = Color.LightBlue
+    End Sub
+
+    
+    
+    Private Sub PictureBox8_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles PictureBox8.MouseLeave
+        PictureBox8.BackColor = Color.AliceBlue
+    End Sub
+
+    Private Sub PictureBox8_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PictureBox8.MouseMove
+        PictureBox8.BackColor = Color.LightBlue
+    End Sub
+
+    Private Sub PictureBox2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PictureBox2.Click
+        frmRent.Show()
+        frmRent.Left = Form1.GroupBox1.Left
+        frmRent.Top = Form1.GroupBox1.Top + 162
+        frmRent.Height = Form1.TreeView1.Height - 142
+        frmRent.Width = Form1.GroupBox1.Width
+    End Sub
+
+   
+End Class

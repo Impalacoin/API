@@ -1,0 +1,63 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "Balance"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private t_Balances As field
+Private t_currency As field
+Private t_availablebalance As field
+Private t_ledgerbalance As field
+
+Private Sub Class_Initialize()
+    Set t_Balances = New field
+    t_Balances.Name = "Balances"
+    
+    Set t_currency = New field
+    t_currency.Name = "Currency"
+    
+    Set t_availablebalance = New field
+    t_availablebalance.Name = "AvailableBalance"
+    
+    Set t_ledgerbalance = New field
+    t_ledgerbalance.Name = "LedgerBalance"
+End Sub
+
+Public Property Get element_Balances() As field
+    Set element_Balances = New field
+    With element_Balances
+        .Name = t_Balances.Name
+    End With
+End Property
+
+Public Property Get field_CurrencyCode() As field
+    Set field_CurrencyCode = New field
+    With field_CurrencyCode
+        .Name = t_currency.Name
+    End With
+End Property
+
+Public Property Get field_AvailableBalance() As field
+    Set field_AvailableBalance = New field
+    With field_AvailableBalance
+        .Name = t_availablebalance.Name
+    End With
+End Property
+
+Public Property Get field_LedgerBalance() As field
+    Set field_LedgerBalance = New field
+    With field_LedgerBalance
+        .Name = t_ledgerbalance.Name
+    End With
+End Property
+
+

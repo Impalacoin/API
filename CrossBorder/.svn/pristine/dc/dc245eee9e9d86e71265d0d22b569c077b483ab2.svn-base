@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @author Nicholas N. Chege
+ * @copyright 2011
+ */
+
+
+
+?>
+ <html>
+    <head>
+      <title>My Facebook Credits Page</title>
+    </head>
+    <body>
+      <div id="fb-root"></div>
+      <script src="http://connect.facebook.net/en_US/all.js"></script>
+<p> <a onclick="getMore(); return false;">Get More</a></p>
+
+<script>
+ function getMore(){
+    // Initialization
+    FB.init({appId: <your_app_id>, status: true, cookie: true});
+
+    // calling the API ...
+    var obj = {
+         method: 'pay',
+         credits_purchase: true,
+    };
+
+    FB.ui(obj, callback);
+ }
+</script>
+</body>
+ </html>

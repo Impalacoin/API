@@ -1,0 +1,314 @@
+﻿Imports Excel = Microsoft.Office.Interop.Excel
+Public Class frmElecDeposit
+    'Private UniversalHostConnection As ADODB.Connection
+    Public House_Name As String
+    Private HouseString As String
+    Private Sub DataGridRefresh()
+        Dim i As Integer
+        Try
+
+            Dim RecSet As New ADODB.Recordset
+            'create a new dataset
+            Dim n As Integer '= DataGridView1.Rows.Add()
+            RecSet.Open("Select cust_id,customer,'NULL',house_nr,house_name,'Type',amount,for_month,date_of_payment,'NULL','NULL',0 from edTransaction order by id asc", UniversalHostConnection)
+            DataGridView1.Rows.Clear()
+            Do While RecSet.EOF = False
+                DataGridView1.Rows.Add()
+                For i = 0 To 11
+                    DataGridView1.Rows.Item(n).Cells(i).Value = UCase(RecSet.Fields(i).Value)
+
+                Next
+
+                n = n + 1
+                RecSet.MoveNext()
+            Loop
+
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+
+    End Sub
+
+    Private Sub frmElecDeposit_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Leave
+
+    End Sub
+
+    Private Sub frmElecDeposit_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+        Label5.Text = "PROPERTY: " & Form1.OWNER
+
+        On Error GoTo ErrTrap
+        Dim recSet As New ADODB.Recordset
+
+        If UniversalHostConnection.State = 0 Then
+            UniversalHostConnection = New ADODB.Connection
+            UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+            UniversalHostConnection.Open()
+        End If
+
+
+        recSet.Open("select house_name from house_details where owner = '" & Form1.OWNER & "' order by house_name asc", UniversalHostConnection)
+        'Call DataGridRefresh()
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.Add("ALL")
+        Button1.Enabled = False
+        HouseString = ""
+        If recSet.EOF = False Then
+            Do While recSet.EOF = False
+                ComboBox1.Items.Add(UCase(recSet.Fields(0).Value))
+                HouseString = HouseString & "'" & UCase(recSet.Fields(0).Value) & "'"
+                recSet.MoveNext()
+
+                If recSet.EOF = False Then
+                    HouseString = HouseString & ","
+                Else
+                    HouseString = "(" & HouseString & ")"
+                End If
+            Loop
+            Button1.Enabled = True
+        Else
+            Button1.Enabled = False
+        End If
+        RadioButton2.Checked = True
+        Exit Sub
+ErrTrap:
+        MsgBox(Err.Description, vbCritical)
+
+    End Sub
+    Private Sub frmElecDeposit_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        GroupBox1.Width = Me.Width - 30
+        GroupBox1.Height = Me.Height - 205
+        GroupBox2.Width = GroupBox1.Width
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Dim Recset As New ADODB.Recordset
+        Dim RecSetX As New ADODB.Recordset
+        Dim RecSetC As New ADODB.Recordset
+        Dim SqlStr, Filter, ALLHouse As String
+        Filter = ""
+        ALLHouse = ""
+        SqlStr = "Select house_name,house_nr,cust_id,customer,tran_type,'',amount,date_of_payment,'NULL','NULL',0 from edTransaction where house_name in " & HouseString & " order by id asc"
+
+        If RadioButton1.Checked = True Then
+            If TextBox2.Text <> "" Then
+                SqlStr = "Select house_name,house_nr,cust_id,customer,'ELECTRICITY DEPOSIT','',amount,date_of_payment,'NULL','NULL',0 from edTransaction where "
+                Filter = " cust_id = '" & Trim(TextBox2.Text) & "'  and house_name in " & HouseString & "  order by id asc"
+                ALLHouse = ""
+            Else
+                MsgBox("Enter Customer ID", vbExclamation)
+                Exit Sub
+            End If
+        End If
+        If RadioButton2.Checked = True Then
+            If ComboBox1.SelectedItem <> "" Then
+                SqlStr = "Select house_name,house_nr,cust_id,customer,'ELECTRICITY DEPOSIT','',amount,date_of_payment,'NULL','NULL',0 from edTransaction where house_name = '" & Trim(ComboBox1.SelectedItem) & "'"
+                ALLHouse = "ALL"
+            Else
+                MsgBox("Select  House Name", vbExclamation)
+                Exit Sub
+            End If
+        
+        End If
+
+        Dim i As Integer
+        Try
+
+
+            Dim n As Integer
+
+            If ALLHouse = "ALL" Then
+
+                RecSetX.Open("select * from houserooms where house_name = '" & ComboBox1.SelectedItem & "' order by unit_number asc", UniversalHostConnection)
+                DataGridView1.Rows.Clear()
+                If RecSetX.EOF = False Then
+                    Do While RecSetX.EOF = False
+                        DataGridView1.Rows.Add()
+                        Recset.Open(SqlStr & " and house_nr = '" & RecSetX.Fields(2).Value & "'", UniversalHostConnection)
+                        If Recset.EOF = False Then
+                            For i = 0 To 10
+                                DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                            Next
+
+                            RecSetC.Open("select elec_deposit from tenant where cust_id = '" & RecSetX.Fields(10).Value & "' and house_no ='" & RecSetX.Fields(2).Value & "'", UniversalHostConnection)
+                            If RecSetC.EOF = False Then
+                                DataGridView1.Rows.Item(n).Cells(4).Value = "ELECTRICITY DEPOSIT"
+                                DataGridView1.Rows.Item(n).Cells(5).Value = RecSetC.Fields(0).Value
+
+                            End If
+                            RecSetC.Close()
+                        Else
+
+                            DataGridView1.Rows.Item(n).Cells(0).Value = RecSetX.Fields(0).Value
+                            DataGridView1.Rows.Item(n).Cells(1).Value = RecSetX.Fields(2).Value
+                            DataGridView1.Rows.Item(n).Cells(2).Value = RecSetX.Fields(10).Value
+                            DataGridView1.Rows.Item(n).Cells(3).Value = RecSetX.Fields(11).Value
+                            DataGridView1.Rows.Item(n).Cells(6).Value = ""
+
+
+                            If IsDBNull(RecSetX.Fields(10).Value) = False And RecSetX.Fields(10).Value <> "" Then
+                                RecSetC.Open("select elec_deposit from tenant where cust_id = '" & RecSetX.Fields(10).Value & "'  and house_no ='" & RecSetX.Fields(2).Value & "'", UniversalHostConnection)
+                                If RecSetC.EOF = False Then
+                                    DataGridView1.Rows.Item(n).Cells(4).Value = "ELECTRICITY DEPOSIT"
+                                    DataGridView1.Rows.Item(n).Cells(5).Value = RecSetC.Fields(0).Value
+                                    DataGridView1.Rows.Item(n).Cells(6).Value = "0"
+                                End If
+                                RecSetC.Close()
+                            End If
+
+                        End If
+                        Recset.Close()
+                        n = n + 1
+                        RecSetX.MoveNext()
+                    Loop
+
+                    For i = 0 To DataGridView1.RowCount - 1
+                        If IsNothing(DataGridView1.Rows(i).Cells(6).Value) = False Then
+                            If DataGridView1.Rows(i).Cells(6).Value = "0" Then
+                                DataGridView1.Rows(i).DefaultCellStyle.BackColor = Color.LightSalmon
+                            End If
+                        End If
+                    Next
+                Else
+                    MsgBox("No House units record found for this house", vbExclamation)
+                    Exit Sub
+                End If
+            Else
+                Recset.Open(SqlStr & Filter, UniversalHostConnection)
+                DataGridView1.Rows.Clear()
+                If Recset.EOF = False Then
+                    Do While Recset.EOF = False
+                        For i = 0 To 10
+                            DataGridView1.Rows.Item(n).Cells(i).Value = Recset.Fields(i).Value
+                        Next
+                        n = n + 1
+                        Recset.MoveNext()
+                    Loop
+                Else
+                    MsgBox("No Record found for this tenant", vbExclamation)
+                    Exit Sub
+                End If
+
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical, Me.Text)
+        End Try
+
+
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked = True Then
+            ComboBox1.Enabled = False
+            TextBox3.Enabled = False
+            TextBox2.Enabled = True
+        End If
+    End Sub
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+        If RadioButton2.Checked = True Then
+            ComboBox1.Enabled = True
+            TextBox3.Enabled = True
+            TextBox2.Enabled = False
+        End If
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Me.Dispose()
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        If ComboBox1.SelectedItem <> "" Then
+            Label8.Visible = True
+            ExcelDataPull()
+            Label8.Visible = False
+        Else
+            MsgBox("Pull data in the grid first", vbExclamation, APPNAME)
+        End If
+    End Sub
+    Private Sub ExcelDataPull()
+        Try
+
+
+
+            Dim reCset As New ADODB.Recordset
+            Dim XreCset As New ADODB.Recordset
+
+            Dim wb As Microsoft.Office.Interop.Excel.Workbook
+            Dim ws As Microsoft.Office.Interop.Excel.Worksheet
+            Dim xRange As Excel.Range
+            Dim mvarExcel As Microsoft.Office.Interop.Excel.Application
+            Dim row As Integer
+            Dim col As Integer
+            Dim FileName As String
+
+
+
+
+
+            mvarExcel = New Excel.Application
+            'ws = New Excel.Worksheet
+            mvarExcel.Visible = False
+            FileName = ""
+
+            mvarExcel.SheetsInNewWorkbook = 5
+            wb = mvarExcel.Workbooks.Add()
+            mvarExcel.Worksheets(1).Select()
+            ws = wb.ActiveSheet
+            With (ws)
+                .Name = "Houses"
+            End With
+
+            row = 1
+            col = 1
+            row = 4
+            ws.Rows.Cells(1, 1) = "SMART PROPERTY"
+            ws.Rows.Cells(2, 1) = "ELECTRICITY DEPOSITS "
+            ws.Rows.Cells(3, 1) = ComboBox1.SelectedItem
+
+
+
+
+
+            row = 5
+            Dim N As Int32 = 1
+            Dim TopRow As Int32 = 1
+            Dim BottomRow As Int32 = 1
+            Dim TOTALAMOUNT As Double = 0
+            Dim VAT As Double = 0
+
+            ws.Range("A1:P5").Font.Bold = True
+
+
+            For M As Integer = 0 To DataGridView1.ColumnCount - 1
+                ws.Rows.Cells(row, M + 1) = UCase(DataGridView1.Columns.Item(M).HeaderText) 'DataGridView1.Rows.Item(N).Cells(M).Value
+            Next
+
+            row = row + 1
+
+            'ws.Range("A6:N" & row + DataGridView1.RowCount).NumberFormat = "@"
+
+            For L As Integer = 0 To DataGridView1.RowCount - 1
+                For M As Integer = 0 To DataGridView1.ColumnCount - 1
+                    ws.Rows.Cells(row, M + 1) = DataGridView1.Rows.Item(L).Cells(M).Value
+                Next
+                row = row + 1
+            Next
+
+Finish:
+            Dim Destination As String = "D:\SMART PROPERTY report"
+            FileName = ComboBox1.SelectedItem & "_ELECTRICITY DEPSOSITS_" & Year(Now) & Format(Month(Now), "00") & Format(Now, "dd") & " " & Format(Hour(Now), "00") & "-" & Format(Minute(Now), "00")
+
+            mvarExcel.Application.ActiveWorkbook.SaveAs(Destination & "\" & FileName & ".xlsx")  ' cMyExcel
+            mvarExcel.Application.ActiveWorkbook.Close(Destination & "\" & FileName & ".xlsx")
+            mvarExcel.Quit()
+
+            Dim proc As System.Diagnostics.Process
+            For Each proc In System.Diagnostics.Process.GetProcessesByName("EXCEL")
+                proc.Kill()
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+End Class

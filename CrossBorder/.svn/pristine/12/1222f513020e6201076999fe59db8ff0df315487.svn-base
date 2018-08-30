@@ -1,0 +1,332 @@
+<?php
+ require_once "engine.php";
+ require_once "lib/nusoap.php";
+ $jquery='
+ $(function(){
+    captcha();
+    
+ });
+ function captcha(){
+    $("#GetCaptcha").html("<img src=security_code_generator.php?"+Math.random()+" />")
+   /*$.ajax({
+        type: "POST",
+        url: "security_code_generator.php?"+ Math.random(),
+        async: false,
+        success: function(response){
+            //$("#GetCaptcha").html("<img src="+response+" />");  
+            $("#GetCaptcha").html("<img src=security_code_generator.php />")       
+        }
+    }); */
+}
+ ';
+ Display::header("sign up",$jquery);
+
+ Display::topNavigation();
+ Display::signUp()
+?>
+
+<!--table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="20" align="left" valign="middle" background="button_1.jpg"><table width="955"  border="0" align="center" cellpadding="3" cellspacing="0">
+      <tr>
+        <td><a href="index.php" class="style2">Home</a></td>
+        <td><a href="about-us.php" class="style2">About us</a></td>
+        <td><a href="faqs.php" class="style2">FAQs</a></td>
+        <td><a href="contact-us.php" class="style2">Contact us</a> </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table></td>
+  </tr>
+</table-->
+<!--table width="950"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td align="left" valign="top" bgcolor="#EFEFEF">
+    <table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr align="left">
+        <td valign="middle" background="banner_.jpg"-->
+        <!--table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr align="left" valign="top">
+              <td height="80" bgcolor="#FFFFFF"><img src="logo.jpg"></td>
+              <td width="400" bgcolor="#FFFFFF">
+              <table width="100%"  border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td>
+                  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td><a href="signup.php"><strong>SIGN UP</strong></a></td>
+                        <td><a href="sign-in-now.php"><strong>SIGN IN</strong></a></td>
+                        <td><a href="forgot-password.php"><strong>FORGOT PASSWORD</strong></a></td>
+                      </tr>
+                  </table></td>
+                </tr>
+                <tr align="left">
+                  <td><strong>EXCHANGE RATE: KSH 85 </strong></td>
+                </tr>
+              </table></td>
+            </tr>
+        </table></td>
+      </tr-->
+      <tr align="left">
+        <td align="left" valign="top" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="3">
+                <tr align="left" valign="top">
+                  <td>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td align="left" valign="top">
+                          <table align="center" width="960">
+                            <tr>
+                              <td>
+                                <div class="GW_main_box"> <span class="GW_main_box_corner GW_main_box_topLeft"></span><span class="GW_main_box_corner GW_main_box_topRight"></span>
+                                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <td><div class="GW_main_box_title">New User Sign Up</div></td>
+                                      </tr>
+                                      <script language="JavaScript" type="text/javascript">
+<!--
+
+
+function Validate(){
+
+
+if(registration_form.contact_birth_month.value=="" || registration_form.contact_birth_day.value=="" || registration_form.contact_birth_year.value==""){
+alert(" Please select your date of birth ");
+return false;}
+
+if(registration_form.contact_state.value==""){
+alert(" Please select your state ");
+return false;}
+
+
+var strongRegex = new RegExp("^(?=.{6,})(?=.*[A-Z])(?=.*[0-9]).*$");
+if (false == strongRegex.test(document.getElementById('Password').value)) {
+alert("Please enter valid password:  minimum 6 characters, at least 1 capital letter and 1 number"); 
+return false;}
+
+
+
+if(document.getElementById('Password').value!=document.getElementById('rePassword').value){
+alert("Password and retyped password field mismatched.");
+return false;}
+
+if(document.getElementById('code_check').value!=document.getElementById('Verificationcode').value){
+alert("Verification code mismatch");
+return false;}
+
+return true;
+}
+
+//-->
+                            </script>
+                                      <tr>
+                                        <td>
+<form action="<?=$_SERVER['PHP_SELF']?>" method="post" id="reg-form">
+                                            <table width="96%" border="0" align="center" cellpadding="0" cellspacing="0">
+                                              <tr>
+                                                <td colspan="2" class="GW_txtgrey" height="35"><div style="padding-bottom:8px;"><em>All fields with <span class="GW_txtred">*</span> are mandatory.</em></div></td>
+                                              </tr>
+                                              <tr>
+                                                <td width="25%" class="GW_txtfieldcaption">&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">First Name <span class="GW_txtred">*</span></td>
+                                                <td><input name="first_name" type="text" maxlength="50"  id="contact_fname"  class="validate-required  GW_textbox"  /></td>
+                                              </tr>
+                                              
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Last Name <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input name="last_name" type="text" maxlength="50"  id="contact_plname"  class="validate-required GW_textbox"  /></td>
+                                              </tr>
+                                              
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Mobile Phone <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input name="phone" type="text" maxlength="10"  id="contact_phone"  class="validate-required GW_textbox"  />
+                                                  <span class="GW_txtgrey">International Format e.g. 254722****** </span> </td>
+                                              </tr>
+                                              
+                                              <tr>
+                                                <td class="GW_txtfieldcaption" height="30">&nbsp;</td>
+                                                <td class="GW_txtgrey">
+                                                  <div style="padding-bottom:8px;"><em>(You will be contacted during business hours in order to verify your identity. This will occur once)</em></div></td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Date of Birth<span class="GW_txtred">*</span></td>
+                                                <td>
+                                                
+                                                  <input class="validate-required" type="text" id="datepicker" name="birthday" />
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Country<span class="GW_txtred">*</span></td>
+                                                <td>
+                                                <?php
+                                                    $xml=simplexml_load_file("countries.xml");
+                                                    $tag_name = "ISO_3166-1_Entry";
+                                                    //print $xml->cust[0]->fname;
+                                                    echo '<select class="validate-required GW_textbox" name="country" id="contact_state" >';
+                                                    echo "<option value=''>Select country</option>";
+                                                    foreach($xml->{'ISO_3166-1_Entry'} as $country){    
+                                                        print "<option value='". $country->{'ISO_3166-1_Country_name'}."'>". $country->{'ISO_3166-1_Country_name'}."</option>";
+                                                    }
+                                                    echo "</select>";
+                                                    
+                                                ?>
+                                                  
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Address <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input class="validate-required GW_textbox" name="address" type="text" maxlength="50"  id="contact_address" /></td>
+                                              
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Town/City <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input class="validate-required GW_textbox" name="town_city" type="text" maxlength="30"  id="contact_city" /></td>
+                                              </tr>
+                                              
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Postal/Zip Code <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input class="validate-required GW_textbox" name="postalcode_zip" type="text" maxlength="5"  id="contact_zip"  />
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">County/State</td>
+                                                <td>
+                                                  <input class="GW_textbox" name="county_state" type="text"   id="contact_zip"  />
+                                                  </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Email Address <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input class="validate-required GW_textbox" name="email" type="text" maxlength="50"  id="email"   autocomplete="off"  /></td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Set Password <span class="GW_txtred">*</span></td>
+                                                <td>
+                                                  <input class="validate-required GW_textbox"  name="password" type="password" maxlength="32"  id="Password"   autocomplete="off"  />
+                                                  <span class="GW_txtgrey">Minimum 6 characters, at least 1 number and 1 uppercase letter</span></td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Retype Password <span class="GW_txtred">*</span></td>
+                                                <td><input  name="conf_password" type="password" maxlength="32"  id="conf_password"  class="validate-required GW_textbox"  autocomplete="off"  />
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Set First Security Question <span class="GW_txtred">*</span></td>
+                                                <td><input class="validate-required GW_textbox" type="text" name="security_one" />
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Set First Security Answer <span class="GW_txtred">*</span></td>
+                                                <td><input class="validate-required GW_textbox" name="security_answer_one" id="security_answer_one"  type="text"   />
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Set Second Security Question <span class="GW_txtred">*</span></td>
+                                                <td><input type="text" name="security_two" id="security_two" class="validate-required GW_textbox" />
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td class="GW_txtfieldcaption">Set Second Security Answer <span class="GW_txtred">*</span></td>
+                                                <td><input name="security_answer_two" id="security_answer_two"  type="text" class="validate-required GW_textbox"  /></td>
+                                              </tr>
+                  <td class="GW_txtfieldcaption">Set Security PIN <span class="GW_txtred">*</span></td>
+                      <td><input name="pin" id="security_PIN"  type="text" maxlength="8"  style="width:60px;"  class="validate-required GW_textbox"  size="10"  />
+                          <span class="GW_txtgrey">(Maximum eight digits)</span></td>
+                  </tr>
+                  <tr>
+                    <td height="30" class="GW_txtfieldcaption">&nbsp;</td>
+                    <td class="GW_txtgrey"><div style="padding:8px 0;"><em>Please secure your account with a PIN so nobody can call our customer service number pretending to be you. We will not disclose anything from your account without this PIN.</em></div>
+                  </tr>
+                  <!--tr>
+                    <td height="30" class="GW_txtfieldcaption">&nbsp;</td>
+                    <td>
+                      <input name="signup" type="hidden" value="true" id="signup"  />
+                      <input class="validate-required"  name="chkagree" type="checkbox" id="chkagree"  />
+                      <a class="GW_link_blue" onclick="window.open('toua.php','stuff','width=600,height=600,scrollbars=1')" style="cursor:pointer">I Agree to Terms & Conditions</a>                  
+                      </tr-->
+                  <tr>
+                    <td class="GW_txtfieldcaption">&nbsp;&nbsp;</td>
+                    <td>
+                      <table cellpadding="0" cellspacing="0" border="0" align="left">
+                        <!--tr>
+                          <td><input type="hidden" name="Verificationcode" value="123456" id="Verificationcode">
+                              <div id="GetCaptcha"></div></td>
+                          <td width="5"></td>
+                          <td class="GW_txtgrey">
+                            <button type="button" name="btnRefreshCaptcha" class="GW_button_grey" onclick="javascript: generate_number_captcha();"><span>Reload Captcha</span></button></td>
+                        </tr-->
+                    </table></td>
+                  </tr>
+                  <!--tr>
+                    <td height="40" class="GW_txtfieldcaption">Verification Code<span class="GW_txtred">*</span></td>
+                    <td>
+                      <input class="validate-required GW_textbox" name="code_check" type="text" maxlength="4"  id="code_check"    />
+                      <span class="GW_txtgrey">Type the numbers you see in the picture</span></td>
+                  </tr-->
+                  <tr>
+                    <td height="35" class="GW_txtfieldcaption"></td>
+                    <td>
+                      <input name="mode" id="mode"  type="hidden" value="insert" />
+                      <button type="submit" class="GW_button_green_small" id="signup"><span>Sign Up</span></button></td>
+                  </tr>
+                  <tr>
+                    <td class="GW_txtfieldcaption">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2"><div class="GW_msg_info">For further assistance please call us at 254****** or email at customer_service@chasebank.co.ke .</div></td>
+                  </tr>
+                  <tr>
+                    <td class="GW_txtfieldcaption">&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                                            </table>
+                                          </form>
+                                          <!--Focus on the first field -->
+                                          <script>
+if (document.getElementById('Verificationcode').value =="123456")
+{ generate_number_captcha();  }
+var txtBox=document.getElementById("contact_fname" );
+if (txtBox!=null ) txtBox.focus();
+                            </script>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                    <span class="GW_main_box_corner GW_main_box_bottomLeft"></span><span class="GW_main_box_corner GW_main_box_bottomRight"></span> </div></td>
+                            </tr>
+                          </table></td>
+                      </tr>
+                  </table></td>
+                </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr align="left">
+        <td align="center" valign="middle" bgcolor="#EFEFEF"><div align="center">
+            <table width="100%"  border="0" cellspacing="1" cellpadding="3">
+              <tr>
+                <td align="center" valign="middle" bgcolor="#FFFFFF"><p>&copy; 2013, Cashswift Money Transfer service</p>
+                  <p><a href="#">Home</a> | <a href="about-us.php">About Us</a> | <a href="fees.php">Fees</a> | <a href="faqs.php">FAQs</a> | <a href="tou.php">Terms of Service</a> | <a href="privacy.php">Privacy Policy</a> | <a href="contact-us.php">Contact Us</a></p>
+                  </td>
+              </tr>
+            </table>
+        </div></td>
+      </tr>
+    <!--/table></td>
+  </tr>
+</table-->
+<?php 
+Display::footer();
+?>

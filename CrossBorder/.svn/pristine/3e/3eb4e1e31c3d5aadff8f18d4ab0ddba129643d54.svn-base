@@ -1,0 +1,111 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "DebitAuthorizationInfo"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
+Private t_debitauthinfo As field
+Private t_localtransactiondate As field
+Private t_localtransactiontime As field
+Private t_settlementdate As field
+Private t_amounts As field
+Private t_amount As amount
+Private t_fees As field
+Private t_fee As fee
+
+
+Private Sub Class_Initialize()
+    Set t_debitauthinfo = New field
+    t_debitauthinfo.Name = "DebitAuthInfo"
+    
+    Set t_amounts = New field
+    t_amounts.Name = "Amount"
+    
+    Set t_fees = New field
+    t_fees.Name = "Fees"
+    
+    Set t_localtransactiondate = New field
+    t_localtransactiondate.Name = "LocalTransactionDate"
+    
+    Set t_localtransactiontime = New field
+    t_localtransactiontime.Name = "LocalTransactionTime"
+    
+    Set t_settlementdate = New field
+    t_settlementdate.Name = "SettlementDate"
+    
+    Set t_amount = New amount
+    t_amount.subfield_Amount.Name = "Amount"
+    t_amount.subfield_CurrencyCode.Name = "CurrencyCode"
+    
+    Set t_fee = New fee
+    t_fee.subfield_Amount.Name = "Amount"
+    t_fee.subfield_CurrencyCode.Name = "CurrencyCode"
+End Sub
+
+Public Property Get element_DebitAuthInfo() As field
+    Set element_DebitAuthInfo = New field
+    With element_DebitAuthInfo
+        .Name = t_debitauthinfo.Name
+    End With
+End Property
+
+Public Property Get element_Amount() As field
+    Set element_Amount = New field
+    With element_Amount
+        .Name = t_amounts.Name
+    End With
+End Property
+
+Public Property Get element_Fee() As field
+    Set element_Fee = New field
+    With element_Fee
+        .Name = t_fees.Name
+    End With
+End Property
+
+Public Property Get field_LocalTransactionDate() As field
+    Set field_LocalTransactionDate = New field
+    With field_LocalTransactionDate
+        .Name = t_localtransactiondate.Name
+    End With
+End Property
+
+Public Property Get field_LocalTransactionTime() As field
+    Set field_LocalTransactionTime = New field
+    With field_LocalTransactionTime
+        .Name = t_localtransactiontime.Name
+    End With
+End Property
+
+Public Property Get field_SettlementDate() As field
+    Set field_SettlementDate = New field
+    With field_SettlementDate
+        .Name = t_settlementdate.Name
+    End With
+End Property
+
+Public Property Get field_Amount() As amount
+    Set field_Amount = New amount
+    With field_Amount
+        .subfield_Amount.Name = t_amount.subfield_Amount.Name
+        .subfield_CurrencyCode.Name = t_amount.subfield_CurrencyCode.Name
+    End With
+End Property
+
+Public Property Get field_Fee() As fee
+    Set field_Fee = New fee
+    With field_Fee
+        .subfield_Amount.Name = t_fee.subfield_Amount.Name
+        .subfield_CurrencyCode.Name = t_fee.subfield_CurrencyCode.Name
+    End With
+End Property
+

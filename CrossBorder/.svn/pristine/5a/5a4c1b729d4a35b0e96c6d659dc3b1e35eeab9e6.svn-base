@@ -1,0 +1,581 @@
+﻿Public Class studDetails
+
+    Private Sub studDetails_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Try
+            Button3.Enabled = False
+            Dim StudentID As String = ""
+            Dim sqlQry As String
+            Dim reCset As New ADODB.Recordset
+            Dim CountSub As Integer = 0
+            sqlQry = ""
+            If UniversalHostConnection.State = 0 Then
+                UniversalHostConnection = New ADODB.Connection
+                UniversalHostConnection.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & AppDomain.CurrentDomain.BaseDirectory & "\1HouseAsset.accdb;Persist Security Info=True"
+                UniversalHostConnection.Open()
+            End If
+            If regisForm.SelectSTudent = 1 Then
+
+                Button3.Enabled = True
+                sqlQry = "SELECT * FROM employee where emp_id = '" & regisForm.SelectedID & "' and owner = '" & Form1.OWNER & "'"
+
+                reCset.Open(sqlQry, UniversalHostConnection)
+                DataGridView1.Rows.Clear()
+                If reCset.EOF = False Then
+                    CountSub = 0
+                    For CountSub = 0 To 21
+                        DataGridView1.Rows.Add()
+                        If CountSub = 0 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EMPLOYEE ID"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 1 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NATIONAL ID"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+
+                        ElseIf CountSub = 2 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "FIRST NAME"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+
+                        ElseIf CountSub = 3 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MIDDLE NAME"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 4 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LAST NAME"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+
+                        ElseIf CountSub = 5 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE OF BIRTH"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = Format(reCset.Fields(CountSub).Value, "dd/MM/yyyy")
+
+                        ElseIf CountSub = 6 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "SEX"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+
+                        ElseIf CountSub = 7 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "WORK STATION"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = (reCset.Fields(CountSub).Value)
+                        ElseIf CountSub = 8 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DEPARTMENT"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 9 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "JOB TITLE"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = (reCset.Fields(CountSub).Value)
+                        ElseIf CountSub = 10 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "JOB GROUP"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = (reCset.Fields(CountSub).Value)
+                        ElseIf CountSub = 11 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE ENTRY"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = Format(reCset.Fields(CountSub).Value, "dd/MM/yyyy")
+                        ElseIf CountSub = 12 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MONTHLY GROSS SALARY"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = (reCset.Fields(CountSub).Value)
+                        ElseIf CountSub = 13 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NHIF NUMBER"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = (reCset.Fields(CountSub).Value)
+                        ElseIf CountSub = 14 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NSSF NUMBER"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = (reCset.Fields(CountSub).Value)
+
+                        ElseIf CountSub = 15 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MEDICAL COVER"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 16 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "COVER AMOUNT"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 17 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LEAVE DAYS"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 18 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE NUMBER"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 19 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "HOME ADDRESS"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        ElseIf CountSub = 20 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE EXIT"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(27).Value
+                        ElseIf CountSub = 21 Then
+                            DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EXIT REASON"
+                            DataGridView1.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(28).Value
+
+                        End If
+                        ' CountSub = CountSub + 1
+                    Next
+                End If
+                'Loop
+                reCset.Close()
+
+
+                sqlQry = "SELECT contact1,address1,telephone1 FROM employee where emp_id = '" & regisForm.SelectedID & "'"
+
+                reCset.Open(sqlQry, UniversalHostConnection)
+                DataGridView2.Rows.Clear()
+                CountSub = 0
+                For CountSub = 0 To 2
+                    DataGridView2.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView2.Rows.Item(CountSub).Cells(0).Value = "CONTACT PERSON"
+                        If reCset.EOF = False Then DataGridView2.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                    ElseIf CountSub = 1 Then
+                        DataGridView2.Rows.Item(CountSub).Cells(0).Value = "ADDRESS"
+                        If reCset.EOF = False Then DataGridView2.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                    ElseIf CountSub = 2 Then
+                        DataGridView2.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE"
+                        If reCset.EOF = False Then DataGridView2.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                    End If
+                Next
+
+                reCset.Close()
+
+                sqlQry = "SELECT bank_branch,account_no FROM employee where emp_id = '" & regisForm.SelectedID & "'  and owner = '" & Form1.OWNER & "'"
+
+                reCset.Open(sqlQry, UniversalHostConnection)
+                DataGridView3.Rows.Clear()
+
+                CountSub = 0
+                For CountSub = 0 To 1
+                    DataGridView3.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView3.Rows.Item(CountSub).Cells(0).Value = "BANK/BRANCH"
+                        If reCset.EOF = False Then DataGridView3.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+
+                    ElseIf CountSub = 1 Then
+                        DataGridView3.Rows.Item(CountSub).Cells(0).Value = "ACCOUNT"
+                        If reCset.EOF = False Then DataGridView3.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                    End If
+                Next
+
+
+                reCset.Close()
+                'If regisForm.CheckBox1.Checked = True Then
+                sqlQry = "SELECT welfare,sacco " & _
+                         "FROM employee where emp_id = '" & regisForm.SelectedID & "'  and owner = '" & Form1.OWNER & "'"
+                reCset.Open(sqlQry, UniversalHostConnection)
+                DataGridView4.Rows.Clear()
+
+                CountSub = 0
+                For CountSub = 0 To 1
+                    DataGridView4.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView4.Rows.Item(CountSub).Cells(0).Value = "STAFF WELFARE"
+                        If reCset.EOF = False Then DataGridView4.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                    ElseIf CountSub = 1 Then
+                        DataGridView4.Rows.Item(CountSub).Cells(0).Value = "SACCO"
+                        If reCset.EOF = False Then DataGridView4.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value ', "", UCase(reCset.Fields(CountSub).Value))
+
+                        'ElseIf CountSub = 2 Then
+                        '    DataGridView4.Rows.Item(CountSub).Cells(0).Value = "ADDRESS"
+                        '    If reCset.EOF = False Then DataGridView4.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                        'ElseIf CountSub = 3 Then
+                        '    DataGridView4.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE"
+                        '    If reCset.EOF = False Then DataGridView4.Rows.Item(CountSub).Cells(1).Value = reCset.Fields(CountSub).Value '), "", UCase(reCset.Fields(CountSub).Value))
+                    End If
+                Next
+
+                reCset.Close()
+
+            Else
+
+                DataGridView1.Rows.Clear()
+                For CountSub = 0 To 21
+                    DataGridView1.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EMPLOYEE ID"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 1 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NATIONAL ID"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+
+                    ElseIf CountSub = 2 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "FIRST NAME"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+
+                    ElseIf CountSub = 3 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MIDDLE NAME"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 4 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LAST NAME"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+
+                    ElseIf CountSub = 5 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE OF BIRTH"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = "01/01/1990"
+
+                    ElseIf CountSub = 6 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "SEX"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = "M"
+
+                    ElseIf CountSub = 7 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "WORK STATION"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 8 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DEPARTMENT"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 9 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "JOB TITLE"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 10 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "JOB GROUP"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 11 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE ENTRY"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = Format(Today, "dd/MM/yyyy")
+
+                    ElseIf CountSub = 12 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MONTHLY GROSS SALARY"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = "0"
+                    ElseIf CountSub = 13 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NHIF NUMBER"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 14 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NSSF NUMBER"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+
+                    ElseIf CountSub = 15 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MEDICAL COVER"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 16 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "COVER AMOUNT"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = "0"
+                    ElseIf CountSub = 17 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LEAVE DAYS"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = "0"
+                    ElseIf CountSub = 18 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE NUMBER"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+
+                    ElseIf CountSub = 19 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "HOME ADDRESS"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 20 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE EXIT"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 21 Then
+                        DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EXIT REASON"
+                        DataGridView1.Rows.Item(CountSub).Cells(1).Value = ""
+                    End If
+                    ' CountSub = CountSub + 1
+                Next
+                DataGridView2.Rows.Clear()
+                For CountSub = 0 To 2
+                    DataGridView2.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView2.Rows.Item(CountSub).Cells(0).Value = "CONTACT PERSON"
+                        DataGridView2.Rows.Item(CountSub).Cells(1).Value = ""
+
+                    ElseIf CountSub = 1 Then
+                        DataGridView2.Rows.Item(CountSub).Cells(0).Value = "ADDRESS"
+                        DataGridView2.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 2 Then
+                        DataGridView2.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE"
+                        DataGridView2.Rows.Item(CountSub).Cells(1).Value = ""
+                    End If
+                Next
+                DataGridView3.Rows.Clear()
+                For CountSub = 0 To 2
+                    DataGridView3.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView3.Rows.Item(CountSub).Cells(0).Value = "BANK/BRANCH"
+                        DataGridView3.Rows.Item(CountSub).Cells(1).Value = ""
+                    ElseIf CountSub = 1 Then
+                        DataGridView3.Rows.Item(CountSub).Cells(0).Value = "ACCOUNT"
+                        DataGridView3.Rows.Item(CountSub).Cells(1).Value = ""
+                    End If
+                Next
+                DataGridView4.Rows.Clear()
+                For CountSub = 0 To 1
+                    DataGridView4.Rows.Add()
+                    If CountSub = 0 Then
+                        DataGridView4.Rows.Item(CountSub).Cells(0).Value = "STAFF WELFARE"
+                        DataGridView4.Rows.Item(CountSub).Cells(1).Value = "0"
+                    ElseIf CountSub = 1 Then
+                        DataGridView4.Rows.Item(CountSub).Cells(0).Value = "SACC0"
+                        DataGridView4.Rows.Item(CountSub).Cells(1).Value = "0"
+
+                        'ElseIf CountSub = 2 Then
+                        '    DataGridView4.Rows.Item(CountSub).Cells(0).Value = "ADDRESS"
+                        '    DataGridView4.Rows.Item(CountSub).Cells(1).Value = ""
+                        'ElseIf CountSub = 3 Then
+                        '    DataGridView4.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE"
+                        '    DataGridView4.Rows.Item(CountSub).Cells(1).Value = ""
+                    End If
+                Next
+            End If
+
+        Catch ex As Exception
+            'If MsgBox("Some Information is Missing. Do You Want to View Error Details", vbAbort, "SCHOOL MASTER") = vbOK Then
+            MsgBox(ex.Message, , APPNAME)
+            'End If
+        End Try
+
+    End Sub
+
+    Private Sub GroupBox5_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GroupBox5.Enter
+
+    End Sub
+
+    Private Sub studDetails_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+        ''GroupBox3.Width = Me.Width / 3 - 30
+        ''GroupBox4.Width = Me.Width / 3 - 30
+        ''GroupBox5.Width = Me.Width / 3 - 30
+        ' ''GroupBox1.Width = Me.Width / 3 - 50
+
+        ''GroupBox1.Left = GroupBox3.Left + 50
+        ''GroupBox1.Width = GroupBox3.Width + 500
+        ''GroupBox1.Left = GroupBox3.Left + 400 ' GroupBox3.Width + 10
+        ''GroupBox1.Height = GroupBox2.Height / 2 + 100
+
+        ''GroupBox4.Left = GroupBox3.Left + GroupBox3.Width + 10
+        ''GroupBox5.Left = GroupBox4.Left + GroupBox4.Width + 10
+
+
+        ''GroupBox3.Top = GroupBox1.Top + GroupBox1.Height + 5
+        ''GroupBox4.Top = GroupBox1.Top + GroupBox1.Height + 5
+        ''GroupBox5.Top = GroupBox1.Top + GroupBox1.Height + 5
+
+        
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Try
+
+            OpenFileDialog1.Filter = "(*.jpg)|*.jpg|(*.bmp)|*.bmp|(*.png)|*.png"
+            OpenFileDialog1.InitialDirectory = "D:\SCHOOL MASTER\BetaGame"
+            OpenFileDialog1.FileName = ""
+            OpenFileDialog1.ShowDialog()
+            
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        Try
+
+            Dim strm As String 'System.IO.Stream
+            ' strm = OpenFileDialog1.OpenFile()
+            strm = OpenFileDialog1.FileName.ToString()
+            If Not (strm Is Nothing) Then
+
+                'PictureBox1.Image = SimpleTC.My.Resources.HOUSE
+            End If
+            'insert code to read the file data
+            'TextBox5.Text = ExtFilePath
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical)
+        End Try
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        Try
+
+            Dim Emp_id, Job_grp, Job_title, Tele, Department, Nat_id, Nssf, Nhif, Med_cover, Cover_amt, Leave_days, Salary, Fname, Mname, Lname, DBirth, Sex, ClassN, Stream, YearE, DateE, HomeAdr, House, ExitDate, ExitReason
+        Dim CountSub As Integer = 0
+            For CountSub = 0 To 21
+                ' DataGridView1.Rows.Add()
+                If DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EMPLOYEE ID" Then
+                    Emp_id = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NATIONAL ID" Then
+                    Nat_id = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "FIRST NAME" Then
+                    Fname = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MIDDLE NAME" Then
+                    Mname = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LAST NAME" Then
+                    Lname = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE OF BIRTH" Then
+                    DBirth = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "SEX" Then
+                    Sex = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "WORK STATION" Then
+                    ClassN = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DEPARTMENT" Then
+                    Department = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "JOB TITLE" Then
+                    Job_title = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "JOB GROUP" Then
+                    Job_grp = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE ENTRY" Then
+                    DateE = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MONTHLY GROSS SALARY" Then
+                    Salary = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NHIF NUMBER" Then
+                    Nhif = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "NSSF NUMBER" Then
+                    Nssf = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MEDICAL COVER" Then
+                    Med_cover = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "COVER AMOUNT" Then
+                    Cover_amt = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LEAVE DAYS" Then
+                    Leave_days = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE NUMBER" Then
+                    Tele = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "HOME ADDRESS" Then
+                    HomeAdr = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                    'ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "BOARD HOUSE" Then
+                    '    House = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE EXIT" Then
+                    ExitDate = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EXIT REASON" Then
+                    ExitReason = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+                End If
+            Next
+
+            Dim Conta1, Relation1, Addr1, Tel1, Conta2, Relation2, Addr2, Tel2, Conta3, Relation3, Addr3, Tel3
+
+            For CountSub = 0 To 2
+                'DataGridView2.Rows.Add()
+                If DataGridView2.Rows.Item(CountSub).Cells(0).Value = "CONTACT PERSON" Then
+                    Conta1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView2.Rows.Item(CountSub).Cells(0).Value = "ADDRESS" Then
+                    Addr1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView2.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE" Then
+                    Tel1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+                End If
+            Next
+
+            For CountSub = 0 To 1
+                'DataGridView3.Rows.Add()
+                If DataGridView3.Rows.Item(CountSub).Cells(0).Value = "BANK/BRANCH" Then
+                    Conta2 = DataGridView3.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView3.Rows.Item(CountSub).Cells(0).Value = "ACCOUNT" Then
+                    Addr2 = DataGridView3.Rows.Item(CountSub).Cells(1).Value
+                End If
+            Next
+
+            For CountSub = 0 To 1
+                If DataGridView4.Rows.Item(CountSub).Cells(0).Value = "STAFF WELFARE" Then
+                    Conta3 = DataGridView4.Rows.Item(CountSub).Cells(1).Value
+                ElseIf DataGridView4.Rows.Item(CountSub).Cells(0).Value = "SACCO" Then
+                    Relation3 = DataGridView4.Rows.Item(CountSub).Cells(1).Value
+                End If
+            Next
+
+        Dim InsertStr As String = ""
+            'ExitDate = "0"
+            If IsNumeric(Salary) = False Then Salary = 0
+            If IsNumeric(Leave_days) = False Then Leave_days = 0
+            If IsNumeric(Conta3) = False Then Conta3 = 0
+            If IsNumeric(Cover_amt) = False Then Cover_amt = 0
+            If IsNumeric(Relation3) = False Then Relation3 = 0
+            If IsDate(DBirth) = False Then DBirth = "01/01/1984"
+            If IsDate(DateE) = False Then DBirth = Today.Date
+
+            If ExitDate = "" Then
+                ExitDate = "0"
+            End If
+
+            InsertStr = "insert into EMPloyee values('" & Emp_id & "','" & Nat_id & "','" & Fname & "','" & Mname & "','" & Lname & "','" & DBirth & "','" & Sex & "','" & ClassN & "','" & _
+                              Department & "','" & Job_title & "','" & Job_grp & "','" & DateE & "'," & Salary & ",'" & Nhif & "','" & Nssf & "','" & Med_cover & "'," & Cover_amt & "," & Leave_days & ",'" & Tele & "','" & HomeAdr & "','" & Conta1 & "','" & Addr1 & "','" & Tel1 & "','" & Conta2 & "','" & Addr2 & "','" & Tel2 & _
+                              "','" & Conta3 & "','" & ExitDate & "','" & ExitReason & "','','" & UserName & "'," & Conta3 & "," & Relation3 & ",'" & Form1.OWNER & "')"
+            UniversalHostConnection.Execute("DELETE from EMPloyee where Emp_id = '" & Emp_id & "'")
+
+            If InsertStr <> "" Then
+                UniversalHostConnection.Execute(UCase(InsertStr))
+                MsgBox("RECORD UPDATED SUCCESSFULLY", vbInformation, APPNAME)
+            Else
+                MsgBox("RECORD NOT UPDATED", vbExclamation, APPNAME)
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbExclamation, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Try
+
+            Dim Stud_id, Fname, Mname, Lname, DBirth, Sex, ClassN, Stream, YearE, DateE, HomeAdr, House, ExitDate, ExitReason
+            Dim CountSub As Integer = 0
+            'For CountSub = 0 To 13
+
+            '    ' DataGridView1.Rows.Add()
+            '    If DataGridView1.Rows.Item(CountSub).Cells(0).Value = "STUDENT ID" Then
+            '        Stud_id = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "FIRST NAME" Then
+            '        Fname = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "MIDDLE NAME" Then
+            '        Mname = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "LAST NAME" Then
+            '        Lname = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE OF BIRTH" Then
+            '        DBirth = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "SEX" Then
+            '        Sex = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "CLASS" Then
+            '        ClassN = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "STREAM" Then
+            '        Stream = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "YEAR ENTRY" Then
+            '        YearE = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE ENTRY" Then
+            '        DateE = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "HOME ADDRESS" Then
+            '        HomeAdr = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "BOARD HOUSE" Then
+            '        House = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "DATE EXIT" Then
+            '        ExitDate = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView1.Rows.Item(CountSub).Cells(0).Value = "EXIT REASON" Then
+            '        ExitReason = DataGridView1.Rows.Item(CountSub).Cells(1).Value
+            '    End If
+            'Next
+
+            'Dim Conta1, Relation1, Addr1, Tel1, Conta2, Relation2, Addr2, Tel2, Conta3, Relation3, Addr3, Tel3
+
+            'For CountSub = 0 To 3
+            '    'DataGridView2.Rows.Add()
+            '    If DataGridView2.Rows.Item(CountSub).Cells(0).Value = "CONTACT PERSON" Then
+            '        Conta1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView2.Rows.Item(CountSub).Cells(0).Value = "RELATIONSHIP" Then
+            '        Relation1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView2.Rows.Item(CountSub).Cells(0).Value = "ADDRESS" Then
+            '        Addr1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView2.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE" Then
+            '        Tel1 = DataGridView2.Rows.Item(CountSub).Cells(1).Value
+            '    End If
+            'Next
+
+            'For CountSub = 0 To 3
+            '    'DataGridView3.Rows.Add()
+            '    If DataGridView3.Rows.Item(CountSub).Cells(0).Value = "CONTACT PERSON" Then
+            '        Conta2 = DataGridView3.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView3.Rows.Item(CountSub).Cells(0).Value = "RELATIONSHIP" Then
+            '        Relation2 = DataGridView3.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView3.Rows.Item(CountSub).Cells(0).Value = "ADDRESS" Then
+            '        Addr2 = DataGridView3.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView3.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE" Then
+            '        Tel2 = DataGridView3.Rows.Item(CountSub).Cells(1).Value
+            '    End If
+            'Next
+
+            'For CountSub = 0 To 3
+            '    'DataGridView4.Rows.Add()
+            '    If DataGridView4.Rows.Item(CountSub).Cells(0).Value = "CONTACT PERSON" Then
+            '        Conta3 = DataGridView4.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView4.Rows.Item(CountSub).Cells(0).Value = "RELATIONSHIP" Then
+            '        Relation3 = DataGridView4.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView4.Rows.Item(CountSub).Cells(0).Value = "ADDRESS" Then
+            '        Addr3 = DataGridView4.Rows.Item(CountSub).Cells(1).Value
+            '    ElseIf DataGridView4.Rows.Item(CountSub).Cells(0).Value = "TELEPHONE" Then
+            '        Tel3 = DataGridView4.Rows.Item(CountSub).Cells(1).Value
+            '    End If
+            'Next
+
+            'Dim InsertStr As String = ""
+            'InsertStr = "insert into OLD_student values('" & Stud_id & "','" & Fname & "','" & Mname & "','" & Lname & "','" & DBirth & "','" & Sex & "'," & ClassN & ",'" & _
+            '                  Stream & "','" & YearE & "','" & DateE & "','" & House & "','" & HomeAdr & "','" & Conta1 & "','" & Relation1 & "','" & Addr1 & "','" & Tel1 & "','" & Conta2 & "','" & Relation2 & "','" & Addr2 & "','" & Tel2 & _
+            '                  "','" & Conta3 & "','" & Relation3 & "','" & Addr3 & "','" & Tel3 & "','" & ExitDate & "','" & ExitReason & "','','" & UserName & "')"
+
+            UniversalHostConnection.Execute("update employee set date_exit = '" & Today & "'  where emp_id = '" & regisForm.SelectedID & "' and owner = '" & Form1.OWNER & "'")
+            'UniversalHostConnection.Execute(UCase(InsertStr))
+            MsgBox("RECORD UPDATED SUCCESSFULLY ", vbInformation, APPNAME)
+        Catch ex As Exception
+            MsgBox(ex.Message, vbCritical, APPNAME)
+        End Try
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+    End Sub
+End Class
